@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "scripts": {
+    "dev:all": "bash ./scripts/bondarys.sh start",
+    "dev:stop": "bash ./scripts/bondarys.sh stop",
+    "db:setup": "bash ./scripts/bondarys.sh db:setup",
+    "deploy:min": "bash ./scripts/bondarys.sh deploy",
+    "supabase:init": "supabase init",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:status": "supabase status",
+    "supabase:reset": "supabase stop && supabase start"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.74.0",
+    "axios": "^1.12.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  }
+}

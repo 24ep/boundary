@@ -1,0 +1,40 @@
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { env, assertRequiredEnv } from '../config/env';
+
+let supabase: SupabaseClient | null = null;
+
+export const initializeSupabase = async (): Promise<SupabaseClient> => {
+  if (supabase) return supabase;
+
+  assertRequiredEnv();
+
+  supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  });
+
+  // Best-effort connection test (non-fatal if tables not present yet)
+  try {
+    const { error } = await supabase.from('users').select('id').limit(1);
+    if (error && error.code !== 'PGRST116') {
+      console.warn('⚠️ Supabase connection test warning:', error.message);
+    }
+  } catch (e: any) {
+    console.warn('⚠️ Supabase connection test error:', e?.message || e);
+  }
+
+  return supabase;
+};
+
+export const getSupabaseClient = (): SupabaseClient => {
+  if (!supabase) {
+    throw new Error('Supabase client not initialized. Call initializeSupabase() first.');
+  }
+  return supabase;
+};
+
+export const getSupabaseAdmin = (): SupabaseClient => getSupabaseClient();
+
+export default { initializeSupabase, getSupabaseClient, getSupabaseAdmin };
