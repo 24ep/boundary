@@ -9,8 +9,15 @@ import {
   ArrowTrendingUpIcon,
   CalendarIcon,
   ClockIcon,
-  CreditCardIcon
+  CreditCardIcon,
+  PlusIcon,
+  FunnelIcon,
+  BookmarkIcon,
+  ArrowDownTrayIcon,
+  LinkIcon
 } from '@heroicons/react/24/outline'
+import { Tooltip } from './ui/Tooltip'
+import { Button } from './ui/Button'
 
 interface DashboardStats {
   totalFamilies: number
@@ -42,8 +49,7 @@ export function Dashboard({ onManageDashboards }: DashboardProps) {
   const sparkContent = [120, 122, 130, 128, 140, 150, 156]
   const sparkUsers = [32, 34, 36, 39, 42, 44, 48]
 
-  function Sparkline({ values, color }: { values: number[]; color: string }) {
-    // Draw a simple path scaled to the container via SVG
+  function Sparkline({ values, color, id }: { values: number[]; color: string; id: string }) {
     const max = Math.max(...values)
     const min = Math.min(...values)
     const width = 200
@@ -53,15 +59,36 @@ export function Dashboard({ onManageDashboards }: DashboardProps) {
       const y = height - ((v - min) / Math.max(1, max - min)) * height
       return `${x},${y}`
     }).join(' ')
+    const gradientId = `gradient-${id}`
     return (
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full">
-        <polyline fill="none" stroke={color} strokeWidth="2" points={norm} />
+      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full" aria-hidden="true">
+        <defs>
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor={color} stopOpacity="0.3" />
+            <stop offset="100%" stopColor={color} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <polyline 
+          fill={`url(#${gradientId})`}
+          stroke={color} 
+          strokeWidth="2.5" 
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          points={`${norm} ${width},${height} 0,${height}`}
+        />
+        <polyline 
+          fill="none" 
+          stroke={color} 
+          strokeWidth="2.5" 
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          points={norm}
+        />
       </svg>
     )
   }
 
   useEffect(() => {
-    // Load data and saved views
     loadDashboardData()
     const storedViews = localStorage.getItem('admin_dashboard_saved_views')
     if (storedViews) {
@@ -110,46 +137,26 @@ export function Dashboard({ onManageDashboards }: DashboardProps) {
     }
   }
 
-  // Keyboard shortcuts: '/' focus search (delegated to Header), 'c' new content, 'g d' go dashboard, 'g u' go users
+  // Keyboard shortcuts
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      // ignore if typing in input/textarea/select
       const tag = (e.target as HTMLElement)?.tagName?.toLowerCase()
       if (tag === 'input' || tag === 'textarea' || tag === 'select' || (e as any).isComposing) return
 
       if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
         e.preventDefault()
-        const search = document.querySelector('input[placeholder="Search families, users, content..."]') as HTMLInputElement | null
+        const search = document.querySelector('input[placeholder*="Search"]') as HTMLInputElement | null
         search?.focus()
       }
       if ((e.key === 'c' || e.key === 'C') && !e.ctrlKey && !e.metaKey) {
         e.preventDefault()
-        alert('Quick create: New content')
-      }
-      if ((e.key === 'g' || e.key === 'G')) {
-        // simple sequence: listen for next key shortly
-        const handler = (n: KeyboardEvent) => {
-          if (n.key.toLowerCase() === 'd') {
-            const params = new URLSearchParams(window.location.search)
-            params.set('module', 'dashboard')
-            window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`)
-            window.dispatchEvent(new PopStateEvent('popstate'))
-          } else if (n.key.toLowerCase() === 'u') {
-            const params = new URLSearchParams(window.location.search)
-            params.set('module', 'users')
-            window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`)
-            window.dispatchEvent(new PopStateEvent('popstate'))
-          }
-          window.removeEventListener('keydown', handler, true)
-        }
-        window.addEventListener('keydown', handler, true)
+        // Trigger new content action
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  // Build unified activity (mock) and filter
   const getUnifiedActivity = () => {
     const all = [
       {
@@ -158,10 +165,9 @@ export function Dashboard({ onManageDashboards }: DashboardProps) {
         title: 'Johnson Family Reunion 2024',
         meta: 'Johnson Family • 45 views',
         badge: 'Published',
-        badgeBg: 'bg-green-100',
-        badgeText: 'text-green-800',
+        badgeColor: 'green',
         time: '2 hours ago',
-        bg: 'bg-gradient-to-br from-red-500 to-red-600'
+        bg: 'from-red-500 to-red-600'
       },
       {
         type: 'content',
@@ -169,10 +175,9 @@ export function Dashboard({ onManageDashboards }: DashboardProps) {
         title: "Grandma's Apple Pie Recipe",
         meta: 'Smith Family • 78 views',
         badge: 'Published',
-        badgeBg: 'bg-green-100',
-        badgeText: 'text-green-800',
+        badgeColor: 'green',
         time: '5 hours ago',
-        bg: 'bg-gradient-to-br from-green-500 to-green-600'
+        bg: 'from-green-500 to-green-600'
       },
       {
         type: 'content',
@@ -180,10 +185,9 @@ export function Dashboard({ onManageDashboards }: DashboardProps) {
         title: 'Birthday Celebration Photos',
         meta: 'Brown Family • 32 views',
         badge: 'Draft',
-        badgeBg: 'bg-yellow-100',
-        badgeText: 'text-yellow-800',
+        badgeColor: 'yellow',
         time: '1 day ago',
-        bg: 'bg-gradient-to-br from-blue-500 to-blue-600'
+        bg: 'from-blue-500 to-blue-600'
       },
       {
         type: 'families',
@@ -191,10 +195,9 @@ export function Dashboard({ onManageDashboards }: DashboardProps) {
         title: 'Smith Family added a new member',
         meta: 'Users +1 (now 5)',
         badge: 'Update',
-        badgeBg: 'bg-blue-100',
-        badgeText: 'text-blue-800',
+        badgeColor: 'blue',
         time: '3 hours ago',
-        bg: 'bg-gradient-to-br from-slate-500 to-slate-600'
+        bg: 'from-slate-500 to-slate-600'
       },
       {
         type: 'users',
@@ -202,10 +205,9 @@ export function Dashboard({ onManageDashboards }: DashboardProps) {
         title: 'New admin invited',
         meta: 'Email sent to admin@bondarys.com',
         badge: 'Invite',
-        badgeBg: 'bg-purple-100',
-        badgeText: 'text-purple-800',
+        badgeColor: 'purple',
         time: '6 hours ago',
-        bg: 'bg-gradient-to-br from-purple-500 to-purple-600'
+        bg: 'from-purple-500 to-purple-600'
       }
     ] as Array<any>
 
@@ -235,15 +237,14 @@ export function Dashboard({ onManageDashboards }: DashboardProps) {
     params.set('activity', activityFilter)
     const link = `${window.location.origin}${window.location.pathname}?${params.toString()}`
     navigator.clipboard.writeText(link).then(() => {
-      // optional toast; keeping simple
-      console.log('Link copied:', link)
+      // Show toast notification
     }).catch(() => {})
   }
 
   const loadDashboardData = async () => {
     setLoading(true)
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await new Promise(resolve => setTimeout(resolve, 800))
       
       setStats({
         totalFamilies: 12,
@@ -265,421 +266,309 @@ export function Dashboard({ onManageDashboards }: DashboardProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+      <div className="flex items-center justify-center h-64" role="status" aria-label="Loading dashboard">
+        <div className="macos-spinner w-8 h-8"></div>
       </div>
     )
   }
 
+  const StatCard = ({ 
+    title, 
+    value, 
+    growth, 
+    icon: Icon, 
+    iconColor,
+    sparkline,
+    sparklineColor,
+    sparklineId
+  }: {
+    title: string
+    value: number | string
+    growth?: number
+    icon: any
+    iconColor: string
+    sparkline?: number[]
+    sparklineColor?: string
+    sparklineId?: string
+  }) => (
+    <div className="macos-card p-6 group hover:scale-[1.02] transition-all duration-300" role="region" aria-label={title}>
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex-1">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{title}</p>
+          <p className="text-3xl font-bold text-gray-900 mb-2">{value}</p>
+          {growth !== undefined && (
+            <div className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-green-50 text-green-700 text-xs font-medium">
+              <ArrowTrendingUpIcon className="w-3 h-3" aria-hidden="true" />
+              <span>+{growth}%</span>
+            </div>
+          )}
+        </div>
+        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${iconColor} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
+          <Icon className="w-6 h-6 text-white" aria-hidden="true" />
+        </div>
+      </div>
+      {sparkline && sparklineId && (
+        <div className="h-12 mt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300">
+          <Sparkline values={sparkline} color={sparklineColor || '#0d7eff'} id={sparklineId} />
+        </div>
+      )}
+    </div>
+  )
+
   return (
-    <div className="space-y-8">
-      {/* Page Intro and Actions */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <div className="space-y-6 animate-fade-in">
+      {/* Header Section */}
+      <div className="macos-card p-6">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-sm text-gray-600 mt-1">Overview of families, content, and activity.</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-1">Dashboard</h1>
+            <p className="text-sm text-gray-500">Overview of families, content, and activity</p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <label className="sr-only" htmlFor="date-range">Date range</label>
+          <div className="flex flex-wrap items-center gap-3">
             <select
-              id="date-range"
               value={dateRange}
               onChange={(e) => setDateRange(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 rounded-xl bg-white text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="macos-input text-sm px-4 py-2 min-w-[140px]"
               aria-label="Select date range"
             >
               <option value="7d">Last 7 days</option>
               <option value="30d">Last 30 days</option>
               <option value="90d">Last 90 days</option>
             </select>
-            <div className="flex gap-3">
-              <button
-                onClick={onManageDashboards}
-                className="px-4 py-2 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 text-sm"
-                aria-label="Manage dashboards"
+            <Tooltip content="Save current view">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={handleSaveCurrentView}
+                aria-label="Save current view"
               >
-                Manage dashboards
-              </button>
-              <button className="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 text-sm" aria-label="Create new content">
-                New content
-              </button>
-            </div>
-          </div>
-          {/* Role control (demo) */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <label className="sr-only" htmlFor="role">Role</label>
-            <select
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 rounded-xl bg-white text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              aria-label="Select role"
+                <BookmarkIcon className="w-4 h-4 mr-1.5" aria-hidden="true" />
+                Save view
+              </Button>
+            </Tooltip>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => {}}
+              aria-label="Create new content"
             >
-              <option value="admin">Admin</option>
-              <option value="editor">Editor</option>
-              <option value="viewer">Viewer</option>
-            </select>
-          </div>
-          {/* Saved views controls */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <label className="sr-only" htmlFor="saved-views">Saved views</label>
-            <select
-              id="saved-views"
-              value={activeViewId || ''}
-              onChange={(e) => handleSelectView(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-xl bg-white text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              aria-label="Select saved view"
-            >
-              <option value="">Saved views…</option>
-              {savedViews.map(view => (
-                <option key={view.id} value={view.id}>{view.name}</option>
-              ))}
-            </select>
-            <button
-              onClick={handleSaveCurrentView}
-              className="px-4 py-2 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 text-sm"
-              aria-label="Save current view"
-            >
-              Save view
-            </button>
-          </div>
-        </div>
-        {/* Quick actions */}
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 text-sm font-medium text-gray-800" aria-label="Create a new family">
-            Create family
-          </button>
-          <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 text-sm font-medium text-gray-800" aria-label="Invite a user">
-            Invite user
-          </button>
-          <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 text-sm font-medium text-gray-800" aria-label="Open the content studio">
-            Open content studio
-          </button>
-        </div>
-      </div>
-
-      {/* KPI cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200" role="region" aria-label="Total families">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Families</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">{stats?.totalFamilies}</p>
-              <div className="inline-flex items-center mt-2 px-2 py-1 rounded-md text-xs font-medium"
-                   aria-label={`Families growth ${stats?.growth.families}%`}>
-                <ArrowTrendingUpIcon className="w-4 h-4 mr-1 text-green-600" />
-                <span className="text-green-700">+{stats?.growth.families}%</span>
-              </div>
-            </div>
-            <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
-              <UserGroupIcon className="h-5 w-5 text-red-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200" role="region" aria-label="Total content">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Content</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">{stats?.totalContent}</p>
-              <div className="inline-flex items-center mt-2 px-2 py-1 rounded-md text-xs font-medium"
-                   aria-label={`Content growth ${stats?.growth.content}%`}>
-                <ArrowTrendingUpIcon className="w-4 h-4 mr-1 text-green-600" />
-                <span className="text-green-700">+{stats?.growth.content}%</span>
-              </div>
-            </div>
-            <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-              <DocumentTextIcon className="h-5 w-5 text-blue-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200" role="region" aria-label="Published content">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Published</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">{stats?.publishedContent}</p>
-              <div className="mt-2 text-sm text-gray-600 font-medium" aria-live="polite">
-                {Math.round((stats?.publishedContent || 0) / (stats?.totalContent || 1) * 100)}% published
-              </div>
-            </div>
-            <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-              <EyeIcon className="h-5 w-5 text-green-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200" role="region" aria-label="Total users">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Users</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">{stats?.totalUsers}</p>
-              <div className="inline-flex items-center mt-2 px-2 py-1 rounded-md text-xs font-medium"
-                   aria-label={`Users growth ${stats?.growth.users}%`}>
-                <ArrowTrendingUpIcon className="w-4 h-4 mr-1 text-green-600" />
-                <span className="text-green-700">+{stats?.growth.users}%</span>
-              </div>
-            </div>
-            <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
-              <UsersIcon className="h-5 w-5 text-purple-600" />
-            </div>
-          </div>
-        </div>
-
-        {/* Billing widget */}
-        {role !== 'viewer' && (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200" role="region" aria-label="Billing">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Billing</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">Manage</p>
-              <div className="mt-3">
-                <button
-                  onClick={() => {
-                    const params = new URLSearchParams(window.location.search)
-                    params.set('module', 'users')
-                    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`)
-                    // Optionally focus users page after navigation; the app reacts to query param
-                    window.dispatchEvent(new PopStateEvent('popstate'))
-                  }}
-                  className="px-3 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700"
-                >
-                  Open billing under Users
-                </button>
-              </div>
-            </div>
-            <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
-              <CreditCardIcon className="h-5 w-5 text-red-600" />
-            </div>
-          </div>
-        </div>
-        )}
-      </div>
-
-      {/* Quick Insights with Sparklines */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-500 uppercase">Families</p>
-              <p className="text-xl font-semibold text-gray-900">{stats?.totalFamilies}</p>
-            </div>
-            <span className="text-xs px-2 py-1 rounded-md bg-green-50 text-green-700">+{stats?.growth.families}%</span>
-          </div>
-          <div className="mt-3 h-12">
-            {/* Simple sparkline using CSS gradient */}
-            <Sparkline values={sparkFamilies} color="#ef4444" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-500 uppercase">Content</p>
-              <p className="text-xl font-semibold text-gray-900">{stats?.totalContent}</p>
-            </div>
-            <span className="text-xs px-2 py-1 rounded-md bg-green-50 text-green-700">+{stats?.growth.content}%</span>
-          </div>
-          <div className="mt-3 h-12">
-            <Sparkline values={sparkContent} color="#3b82f6" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-500 uppercase">Users</p>
-              <p className="text-xl font-semibold text-gray-900">{stats?.totalUsers}</p>
-            </div>
-            <span className="text-xs px-2 py-1 rounded-md bg-green-50 text-green-700">+{stats?.growth.users}%</span>
-          </div>
-          <div className="mt-3 h-12">
-            <Sparkline values={sparkUsers} color="#8b5cf6" />
+              <PlusIcon className="w-4 h-4 mr-1.5" aria-hidden="true" />
+              New content
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Main sections */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        <div className="xl:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard
+          title="Total Families"
+          value={stats?.totalFamilies || 0}
+          growth={stats?.growth.families}
+          icon={UserGroupIcon}
+          iconColor="from-red-500 to-red-600"
+          sparkline={sparkFamilies}
+          sparklineColor="#ef4444"
+          sparklineId="families"
+        />
+        <StatCard
+          title="Total Content"
+          value={stats?.totalContent || 0}
+          growth={stats?.growth.content}
+          icon={DocumentTextIcon}
+          iconColor="from-blue-500 to-blue-600"
+          sparkline={sparkContent}
+          sparklineColor="#3b82f6"
+          sparklineId="content"
+        />
+        <StatCard
+          title="Published"
+          value={stats?.publishedContent || 0}
+          icon={EyeIcon}
+          iconColor="from-green-500 to-green-600"
+        />
+        <StatCard
+          title="Total Users"
+          value={stats?.totalUsers || 0}
+          growth={stats?.growth.users}
+          icon={UsersIcon}
+          iconColor="from-purple-500 to-purple-600"
+          sparkline={sparkUsers}
+          sparklineColor="#8b5cf6"
+          sparklineId="users"
+        />
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        {/* Activity Feed */}
+        <div className="xl:col-span-2 macos-card p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Activity</h3>
+            <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
             <div className="flex items-center gap-2">
-              <label className="sr-only" htmlFor="activity-filter">Filter activity</label>
               <select
-                id="activity-filter"
                 value={activityFilter}
                 onChange={(e) => setActivityFilter(e.target.value as any)}
-                className="px-3 py-2 border border-gray-300 rounded-xl bg-white text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                className="macos-input text-sm px-3 py-1.5"
+                aria-label="Filter activity"
               >
                 <option value="all">All</option>
                 <option value="families">Families</option>
                 <option value="content">Content</option>
                 <option value="users">Users</option>
               </select>
-              <button className="text-sm text-red-600 hover:text-red-700 font-medium">View all</button>
+              <Tooltip content="Export to CSV">
+                <button
+                  onClick={() => exportActivityCsv(getUnifiedActivity())}
+                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                  aria-label="Export to CSV"
+                >
+                  <ArrowDownTrayIcon className="w-4 h-4 text-gray-600" aria-hidden="true" />
+                </button>
+              </Tooltip>
+              <Tooltip content="Copy link with filters">
+                <button
+                  onClick={copyLinkWithFilters}
+                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                  aria-label="Copy link"
+                >
+                  <LinkIcon className="w-4 h-4 text-gray-600" aria-hidden="true" />
+                </button>
+              </Tooltip>
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {getUnifiedActivity().map((item, idx) => (
-              <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-150">
-                <div className="flex items-center">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm mr-4 ${item.bg}`}>
-                    {item.initials}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900">{item.title}</div>
-                    <div className="text-sm text-gray-500 mt-1">{item.meta}</div>
-                  </div>
+              <div
+                key={idx}
+                className="flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 group cursor-pointer"
+                role="button"
+                tabIndex={0}
+                aria-label={`${item.title} - ${item.meta}`}
+              >
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.bg} flex items-center justify-center text-white font-semibold text-sm shadow-lg flex-shrink-0`}>
+                  {item.initials}
                 </div>
-                <div className="text-right">
-                  <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${item.badgeBg} ${item.badgeText}`}>{item.badge}</span>
-                  <div className="text-xs text-gray-500 mt-1">{item.time}</div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 truncate">{item.title}</p>
+                  <p className="text-sm text-gray-500 truncate">{item.meta}</p>
+                </div>
+                <div className="flex items-center gap-3 flex-shrink-0">
+                  <span className={`px-2.5 py-1 rounded-md text-xs font-semibold ${
+                    item.badgeColor === 'green' ? 'bg-green-50 text-green-700' :
+                    item.badgeColor === 'yellow' ? 'bg-yellow-50 text-yellow-700' :
+                    item.badgeColor === 'blue' ? 'bg-blue-50 text-blue-700' :
+                    'bg-purple-50 text-purple-700'
+                  }`}>
+                    {item.badge}
+                  </span>
+                  <span className="text-xs text-gray-400 whitespace-nowrap">{item.time}</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Family Activity</h3>
-            <button className="text-sm text-red-600 hover:text-red-700 font-medium">View all</button>
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-150">
-              <div className="flex items-center">
-                <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center text-white font-bold text-sm mr-4">
-                  JF
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">Johnson Family</div>
-                  <div className="text-sm text-gray-500 flex items-center mt-1">
-                    <UsersIcon className="w-4 h-4 mr-1" />
-                    6 members • 24 content
+        {/* Sidebar Widgets */}
+        <div className="space-y-4">
+          {/* Family Activity */}
+          <div className="macos-card p-6">
+            <h3 className="text-base font-semibold text-gray-900 mb-4">Family Activity</h3>
+            <div className="space-y-3">
+              {[
+                { name: 'Johnson Family', members: 6, content: 24, date: 'Jan 15, 2024', color: 'from-red-500 to-red-600' },
+                { name: 'Smith Family', members: 4, content: 18, date: 'Jan 14, 2024', color: 'from-green-500 to-green-600' },
+                { name: 'Brown Family', members: 5, content: 12, date: 'Jan 13, 2024', color: 'from-blue-500 to-blue-600' },
+              ].map((family, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200 cursor-pointer group"
+                  role="button"
+                  tabIndex={0}
+                >
+                  <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${family.color} flex items-center justify-center text-white font-semibold text-xs shadow-md`}>
+                    {family.name.split(' ').map(n => n[0]).join('')}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-900 text-sm truncate">{family.name}</p>
+                    <p className="text-xs text-gray-500">{family.members} members • {family.content} content</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-gray-400">{family.date}</p>
                   </div>
                 </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm text-gray-500 flex items-center">
-                  <ClockIcon className="w-4 h-4 mr-1" />
-                  Last activity
-                </div>
-                <div className="text-sm font-semibold text-gray-900">Jan 15, 2024</div>
-              </div>
+              ))}
             </div>
+          </div>
 
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-150">
-              <div className="flex items-center">
-                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center text-white font-bold text-sm mr-4">
-                  SF
+          {/* System Status */}
+          <div className="macos-card p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-semibold text-gray-900">System Status</h3>
+              <span className="px-2.5 py-1 rounded-md bg-green-50 text-green-700 text-xs font-semibold">All systems normal</span>
+            </div>
+            <div className="space-y-3">
+              {[
+                { label: 'Uptime', value: '99.98%' },
+                { label: 'API latency (p95)', value: '182 ms' },
+                { label: 'Job queue', value: '3 pending', badge: true },
+              ].map((stat, idx) => (
+                <div key={idx} className="flex items-center justify-between py-2">
+                  <span className="text-sm text-gray-600">{stat.label}</span>
+                  {stat.badge ? (
+                    <span className="px-2 py-1 rounded-md bg-yellow-50 text-yellow-700 text-xs font-medium">
+                      {stat.value}
+                    </span>
+                  ) : (
+                    <span className="text-sm font-medium text-gray-900">{stat.value}</span>
+                  )}
                 </div>
-                <div>
-                  <div className="font-semibold text-gray-900">Smith Family</div>
-                  <div className="text-sm text-gray-500 flex items-center mt-1">
-                    <UsersIcon className="w-4 h-4 mr-1" />
-                    4 members • 18 content
+              ))}
+            </div>
+          </div>
+
+          {/* Alerts */}
+          <div className="macos-card p-6">
+            <h3 className="text-base font-semibold text-gray-900 mb-4">Alerts</h3>
+            <div className="space-y-3">
+              {[
+                { type: 'error', title: 'Backup failed last night', desc: 'Automatic backup did not complete. Retry required.' },
+                { type: 'warning', title: 'Pending content approvals', desc: '4 items awaiting review.' },
+                { type: 'info', title: 'New platform update available', desc: 'Version 2.2.0 includes security fixes.' },
+              ].map((alert, idx) => (
+                <div
+                  key={idx}
+                  className={`p-3 rounded-xl border ${
+                    alert.type === 'error' ? 'bg-red-50 border-red-100' :
+                    alert.type === 'warning' ? 'bg-yellow-50 border-yellow-100' :
+                    'bg-blue-50 border-blue-100'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`w-2 h-2 rounded-full mt-1.5 ${
+                      alert.type === 'error' ? 'bg-red-500' :
+                      alert.type === 'warning' ? 'bg-yellow-500' :
+                      'bg-blue-500'
+                    }`} aria-hidden="true"></div>
+                    <div className="flex-1">
+                      <p className={`text-sm font-semibold ${
+                        alert.type === 'error' ? 'text-red-800' :
+                        alert.type === 'warning' ? 'text-yellow-800' :
+                        'text-blue-800'
+                      }`}>
+                        {alert.title}
+                      </p>
+                      <p className={`text-xs mt-1 ${
+                        alert.type === 'error' ? 'text-red-700' :
+                        alert.type === 'warning' ? 'text-yellow-700' :
+                        'text-blue-700'
+                      }`}>
+                        {alert.desc}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm text-gray-500 flex items-center">
-                  <ClockIcon className="w-4 h-4 mr-1" />
-                  Last activity
-                </div>
-                <div className="text-sm font-semibold text-gray-900">Jan 14, 2024</div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-150">
-              <div className="flex items-center">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-sm mr-4">
-                  BF
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900">Brown Family</div>
-                  <div className="text-sm text-gray-500 flex items-center mt-1">
-                    <UsersIcon className="w-4 h-4 mr-1" />
-                    5 members • 12 content
-                  </div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm text-gray-500 flex items-center">
-                  <ClockIcon className="w-4 h-4 mr-1" />
-                  Last activity
-                </div>
-                <div className="text-sm font-semibold text-gray-900">Jan 13, 2024</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* System Status */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">System Status</h3>
-            <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700">All systems normal</span>
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Uptime</span>
-              <span className="text-sm font-medium text-gray-900">99.98%</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">API latency (p95)</span>
-              <span className="text-sm font-medium text-gray-900">182 ms</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Job queue</span>
-              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-yellow-50 text-yellow-700">3 pending</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Alerts */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Alerts</h3>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => exportActivityCsv(getUnifiedActivity())}
-                className="px-3 py-1.5 border border-gray-300 rounded-lg text-xs text-gray-700 hover:bg-gray-50"
-                aria-label="Export alerts CSV"
-              >
-                Export CSV
-              </button>
-              <button
-                onClick={copyLinkWithFilters}
-                className="px-3 py-1.5 border border-gray-300 rounded-lg text-xs text-gray-700 hover:bg-gray-50"
-                aria-label="Copy link with filters"
-              >
-                Copy link
-              </button>
-            </div>
-          </div>
-          <div className="space-y-3">
-            <div className="flex items-start p-3 bg-red-50 rounded-xl border border-red-100">
-              <div className="w-2 h-2 bg-red-500 rounded-full mt-2 mr-3"></div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-red-800">Backup failed last night</p>
-                <p className="text-xs text-red-700 mt-1">Automatic backup did not complete. Retry required.</p>
-              </div>
-            </div>
-            <div className="flex items-start p-3 bg-yellow-50 rounded-xl border border-yellow-100">
-              <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2 mr-3"></div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-yellow-800">Pending content approvals</p>
-                <p className="text-xs text-yellow-700 mt-1">4 items awaiting review.</p>
-              </div>
-            </div>
-            <div className="flex items-start p-3 bg-blue-50 rounded-xl border border-blue-100">
-              <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-blue-800">New platform update available</p>
-                <p className="text-xs text-blue-700 mt-1">Version 2.2.0 includes security fixes.</p>
-              </div>
+              ))}
             </div>
           </div>
         </div>

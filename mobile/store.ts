@@ -1,100 +1,22 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Define initial state
-const initialState = {
-  auth: {
-    user: null,
-    isAuthenticated: false,
-    loading: false,
-  },
-  family: {
-    members: [],
-    currentFamily: null,
-    loading: false,
-  },
-  chat: {
-    messages: [],
-    conversations: [],
-    loading: false,
-  },
-  location: {
-    currentLocation: null,
-    familyLocations: [],
-    loading: false,
-  },
-  safety: {
-    emergencyContacts: [],
-    geofences: [],
-    alerts: [],
-    loading: false,
-  },
-};
+// Import slices
+import authReducer from './src/store/slices/authSlice';
+import familyReducer from './src/store/slices/familySlice';
+import chatReducer from './src/store/slices/chatSlice';
+import locationReducer from './src/store/slices/locationSlice';
+import safetyReducer from './src/store/slices/safetySlice';
 
-// Create root reducer
-const rootReducer = (state = initialState, action: any) => {
-  switch (action.type) {
-    case 'auth/login':
-      return {
-        ...state,
-        auth: {
-          ...state.auth,
-          user: action.payload,
-          isAuthenticated: true,
-          loading: false,
-        },
-      };
-    case 'auth/logout':
-      return {
-        ...state,
-        auth: {
-          ...state.auth,
-          user: null,
-          isAuthenticated: false,
-          loading: false,
-        },
-      };
-    case 'family/setMembers':
-      return {
-        ...state,
-        family: {
-          ...state.family,
-          members: action.payload,
-          loading: false,
-        },
-      };
-    case 'chat/setMessages':
-      return {
-        ...state,
-        chat: {
-          ...state.chat,
-          messages: action.payload,
-          loading: false,
-        },
-      };
-    case 'location/setCurrentLocation':
-      return {
-        ...state,
-        location: {
-          ...state.location,
-          currentLocation: action.payload,
-          loading: false,
-        },
-      };
-    case 'safety/setEmergencyContacts':
-      return {
-        ...state,
-        safety: {
-          ...state.safety,
-          emergencyContacts: action.payload,
-          loading: false,
-        },
-      };
-    default:
-      return state;
-  }
-};
+// Combine reducers
+const rootReducer = combineReducers({
+  auth: authReducer,
+  family: familyReducer,
+  chat: chatReducer,
+  location: locationReducer,
+  safety: safetyReducer,
+});
 
 // Configure persist
 const persistConfig = {
@@ -112,11 +34,16 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+        // Ignore these field paths in all actions
+        ignoredActionPaths: ['payload.timestamp', 'payload.createdAt', 'payload.updatedAt'],
+        // Ignore these paths in the state
+        ignoredPaths: ['chat.messages', 'location.familyLocations'],
       },
     }),
 });
 
 export const persistor = persistStore(store);
 
+// Export types
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch; 

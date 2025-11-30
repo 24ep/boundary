@@ -21,6 +21,15 @@ import {
   PlusIcon,
   TagIcon
 } from '@heroicons/react/24/outline'
+import { Card, CardBody, CardHeader } from './ui/Card'
+import { Button } from './ui/Button'
+import { Input } from './ui/Input'
+import { Select } from './ui/Select'
+import { Badge } from './ui/Badge'
+import { Modal } from './ui/Modal'
+import { LoadingSpinner } from './ui/LoadingSpinner'
+import { EmptyState } from './ui/EmptyState'
+import { Table } from './ui/Table'
 
 interface Ticket {
   id: string
@@ -162,293 +171,287 @@ export function TicketManagement() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="loading-spinner"></div>
+      <div className="flex items-center justify-center h-64" role="status" aria-label="Loading tickets">
+        <LoadingSpinner size="lg" />
       </div>
     )
   }
 
   return (
-    <div className="p-6 space-y-8">
-      {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 section bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl">
-        <div className="space-y-2">
-          <h2 className="text-3xl font-bold text-gray-900">Ticket Management</h2>
-          <p className="text-gray-600 text-lg">Manage support tickets, reports, and user complaints</p>
-        </div>
-        <button 
-          onClick={() => setShowCreateTicket(true)} 
-          className="btn btn-primary flex items-center gap-3 px-6 py-3 text-base font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
-        >
-          <PlusIcon className="h-5 w-5" />
-          Create Ticket
-        </button>
-      </div>
+    <div className="space-y-6 animate-fade-in">
+      {/* Header */}
+      <Card variant="frosted">
+        <CardBody>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Ticket Management</h2>
+              <p className="text-sm text-gray-500">Manage support tickets, reports, and user complaints</p>
+            </div>
+            <Button
+              variant="primary"
+              onClick={() => setShowCreateTicket(true)}
+            >
+              <PlusIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+              Create Ticket
+            </Button>
+          </div>
+        </CardBody>
+      </Card>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="stats-card rounded-xl">
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Tickets</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Tickets</p>
+                <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <TicketIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
             </div>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <TicketIcon className="h-8 w-8 text-blue-600" />
+          </CardBody>
+        </Card>
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Open</p>
+                <p className="text-3xl font-bold text-red-600">{stats.open}</p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                <ExclamationTriangleIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div className="stats-card rounded-xl">
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Open</p>
-              <p className="text-3xl font-bold text-red-600">{stats.open}</p>
+          </CardBody>
+        </Card>
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">In Progress</p>
+                <p className="text-3xl font-bold text-blue-600">{stats.inProgress}</p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <ClockIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
             </div>
-            <div className="p-3 bg-red-100 rounded-lg">
-              <ExclamationTriangleIcon className="h-8 w-8 text-red-600" />
+          </CardBody>
+        </Card>
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Resolved</p>
+                <p className="text-3xl font-bold text-green-600">{stats.resolved}</p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                <CheckCircleIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div className="stats-card rounded-xl">
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">In Progress</p>
-              <p className="text-3xl font-bold text-blue-600">{stats.inProgress}</p>
-            </div>
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <ClockIcon className="h-8 w-8 text-blue-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="stats-card rounded-xl">
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Resolved</p>
-              <p className="text-3xl font-bold text-green-600">{stats.resolved}</p>
-            </div>
-            <div className="p-3 bg-green-100 rounded-lg">
-              <CheckCircleIcon className="h-8 w-8 text-green-600" />
-            </div>
-          </div>
-        </div>
+          </CardBody>
+        </Card>
       </div>
 
       {/* Filters Section */}
-      <div className="section">
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Filters & Search</h3>
-          <p className="text-gray-600">Filter and search through tickets</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              <MagnifyingGlassIcon className="h-4 w-4 inline mr-2" />
-              Search Tickets
-            </label>
-            <input
-              type="text"
-              placeholder="Search by title or description..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="input input-bordered w-full px-4 py-3 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              <FunnelIcon className="h-4 w-4 inline mr-2" />
-              Status Filter
-            </label>
-            <select
+      <Card variant="frosted">
+        <CardHeader>
+          <h3 className="text-base font-semibold text-gray-900">Filters & Search</h3>
+        </CardHeader>
+        <CardBody>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="relative">
+              <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" aria-hidden="true" />
+              <Input
+                type="text"
+                placeholder="Search by title or description..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <Select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="select select-bordered w-full px-4 py-3 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-            >
-              <option value="all">All Status</option>
-              <option value="open">Open</option>
-              <option value="in_progress">In Progress</option>
-              <option value="resolved">Resolved</option>
-              <option value="closed">Closed</option>
-            </select>
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              <TagIcon className="h-4 w-4 inline mr-2" />
-              Type Filter
-            </label>
-            <select
+              options={[
+                { value: 'all', label: 'All Status' },
+                { value: 'open', label: 'Open' },
+                { value: 'in_progress', label: 'In Progress' },
+                { value: 'resolved', label: 'Resolved' },
+                { value: 'closed', label: 'Closed' }
+              ]}
+            />
+            <Select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="select select-bordered w-full px-4 py-3 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-            >
-              <option value="all">All Types</option>
-              <option value="post_report">Post Report</option>
-              <option value="user_complaint">User Complaint</option>
-              <option value="technical_issue">Technical Issue</option>
-              <option value="feature_request">Feature Request</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              <FlagIcon className="h-4 w-4 inline mr-2" />
-              Priority Filter
-            </label>
-            <select
+              options={[
+                { value: 'all', label: 'All Types' },
+                { value: 'post_report', label: 'Post Report' },
+                { value: 'user_complaint', label: 'User Complaint' },
+                { value: 'technical_issue', label: 'Technical Issue' },
+                { value: 'feature_request', label: 'Feature Request' },
+                { value: 'other', label: 'Other' }
+              ]}
+            />
+            <Select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value)}
-              className="select select-bordered w-full px-4 py-3 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-            >
-              <option value="all">All Priorities</option>
-              <option value="urgent">Urgent</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
+              options={[
+                { value: 'all', label: 'All Priorities' },
+                { value: 'urgent', label: 'Urgent' },
+                { value: 'high', label: 'High' },
+                { value: 'medium', label: 'Medium' },
+                { value: 'low', label: 'Low' }
+              ]}
+            />
           </div>
-        </div>
-      </div>
+        </CardBody>
+      </Card>
 
       {/* Tickets List */}
-      <div className="table-container">
-        <div className="table-title">
-          <h3 className="text-lg font-semibold text-gray-900">Tickets</h3>
-          <p className="text-sm text-gray-600">Manage and track all support tickets</p>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="table w-full">
-            <thead className="table-head">
-              <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reporter</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredTickets.map((ticket) => (
-                <tr 
-                  key={ticket.id} 
-                  className="table-row"
-                  onClick={() => {
-                    setSelectedTicket(ticket)
-                    setShowTicketDrawer(true)
-                  }}
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="font-mono text-sm text-gray-900 bg-gray-100 px-2 py-1 rounded">#{ticket.id}</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="max-w-xs">
-                      <div className="font-medium text-gray-900 truncate">{ticket.title}</div>
-                      <div className="text-sm text-gray-500 truncate">
-                        {ticket.description}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
-                      <div className="text-gray-400">
-                        {getTypeIcon(ticket.type)}
-                      </div>
-                      <span className="text-sm font-medium text-gray-900 capitalize">
-                        {ticket.type.replace('_', ' ')}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                      ticket.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-                      ticket.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                      ticket.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-green-100 text-green-800'
-                    }`}>
-                      {ticket.priority}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                      ticket.status === 'open' ? 'bg-red-100 text-red-800' :
-                      ticket.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
-                      ticket.status === 'resolved' ? 'bg-green-100 text-green-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
-                      {ticket.status.replace('_', ' ')}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0">
-                        <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
-                          <UserIcon className="h-4 w-4 text-gray-500" />
+      {filteredTickets.length === 0 ? (
+        <EmptyState
+          icon={<TicketIcon className="h-12 w-12" />}
+          title="No tickets found"
+          description="Try adjusting your search or filter criteria"
+        />
+      ) : (
+        <Card variant="frosted">
+          <CardHeader>
+            <h3 className="text-lg font-semibold text-gray-900">Tickets ({filteredTickets.length})</h3>
+          </CardHeader>
+          <CardBody className="p-0">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50/50 border-b border-gray-200/50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">ID</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Title</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Priority</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Reporter</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Created</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200/50">
+                  {filteredTickets.map((ticket) => (
+                    <tr 
+                      key={ticket.id} 
+                      className="hover:bg-gray-50/50 cursor-pointer transition-colors duration-150"
+                      onClick={() => {
+                        setSelectedTicket(ticket)
+                        setShowTicketDrawer(true)
+                      }}
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="font-mono text-sm text-gray-900 bg-gray-100 px-2 py-1 rounded-lg">#{ticket.id}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="max-w-xs">
+                          <div className="font-medium text-gray-900 truncate">{ticket.title}</div>
+                          <div className="text-sm text-gray-500 truncate">
+                            {ticket.description}
+                          </div>
                         </div>
-                      </div>
-                      <div className="min-w-0">
-                        <div className="font-medium text-sm text-gray-900 truncate">{ticket.reporter.name}</div>
-                        <div className="text-xs text-gray-500 truncate">{ticket.reporter.familyName}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <CalendarIcon className="h-4 w-4 text-gray-400" />
-                      <span>{new Date(ticket.createdAt).toLocaleDateString()}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setSelectedTicket(ticket)
-                          setShowTicketDrawer(true)
-                        }}
-                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150"
-                        title="View Details"
-                      >
-                        <EyeIcon className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={(e) => e.stopPropagation()}
-                        className="p-2 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors duration-150"
-                        title="Edit"
-                      >
-                        <PencilIcon className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={(e) => e.stopPropagation()}
-                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-150"
-                        title="Delete"
-                      >
-                        <TrashIcon className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          {filteredTickets.length === 0 && (
-            <div className="text-center py-16">
-              <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                <TicketIcon className="h-8 w-8 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No tickets found</h3>
-              <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <div className="text-gray-400">
+                            {getTypeIcon(ticket.type)}
+                          </div>
+                          <span className="text-sm font-medium text-gray-900 capitalize">
+                            {ticket.type.replace('_', ' ')}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <Badge 
+                          variant={
+                            ticket.priority === 'urgent' ? 'error' :
+                            ticket.priority === 'high' ? 'warning' :
+                            ticket.priority === 'medium' ? 'warning' :
+                            'success'
+                          }
+                          size="sm"
+                        >
+                          {ticket.priority}
+                        </Badge>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <Badge 
+                          variant={
+                            ticket.status === 'open' ? 'error' :
+                            ticket.status === 'in_progress' ? 'info' :
+                            ticket.status === 'resolved' ? 'success' :
+                            'default'
+                          }
+                          size="sm"
+                        >
+                          {ticket.status.replace('_', ' ')}
+                        </Badge>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-3">
+                          <div className="flex-shrink-0">
+                            <div className="h-8 w-8 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center">
+                              <UserIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
+                            </div>
+                          </div>
+                          <div className="min-w-0">
+                            <div className="font-medium text-sm text-gray-900 truncate">{ticket.reporter.name}</div>
+                            <div className="text-xs text-gray-500 truncate">{ticket.reporter.familyName}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <CalendarIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
+                          <span>{new Date(ticket.createdAt).toLocaleDateString()}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setSelectedTicket(ticket)
+                              setShowTicketDrawer(true)
+                            }}
+                            aria-label="View ticket details"
+                          >
+                            <EyeIcon className="h-4 w-4" aria-hidden="true" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => e.stopPropagation()}
+                            aria-label="Edit ticket"
+                          >
+                            <PencilIcon className="h-4 w-4" aria-hidden="true" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => e.stopPropagation()}
+                            aria-label="Delete ticket"
+                          >
+                            <TrashIcon className="h-4 w-4" aria-hidden="true" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          )}
-        </div>
-      </div>
+          </CardBody>
+        </Card>
+      )}
 
       {/* Create Ticket Modal */}
       {showCreateTicket && (

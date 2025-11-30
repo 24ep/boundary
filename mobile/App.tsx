@@ -19,7 +19,7 @@ import { AuthProvider } from './src/contexts/AuthContext';
 import { LocationProvider } from './src/contexts/LocationContext';
 import { NotificationProvider } from './src/contexts/NotificationContext';
 import { SocketProvider } from './src/contexts/SocketContext';
-import { BrandingProvider } from './src/contexts/BrandingContext';
+import { BrandingProvider, useBranding } from './src/contexts/BrandingContext';
 // Initialize react-i18next (basic strings)
 import './src/i18n';
 // Initialize app localization service (JSON locales, language switching)
@@ -92,6 +92,15 @@ const theme = extendTheme({
   // Using system fonts - no custom font configuration needed
 });
 
+// Branding Gate Component - must be inside BrandingProvider
+const BrandingGate: React.FC = () => {
+  const { isLoaded, mobileAppName, logoUrl } = useBranding();
+  if (!isLoaded) {
+    return <SplashBranding appName={mobileAppName} logoUrl={logoUrl} />;
+  }
+  return <RootNavigator />;
+};
+
 const App: React.FC = () => {
   const [i18nReady, setI18nReady] = useState(false);
   const [fontsLoaded] = useFonts({
@@ -137,19 +146,7 @@ const App: React.FC = () => {
               <BrandingProvider>
                 <NotificationProvider>
                   <StatusBar barStyle="light-content" backgroundColor="#FA7272" />
-                  {/* Inline consumer to gate on branding load */}
-                  {(() => {
-                    const BrandingGate: React.FC = () => {
-                      const BrandingCtx = require('./src/contexts/BrandingContext')
-                      const { useBranding } = BrandingCtx
-                      const { isLoaded, mobileAppName, logoUrl } = useBranding()
-                      if (!isLoaded) {
-                        return <SplashBranding appName={mobileAppName} logoUrl={logoUrl} />
-                      }
-                      return <RootNavigator />
-                    }
-                    return <BrandingGate />
-                  })()}
+                  <BrandingGate />
                 </NotificationProvider>
               </BrandingProvider>
             </LocationProvider>
@@ -161,3 +158,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

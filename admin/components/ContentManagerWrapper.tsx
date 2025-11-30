@@ -8,6 +8,9 @@ import { LookerStudioEditor } from './LookerStudioEditor'
 import { ContentProviderWithNavigation } from './content/providers/ContentProviderWithNavigation'
 import { authService } from '../services/authService'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { Card, CardBody } from './ui/Card'
+import { Button } from './ui/Button'
+import { LoadingSpinner } from './ui/LoadingSpinner'
 
 export const ContentManagerWrapper: React.FC = () => {
   const [currentView, setCurrentView] = useState<'list' | 'create' | 'edit'>('list')
@@ -213,38 +216,46 @@ export const ContentManagerWrapper: React.FC = () => {
 
   if (currentView === 'create' || currentView === 'edit') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
         {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={handleBackToList}
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                <ArrowLeftIcon className="h-5 w-5" />
-                <span>Back to Content Management</span>
-              </button>
-              <div className="h-6 w-px bg-gray-300"></div>
-            <div className="flex items-center space-x-3">
-              <h1 className="text-xl font-semibold text-gray-900">
-                {currentView === 'create' ? 'Create New Content' : `Edit Content: ${editingPage?.title || ''}`}
-              </h1>
-              {editingPage?.slug && (
-                <span className="text-sm text-gray-500">
-                  Route: <span className="font-mono text-gray-700">/content/{editingPage.slug}</span>
-                </span>
-              )}
+        <Card variant="frosted" className="rounded-none border-x-0 border-t-0 shadow-lg">
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  onClick={handleBackToList}
+                  className="flex items-center gap-2"
+                >
+                  <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
+                  <span>Back to Content Management</span>
+                </Button>
+                <div className="h-6 w-px bg-gray-300/50" aria-hidden="true"></div>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-xl font-semibold text-gray-900">
+                    {currentView === 'create' ? 'Create New Content' : `Edit Content: ${editingPage?.title || ''}`}
+                  </h1>
+                  {editingPage?.slug && (
+                    <span className="text-sm text-gray-500">
+                      Route: <span className="font-mono text-gray-700">/content/{editingPage.slug}</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+              <BackendStatusIndicator />
             </div>
-            </div>
-            <BackendStatusIndicator />
-          </div>
-        </div>
+          </CardBody>
+        </Card>
 
         {/* Content Editor */}
-        <div className="flex-1">
+        <div className="flex-1 p-6">
           {creatingDraft ? (
-            <div className="p-6 text-gray-600">Creating draft...</div>
+            <div className="flex items-center justify-center h-64" role="status" aria-label="Creating draft">
+              <div className="text-center">
+                <LoadingSpinner size="lg" className="mx-auto mb-4" />
+                <p className="text-sm text-gray-600">Creating draft...</p>
+              </div>
+            </div>
           ) : (
             <LookerStudioEditor
               page={editingPage}
@@ -264,7 +275,7 @@ export const ContentManagerWrapper: React.FC = () => {
   // This component assumes the user is already authenticated
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 animate-fade-in">
       {/* Content management without top header/status */}
       <ContentProviderWithNavigation 
         onCreateNew={handleCreateNew}

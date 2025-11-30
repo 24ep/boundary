@@ -236,8 +236,8 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50" role="status" aria-label="Loading application">
+        <div className="macos-spinner w-12 h-12"></div>
       </div>
     )
   }
@@ -247,7 +247,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
       <Sidebar 
         activeModule={activeModule} 
         setActiveModule={setActiveModule}
@@ -261,9 +261,9 @@ export default function Home() {
           onFilterClick={handleFilterClick}
           onLogout={handleLogout}
         />
-        <div className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-6" role="main">
           {renderModule()}
-        </div>
+        </main>
       </div>
     </div>
   )

@@ -18,6 +18,13 @@ import {
   CloudIcon
 } from '@heroicons/react/24/outline'
 import { DashboardStudio } from './DashboardStudio'
+import { Card, CardBody, CardHeader } from './ui/Card'
+import { Button } from './ui/Button'
+import { Input } from './ui/Input'
+import { Badge } from './ui/Badge'
+import { LoadingSpinner } from './ui/LoadingSpinner'
+import { EmptyState } from './ui/EmptyState'
+import { Modal } from './ui/Modal'
 
 interface Dashboard {
   id: string
@@ -213,146 +220,156 @@ export const DashboardManagement: React.FC<DashboardManagementProps> = ({ onBack
   }
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full animate-fade-in">
       {/* Secondary Sidebar - Dashboard List */}
-      <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+      <Card variant="frosted" className="w-80 rounded-none border-r border-gray-200/50 flex flex-col">
         {/* Header */}
-        <div className="p-4 border-b border-gray-200">
+        <CardHeader>
           <div className="flex items-center justify-between mb-4">
-            <button
+            <Button
+              variant="secondary"
+              size="sm"
               onClick={onBack}
-              className="btn btn-secondary btn-sm"
             >
-              <ArrowLeftIcon className="h-4 w-4 mr-1" />
+              <ArrowLeftIcon className="h-4 w-4 mr-1" aria-hidden="true" />
               Back
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
               onClick={handleCreateDashboard}
-              className="btn btn-primary btn-sm"
             >
-              <PlusIcon className="h-4 w-4 mr-1" />
+              <PlusIcon className="h-4 w-4 mr-1" aria-hidden="true" />
               New
-            </button>
+            </Button>
           </div>
           
           <h2 className="text-lg font-semibold text-gray-900 mb-3">Dashboards</h2>
           
           {/* Search */}
           <div className="relative">
-            <MagnifyingGlassIcon className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
+            <MagnifyingGlassIcon className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" aria-hidden="true" />
+            <Input
               type="text"
               placeholder="Search dashboards..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              className="pl-10"
             />
           </div>
-        </div>
+        </CardHeader>
 
         {/* Dashboard List */}
-        <div className="flex-1 overflow-y-auto">
+        <CardBody className="flex-1 overflow-y-auto p-2">
           {loading ? (
-            <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-red-600"></div>
+            <div className="flex items-center justify-center h-32" role="status" aria-label="Loading">
+              <LoadingSpinner size="md" />
             </div>
           ) : filteredDashboards.length === 0 ? (
-            <div className="p-4 text-center text-gray-500">
-              {searchTerm ? 'No dashboards found' : 'No dashboards available'}
-            </div>
+            <EmptyState
+              icon={<ChartBarIcon className="h-12 w-12 text-gray-400" />}
+              title={searchTerm ? 'No dashboards found' : 'No dashboards available'}
+              description={searchTerm ? 'Try adjusting your search terms.' : 'Create your first dashboard to get started.'}
+            />
           ) : (
-            <div className="p-2 space-y-2">
+            <div className="space-y-2">
               {filteredDashboards.map((dashboard) => (
-                <div
+                <Card
                   key={dashboard.id}
+                  variant="default"
+                  hoverable
                   onClick={() => handleDashboardSelect(dashboard)}
-                  className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                  className={`cursor-pointer transition-all ${
                     selectedDashboard?.id === dashboard.id
-                      ? 'border-red-500 bg-red-50'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      ? 'border-blue-500 bg-blue-50/50 shadow-md'
+                      : ''
                   }`}
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-gray-900">{dashboard.name}</h3>
-                        {dashboard.isDefault && (
-                          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
-                            Default
-                          </span>
-                        )}
+                  <CardBody>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-medium text-gray-900">{dashboard.name}</h3>
+                          {dashboard.isDefault && (
+                            <Badge variant="info" size="sm">Default</Badge>
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-600 mb-2">{dashboard.description}</p>
+                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                          <span>{dashboard.widgets.length} widgets</span>
+                          <span>Updated {new Date(dashboard.updatedAt).toLocaleDateString()}</span>
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-600 mt-1">{dashboard.description}</p>
-                      <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                        <span>{dashboard.widgets.length} widgets</span>
-                        <span>Updated {new Date(dashboard.updatedAt).toLocaleDateString()}</span>
+                      <div className="flex gap-1 ml-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleEditDashboard(dashboard)
+                          }}
+                          aria-label="Edit dashboard"
+                        >
+                          <PencilIcon className="h-4 w-4" aria-hidden="true" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDeleteDashboard(dashboard.id)
+                          }}
+                          aria-label="Delete dashboard"
+                          disabled={dashboard.isDefault}
+                        >
+                          <TrashIcon className="h-4 w-4 text-red-600" aria-hidden="true" />
+                        </Button>
                       </div>
                     </div>
-                    <div className="flex gap-1 ml-2">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleEditDashboard(dashboard)
-                        }}
-                        className="p-1 text-gray-400 hover:text-blue-600"
-                        title="Edit dashboard"
-                      >
-                        <PencilIcon className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleDeleteDashboard(dashboard.id)
-                        }}
-                        className="p-1 text-gray-400 hover:text-red-600"
-                        title="Delete dashboard"
-                        disabled={dashboard.isDefault}
-                      >
-                        <TrashIcon className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                  </CardBody>
+                </Card>
               ))}
             </div>
           )}
-        </div>
-      </div>
+        </CardBody>
+      </Card>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-50 via-white to-gray-50">
         {selectedDashboard ? (
           <>
             {/* Dashboard Header */}
-            <div className="p-4 border-b border-gray-200 bg-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">{selectedDashboard.name}</h1>
-                  <p className="text-gray-600 mt-1">{selectedDashboard.description}</p>
+            <Card variant="frosted" className="rounded-none border-x-0 border-t-0 shadow-lg">
+              <CardBody>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-900 mb-2">{selectedDashboard.name}</h1>
+                    <p className="text-sm text-gray-500">{selectedDashboard.description}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant={editMode ? 'secondary' : 'primary'}
+                      onClick={() => setEditMode(!editMode)}
+                    >
+                      {editMode ? (
+                        <>
+                          <EyeIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+                          View Mode
+                        </>
+                      ) : (
+                        <>
+                          <PencilIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+                          Edit Mode
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setEditMode(!editMode)}
-                    className={`btn ${editMode ? 'btn-secondary' : 'btn-primary'}`}
-                  >
-                    {editMode ? (
-                      <>
-                        <EyeIcon className="h-4 w-4 mr-2" />
-                        View Mode
-                      </>
-                    ) : (
-                      <>
-                        <PencilIcon className="h-4 w-4 mr-2" />
-                        Edit Mode
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
+              </CardBody>
+            </Card>
 
             {/* Dashboard Content */}
-            <div className="flex-1 p-4 bg-gray-50">
+            <div className="flex-1 p-6 overflow-y-auto">
               {editMode ? (
                 <DashboardStudio 
                   dashboard={selectedDashboard}
@@ -370,15 +387,15 @@ export const DashboardManagement: React.FC<DashboardManagementProps> = ({ onBack
           </>
         ) : (
           <div className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <ChartBarIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Dashboard Selected</h3>
-              <p className="text-gray-600 mb-4">Select a dashboard from the sidebar to view it</p>
-              <button onClick={handleCreateDashboard} className="btn btn-primary">
-                <PlusIcon className="h-4 w-4 mr-2" />
-                Create New Dashboard
-              </button>
-            </div>
+            <EmptyState
+              icon={<ChartBarIcon className="h-12 w-12 text-gray-400" />}
+              title="No Dashboard Selected"
+              description="Select a dashboard from the sidebar to view it"
+              action={{
+                label: 'Create New Dashboard',
+                onClick: handleCreateDashboard
+              }}
+            />
           </div>
         )}
       </div>
@@ -404,72 +421,77 @@ function DashboardViewer({ dashboard }: { dashboard: Dashboard }) {
   return (
     <div className="grid grid-cols-12 gap-4">
       {dashboard.widgets.map((widget) => (
-        <div
+        <Card
           key={widget.id}
-          className="card"
+          variant="frosted"
+          hoverable
           style={{
             gridColumn: `span ${widget.position.w}`,
             gridRow: `span ${widget.position.h}`
           }}
         >
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-medium text-gray-900">{widget.title}</h3>
-            <div className="text-gray-400">
-              {getWidgetIcon(widget.type)}
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <h3 className="font-medium text-gray-900">{widget.title}</h3>
+              <div className="text-gray-400">
+                {getWidgetIcon(widget.type)}
+              </div>
             </div>
-          </div>
+          </CardHeader>
+          <CardBody>
           
-          <div className="h-full">
-            {widget.type === 'stats' && (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-red-600">12</div>
-                  <div className="text-sm text-gray-500">Total Families</div>
+            <div className="h-full">
+              {widget.type === 'stats' && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-red-600">12</div>
+                    <div className="text-sm text-gray-500">Total Families</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-600">156</div>
+                    <div className="text-sm text-gray-500">Total Content</div>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">156</div>
-                  <div className="text-sm text-gray-500">Total Content</div>
+              )}
+              
+              {widget.type === 'chart' && (
+                <div className="h-32 bg-gray-100/50 rounded-lg flex items-center justify-center border border-gray-200/50">
+                  <span className="text-gray-500">Chart Widget</span>
                 </div>
-              </div>
-            )}
-            
-            {widget.type === 'chart' && (
-              <div className="h-32 bg-gray-100 rounded flex items-center justify-center">
-                <span className="text-gray-500">Chart Widget</span>
-              </div>
-            )}
-            
-            {widget.type === 'table' && (
-              <div className="h-32 bg-gray-100 rounded flex items-center justify-center">
-                <span className="text-gray-500">Table Widget</span>
-              </div>
-            )}
+              )}
+              
+              {widget.type === 'table' && (
+                <div className="h-32 bg-gray-100/50 rounded-lg flex items-center justify-center border border-gray-200/50">
+                  <span className="text-gray-500">Table Widget</span>
+                </div>
+              )}
 
-            {widget.type === 'calendar' && (
-              <div className="h-32 bg-gray-100 rounded flex items-center justify-center">
-                <span className="text-gray-500">Calendar Widget</span>
-              </div>
-            )}
+              {widget.type === 'calendar' && (
+                <div className="h-32 bg-gray-100/50 rounded-lg flex items-center justify-center border border-gray-200/50">
+                  <span className="text-gray-500">Calendar Widget</span>
+                </div>
+              )}
 
-            {widget.type === 'gallery' && (
-              <div className="h-32 bg-gray-100 rounded flex items-center justify-center">
-                <span className="text-gray-500">Gallery Widget</span>
-              </div>
-            )}
+              {widget.type === 'gallery' && (
+                <div className="h-32 bg-gray-100/50 rounded-lg flex items-center justify-center border border-gray-200/50">
+                  <span className="text-gray-500">Gallery Widget</span>
+                </div>
+              )}
 
-            {widget.type === 'text' && (
-              <div className="h-32 bg-gray-100 rounded flex items-center justify-center">
-                <span className="text-gray-500">Text Widget</span>
-              </div>
-            )}
+              {widget.type === 'text' && (
+                <div className="h-32 bg-gray-100/50 rounded-lg flex items-center justify-center border border-gray-200/50">
+                  <span className="text-gray-500">Text Widget</span>
+                </div>
+              )}
 
-            {widget.type === 'storage' && (
-              <div className="h-32 bg-gray-100 rounded flex items-center justify-center">
-                <span className="text-gray-500">Storage Widget</span>
-              </div>
-            )}
-          </div>
-        </div>
+              {widget.type === 'storage' && (
+                <div className="h-32 bg-gray-100/50 rounded-lg flex items-center justify-center border border-gray-200/50">
+                  <span className="text-gray-500">Storage Widget</span>
+                </div>
+              )}
+            </div>
+          </CardBody>
+        </Card>
       ))}
     </div>
   )
@@ -499,53 +521,54 @@ const DashboardForm: React.FC<DashboardFormProps> = ({ dashboard, onSave, onCanc
   }
 
   return (
-    <div className="space-y-6">
-      <div className="card">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-900">
-            {dashboard ? 'Edit Dashboard' : 'Create New Dashboard'}
-          </h2>
-          <button onClick={onCancel} className="btn btn-secondary">
-            Cancel
-          </button>
-        </div>
-      </div>
+    <div className="space-y-6 animate-fade-in">
+      <Card variant="frosted">
+        <CardBody>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-900">
+              {dashboard ? 'Edit Dashboard' : 'Create New Dashboard'}
+            </h2>
+            <Button variant="secondary" onClick={onCancel}>
+              Cancel
+            </Button>
+          </div>
+        </CardBody>
+      </Card>
 
-      <div className="card">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="form-group">
-            <label className="form-label">Dashboard Name</label>
-            <input
+      <Card variant="frosted">
+        <CardBody>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Input
+              label="Dashboard Name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="form-input"
               placeholder="Enter dashboard name"
               required
             />
-          </div>
-          
-          <div className="form-group">
-            <label className="form-label">Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="form-input"
-              rows={3}
-              placeholder="Enter dashboard description"
-            />
-          </div>
-          
-          <div className="flex space-x-3">
-            <button type="button" onClick={onCancel} className="btn btn-secondary">
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary">
-              {dashboard ? 'Update Dashboard' : 'Create Dashboard'}
-            </button>
-          </div>
-        </form>
-      </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                rows={3}
+                placeholder="Enter dashboard description"
+              />
+            </div>
+            
+            <div className="flex gap-3 pt-4 border-t border-gray-200/50">
+              <Button type="button" variant="secondary" onClick={onCancel}>
+                Cancel
+              </Button>
+              <Button type="submit" variant="primary">
+                {dashboard ? 'Update Dashboard' : 'Create Dashboard'}
+              </Button>
+            </div>
+          </form>
+        </CardBody>
+      </Card>
     </div>
   )
 }

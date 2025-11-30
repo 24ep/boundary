@@ -16,6 +16,11 @@ import {
   LockClosedIcon,
   GlobeAltIcon
 } from '@heroicons/react/24/outline'
+import { Card, CardBody, CardHeader } from './ui/Card'
+import { Button } from './ui/Button'
+import { Badge } from './ui/Badge'
+import { LoadingSpinner } from './ui/LoadingSpinner'
+import { Table } from './ui/Table'
 
 interface FamilyMember {
   id: string
@@ -102,54 +107,56 @@ function FamilySidebar({ familyId, activeSection, setActiveSection }: FamilySide
   ]
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 h-full">
-      <div className="p-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">Family Management</h3>
-        <p className="text-sm text-gray-500">Family ID: {familyId}</p>
-      </div>
+    <Card variant="frosted" className="w-64 rounded-none border-r border-gray-200/50 h-full">
+      <CardHeader>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Family Management</h3>
+        <p className="text-xs text-gray-500 font-mono">Family ID: {familyId}</p>
+      </CardHeader>
       
-      <nav className="p-4 space-y-1">
-        {familySections.map((section) => {
-          const Icon = section.icon
-          const isActive = activeSection === section.id
-          
-          return (
-            <button
-              key={section.id}
-              onClick={() => setActiveSection(section.id)}
-              className={`
-                w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-all duration-200
-                ${isActive 
-                  ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 shadow-sm' 
-                  : 'hover:bg-gray-50 hover:shadow-sm'
-                }
-                group
-              `}
-            >
-              <div className={`
-                p-2 rounded-lg transition-colors
-                ${isActive 
-                  ? 'bg-white shadow-sm' 
-                  : 'group-hover:bg-white'
-                }
-              `}>
-                <Icon className={`h-4 w-4 ${isActive ? section.color : 'text-gray-400 group-hover:' + section.color.replace('text-', 'text-')}`} />
-              </div>
-              <div className="flex-1 text-left">
-                <div className={`font-medium text-sm transition-colors ${
-                  isActive ? 'text-gray-900' : 'text-gray-700 group-hover:text-gray-900'
-                }`}>
-                  {section.label}
+      <CardBody className="p-4">
+        <nav className="space-y-1">
+          {familySections.map((section) => {
+            const Icon = section.icon
+            const isActive = activeSection === section.id
+            
+            return (
+              <button
+                key={section.id}
+                onClick={() => setActiveSection(section.id)}
+                className={`
+                  w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200
+                  ${isActive 
+                    ? 'bg-blue-50 text-blue-700 shadow-sm border border-blue-200/50' 
+                    : 'hover:bg-gray-50 text-gray-700 hover:text-gray-900'
+                  }
+                  group
+                `}
+              >
+                <div className={`
+                  p-2 rounded-lg transition-colors
+                  ${isActive 
+                    ? 'bg-white shadow-sm' 
+                    : 'group-hover:bg-white'
+                  }
+                `}>
+                  <Icon className={`h-4 w-4 ${isActive ? section.color : 'text-gray-400 group-hover:' + section.color.replace('text-', 'text-')}`} aria-hidden="true" />
                 </div>
-              </div>
-              {isActive && (
-                <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
-              )}
-            </button>
-          )
-        })}
-      </nav>
-    </div>
+                <div className="flex-1 text-left">
+                  <div className={`font-medium text-sm transition-colors ${
+                    isActive ? 'text-gray-900' : 'text-gray-700 group-hover:text-gray-900'
+                  }`}>
+                    {section.label}
+                  </div>
+                </div>
+                {isActive && (
+                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full" aria-hidden="true"></div>
+                )}
+              </button>
+            )
+          })}
+        </nav>
+      </CardBody>
+    </Card>
   )
 }
 
@@ -233,215 +240,246 @@ export function FamilyDetail({ onBackToFamilies }: FamilyDetailProps) {
     switch (activeSection) {
       case 'overview':
         return (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white rounded-lg shadow p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Total Members</p>
-                    <p className="text-2xl font-bold text-gray-800">{family.memberCount}</p>
+              <Card variant="default" hoverable>
+                <CardBody>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Members</p>
+                      <p className="text-3xl font-bold text-gray-900">{family.memberCount}</p>
+                    </div>
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md">
+                      <UsersIcon className="h-5 w-5 text-white" aria-hidden="true" />
+                    </div>
                   </div>
-                  <UsersIcon className="h-8 w-8 text-blue-500" />
-                </div>
-              </div>
+                </CardBody>
+              </Card>
 
-              <div className="bg-white rounded-lg shadow p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Active Members</p>
-                    <p className="text-2xl font-bold text-green-600">
-                      {family.members.filter(m => m.status === 'active').length}
-                    </p>
+              <Card variant="default" hoverable>
+                <CardBody>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Active Members</p>
+                      <p className="text-3xl font-bold text-green-600">
+                        {family.members.filter(m => m.status === 'active').length}
+                      </p>
+                    </div>
+                    <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-md">
+                      <CheckCircleIcon className="h-5 w-5 text-white" aria-hidden="true" />
+                    </div>
                   </div>
-                  <CheckCircleIcon className="h-8 w-8 text-green-500" />
-                </div>
-              </div>
+                </CardBody>
+              </Card>
 
-              <div className="bg-white rounded-lg shadow p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Family Status</p>
-                    <p className="text-2xl font-bold text-blue-600 capitalize">{family.status}</p>
+              <Card variant="default" hoverable>
+                <CardBody>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Family Status</p>
+                      <p className="text-3xl font-bold text-blue-600 capitalize">{family.status}</p>
+                    </div>
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md">
+                      <ShieldCheckIcon className="h-5 w-5 text-white" aria-hidden="true" />
+                    </div>
                   </div>
-                  <ShieldCheckIcon className="h-8 w-8 text-blue-500" />
-                </div>
-              </div>
+                </CardBody>
+              </Card>
             </div>
 
-            <div className="bg-white rounded-lg shadow">
-              <div className="p-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold">Family Members</h3>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="table w-full">
-                  <thead>
-                    <tr>
-                      <th>Member</th>
-                      <th>Role</th>
-                      <th>Status</th>
-                      <th>Last Active</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {family.members.map((member) => (
-                      <tr key={member.id} className="hover:bg-gray-50">
-                        <td>
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                              <span className="text-white font-bold text-xs">
-                                {member.name.charAt(0)}
-                              </span>
-                            </div>
-                            <div>
-                              <div className="font-medium text-sm">{member.name}</div>
-                              <div className="text-xs text-gray-500">{member.email}</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <span className={`badge badge-${member.role === 'owner' ? 'blue' : member.role === 'admin' ? 'green' : 'gray'}`}>
-                            {member.role}
+            <Card variant="frosted">
+              <CardHeader>
+                <h3 className="text-lg font-semibold text-gray-900">Family Members</h3>
+              </CardHeader>
+              <CardBody className="p-0">
+                <Table
+                  headers={[
+                    { key: 'member', label: 'Member' },
+                    { key: 'role', label: 'Role' },
+                    { key: 'status', label: 'Status' },
+                    { key: 'lastActive', label: 'Last Active' },
+                    { key: 'actions', label: 'Actions' }
+                  ]}
+                  data={family.members.map((member) => ({
+                    member: (
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-md">
+                          <span className="text-white font-bold text-xs">
+                            {member.name.charAt(0)}
                           </span>
-                        </td>
-                        <td>
-                          <span className={`badge badge-${member.status === 'active' ? 'green' : 'yellow'}`}>
-                            {member.status}
-                          </span>
-                        </td>
-                        <td>
-                          <div className="text-sm text-gray-600">
-                            {new Date(member.lastActive).toLocaleDateString()}
-                          </div>
-                        </td>
-                        <td>
-                          <button className="btn btn-sm btn-ghost">
-                            <PencilIcon className="h-4 w-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                        </div>
+                        <div>
+                          <div className="font-medium text-sm text-gray-900">{member.name}</div>
+                          <div className="text-xs text-gray-500">{member.email}</div>
+                        </div>
+                      </div>
+                    ),
+                    role: (
+                      <Badge variant={member.role === 'owner' ? 'info' : member.role === 'admin' ? 'success' : 'default'} size="sm">
+                        {member.role}
+                      </Badge>
+                    ),
+                    status: (
+                      <Badge variant={member.status === 'active' ? 'success' : 'warning'} size="sm">
+                        {member.status}
+                      </Badge>
+                    ),
+                    lastActive: (
+                      <div className="text-sm text-gray-600">
+                        {new Date(member.lastActive).toLocaleDateString()}
+                      </div>
+                    ),
+                    actions: (
+                      <Button variant="ghost" size="sm" aria-label="Edit member">
+                        <PencilIcon className="h-4 w-4" aria-hidden="true" />
+                      </Button>
+                    )
+                  }))}
+                />
+              </CardBody>
+            </Card>
           </div>
         )
 
       case 'storage':
         return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold mb-4">Family Storage</h3>
-              <p className="text-gray-600">Storage management for {family.name}</p>
-              <div className="mt-4">
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-blue-600 h-2 rounded-full" style={{ width: '45%' }}></div>
+          <div className="space-y-6 animate-fade-in">
+            <Card variant="frosted">
+              <CardHeader>
+                <h3 className="text-lg font-semibold text-gray-900">Family Storage</h3>
+                <p className="text-sm text-gray-500">Storage management for {family.name}</p>
+              </CardHeader>
+              <CardBody>
+                <div className="mt-4">
+                  <div className="w-full bg-gray-200/50 rounded-full h-2.5 overflow-hidden">
+                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 h-2.5 rounded-full transition-all duration-500" style={{ width: '45%' }}></div>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">4.5 GB of 10 GB used</p>
                 </div>
-                <p className="text-sm text-gray-500 mt-2">4.5 GB of 10 GB used</p>
-              </div>
-            </div>
+              </CardBody>
+            </Card>
           </div>
         )
 
       case 'calendar':
         return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold mb-4">Family Calendar</h3>
-              <p className="text-gray-600">Event calendar for {family.name}</p>
-            </div>
+          <div className="space-y-6 animate-fade-in">
+            <Card variant="frosted">
+              <CardHeader>
+                <h3 className="text-lg font-semibold text-gray-900">Family Calendar</h3>
+                <p className="text-sm text-gray-500">Event calendar for {family.name}</p>
+              </CardHeader>
+            </Card>
           </div>
         )
 
       case 'content':
         return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold mb-4">Family Content</h3>
-              <p className="text-gray-600">Content management for {family.name}</p>
-              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-2">Marketing Content</h4>
-                  <p className="text-sm text-gray-600">Manage marketing materials and campaigns</p>
+          <div className="space-y-6 animate-fade-in">
+            <Card variant="frosted">
+              <CardHeader>
+                <h3 className="text-lg font-semibold text-gray-900">Family Content</h3>
+                <p className="text-sm text-gray-500">Content management for {family.name}</p>
+              </CardHeader>
+              <CardBody>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card variant="default" hoverable>
+                    <CardBody>
+                      <h4 className="font-medium text-gray-900 mb-2">Marketing Content</h4>
+                      <p className="text-sm text-gray-600">Manage marketing materials and campaigns</p>
+                    </CardBody>
+                  </Card>
+                  <Card variant="default" hoverable>
+                    <CardBody>
+                      <h4 className="font-medium text-gray-900 mb-2">News & Updates</h4>
+                      <p className="text-sm text-gray-600">Family news and announcements</p>
+                    </CardBody>
+                  </Card>
+                  <Card variant="default" hoverable>
+                    <CardBody>
+                      <h4 className="font-medium text-gray-900 mb-2">Documents</h4>
+                      <p className="text-sm text-gray-600">Family documents and files</p>
+                    </CardBody>
+                  </Card>
+                  <Card variant="default" hoverable>
+                    <CardBody>
+                      <h4 className="font-medium text-gray-900 mb-2">Media Library</h4>
+                      <p className="text-sm text-gray-600">Photos, videos, and other media</p>
+                    </CardBody>
+                  </Card>
                 </div>
-                <div className="border rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-2">News & Updates</h4>
-                  <p className="text-sm text-gray-600">Family news and announcements</p>
-                </div>
-                <div className="border rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-2">Documents</h4>
-                  <p className="text-sm text-gray-600">Family documents and files</p>
-                </div>
-                <div className="border rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-2">Media Library</h4>
-                  <p className="text-sm text-gray-600">Photos, videos, and other media</p>
-                </div>
-              </div>
-            </div>
+              </CardBody>
+            </Card>
           </div>
         )
 
       case 'notes':
         return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold mb-4">Family Notes</h3>
-              <p className="text-gray-600">Notes and documentation for {family.name}</p>
-            </div>
+          <div className="space-y-6 animate-fade-in">
+            <Card variant="frosted">
+              <CardHeader>
+                <h3 className="text-lg font-semibold text-gray-900">Family Notes</h3>
+                <p className="text-sm text-gray-500">Notes and documentation for {family.name}</p>
+              </CardHeader>
+            </Card>
           </div>
         )
 
       case 'safety':
         return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold mb-4">Family Safety</h3>
-              <p className="text-gray-600">Safety settings and emergency contacts for {family.name}</p>
-            </div>
+          <div className="space-y-6 animate-fade-in">
+            <Card variant="frosted">
+              <CardHeader>
+                <h3 className="text-lg font-semibold text-gray-900">Family Safety</h3>
+                <p className="text-sm text-gray-500">Safety settings and emergency contacts for {family.name}</p>
+              </CardHeader>
+            </Card>
           </div>
         )
 
-
       case 'settings':
         return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold mb-4">Family Settings</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium">Privacy</div>
-                    <div className="text-sm text-gray-500">Current: {family.settings.privacy}</div>
+          <div className="space-y-6 animate-fade-in">
+            <Card variant="frosted">
+              <CardHeader>
+                <h3 className="text-lg font-semibold text-gray-900">Family Settings</h3>
+              </CardHeader>
+              <CardBody>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between py-3 border-b border-gray-200/50">
+                    <div>
+                      <div className="font-medium text-gray-900">Privacy</div>
+                      <div className="text-sm text-gray-500">Current: {family.settings.privacy}</div>
+                    </div>
+                    <div className="flex items-center">
+                      {family.settings.privacy === 'public' ? <GlobeAltIcon className="h-5 w-5 text-green-500" aria-hidden="true" /> : 
+                       family.settings.privacy === 'private' ? <LockClosedIcon className="h-5 w-5 text-yellow-500" aria-hidden="true" /> :
+                       <UsersIcon className="h-5 w-5 text-blue-500" aria-hidden="true" />}
+                    </div>
                   </div>
-                  <div className="flex items-center">
-                    {family.settings.privacy === 'public' ? <GlobeAltIcon className="h-5 w-5 text-green-500" /> : 
-                     family.settings.privacy === 'private' ? <LockClosedIcon className="h-5 w-5 text-yellow-500" /> :
-                     <UsersIcon className="h-5 w-5 text-blue-500" />}
+                  <div className="flex items-center justify-between py-3 border-b border-gray-200/50">
+                    <div>
+                      <div className="font-medium text-gray-900">Notifications</div>
+                      <div className="text-sm text-gray-500">Email notifications</div>
+                    </div>
+                    <div className="flex items-center">
+                      {family.settings.notifications ? <BellIcon className="h-5 w-5 text-green-500" aria-hidden="true" /> : 
+                       <BellIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between py-3">
+                    <div>
+                      <div className="font-medium text-gray-900">Content Moderation</div>
+                      <div className="text-sm text-gray-500">Automatic content filtering</div>
+                    </div>
+                    <div className="flex items-center">
+                      {family.settings.moderation ? <ShieldCheckIcon className="h-5 w-5 text-green-500" aria-hidden="true" /> : 
+                       <ShieldCheckIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />}
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium">Notifications</div>
-                    <div className="text-sm text-gray-500">Email notifications</div>
-                  </div>
-                  <div className="flex items-center">
-                    {family.settings.notifications ? <BellIcon className="h-5 w-5 text-green-500" /> : 
-                     <BellIcon className="h-5 w-5 text-gray-400" />}
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium">Content Moderation</div>
-                    <div className="text-sm text-gray-500">Automatic content filtering</div>
-                  </div>
-                  <div className="flex items-center">
-                    {family.settings.moderation ? <ShieldCheckIcon className="h-5 w-5 text-green-500" /> : 
-                     <ShieldCheckIcon className="h-5 w-5 text-gray-400" />}
-                  </div>
-                </div>
-              </div>
-            </div>
+              </CardBody>
+            </Card>
           </div>
         )
 
@@ -452,8 +490,8 @@ export function FamilyDetail({ onBackToFamilies }: FamilyDetailProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="loading-spinner"></div>
+      <div className="flex items-center justify-center h-64" role="status" aria-label="Loading">
+        <LoadingSpinner size="lg" />
       </div>
     )
   }
@@ -461,14 +499,14 @@ export function FamilyDetail({ onBackToFamilies }: FamilyDetailProps) {
   if (!family) {
     return (
       <div className="text-center py-12">
-        <UsersIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+        <UsersIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" aria-hidden="true" />
         <p className="text-gray-500">Family not found</p>
       </div>
     )
   }
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full animate-fade-in">
       {/* Family Sidebar */}
       <FamilySidebar 
         familyId={family.id}
@@ -477,20 +515,24 @@ export function FamilyDetail({ onBackToFamilies }: FamilyDetailProps) {
       />
       
       {/* Main Content */}
-      <div className="flex-1 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">{family.name}</h2>
-            <p className="text-gray-600">{family.description}</p>
-          </div>
-          <button 
-            onClick={onBackToFamilies}
-            className="btn btn-secondary flex items-center gap-2"
-          >
-            <ArrowLeftIcon className="h-4 w-4" />
-            Back to Families
-          </button>
-        </div>
+      <div className="flex-1 p-6 bg-gradient-to-br from-gray-50 via-white to-gray-50 overflow-y-auto">
+        <Card variant="frosted" className="mb-6">
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">{family.name}</h2>
+                <p className="text-sm text-gray-500">{family.description}</p>
+              </div>
+              <Button 
+                variant="secondary"
+                onClick={onBackToFamilies}
+              >
+                <ArrowLeftIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+                Back to Families
+              </Button>
+            </div>
+          </CardBody>
+        </Card>
 
         {renderSectionContent()}
       </div>

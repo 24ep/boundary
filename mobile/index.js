@@ -1,7 +1,11 @@
-import { registerRootComponent } from 'expo';
-import App from './App'; // Assuming App.tsx is your main app component
+// CRITICAL: Polyfill MUST be the absolute first thing that runs
+import './src/utils/platformConstantsPolyfill';
+// Suppress non-critical Jimp errors
+import './src/utils/jimpErrorHandler';
+// Then load other polyfills
+import './src/utils/webPolyfills';
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in Expo Go or in a native build,
-// the environment is set up appropriately
+import { registerRootComponent } from 'expo';
+import App from './App';
+
 registerRootComponent(App);

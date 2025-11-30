@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+coverage
+*.log
+*.lock
+.env
+.env.local
+**/*.min.js
+
+
+

@@ -14,7 +14,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import IconMC from 'react-native-vector-icons/MaterialCommunityIcons';
 import { homeStyles } from '../../styles/homeStyles';
 import { locationSearchService, LocationDetails } from '../../services/locationSearchService';
-import { familyService, FamilyMember } from '../../services/familyService';
+import { familyService } from '../../services/hourse/FamilyService';
+import { FamilyMember } from '../../services/api/hourse';
 import { categoryService, Category } from '../../services/categoryService';
 
 interface ShoppingItem {

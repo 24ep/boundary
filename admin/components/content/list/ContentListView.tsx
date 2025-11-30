@@ -61,9 +61,11 @@ export const ContentListView: React.FC = memo(() => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        {renderView()}
-      </div>
+      <Card variant="frosted">
+        <CardBody className="p-0">
+          {renderView()}
+        </CardBody>
+      </Card>
 
       {filteredContent.length > state.pageSize && (
         <Pagination

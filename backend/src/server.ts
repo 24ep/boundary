@@ -48,7 +48,7 @@ import adminAuthRoutes from './routes/adminAuth';
 import { errorHandler } from './middleware/errorHandler';
 import { requestLogger } from './middleware/logger';
 import { requestIdMiddleware } from './middleware/requestId';
-import { validateRequest } from './middleware/validation';
+// import { validateRequest } from './middleware/validation';
 
 // Import services
 import { initializeSupabase, getSupabaseClient } from './services/supabaseService';
@@ -83,7 +83,7 @@ if (isProduction && cluster.isPrimary) {
     cluster.fork();
   }
 
-  cluster.on('exit', (worker, code, signal) => {
+  cluster.on('exit', (worker) => {
     console.log(`Worker ${worker.process.pid} died. Restarting...`);
     cluster.fork();
   });
@@ -226,7 +226,7 @@ function startServer() {
   // Body parsing middleware with size limits
   app.use(express.json({ 
     limit: process.env.MAX_FILE_SIZE || '10mb',
-    verify: (req, res, buf) => {
+    verify: (req, _res, buf) => {
       // Store raw body for webhook verification
       (req as any).rawBody = buf;
     }
@@ -253,7 +253,7 @@ function startServer() {
   app.use(requestLogger);
 
   // Enhanced health check endpoint
-  app.get('/health', async (req, res) => {
+  app.get('/health', async (_req, res) => {
     const healthCheck = {
       status: 'OK',
       timestamp: new Date().toISOString(),

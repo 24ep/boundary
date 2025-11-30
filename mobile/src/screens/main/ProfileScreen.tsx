@@ -20,10 +20,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useAuth } from '../../hooks/useAuth';
 import { useFamily } from '../../hooks/useFamily';
 import { userService } from '../../services/user/UserService';
-import ProfileHeaderNew from '../../components/profile/ProfileHeaderNew';
-import ProfileStatsNew from '../../components/profile/ProfileStatsNew';
-import ProfileActionsNew from '../../components/profile/ProfileActionsNew';
-import ProfileSettingsNew from '../../components/profile/ProfileSettingsNew';
+import ProfileHeader from '../../components/profile/ProfileHeader';
+import ProfileStats from '../../components/profile/ProfileStats';
+import ProfileActions from '../../components/profile/ProfileActions';
+import ProfileSettings from '../../components/profile/ProfileSettings';
 import { FamilyCard } from '../../components/profile/FamilyCard';
 import { EmergencyContactsCard } from '../../components/profile/EmergencyContactsCard';
 import { EditProfileModal } from '../../components/profile/EditProfileModal';
@@ -279,7 +279,7 @@ const ProfileScreen: React.FC = () => {
         }
       >
         {/* New Profile Header */}
-        <ProfileHeaderNew
+        <ProfileHeader
           profile={{
             ...profile,
             stats: {
@@ -299,7 +299,7 @@ const ProfileScreen: React.FC = () => {
         />
 
         {/* New Profile Stats */}
-        <ProfileStatsNew
+        <ProfileStats
           postsCount={156}
           familyMembers={currentFamily?.members?.length || 0}
           emergencyContacts={profile.emergencyContacts.length}
@@ -308,7 +308,7 @@ const ProfileScreen: React.FC = () => {
         />
 
         {/* New Profile Actions */}
-        <ProfileActionsNew
+        <ProfileActions
           onEditProfile={() => setShowEditModal(true)}
           onChangePassword={() => setShowPasswordModal(true)}
           onEmergencyContacts={() => navigation.navigate('EmergencyContactsScreen' as never)}
@@ -337,7 +337,7 @@ const ProfileScreen: React.FC = () => {
         />
 
         {/* New Profile Settings */}
-        <ProfileSettingsNew
+        <ProfileSettings
           preferences={profile.preferences}
           subscription={profile.subscription}
           onNotificationSettings={() => setShowNotificationModal(true)}

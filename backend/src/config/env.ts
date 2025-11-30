@@ -1,46 +1,96 @@
-import dotenv from 'dotenv';
-import path from 'path';
+import { z } from 'zod';
 
-// Load env from repository root only; fallback to default lookup
-const rootEnvPath = path.resolve(__dirname, '../../..', '.env');
-dotenv.config({ path: rootEnvPath });
-dotenv.config();
+/**
+ * Environment Variable Validation
+ * 
+ * Validates all required environment variables at startup
+ * using Zod schema validation.
+ */
 
-type RequiredEnv = {
-  SUPABASE_URL: string;
-  SUPABASE_SERVICE_ROLE_KEY: string;
-};
+const envSchema = z.object({
+  // Node Environment
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  PORT: z.string().transform(Number).default('3000'),
+  
+  // Supabase
+  SUPABASE_URL: z.string().url(),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+  SUPABASE_ANON_KEY: z.string().min(1).optional(),
+  
+  // JWT
+  JWT_SECRET: z.string().min(32),
+  JWT_EXPIRES_IN: z.string().default('7d'),
+  
+  // Database (if using direct connection)
+  DATABASE_URL: z.string().url().optional(),
+  
+  // AWS S3 (optional)
+  AWS_ACCESS_KEY_ID: z.string().optional(),
+  AWS_SECRET_ACCESS_KEY: z.string().optional(),
+  AWS_REGION: z.string().default('us-east-1'),
+  AWS_S3_BUCKET: z.string().optional(),
+  
+  // Redis (optional)
+  REDIS_HOST: z.string().default('localhost'),
+  REDIS_PORT: z.string().transform(Number).default('6379'),
+  REDIS_PASSWORD: z.string().optional(),
+  
+  // External Services (optional)
+  STRIPE_SECRET_KEY: z.string().optional(),
+  TWILIO_ACCOUNT_SID: z.string().optional(),
+  TWILIO_AUTH_TOKEN: z.string().optional(),
+  FIREBASE_PROJECT_ID: z.string().optional(),
+  
+  // CORS
+  CORS_ORIGIN: z.string().default('*'),
+  
+  // Rate Limiting
+  RATE_LIMIT_WINDOW_MS: z.string().transform(Number).default('900000'), // 15 minutes
+  RATE_LIMIT_MAX_REQUESTS: z.string().transform(Number).default('100'),
+});
 
-const requiredKeys: Array<keyof RequiredEnv> = [
-  'SUPABASE_URL',
-  'SUPABASE_SERVICE_ROLE_KEY',
-];
+type Env = z.infer<typeof envSchema>;
 
-function getString(name: keyof RequiredEnv, fallback?: string): string {
-  const value = process.env[name] ?? fallback ?? '';
-  return value;
+let env: Env;
+
+/**
+ * Validate and get environment variables
+ */
+export function getEnv(): Env {
+  if (!env) {
+    try {
+      env = envSchema.parse(process.env);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.error('❌ Environment variable validation failed:');
+        error.errors.forEach((err) => {
+          console.error(`  - ${err.path.join('.')}: ${err.message}`);
+        });
+        process.exit(1);
+      }
+      throw error;
+    }
+  }
+  return env;
 }
 
-export const env = {
-  NODE_ENV: process.env.NODE_ENV || 'development',
-  PORT: parseInt(process.env.PORT || '3000', 10),
-  HOST: process.env.HOST || '0.0.0.0',
-  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3001',
-  RATE_LIMIT_WINDOW_MS: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10),
-  RATE_LIMIT_MAX_REQUESTS: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100', 10),
-  MAX_FILE_SIZE: process.env.MAX_FILE_SIZE || '10mb',
-
-  // Supabase
-  SUPABASE_URL: getString('SUPABASE_URL'),
-  SUPABASE_SERVICE_ROLE_KEY: getString('SUPABASE_SERVICE_ROLE_KEY'),
-} as const;
-
-export function assertRequiredEnv(): void {
-  const missing = requiredKeys.filter((k) => !env[k] || String(env[k]).includes('your-project'));
-  if (missing.length > 0) {
-    const detail = missing.join(', ');
-    throw new Error(`Missing required environment variables: ${detail}`);
+/**
+ * Validate environment variables (call at startup)
+ */
+export function validateEnv(): { isValid: boolean; errors: string[] } {
+  try {
+    envSchema.parse(process.env);
+    return { isValid: true, errors: [] };
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const errors = error.errors.map(
+        (err) => `${err.path.join('.')}: ${err.message}`
+      );
+      return { isValid: false, errors };
+    }
+    return { isValid: false, errors: ['Unknown validation error'] };
   }
 }
 
-
+// Export validated env
+export const config = getEnv();

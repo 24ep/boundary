@@ -1,6 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Card, CardBody, CardHeader } from './ui/Card'
+import { Button } from './ui/Button'
+import { Input } from './ui/Input'
+import { LoadingSpinner } from './ui/LoadingSpinner'
 
 export function PagePreferences() {
   const [activeTab, setActiveTab] = useState<'homescreen'>('homescreen')
@@ -75,194 +79,270 @@ export function PagePreferences() {
   }, [])
 
   return (
-    <div className="grid grid-cols-12 gap-6">
+    <div className="grid grid-cols-12 gap-6 animate-fade-in">
       {/* Secondary Sidebar */}
       <aside className="col-span-12 lg:col-span-3">
-        <div className="card p-0 overflow-hidden">
-          <div className="border-b px-4 py-3 text-sm font-semibold text-gray-700">Pages</div>
-          <nav className="p-2">
-            <button
-              className={`w-full text-left px-3 py-2 rounded-md text-sm ${activeTab==='homescreen' ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50'}`}
-              onClick={() => setActiveTab('homescreen')}
-            >
-              Homescreen
-            </button>
-          </nav>
-        </div>
+        <Card variant="frosted">
+          <CardHeader>
+            <h3 className="text-sm font-semibold text-gray-700">Pages</h3>
+          </CardHeader>
+          <CardBody className="p-2">
+            <nav>
+              <button
+                className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  activeTab === 'homescreen'
+                    ? 'bg-blue-50 text-blue-700 shadow-sm'
+                    : 'hover:bg-gray-50 text-gray-600 hover:text-gray-900'
+                }`}
+                onClick={() => setActiveTab('homescreen')}
+              >
+                Homescreen
+              </button>
+            </nav>
+          </CardBody>
+        </Card>
       </aside>
 
       {/* Content */}
       <section className="col-span-12 lg:col-span-9 space-y-6">
         {activeTab === 'homescreen' && (
-          <div className="card">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Homescreen Background</h3>
-            <div className="space-y-4">
-              <div className="form-group">
-                <label className="form-label mr-4">Type</label>
-                <div className="flex gap-4">
-                  <label className="inline-flex items-center gap-2">
-                    <input type="radio" name="bgType" value="color" checked={bgType==='color'} onChange={() => setBgType('color')} />
-                    <span>Color</span>
-                  </label>
-                  <label className="inline-flex items-center gap-2">
-                    <input type="radio" name="bgType" value="gradient" checked={bgType==='gradient'} onChange={() => setBgType('gradient')} />
-                    <span>2–3 Color Gradient</span>
-                  </label>
-                  <label className="inline-flex items-center gap-2">
-                    <input type="radio" name="bgType" value="image" checked={bgType==='image'} onChange={() => setBgType('image')} />
-                    <span>Image</span>
-                  </label>
-                </div>
-              </div>
-
-              {bgType === 'color' && (
-                <div className="form-group">
-                  <label className="form-label">Color</label>
-                  <div className="flex gap-3 items-center">
-                    <input type="color" value={bgColors[0] || '#ffffff'} onChange={e => setBgColors([e.target.value])} className="h-10 w-12 p-0 border rounded" />
-                    <input type="text" value={bgColors[0] || ''} onChange={e => setBgColors([e.target.value])} className="form-input" />
-                  </div>
-                </div>
-              )}
-
-              {bgType === 'gradient' && (
-                <div className="form-group">
-                  <label className="form-label">Gradient Colors (2–3)</label>
-                  <div className="space-y-2">
-                    {[0,1,2].map(i => (
-                      <div key={i} className="flex gap-3 items-center">
-                        <input type="color" value={bgColors[i] || '#ffffff'} onChange={e => { const next=[...bgColors]; next[i]=e.target.value; setBgColors(next.filter(Boolean).slice(0,3)); }} className="h-10 w-12 p-0 border rounded" />
-                        <input type="text" value={bgColors[i] || ''} onChange={e => { const next=[...bgColors]; next[i]=e.target.value; setBgColors(next.filter(Boolean).slice(0,3)); }} className="form-input" placeholder={i<2 ? `Color ${i+1} (required)` : 'Color 3 (optional)'} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {bgType === 'image' && (
-                <div className="form-group">
-                  <label className="form-label">Image URL</label>
-                  <div className="space-y-2">
-                    <input type="text" value={bgImage} onChange={e => setBgImage(e.target.value)} className="form-input" placeholder="https://.../background.jpg" />
-                    <div className="flex items-center gap-3">
+          <Card variant="frosted">
+            <CardHeader>
+              <h3 className="text-base font-semibold text-gray-900">Homescreen Background</h3>
+            </CardHeader>
+            <CardBody>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">Type</label>
+                  <div className="flex gap-4">
+                    <label className="inline-flex items-center gap-2 cursor-pointer">
                       <input
-                        id="bg-file-input"
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0]
-                          if (file) handleFilePicked(file)
-                        }}
+                        type="radio"
+                        name="bgType"
+                        value="color"
+                        checked={bgType === 'color'}
+                        onChange={() => setBgType('color')}
+                        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                       />
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={() => document.getElementById('bg-file-input')?.click()}
-                      >
-                        {uploading ? 'Uploading…' : 'Upload Image'}
-                      </button>
-                      {selectedFileName && (
-                        <span className="text-sm text-gray-600 truncate max-w-xs">{selectedFileName}</span>
-                      )}
+                      <span className="text-sm text-gray-700">Color</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="bgType"
+                        value="gradient"
+                        checked={bgType === 'gradient'}
+                        onChange={() => setBgType('gradient')}
+                        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">2–3 Color Gradient</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="bgType"
+                        value="image"
+                        checked={bgType === 'image'}
+                        onChange={() => setBgType('image')}
+                        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">Image</span>
+                    </label>
+                  </div>
+                </div>
+
+                {bgType === 'color' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Color</label>
+                    <div className="flex gap-3 items-center">
+                      <input
+                        type="color"
+                        value={bgColors[0] || '#ffffff'}
+                        onChange={e => setBgColors([e.target.value])}
+                        className="h-10 w-12 p-0 border border-gray-300 rounded-lg cursor-pointer"
+                      />
+                      <Input
+                        type="text"
+                        value={bgColors[0] || ''}
+                        onChange={e => setBgColors([e.target.value])}
+                        className="flex-1"
+                      />
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              <div>
-                <div className="text-sm text-gray-600 mb-2">Preview</div>
-                <div className="relative">
-                  <div
-                    className="rounded border h-40"
-                    style={{
-                      background: (
-                        bgType === 'color'
-                          ? (bgColors[0] || '#ffffff')
-                          : bgType === 'gradient'
-                            ? `linear-gradient(135deg, ${bgColors.filter(Boolean).slice(0,3).join(', ')})`
-                            : `url(${(localPreviewUrl || bgImage) || ''}) center/cover no-repeat`
-                      )
+                {bgType === 'gradient' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">Gradient Colors (2–3)</label>
+                    <div className="space-y-3">
+                      {[0, 1, 2].map(i => (
+                        <div key={i} className="flex gap-3 items-center">
+                          <input
+                            type="color"
+                            value={bgColors[i] || '#ffffff'}
+                            onChange={e => {
+                              const next = [...bgColors]
+                              next[i] = e.target.value
+                              setBgColors(next.filter(Boolean).slice(0, 3))
+                            }}
+                            className="h-10 w-12 p-0 border border-gray-300 rounded-lg cursor-pointer"
+                          />
+                          <Input
+                            type="text"
+                            value={bgColors[i] || ''}
+                            onChange={e => {
+                              const next = [...bgColors]
+                              next[i] = e.target.value
+                              setBgColors(next.filter(Boolean).slice(0, 3))
+                            }}
+                            placeholder={i < 2 ? `Color ${i + 1} (required)` : 'Color 3 (optional)'}
+                            className="flex-1"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {bgType === 'image' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+                    <div className="space-y-3">
+                      <Input
+                        type="text"
+                        value={bgImage}
+                        onChange={e => setBgImage(e.target.value)}
+                        placeholder="https://.../background.jpg"
+                      />
+                      <div className="flex items-center gap-3">
+                        <input
+                          id="bg-file-input"
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0]
+                            if (file) handleFilePicked(file)
+                          }}
+                        />
+                        <Button
+                          variant="secondary"
+                          type="button"
+                          onClick={() => document.getElementById('bg-file-input')?.click()}
+                          disabled={uploading}
+                        >
+                          {uploading ? (
+                            <>
+                              <LoadingSpinner size="sm" className="mr-2" />
+                              Uploading…
+                            </>
+                          ) : (
+                            'Upload Image'
+                          )}
+                        </Button>
+                        {selectedFileName && (
+                          <span className="text-sm text-gray-600 truncate max-w-xs">{selectedFileName}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Preview</label>
+                  <div className="relative rounded-lg overflow-hidden border border-gray-200/50 shadow-sm">
+                    <div
+                      className="h-40"
+                      style={{
+                        background: (
+                          bgType === 'color'
+                            ? (bgColors[0] || '#ffffff')
+                            : bgType === 'gradient'
+                              ? `linear-gradient(135deg, ${bgColors.filter(Boolean).slice(0, 3).join(', ')})`
+                              : `url(${(localPreviewUrl || bgImage) || ''}) center/cover no-repeat`
+                        )
+                      }}
+                    />
+                    {showPreview && (
+                      <div className="absolute inset-0 rounded-lg border-2 border-blue-400 pointer-events-none shadow-lg" />
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex gap-3 pt-4 border-t border-gray-200/50">
+                  <Button
+                    variant="primary"
+                    onClick={async () => {
+                      try {
+                        setSaving(true)
+                        const svc = (await import('../services/adminService')).adminService
+                        await svc.upsertApplicationSetting({
+                          setting_key: 'homescreen.background.draft',
+                          setting_value: {
+                            type: bgType,
+                            colors: bgType === 'color' ? [bgColors[0]] : bgColors.filter(Boolean).slice(0, 3),
+                            imageUrl: bgType === 'image' ? (bgImage || '') : undefined,
+                          },
+                          setting_type: 'json',
+                          category: 'appearance',
+                          description: 'Homescreen background configuration (draft)',
+                          is_public: true,
+                          is_editable: true,
+                        })
+                        alert('Draft saved.')
+                      } catch (e) {
+                        alert('Failed to save draft.')
+                      } finally {
+                        setSaving(false)
+                      }
                     }}
-                  />
-                  {showPreview && (
-                    <div className="absolute inset-0 rounded border-2 border-blue-300 pointer-events-none" />
-                  )}
+                    disabled={saving}
+                  >
+                    {saving ? 'Saving...' : 'Save Draft'}
+                  </Button>
+
+                  <Button
+                    variant="secondary"
+                    onClick={async () => {
+                      try {
+                        setPublishing(true)
+                        const value = {
+                          type: bgType,
+                          colors: bgType === 'color' ? [bgColors[0]] : bgColors.filter(Boolean).slice(0, 3),
+                          imageUrl: bgType === 'image' ? (bgImage || '') : undefined,
+                        }
+                        const svc = (await import('../services/adminService')).adminService
+                        await svc.upsertApplicationSetting({
+                          setting_key: 'homescreen.background.public',
+                          setting_value: value,
+                          setting_type: 'json',
+                          category: 'appearance',
+                          description: 'Homescreen background configuration (public)',
+                          is_public: true,
+                          is_editable: true,
+                        })
+                        alert('Published to public background.')
+                      } catch (e) {
+                        alert('Failed to publish background.')
+                      } finally {
+                        setPublishing(false)
+                      }
+                    }}
+                    disabled={publishing}
+                  >
+                    {publishing ? 'Publishing...' : 'Publish'}
+                  </Button>
+
+                  <Button
+                    variant="ghost"
+                    onClick={() => setShowPreview(!showPreview)}
+                  >
+                    {showPreview ? 'Hide Preview' : 'Preview Draft'}
+                  </Button>
                 </div>
               </div>
-
-              <div className="flex gap-3">
-                <button
-                className={`btn btn-primary ${saving ? 'opacity-70 pointer-events-none' : ''}`}
-                onClick={async () => {
-                  try {
-                    setSaving(true)
-                    const svc = (await import('../services/adminService')).adminService
-                    await svc.upsertApplicationSetting({
-                      setting_key: 'homescreen.background.draft',
-                      setting_value: {
-                        type: bgType,
-                        colors: bgType === 'color' ? [bgColors[0]] : bgColors.filter(Boolean).slice(0,3),
-                        imageUrl: bgType === 'image' ? (bgImage || '') : undefined,
-                      },
-                      setting_type: 'json',
-                      category: 'appearance',
-                      description: 'Homescreen background configuration (draft)',
-                      is_public: true,
-                      is_editable: true,
-                    })
-                    alert('Draft saved.')
-                  } catch (e) {
-                    alert('Failed to save draft.')
-                  } finally {
-                    setSaving(false)
-                  }
-                }}
-              >
-                Save Draft
-              </button>
-
-              <button
-                className={`btn btn-secondary ${publishing ? 'opacity-70 pointer-events-none' : ''}`}
-                onClick={async () => {
-                  try {
-                    setPublishing(true)
-                    // Publish by copying draft to public
-                    const value = {
-                      type: bgType,
-                      colors: bgType === 'color' ? [bgColors[0]] : bgColors.filter(Boolean).slice(0,3),
-                      imageUrl: bgType === 'image' ? (bgImage || '') : undefined,
-                    }
-                    const svc = (await import('../services/adminService')).adminService
-                    await svc.upsertApplicationSetting({
-                      setting_key: 'homescreen.background.public',
-                      setting_value: value,
-                      setting_type: 'json',
-                      category: 'appearance',
-                      description: 'Homescreen background configuration (public)',
-                      is_public: true,
-                      is_editable: true,
-                    })
-                    alert('Published to public background.')
-                  } catch (e) {
-                    alert('Failed to publish background.')
-                  } finally {
-                    setPublishing(false)
-                  }
-                }}
-              >
-                Publish
-              </button>
-
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowPreview(!showPreview)}
-              >
-                {showPreview ? 'Hide Preview' : 'Preview Draft'}
-              </button>
-              </div>
-            </div>
-          </div>
+            </CardBody>
+          </Card>
         )}
       </section>
     </div>

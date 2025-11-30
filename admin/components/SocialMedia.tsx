@@ -20,9 +20,18 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   PencilIcon,
-  BellIcon
+  BellIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline'
 import { socialMediaService, Family, SocialPost, SocialComment, SocialReport, SocialActivity } from '../services/socialMediaService'
+import { Card, CardBody, CardHeader } from './ui/Card'
+import { Button } from './ui/Button'
+import { Input } from './ui/Input'
+import { Select } from './ui/Select'
+import { Badge } from './ui/Badge'
+import { Modal } from './ui/Modal'
+import { LoadingSpinner } from './ui/LoadingSpinner'
+import { EmptyState } from './ui/EmptyState'
 
 // Interfaces are now imported from the service
 
@@ -183,266 +192,301 @@ export function SocialMedia() {
     return family?.name || 'All Families'
   }
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64" role="status" aria-label="Loading social media data">
+        <LoadingSpinner size="lg" />
+      </div>
+    )
+  }
+
   return (
-    <>
-      {loading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="loading-spinner"></div>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-800">Social Media Management</h2>
-              <p className="text-gray-600">Monitor posts, comments, reports, and moderate content</p>
-            </div>
+    <div className="space-y-6 animate-fade-in">
+      {/* Header */}
+      <Card variant="frosted">
+        <CardBody>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Social Media Management</h2>
+            <p className="text-sm text-gray-500">Monitor posts, comments, reports, and moderate content</p>
           </div>
+        </CardBody>
+      </Card>
 
-          {/* Family Selection */}
-          <div className="card">
-            <div className="card-body">
-              <div className="flex items-center gap-4">
-                <label className="form-label">Select Family:</label>
-                <select
-                  value={selectedFamily}
-                  onChange={(e) => setSelectedFamily(e.target.value)}
-                  className="form-select w-auto"
-                >
-                  {families.map(family => (
-                    <option key={family.id} value={family.id}>
-                      {family.name} {family.member_count > 0 && `(${family.member_count} members)`}
-                    </option>
-                  ))}
-                </select>
+      {/* Family Selection */}
+      <Card variant="frosted">
+        <CardBody>
+          <Select
+            label="Select Family"
+            value={selectedFamily}
+            onChange={(e) => setSelectedFamily(e.target.value)}
+            options={families.map(family => ({
+              value: family.id,
+              label: `${family.name}${family.member_count > 0 ? ` (${family.member_count} members)` : ''}`
+            }))}
+          />
+        </CardBody>
+      </Card>
+
+      {/* Social Media Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Posts</p>
+                <p className="text-3xl font-bold text-blue-600">{posts.length}</p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <ShareIcon className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
             </div>
-          </div>
+          </CardBody>
+        </Card>
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Active Posts</p>
+                <p className="text-3xl font-bold text-green-600">
+                  {posts.filter(p => p.status === 'active').length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                <CheckCircleIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Reported Posts</p>
+                <p className="text-3xl font-bold text-red-600">
+                  {posts.filter(p => p.is_reported).length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                <FlagIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Engagement</p>
+                <p className="text-3xl font-bold text-orange-600">
+                  {posts.reduce((sum, post) => sum + post.likes_count + post.shares_count + post.comments_count, 0)}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+                <ChartBarIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+      </div>
 
-          {/* Social Media Stats */}
+      {/* Filters */}
+      <Card variant="frosted">
+        <CardBody>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="stat-card">
-              <div className="stat-number text-blue-600">{posts.length}</div>
-              <div className="stat-label">Total Posts</div>
+            <div className="relative">
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" aria-hidden="true" />
+              <Input
+                type="text"
+                placeholder="Search posts, users, or content..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
             </div>
-            <div className="stat-card">
-              <div className="stat-number text-green-600">
-                {posts.filter(p => p.status === 'active').length}
-              </div>
-              <div className="stat-label">Active Posts</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number text-red-600">
-                {posts.filter(p => p.is_reported).length}
-              </div>
-              <div className="stat-label">Reported Posts</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number text-orange-600">
-                {posts.reduce((sum, post) => sum + post.likes_count + post.shares_count + post.comments_count, 0)}
-              </div>
-              <div className="stat-label">Total Engagement</div>
-            </div>
+            <Select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              options={[
+                { value: 'all', label: 'All Status' },
+                { value: 'active', label: 'Active' },
+                { value: 'hidden', label: 'Hidden' },
+                { value: 'deleted', label: 'Deleted' },
+                { value: 'under_review', label: 'Under Review' }
+              ]}
+            />
+            <Select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              options={[
+                { value: 'all', label: 'All Types' },
+                { value: 'text', label: 'Text' },
+                { value: 'image', label: 'Image' },
+                { value: 'video', label: 'Video' },
+                { value: 'event', label: 'Event' }
+              ]}
+            />
+            <Select
+              value={filterReported}
+              onChange={(e) => setFilterReported(e.target.value)}
+              options={[
+                { value: 'all', label: 'All Posts' },
+                { value: 'reported', label: 'Reported' },
+                { value: 'not_reported', label: 'Not Reported' }
+              ]}
+            />
           </div>
+        </CardBody>
+      </Card>
 
-          {/* Filters */}
-          <div className="card">
-            <div className="card-body">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1 relative">
-                  <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search posts, users, or content..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-input pl-10"
-                  />
-                </div>
-                
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="form-select w-auto"
-                >
-                  <option value="all">All Status</option>
-                  <option value="active">Active</option>
-                  <option value="hidden">Hidden</option>
-                  <option value="deleted">Deleted</option>
-                  <option value="under_review">Under Review</option>
-                </select>
-                
-                <select
-                  value={filterType}
-                  onChange={(e) => setFilterType(e.target.value)}
-                  className="form-select w-auto"
-                >
-                  <option value="all">All Types</option>
-                  <option value="text">Text</option>
-                  <option value="image">Image</option>
-                  <option value="video">Video</option>
-                  <option value="event">Event</option>
-                </select>
-                
-                <select
-                  value={filterReported}
-                  onChange={(e) => setFilterReported(e.target.value)}
-                  className="form-select w-auto"
-                >
-                  <option value="all">All Posts</option>
-                  <option value="reported">Reported</option>
-                  <option value="not_reported">Not Reported</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Posts List */}
-          {filteredPosts.length === 0 ? (
-            <div className="empty-state">
-              <div className="empty-state-icon">📱</div>
-              <h3 className="empty-state-title">No posts found</h3>
-              <p className="empty-state-description">
-                {searchTerm ? 'Try adjusting your search terms.' : 'No posts available for the selected family.'}
-              </p>
-            </div>
-          ) : (
-            <div className="card">
-              <div className="card-body">
-                <div className="space-y-4">
-                  {filteredPosts.map((post) => (
-                    <div key={post.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                              {post.author?.avatar_url ? (
-                                <img src={post.author.avatar_url} alt={`${post.author.first_name} ${post.author.last_name}`} className="w-10 h-10 rounded-full" />
-                              ) : (
-                                <UserIcon className="h-6 w-6 text-gray-500" />
-                              )}
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h4 className="text-lg font-semibold text-gray-900">{post.author?.first_name} {post.author?.last_name}</h4>
-                                <span className="badge badge-info">{post.family?.name}</span>
-                                <span className={`badge badge-${getStatusColor(post.status)}`}>
-                                  {post.status.replace('_', ' ')}
-                                </span>
-                                {post.is_reported && (
-                                  <span className="badge badge-red">Reported ({post.report_count})</span>
-                                )}
-                                {post.is_hidden && (
-                                  <span className="badge badge-yellow">Hidden</span>
-                                )}
-                              </div>
-                              <div className="flex items-center gap-4 text-sm text-gray-500">
-                                <span className="flex items-center gap-1">
-                                  <CalendarIcon className="h-4 w-4" />
-                                  {new Date(post.created_at).toLocaleDateString()}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  <EyeIcon className="h-4 w-4" />
-                                  {post.views_count} views
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  <UsersIcon className="h-4 w-4" />
-                                  {post.visibility}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="mb-3">
-                            <p className="text-gray-800">{post.content}</p>
-                            {post.media_urls && post.media_urls.length > 0 && (
-                              <div className="mt-2 grid grid-cols-2 gap-2">
-                                {post.media_urls.map((url, index) => (
-                                  <img key={index} src={url} alt={`Media ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
-                                ))}
-                              </div>
+      {/* Posts List */}
+      {filteredPosts.length === 0 ? (
+        <EmptyState
+          icon={<ShareIcon className="h-12 w-12" />}
+          title="No posts found"
+          description={searchTerm ? 'Try adjusting your search terms.' : 'No posts available for the selected family.'}
+        />
+      ) : (
+        <Card variant="frosted">
+          <CardBody>
+            <div className="space-y-4">
+              {filteredPosts.map((post) => (
+                <Card key={post.id} variant="default" hoverable>
+                  <CardBody>
+                    <div className="flex justify-between items-start gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+                            {post.author?.avatar_url ? (
+                              <img src={post.author.avatar_url} alt={`${post.author.first_name} ${post.author.last_name}`} className="w-10 h-10 rounded-full" />
+                            ) : (
+                              <UserIcon className="h-6 w-6 text-gray-500" aria-hidden="true" />
                             )}
                           </div>
-                          
-                          <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                            <span className="flex items-center gap-1">
-                              <HeartIcon className="h-4 w-4" />
-                              {post.likes_count} likes
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <ShareIcon className="h-4 w-4" />
-                              {post.shares_count} shares
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <ChatBubbleLeftRightIcon className="h-4 w-4" />
-                              {post.comments_count} comments
-                            </span>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1 flex-wrap">
+                              <h4 className="text-base font-semibold text-gray-900 truncate">{post.author?.first_name} {post.author?.last_name}</h4>
+                              <Badge variant="info" size="sm">{post.family?.name}</Badge>
+                              <Badge variant={getStatusColor(post.status) === 'green' ? 'success' : getStatusColor(post.status) === 'yellow' ? 'warning' : getStatusColor(post.status) === 'red' ? 'error' : 'default'} size="sm">
+                                {post.status.replace('_', ' ')}
+                              </Badge>
+                              {post.is_reported && (
+                                <Badge variant="error" size="sm">Reported ({post.report_count})</Badge>
+                              )}
+                              {post.is_hidden && (
+                                <Badge variant="warning" size="sm">Hidden</Badge>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-4 text-sm text-gray-500 flex-wrap">
+                              <span className="flex items-center gap-1.5">
+                                <CalendarIcon className="h-4 w-4" aria-hidden="true" />
+                                {new Date(post.created_at).toLocaleDateString()}
+                              </span>
+                              <span className="flex items-center gap-1.5">
+                                <EyeIcon className="h-4 w-4" aria-hidden="true" />
+                                {post.views_count} views
+                              </span>
+                              <span className="flex items-center gap-1.5">
+                                <UsersIcon className="h-4 w-4" aria-hidden="true" />
+                                {post.visibility}
+                              </span>
+                            </div>
                           </div>
-                          
-                          {post.tags && post.tags.length > 0 && (
-                            <div className="flex items-center gap-2 mb-3">
-                              {post.tags.map(tag => (
-                                <span key={tag} className="badge badge-sm badge-info">
-                                  {tag}
-                                </span>
+                        </div>
+                        
+                        <div className="mb-3">
+                          <p className="text-gray-800">{post.content}</p>
+                          {post.media_urls && post.media_urls.length > 0 && (
+                            <div className="mt-3 grid grid-cols-2 gap-2">
+                              {post.media_urls.map((url, index) => (
+                                <img key={index} src={url} alt={`Media ${index + 1}`} className="w-full h-32 object-cover rounded-lg shadow-sm" />
                               ))}
                             </div>
                           )}
                         </div>
                         
-                        <div className="flex gap-2 ml-4">
-                          <button
-                            onClick={() => {
-                              setSelectedPost(post);
-                              setShowPostDetail(true);
-                            }}
-                            className="btn btn-ghost text-blue-600 hover:text-blue-700"
-                          >
-                            <EyeIcon className="h-4 w-4" />
-                          </button>
-                          {post.status === 'active' && (
-                            <button
-                              onClick={() => handleModeratePost(post, 'hide')}
-                              className="btn btn-ghost text-yellow-600 hover:text-yellow-700"
-                            >
-                              <EyeSlashIcon className="h-4 w-4" />
-                            </button>
-                          )}
-                          {post.status === 'hidden' && (
-                            <button
-                              onClick={() => handleModeratePost(post, 'approve')}
-                              className="btn btn-ghost text-green-600 hover:text-green-700"
-                            >
-                              <CheckCircleIcon className="h-4 w-4" />
-                            </button>
-                          )}
-                          <button
-                            onClick={() => handleModeratePost(post, 'delete')}
-                            className="btn btn-ghost text-red-600 hover:text-red-700"
-                          >
-                            <TrashIcon className="h-4 w-4" />
-                          </button>
+                        <div className="flex items-center gap-4 text-sm text-gray-500 mb-3 flex-wrap">
+                          <span className="flex items-center gap-1.5">
+                            <HeartIcon className="h-4 w-4" aria-hidden="true" />
+                            {post.likes_count} likes
+                          </span>
+                          <span className="flex items-center gap-1.5">
+                            <ShareIcon className="h-4 w-4" aria-hidden="true" />
+                            {post.shares_count} shares
+                          </span>
+                          <span className="flex items-center gap-1.5">
+                            <ChatBubbleLeftRightIcon className="h-4 w-4" aria-hidden="true" />
+                            {post.comments_count} comments
+                          </span>
                         </div>
+                        
+                        {post.tags && post.tags.length > 0 && (
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {post.tags.map(tag => (
+                              <Badge key={tag} variant="info" size="sm">{tag}</Badge>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex gap-2 flex-shrink-0">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedPost(post);
+                            setShowPostDetail(true);
+                          }}
+                          aria-label="View post details"
+                        >
+                          <EyeIcon className="h-4 w-4" aria-hidden="true" />
+                        </Button>
+                        {post.status === 'active' && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleModeratePost(post, 'hide')}
+                            aria-label="Hide post"
+                          >
+                            <EyeSlashIcon className="h-4 w-4" aria-hidden="true" />
+                          </Button>
+                        )}
+                        {post.status === 'hidden' && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleModeratePost(post, 'approve')}
+                            aria-label="Approve post"
+                          >
+                            <CheckCircleIcon className="h-4 w-4" aria-hidden="true" />
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleModeratePost(post, 'delete')}
+                          aria-label="Delete post"
+                        >
+                          <TrashIcon className="h-4 w-4" aria-hidden="true" />
+                        </Button>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </CardBody>
+                </Card>
+              ))}
             </div>
-          )}
+          </CardBody>
+        </Card>
+      )}
 
-          {/* Post Detail Modal */}
-          {showPostDetail && selectedPost && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold">Post Details</h3>
-                  <button
-                    onClick={() => setShowPostDetail(false)}
-                    className="btn btn-ghost"
-                  >
-                    ✕
-                  </button>
-                </div>
+      {/* Post Detail Modal */}
+      <Modal
+        isOpen={showPostDetail}
+        onClose={() => setShowPostDetail(false)}
+        title="Post Details"
+        size="xl"
+      >
+        {selectedPost && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>

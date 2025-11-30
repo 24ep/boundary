@@ -1,6 +1,7 @@
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import { getSupabaseClient } from '../services/supabaseService';
+import { setupChatHandlers } from './chat';
 
 interface AuthenticatedSocket extends Socket {
   userId?: string;
@@ -67,34 +68,8 @@ export const initializeSocket = (io: Server) => {
       });
     }
 
-    // Handle chat messages
-    socket.on('chat:message', async (data) => {
-      try {
-        if (!socket.familyId) {
-          socket.emit('error', { message: 'Not a member of any hourse' });
-          return;
-        }
-
-        const { content, type = 'text' } = data;
-
-        // TODO: Save message to database
-        const message = {
-          id: Date.now().toString(),
-          content,
-          type,
-          senderId: socket.userId,
-          familyId: socket.familyId,
-          timestamp: new Date().toISOString()
-        };
-
-        // Broadcast to hourse members
-        io.to(`hourse:${socket.familyId}`).emit('chat:message', message);
-
-      } catch (error) {
-        console.error('Chat message error:', error);
-        socket.emit('error', { message: 'Failed to send message' });
-      }
-    });
+    // Setup chat handlers
+    setupChatHandlers(io, socket as Socket & { userId?: string });
 
     // Handle location updates
     socket.on('location:update', async (data) => {

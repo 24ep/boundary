@@ -19,9 +19,18 @@ import {
   UserIcon,
   CalendarIcon,
   DevicePhoneMobileIcon,
-  EnvelopeIcon
+  EnvelopeIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline'
 import { adminService } from '../services/adminService'
+import { Card, CardBody, CardHeader } from './ui/Card'
+import { Button } from './ui/Button'
+import { Input } from './ui/Input'
+import { Select } from './ui/Select'
+import { Badge } from './ui/Badge'
+import { Modal } from './ui/Modal'
+import { LoadingSpinner } from './ui/LoadingSpinner'
+import { EmptyState } from './ui/EmptyState'
 
 interface Family {
   id: string
@@ -262,23 +271,23 @@ export function FamilySafetyIncidents() {
     }
   }
 
-  const getSeverityColor = (severity: string) => {
+  const getSeverityVariant = (severity: string): 'error' | 'warning' | 'info' | 'success' | 'default' => {
     switch (severity) {
-      case 'critical': return 'text-red-600 bg-red-100'
-      case 'high': return 'text-orange-600 bg-orange-100'
-      case 'medium': return 'text-yellow-600 bg-yellow-100'
-      case 'low': return 'text-green-600 bg-green-100'
-      default: return 'text-gray-600 bg-gray-100'
+      case 'critical': return 'error'
+      case 'high': return 'warning'
+      case 'medium': return 'warning'
+      case 'low': return 'success'
+      default: return 'default'
     }
   }
 
-  const getStatusColor = (status: string) => {
+  const getStatusVariant = (status: string): 'error' | 'warning' | 'success' | 'default' => {
     switch (status) {
-      case 'active': return 'text-red-600 bg-red-100'
-      case 'acknowledged': return 'text-yellow-600 bg-yellow-100'
-      case 'resolved': return 'text-green-600 bg-green-100'
-      case 'false_alarm': return 'text-gray-600 bg-gray-100'
-      default: return 'text-gray-600 bg-gray-100'
+      case 'active': return 'error'
+      case 'acknowledged': return 'warning'
+      case 'resolved': return 'success'
+      case 'false_alarm': return 'default'
+      default: return 'default'
     }
   }
 
@@ -330,355 +339,392 @@ export function FamilySafetyIncidents() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="loading-spinner"></div>
+      <div className="flex items-center justify-center h-64" role="status" aria-label="Loading safety incidents">
+        <LoadingSpinner size="lg" />
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">🚨 Family Safety Incidents</h2>
-          <p className="text-gray-600">Monitor and manage emergency incidents across all families</p>
-        </div>
-      </div>
+    <div className="space-y-6 animate-fade-in">
+      {/* Header */}
+      <Card variant="frosted">
+        <CardBody>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">🚨 Family Safety Incidents</h2>
+            <p className="text-sm text-gray-500">Monitor and manage emergency incidents across all families</p>
+          </div>
+        </CardBody>
+      </Card>
+
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="stat-card">
-          <div className="stat-number text-red-600">
-            {incidents.filter(i => i.status === 'active').length}
-          </div>
-          <div className="stat-label">Active Incidents</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-number text-orange-600">
-            {incidents.filter(i => i.severity === 'critical' || i.severity === 'high').length}
-          </div>
-          <div className="stat-label">High Priority</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-number text-yellow-600">
-            {incidents.filter(i => i.status === 'acknowledged').length}
-          </div>
-          <div className="stat-label">Acknowledged</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-number text-green-600">
-            {incidents.filter(i => i.status === 'resolved').length}
-          </div>
-          <div className="stat-label">Resolved</div>
-        </div>
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Active Incidents</p>
+                <p className="text-3xl font-bold text-red-600">
+                  {incidents.filter(i => i.status === 'active').length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                <ExclamationTriangleIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">High Priority</p>
+                <p className="text-3xl font-bold text-orange-600">
+                  {incidents.filter(i => i.severity === 'critical' || i.severity === 'high').length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+                <BellIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Acknowledged</p>
+                <p className="text-3xl font-bold text-yellow-600">
+                  {incidents.filter(i => i.status === 'acknowledged').length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg">
+                <ClockIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+        <Card variant="frosted" hoverable>
+          <CardBody>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Resolved</p>
+                <p className="text-3xl font-bold text-green-600">
+                  {incidents.filter(i => i.status === 'resolved').length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                <ShieldCheckIcon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+            </div>
+          </CardBody>
+        </Card>
       </div>
 
       {/* Filters */}
-      <div className="card">
-        <div className="card-body">
-          <div className="flex flex-wrap gap-4 items-center">
-            <div className="flex-1 min-w-64">
-              <div className="relative">
-                <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search incidents..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="form-input pl-10"
-                />
-              </div>
+      <Card variant="frosted">
+        <CardBody>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="relative">
+              <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" aria-hidden="true" />
+              <Input
+                type="text"
+                placeholder="Search incidents..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
             </div>
-            <select
+            <Select
               value={filterFamily}
               onChange={(e) => setFilterFamily(e.target.value)}
-              className="form-select w-auto"
-            >
-              <option value="all">All Families</option>
-              {families.map(family => (
-                <option key={family.id} value={family.id}>
-                  {family.name}
-                </option>
-              ))}
-            </select>
-            <select
+              options={[
+                { value: 'all', label: 'All Families' },
+                ...families.map(family => ({ value: family.id, label: family.name }))
+              ]}
+            />
+            <Select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="form-select w-auto"
-            >
-              <option value="all">All Types</option>
-              <option value="panic">Panic</option>
-              <option value="medical">Medical</option>
-              <option value="safety">Safety</option>
-              <option value="weather">Weather</option>
-              <option value="geofence">Geofence</option>
-              <option value="check-in">Check-in</option>
-            </select>
-            <select
+              options={[
+                { value: 'all', label: 'All Types' },
+                { value: 'panic', label: 'Panic' },
+                { value: 'medical', label: 'Medical' },
+                { value: 'safety', label: 'Safety' },
+                { value: 'weather', label: 'Weather' },
+                { value: 'geofence', label: 'Geofence' },
+                { value: 'check-in', label: 'Check-in' }
+              ]}
+            />
+            <Select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="form-select w-auto"
-            >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="acknowledged">Acknowledged</option>
-              <option value="resolved">Resolved</option>
-              <option value="false_alarm">False Alarm</option>
-            </select>
+              options={[
+                { value: 'all', label: 'All Status' },
+                { value: 'active', label: 'Active' },
+                { value: 'acknowledged', label: 'Acknowledged' },
+                { value: 'resolved', label: 'Resolved' },
+                { value: 'false_alarm', label: 'False Alarm' }
+              ]}
+            />
           </div>
-        </div>
-      </div>
+        </CardBody>
+      </Card>
 
       {/* Incidents List */}
-      <div className="card">
-        <div className="card-header">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Emergency Incidents ({filteredIncidents.length})
-          </h3>
-        </div>
-            <div className="card-body p-0">
-              {filteredIncidents.length === 0 ? (
-                <div className="text-center py-12">
-                  <ShieldCheckIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No incidents found</h3>
-                  <p className="text-gray-500">No emergency incidents match your current filters.</p>
-                </div>
-              ) : (
-                <div className="divide-y divide-gray-200">
-                  {filteredIncidents.map((incident) => (
-                    <div
-                      key={incident.id}
-                      className="p-6 hover:bg-gray-50 cursor-pointer transition-colors"
-                      onClick={() => handleIncidentClick(incident)}
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-start space-x-4 flex-1">
-                          <div className="flex-shrink-0">
-                            {getTypeIcon(incident.type)}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center space-x-3 mb-2">
-                              <h4 className="text-lg font-semibold text-gray-900">
-                                {incident.title}
-                              </h4>
-                              <span className={`px-2 py-1 text-xs font-medium rounded-full ${getSeverityColor(incident.severity)}`}>
-                                {incident.severity}
-                              </span>
-                              <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(incident.status)}`}>
-                                {incident.status}
-                              </span>
-                            </div>
-                            
-                            <p className="text-gray-600 text-sm mb-3">{incident.message}</p>
-                            
-                            <div className="flex items-center space-x-6 text-sm text-gray-500">
-                              <div className="flex items-center space-x-1">
-                                <UserIcon className="h-4 w-4" />
-                                <span>{incident.user.firstName} {incident.user.lastName}</span>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                <UserGroupIcon className="h-4 w-4" />
-                                <span>{getFamilyName(incident.familyId)}</span>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                <MapPinIcon className="h-4 w-4" />
-                                <span>{incident.location.address}</span>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                <ClockIcon className="h-4 w-4" />
-                                <span>{getRelativeTime(incident.timestamp)}</span>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                <PhoneIcon className="h-4 w-4" />
-                                <span>{incident.contacts.length} contacts</span>
-                              </div>
-                            </div>
-                          </div>
+      {filteredIncidents.length === 0 ? (
+        <EmptyState
+          icon={<ShieldCheckIcon className="h-12 w-12" />}
+          title="No incidents found"
+          description="No emergency incidents match your current filters."
+        />
+      ) : (
+        <Card variant="frosted">
+          <CardHeader>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Emergency Incidents ({filteredIncidents.length})
+            </h3>
+          </CardHeader>
+          <CardBody className="p-0">
+            <div className="divide-y divide-gray-200/50">
+              {filteredIncidents.map((incident) => (
+                <div
+                  key={incident.id}
+                  className="p-6 hover:bg-gray-50/50 cursor-pointer transition-colors duration-200"
+                  onClick={() => handleIncidentClick(incident)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View incident: ${incident.title}`}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-4 flex-1 min-w-0">
+                      <div className="flex-shrink-0">
+                        {getTypeIcon(incident.type)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-2 flex-wrap">
+                          <h4 className="text-lg font-semibold text-gray-900 truncate">
+                            {incident.title}
+                          </h4>
+                          <Badge variant={getSeverityVariant(incident.severity)} size="sm">
+                            {incident.severity}
+                          </Badge>
+                          <Badge variant={getStatusVariant(incident.status)} size="sm">
+                            {incident.status}
+                          </Badge>
                         </div>
                         
-                        <div className="flex items-center space-x-2 ml-4">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleIncidentClick(incident)
-                            }}
-                            className="btn btn-ghost text-blue-600 hover:text-blue-700"
-                          >
-                            <EyeIcon className="h-4 w-4" />
-                          </button>
-                          {incident.status === 'active' && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleAcknowledgeIncident(incident.id)
-                              }}
-                              className="btn btn-ghost text-yellow-600 hover:text-yellow-700"
-                            >
-                              <BellIcon className="h-4 w-4" />
-                            </button>
-                          )}
-                          {incident.status === 'acknowledged' && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleResolveIncident(incident.id)
-                              }}
-                              className="btn btn-ghost text-green-600 hover:text-green-700"
-                            >
-                              <ShieldCheckIcon className="h-4 w-4" />
-                            </button>
-                          )}
+                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">{incident.message}</p>
+                        
+                        <div className="flex items-center gap-6 text-sm text-gray-500 flex-wrap">
+                          <div className="flex items-center gap-1.5">
+                            <UserIcon className="h-4 w-4" aria-hidden="true" />
+                            <span>{incident.user.firstName} {incident.user.lastName}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <UserGroupIcon className="h-4 w-4" aria-hidden="true" />
+                            <span className="truncate">{getFamilyName(incident.familyId)}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <MapPinIcon className="h-4 w-4" aria-hidden="true" />
+                            <span className="truncate max-w-xs">{incident.location.address}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <ClockIcon className="h-4 w-4" aria-hidden="true" />
+                            <span>{getRelativeTime(incident.timestamp)}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <PhoneIcon className="h-4 w-4" aria-hidden="true" />
+                            <span>{incident.contacts.length} contacts</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  ))}
+                    
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleIncidentClick(incident)
+                        }}
+                        aria-label="View incident details"
+                      >
+                        <EyeIcon className="h-4 w-4" aria-hidden="true" />
+                      </Button>
+                      {incident.status === 'active' && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleAcknowledgeIncident(incident.id)
+                          }}
+                          aria-label="Acknowledge incident"
+                        >
+                          <BellIcon className="h-4 w-4" aria-hidden="true" />
+                        </Button>
+                      )}
+                      {incident.status === 'acknowledged' && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleResolveIncident(incident.id)
+                          }}
+                          aria-label="Resolve incident"
+                        >
+                          <ShieldCheckIcon className="h-4 w-4" aria-hidden="true" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              )}
+              ))}
             </div>
-          </div>
+          </CardBody>
+        </Card>
+      )}
 
       {/* Incident Details Modal */}
-      {showDetails && selectedIncident && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {selectedIncident.title}
-                  </h3>
-                  <div className="flex items-center space-x-3">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getSeverityColor(selectedIncident.severity)}`}>
-                      {selectedIncident.severity}
-                    </span>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(selectedIncident.status)}`}>
-                      {selectedIncident.status}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      {formatTime(selectedIncident.timestamp)}
-                    </span>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setShowDetails(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
+      <Modal
+        isOpen={showDetails}
+        onClose={() => setShowDetails(false)}
+        title={selectedIncident?.title}
+        size="xl"
+      >
+        {selectedIncident && (
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 flex-wrap">
+              <Badge variant={getSeverityVariant(selectedIncident.severity)}>
+                {selectedIncident.severity}
+              </Badge>
+              <Badge variant={getStatusVariant(selectedIncident.status)}>
+                {selectedIncident.status}
+              </Badge>
+              <span className="text-sm text-gray-500">
+                {formatTime(selectedIncident.timestamp)}
+              </span>
             </div>
 
-            <div className="p-6 space-y-6">
-              {/* User Information */}
-              <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-3">User Information</h4>
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex items-center space-x-4">
-                    <img
-                      src={selectedIncident.user.avatar || 'https://via.placeholder.com/60'}
-                      alt={selectedIncident.user.firstName}
-                      className="h-12 w-12 rounded-full"
-                    />
-                    <div>
-                      <h5 className="font-medium text-gray-900">
-                        {selectedIncident.user.firstName} {selectedIncident.user.lastName}
-                      </h5>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        <div className="flex items-center space-x-1">
-                          <UserGroupIcon className="h-4 w-4" />
-                          <span>{getFamilyName(selectedIncident.familyId)}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <EnvelopeIcon className="h-4 w-4" />
-                          <span>{selectedIncident.user.email}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <DevicePhoneMobileIcon className="h-4 w-4" />
-                          <span>{selectedIncident.user.phone}</span>
-                        </div>
+            {/* User Information */}
+            <Card variant="default">
+              <CardHeader>
+                <h4 className="text-base font-semibold text-gray-900">User Information</h4>
+              </CardHeader>
+              <CardBody>
+                <div className="flex items-center gap-4">
+                  <img
+                    src={selectedIncident.user.avatar || 'https://via.placeholder.com/60'}
+                    alt={selectedIncident.user.firstName}
+                    className="h-12 w-12 rounded-full shadow-md"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h5 className="font-semibold text-gray-900 truncate">
+                      {selectedIncident.user.firstName} {selectedIncident.user.lastName}
+                    </h5>
+                    <div className="flex items-center gap-4 text-sm text-gray-500 mt-1 flex-wrap">
+                      <div className="flex items-center gap-1.5">
+                        <UserGroupIcon className="h-4 w-4" aria-hidden="true" />
+                        <span className="truncate">{getFamilyName(selectedIncident.familyId)}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <EnvelopeIcon className="h-4 w-4" aria-hidden="true" />
+                        <span className="truncate">{selectedIncident.user.email}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <DevicePhoneMobileIcon className="h-4 w-4" aria-hidden="true" />
+                        <span>{selectedIncident.user.phone}</span>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </CardBody>
+            </Card>
 
-              {/* Incident Details */}
-              <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-3">Incident Details</h4>
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-gray-700 mb-4">{selectedIncident.message}</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="font-medium text-gray-900">Type:</span>
-                      <span className="ml-2 text-gray-600 capitalize">{selectedIncident.type}</span>
-                    </div>
-                    <div>
-                      <span className="font-medium text-gray-900">Severity:</span>
-                      <span className="ml-2 text-gray-600 capitalize">{selectedIncident.severity}</span>
-                    </div>
-                    <div>
-                      <span className="font-medium text-gray-900">Status:</span>
-                      <span className="ml-2 text-gray-600 capitalize">{selectedIncident.status}</span>
-                    </div>
-                    <div>
-                      <span className="font-medium text-gray-900">Timestamp:</span>
-                      <span className="ml-2 text-gray-600">{formatTime(selectedIncident.timestamp)}</span>
-                    </div>
+            {/* Incident Details */}
+            <Card variant="default">
+              <CardHeader>
+                <h4 className="text-base font-semibold text-gray-900">Incident Details</h4>
+              </CardHeader>
+              <CardBody>
+                <p className="text-gray-700 mb-4">{selectedIncident.message}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium text-gray-900">Type:</span>
+                    <span className="ml-2 text-gray-600 capitalize">{selectedIncident.type}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-900">Severity:</span>
+                    <span className="ml-2 text-gray-600 capitalize">{selectedIncident.severity}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-900">Status:</span>
+                    <span className="ml-2 text-gray-600 capitalize">{selectedIncident.status}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-900">Timestamp:</span>
+                    <span className="ml-2 text-gray-600">{formatTime(selectedIncident.timestamp)}</span>
                   </div>
                 </div>
-              </div>
+              </CardBody>
+            </Card>
 
-              {/* Location Information */}
-              <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-3">Location Information</h4>
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <MapPinIcon className="h-5 w-5 text-gray-500" />
-                    <span className="font-medium text-gray-900">Address:</span>
+            {/* Location Information */}
+            <Card variant="default">
+              <CardHeader>
+                <h4 className="text-base font-semibold text-gray-900">Location Information</h4>
+              </CardHeader>
+              <CardBody>
+                <div className="flex items-center gap-2 mb-3">
+                  <MapPinIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
+                  <span className="font-medium text-gray-900">Address:</span>
+                </div>
+                <p className="text-gray-700 mb-4">{selectedIncident.location.address}</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium text-gray-900">Latitude:</span>
+                    <span className="ml-2 text-gray-600 font-mono">{selectedIncident.location.latitude}</span>
                   </div>
-                  <p className="text-gray-700 mb-3">{selectedIncident.location.address}</p>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <span className="font-medium text-gray-900">Latitude:</span>
-                      <span className="ml-2 text-gray-600">{selectedIncident.location.latitude}</span>
-                    </div>
-                    <div>
-                      <span className="font-medium text-gray-900">Longitude:</span>
-                      <span className="ml-2 text-gray-600">{selectedIncident.location.longitude}</span>
-                    </div>
-                    <div>
-                      <span className="font-medium text-gray-900">Accuracy:</span>
-                      <span className="ml-2 text-gray-600">{selectedIncident.location.accuracy}m</span>
-                    </div>
+                  <div>
+                    <span className="font-medium text-gray-900">Longitude:</span>
+                    <span className="ml-2 text-gray-600 font-mono">{selectedIncident.location.longitude}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-900">Accuracy:</span>
+                    <span className="ml-2 text-gray-600 font-mono">{selectedIncident.location.accuracy}m</span>
                   </div>
                 </div>
-              </div>
+              </CardBody>
+            </Card>
 
-              {/* Emergency Contacts */}
-              {selectedIncident.contacts.length > 0 && (
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Emergency Contacts</h4>
+            {/* Emergency Contacts */}
+            {selectedIncident.contacts.length > 0 && (
+              <Card variant="default">
+                <CardHeader>
+                  <h4 className="text-base font-semibold text-gray-900">Emergency Contacts</h4>
+                </CardHeader>
+                <CardBody>
                   <div className="space-y-3">
                     {selectedIncident.contacts.map((contact) => (
-                      <div key={contact.id} className="bg-gray-50 rounded-lg p-4">
+                      <div key={contact.id} className="p-4 rounded-xl bg-gray-50 border border-gray-200/50">
                         <div className="flex items-center justify-between">
                           <div>
-                            <h5 className="font-medium text-gray-900">{contact.name}</h5>
-                            <div className="flex items-center space-x-4 text-sm text-gray-500">
-                              <div className="flex items-center space-x-1">
-                                <PhoneIcon className="h-4 w-4" />
+                            <h5 className="font-semibold text-gray-900">{contact.name}</h5>
+                            <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
+                              <div className="flex items-center gap-1.5">
+                                <PhoneIcon className="h-4 w-4" aria-hidden="true" />
                                 <span>{contact.phone}</span>
                               </div>
                               <span>{contact.relationship}</span>
                             </div>
                           </div>
                           <div className="text-right">
-                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                              contact.contacted ? 'text-green-600 bg-green-100' : 'text-gray-600 bg-gray-100'
-                            }`}>
+                            <Badge variant={contact.contacted ? 'success' : 'default'} size="sm">
                               {contact.contacted ? 'Contacted' : 'Not Contacted'}
-                            </span>
+                            </Badge>
                             {contact.contactedAt && (
                               <p className="text-xs text-gray-500 mt-1">
                                 {formatTime(contact.contactedAt)}
@@ -689,27 +735,29 @@ export function FamilySafetyIncidents() {
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
+                </CardBody>
+              </Card>
+            )}
 
-              {/* Family Members */}
-              {selectedIncident.familyMembers.length > 0 && (
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Family Members</h4>
+            {/* Family Members */}
+            {selectedIncident.familyMembers.length > 0 && (
+              <Card variant="default">
+                <CardHeader>
+                  <h4 className="text-base font-semibold text-gray-900">Family Members</h4>
+                </CardHeader>
+                <CardBody>
                   <div className="space-y-3">
                     {selectedIncident.familyMembers.map((member) => (
-                      <div key={member.id} className="bg-gray-50 rounded-lg p-4">
+                      <div key={member.id} className="p-4 rounded-xl bg-gray-50 border border-gray-200/50">
                         <div className="flex items-center justify-between">
                           <div>
-                            <h5 className="font-medium text-gray-900">{member.name}</h5>
+                            <h5 className="font-semibold text-gray-900">{member.name}</h5>
                             <span className="text-sm text-gray-500">{member.role}</span>
                           </div>
                           <div className="text-right">
-                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                              member.notified ? 'text-green-600 bg-green-100' : 'text-gray-600 bg-gray-100'
-                            }`}>
+                            <Badge variant={member.notified ? 'success' : 'default'} size="sm">
                               {member.notified ? 'Notified' : 'Not Notified'}
-                            </span>
+                            </Badge>
                             {member.notifiedAt && (
                               <p className="text-xs text-gray-500 mt-1">
                                 {formatTime(member.notifiedAt)}
@@ -720,79 +768,78 @@ export function FamilySafetyIncidents() {
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
+                </CardBody>
+              </Card>
+            )}
 
-              {/* Device Information */}
-              {selectedIncident.metadata && (
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Device Information</h4>
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                      {selectedIncident.metadata.deviceInfo && (
-                        <div>
-                          <span className="font-medium text-gray-900">Device:</span>
-                          <span className="ml-2 text-gray-600">{selectedIncident.metadata.deviceInfo}</span>
-                        </div>
-                      )}
-                      {selectedIncident.metadata.appVersion && (
-                        <div>
-                          <span className="font-medium text-gray-900">App Version:</span>
-                          <span className="ml-2 text-gray-600">{selectedIncident.metadata.appVersion}</span>
-                        </div>
-                      )}
-                      {selectedIncident.metadata.batteryLevel && (
-                        <div>
-                          <span className="font-medium text-gray-900">Battery Level:</span>
-                          <span className="ml-2 text-gray-600">{selectedIncident.metadata.batteryLevel}%</span>
-                        </div>
-                      )}
-                      {selectedIncident.metadata.networkType && (
-                        <div>
-                          <span className="font-medium text-gray-900">Network:</span>
-                          <span className="ml-2 text-gray-600">{selectedIncident.metadata.networkType}</span>
-                        </div>
-                      )}
-                    </div>
+            {/* Device Information */}
+            {selectedIncident.metadata && (
+              <Card variant="default">
+                <CardHeader>
+                  <h4 className="text-base font-semibold text-gray-900">Device Information</h4>
+                </CardHeader>
+                <CardBody>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    {selectedIncident.metadata.deviceInfo && (
+                      <div>
+                        <span className="font-medium text-gray-900">Device:</span>
+                        <span className="ml-2 text-gray-600 font-mono">{selectedIncident.metadata.deviceInfo}</span>
+                      </div>
+                    )}
+                    {selectedIncident.metadata.appVersion && (
+                      <div>
+                        <span className="font-medium text-gray-900">App Version:</span>
+                        <span className="ml-2 text-gray-600 font-mono">{selectedIncident.metadata.appVersion}</span>
+                      </div>
+                    )}
+                    {selectedIncident.metadata.batteryLevel && (
+                      <div>
+                        <span className="font-medium text-gray-900">Battery Level:</span>
+                        <span className="ml-2 text-gray-600 font-mono">{selectedIncident.metadata.batteryLevel}%</span>
+                      </div>
+                    )}
+                    {selectedIncident.metadata.networkType && (
+                      <div>
+                        <span className="font-medium text-gray-900">Network:</span>
+                        <span className="ml-2 text-gray-600 font-mono">{selectedIncident.metadata.networkType}</span>
+                      </div>
+                    )}
                   </div>
-                </div>
-              )}
+                </CardBody>
+              </Card>
+            )}
 
-              {/* Actions */}
-              <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-                {selectedIncident.status === 'active' && (
-                  <button
-                    onClick={() => {
-                      handleAcknowledgeIncident(selectedIncident.id)
-                      setShowDetails(false)
-                    }}
-                    className="btn btn-warning"
-                  >
-                    Acknowledge Incident
-                  </button>
-                )}
-                {selectedIncident.status === 'acknowledged' && (
-                  <button
-                    onClick={() => {
-                      handleResolveIncident(selectedIncident.id)
-                      setShowDetails(false)
-                    }}
-                    className="btn btn-success"
-                  >
-                    Resolve Incident
-                  </button>
-                )}
-                <button
-                  onClick={() => setShowDetails(false)}
-                  className="btn btn-secondary"
+            {/* Actions */}
+            <div className="flex justify-end gap-3 pt-4 border-t border-gray-200/50">
+              {selectedIncident.status === 'active' && (
+                <Button
+                  variant="warning"
+                  onClick={() => {
+                    handleAcknowledgeIncident(selectedIncident.id)
+                    setShowDetails(false)
+                  }}
                 >
-                  Close
-                </button>
-              </div>
+                  Acknowledge Incident
+                </Button>
+              )}
+              {selectedIncident.status === 'acknowledged' && (
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    handleResolveIncident(selectedIncident.id)
+                    setShowDetails(false)
+                  }}
+                >
+                  Resolve Incident
+                </Button>
+              )}
+              <Button variant="secondary" onClick={() => setShowDetails(false)}>
+                Close
+              </Button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </div>
   )
 }

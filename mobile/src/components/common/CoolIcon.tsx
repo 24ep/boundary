@@ -78,3 +78,5 @@ export const CoolIcon: React.FC<CoolIconProps> = ({ name, size = 24, color = '#0
 export default CoolIcon;
 
 
+
+
