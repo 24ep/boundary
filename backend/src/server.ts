@@ -29,6 +29,7 @@ import notesRoutes from './routes/notes';
 import todosRoutes from './routes/todos';
 import socialRoutes from './routes/social';
 import financialRoutes from './routes/financial';
+import emotionsRoutes from './routes/emotions';
 // JS route modules
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const auditRoutes = require('./routes/audit');
@@ -44,6 +45,7 @@ import versionControlRoutes from './routes/versionControlRoutes';
 import mobileRoutes from './routes/mobileRoutes';
 import settingsRoutes from './routes/settings';
 import adminAuthRoutes from './routes/adminAuth';
+import adminUsersRoutes from './routes/adminUsers';
 import appConfigRoutes from './routes/appConfigRoutes';
 import pageBuilderRoutes from './routes/pageBuilderRoutes';
 import componentRoutes from './routes/componentRoutes';
@@ -60,7 +62,7 @@ import { requestIdMiddleware } from './middleware/requestId';
 // import { validateRequest } from './middleware/validation';
 
 // Import services
-import { initializeSupabase, getSupabaseClient } from './services/supabaseService';
+// import { initializeSupabase, getSupabaseClient } from './services/supabaseService';
 import { initializeSocket } from './socket/socketService';
 
 // Load environment variables from repository root
@@ -285,8 +287,10 @@ function startServer() {
 
     // Check database connection
     try {
-      const supabase = getSupabaseClient();
-      await supabase.from('users').select('id').limit(1);
+      // const supabase = getSupabaseClient();
+      // await supabase.from('users').select('id').limit(1);
+      const { pool } = require('./config/database');
+      await pool.query('SELECT 1');
       healthCheck.services.database = 'connected';
     } catch (error) {
       healthCheck.services.database = 'disconnected';
@@ -355,6 +359,7 @@ function startServer() {
   app.use('/api/v1/todos', todosRoutes);
   app.use('/api/v1/social', socialRoutes);
   app.use('/api/v1/finance', financialRoutes);
+  app.use('/api/v1/emotions', emotionsRoutes);
   // Audit routes (non-versioned)
   app.use('/api/audit', auditRoutes);
   app.use('/api/admin', adminRoutes);
@@ -374,7 +379,7 @@ function startServer() {
   app.use('/api/page-builder/assets', assetRoutes);
   app.use('/api/mobile', mobileRoutes);
   app.use('/api/settings', settingsRoutes);
-  app.use('/api/admin/auth', adminAuthRoutes);
+  app.use('/api/admin/auth', adminUsersRoutes); // New RBAC-based auth
 
   // App Configuration API (for dynamic app management - login backgrounds, themes, etc.)
   app.use('/api/app-config', appConfigRoutes);
@@ -426,9 +431,9 @@ function startServer() {
   // Initialize services and start server
   async function initializeServices() {
     try {
-      // Initialize Supabase
-      await initializeSupabase();
-      console.log('✅ Supabase connected successfully');
+      // Initialize Database Pool
+      // await initializeSupabase();
+      console.log('✅ Database pool configuration loaded');
 
       // Initialize Socket.IO
       initializeSocket(io);

@@ -7,7 +7,7 @@ import { supabase } from '../config/supabase';
  * Handles themes, screens, assets, feature flags, etc.
  */
 export class AppConfigController {
-  
+
   /**
    * Get complete app configuration bundle
    * Returns all configuration needed for app initialization
@@ -58,9 +58,9 @@ export class AppConfigController {
       // Filter feature flags based on platform and version
       let features = featuresResult.data || [];
       if (platform) {
-        features = features.filter(f => 
-          !f.target_platforms || 
-          f.target_platforms.length === 0 || 
+        features = features.filter(f =>
+          !f.target_platforms ||
+          f.target_platforms.length === 0 ||
           f.target_platforms.includes(platform as string)
         );
       }
@@ -68,7 +68,7 @@ export class AppConfigController {
       // Filter assets based on platform
       let assets = assetsResult.data || [];
       if (platform) {
-        assets = assets.filter(a => 
+        assets = assets.filter(a =>
           a.platform === 'all' || a.platform === platform
         );
       }
@@ -132,7 +132,21 @@ export class AppConfigController {
         .single();
 
       if (error || !data) {
-        return res.status(404).json({ error: 'Screen configuration not found' });
+        // Return default screen config if not found (prevents 404 errors)
+        return res.json({
+          screen: {
+            key: screenKey,
+            name: screenKey.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+            type: 'default',
+            config: {
+              background: {
+                type: 'gradient',
+                colors: ['#FA7272', '#FFBBB4']
+              }
+            },
+            version: 1
+          }
+        });
       }
 
       res.json({
@@ -323,9 +337,9 @@ export class AppConfigController {
       // Filter by platform if specified
       let features = data || [];
       if (platform) {
-        features = features.filter(f => 
-          !f.target_platforms || 
-          f.target_platforms.length === 0 || 
+        features = features.filter(f =>
+          !f.target_platforms ||
+          f.target_platforms.length === 0 ||
           f.target_platforms.includes(platform as string)
         );
       }

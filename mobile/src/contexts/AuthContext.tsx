@@ -27,9 +27,23 @@ appleAuth = null;
 
 import { apiClient } from '../services/api/apiClient';
 import { logger } from '../utils/logger';
+import axios from 'axios';
 
-// Use apiClient directly instead of the barrel export (fixes undefined api issue)
-const api = apiClient;
+// Create a fallback axios instance in case apiClient fails to load
+const fallbackApi = axios.create({
+  baseURL: 'http://localhost:3000/api/v1',
+  timeout: 30000,
+  headers: { 'Content-Type': 'application/json' }
+});
+
+// Use apiClient if available, otherwise use fallback
+const api = apiClient || {
+  post: (url: string, data: any) => fallbackApi.post(url, data).then(r => r.data),
+  get: (url: string) => fallbackApi.get(url).then(r => r.data),
+  put: (url: string, data: any) => fallbackApi.put(url, data).then(r => r.data),
+  setAuthToken: (token: string) => { fallbackApi.defaults.headers.common.Authorization = `Bearer ${token}`; },
+  removeAuthToken: () => { delete fallbackApi.defaults.headers.common.Authorization; }
+};
 
 interface User {
   id: string;
@@ -194,29 +208,54 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return;
       }
 
-      if (accessToken && !__DEV__) {
-        // In production, try to validate token
-        console.log('[AUTH] Production mode - validating token');
-        // Add token validation logic here if needed
-      }
-
       // Check if user has valid authentication
       if (accessToken) {
+        // First, try to restore user from local storage (fast path)
+        const storedUser = await AsyncStorage.getItem('user');
+        if (storedUser) {
+          try {
+            const userData = JSON.parse(storedUser);
+            console.log('[AUTH] Restored user from storage:', userData.email);
+            setUser(userData);
+            setIsOnboardingComplete(userData.isOnboardingComplete || false);
+
+            // Optionally validate token in background (non-blocking)
+            api.get('/auth/me').then((response: any) => {
+              const freshUserData = response?.user || response?.data?.user;
+              if (freshUserData) {
+                setUser(freshUserData);
+                AsyncStorage.setItem('user', JSON.stringify(freshUserData));
+                console.log('[AUTH] User data refreshed from server');
+              }
+            }).catch(() => {
+              console.log('[AUTH] Background refresh failed, using cached data');
+            });
+
+            return; // Session restored successfully
+          } catch (parseError) {
+            console.log('[AUTH] Failed to parse stored user, clearing...');
+            await AsyncStorage.removeItem('user');
+          }
+        }
+
+        // No stored user, try to fetch from API
         try {
-          // Try to validate the token by making a request to get user profile
-          // Note: This endpoint might not exist, so we'll handle the error gracefully
-          const response = await api.get('/auth/me').catch(() => null);
+          const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Auth check timeout')), 3000)
+          );
+          const response = await Promise.race([
+            api.get('/auth/me'),
+            timeoutPromise
+          ]).catch(() => null);
           const responseData = response as any;
           if (responseData && (responseData.user || responseData.data?.user)) {
             const userData = responseData.user || responseData.data?.user;
             setUser(userData);
             setIsOnboardingComplete(userData.isOnboardingComplete || false);
-            console.log('[AUTH] Valid token found - user authenticated');
+            await AsyncStorage.setItem('user', JSON.stringify(userData));
+            console.log('[AUTH] Valid token found - user authenticated and cached');
           } else {
-            // If /auth/me doesn't exist or returns no user, don't clear tokens
-            // Just log and keep the existing state
-            console.log('[AUTH] /auth/me endpoint not available or no user data - keeping existing state');
-            // Don't clear tokens - user might have just logged in
+            console.log('[AUTH] /auth/me not available or no user data');
           }
         } catch (error: any) {
           // Token validation failed - but don't clear if it's just a 404
@@ -315,6 +354,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Set all states together to minimize re-renders
       setUser(transformedUser);
       setIsOnboardingComplete(userData.isOnboardingComplete ?? true);
+
+      // Store user data in AsyncStorage for session persistence
+      await AsyncStorage.setItem('user', JSON.stringify(transformedUser));
+      console.log('[AUTH] User data stored in AsyncStorage for session persistence');
+
       setIsLoading(false);
 
       // Immediately force a re-render to ensure RootNavigator sees the change

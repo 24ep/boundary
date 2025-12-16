@@ -7,7 +7,7 @@ import { getSupabaseClient } from '../services/supabaseService';
 import { emailService } from '../services/emailService';
 import { authenticateToken } from '../middleware/auth';
 import { AuthController } from '../controllers/AuthController';
-import { UserModel } from '../models/User';
+import { UserModel } from '../models/UserModel';
 
 const authController = new AuthController();
 

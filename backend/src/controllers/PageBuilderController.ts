@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { supabase } from '../config/supabase';
+import pool from '../config/database';
 
 export class PageBuilderController {
   // ==================== PAGE CRUD OPERATIONS ====================
@@ -122,38 +123,27 @@ export class PageBuilderController {
     try {
       const { slug } = req.params;
 
-      const { data, error } = await supabase
-        .from('pages')
-        .select(`
-          *,
-          page_components(
-            id,
-            component_type,
-            position,
-            props,
-            styles,
-            responsive_config
-          )
-        `)
-        .eq('slug', slug)
-        .eq('status', 'published')
-        .single();
+      // Use direct PG connection since Supabase API might be unavailable
+      const query = `
+        SELECT p.*, 
+               COALESCE(json_agg(pc.* ORDER BY pc.position) FILTER (WHERE pc.id IS NOT NULL), '[]') as page_components
+        FROM pages p
+        LEFT JOIN page_components pc ON p.id = pc.page_id
+        WHERE p.slug = $1 AND p.status = 'published'
+        GROUP BY p.id
+      `;
 
-      if (error) {
-        console.error('Error fetching page by slug:', error);
+      const { rows } = await pool.query(query, [slug]);
+      const page = rows[0];
+
+      if (!page) {
         return res.status(404).json({ error: 'Page not found' });
       }
 
-      // Sort components by position
-      const page = {
-        ...data,
-        page_components: data.page_components?.sort((a: any, b: any) => a.position - b.position) || []
-      };
-
       res.json({ page });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching page by slug:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal server error', details: error.message || String(error) });
     }
   }
 
@@ -363,7 +353,7 @@ export class PageBuilderController {
         .eq('parent_id', id);
 
       if (children && children.length > 0) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: 'Cannot delete page with child pages',
           childCount: children.length
         });

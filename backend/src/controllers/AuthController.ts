@@ -2,7 +2,7 @@ import { Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
-import { UserModel } from '../models/User';
+import { UserModel } from '../models/UserModel';
 // import { logger } from '../utils/logger';
 // TODO: Fix missing module: ../utils/logger
 import emailService from '../services/emailService';

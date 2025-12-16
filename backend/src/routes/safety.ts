@@ -11,6 +11,32 @@ const router = express.Router();
 router.use(authenticateToken as any);
 router.use(requireFamilyMember as any);
 
+// Get safety statistics
+router.get('/stats', async (req: any, res: any) => {
+  try {
+    // Return empty stats for now
+    res.json({
+      success: true,
+      stats: {
+        totalAlerts: 0,
+        activeAlerts: 0,
+        resolvedAlerts: 0,
+        alertsByType: {},
+        alertsBySeverity: {},
+        checkInsToday: 0,
+        lastCheckIn: null,
+        safetyScore: 100,
+      }
+    });
+  } catch (error) {
+    console.error('Get safety stats error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: 'An unexpected error occurred'
+    });
+  }
+});
+
 // Get safety alerts
 router.get('/alerts', [
   query('status').optional().isIn(['active', 'resolved', 'cancelled']),

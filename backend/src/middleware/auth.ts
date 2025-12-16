@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserModel } from '../models/User';
+import { UserModel } from '../models/UserModel';
 import pool from '../config/database'; // Using postgres pool directly
 
 export interface AuthenticatedRequest extends Request {
@@ -114,10 +114,10 @@ export const optionalAuth = async (
       jwtSecret
     ) as any;
 
-    const res = await pool.query('SELECT id, email, is_active FROM users WHERE id = $1', [decoded.id]);
+    const res = await pool.query('SELECT id, email FROM auth.users WHERE id = $1', [decoded.id]);
     const user = res.rows[0];
 
-    if (user && user.is_active) {
+    if (user) {
       req.user = {
         id: user.id,
         email: user.email

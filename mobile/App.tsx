@@ -2,6 +2,8 @@ import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from './src/contexts/AuthContext';
+import { PinProvider } from './src/contexts/PinContext';
+import { SocketProvider } from './src/contexts/SocketContext';
 import { MainContentProvider } from './src/contexts/MainContentContext';
 import RootNavigator from './src/navigation/RootNavigator';
 
@@ -12,8 +14,10 @@ import RootNavigator from './src/navigation/RootNavigator';
  * - GestureHandlerRootView for gesture support
  * - SafeAreaProvider for safe area insets
  * - AuthProvider for authentication state
+ * - PinProvider for PIN code management
+ * - SocketProvider for real-time socket connections
  * - MainContentProvider for main content state
- * - RootNavigator for navigation (shows Auth or App based on auth state)
+ * - RootNavigator for navigation (shows Auth, PIN setup/unlock, or App based on state)
  */
 const App: React.FC = () => {
   console.log('🚀 App Starting...');
@@ -22,9 +26,13 @@ const App: React.FC = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <AuthProvider>
-          <MainContentProvider>
-            <RootNavigator />
-          </MainContentProvider>
+          <PinProvider>
+            <SocketProvider>
+              <MainContentProvider>
+                <RootNavigator />
+              </MainContentProvider>
+            </SocketProvider>
+          </PinProvider>
         </AuthProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

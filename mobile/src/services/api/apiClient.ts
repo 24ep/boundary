@@ -30,9 +30,9 @@ class ApiClient {
   }> = [];
 
   constructor() {
-    // Use central config for base URL
-    const { API_BASE_URL } = require('../../config/api');
-    this.baseURL = API_BASE_URL;
+    // Hardcoded default URL for web compatibility - avoids require() issues
+    // Backend runs on port 3000
+    this.baseURL = 'http://127.0.0.1:3000/api/v1';
 
     this.instance = axios.create({
       baseURL: this.baseURL,

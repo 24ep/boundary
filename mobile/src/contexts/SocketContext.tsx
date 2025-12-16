@@ -56,10 +56,10 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       await socketService.connect();
       setIsConnected(true);
       setSocketId(socketService.getSocketId());
-      
+
       // Setup global event listeners
       setupGlobalEventListeners();
-      
+
       console.log('Socket connected successfully');
     } catch (error) {
       console.error('Failed to connect socket:', error);
@@ -262,10 +262,35 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   );
 };
 
+// Safe default values for when SocketProvider is not present
+const defaultSocketContext: SocketContextType = {
+  isConnected: false,
+  socketId: undefined,
+  onlineUserIds: [],
+  joinChat: () => { },
+  leaveChat: () => { },
+  sendMessage: () => { },
+  startTyping: () => { },
+  stopTyping: () => { },
+  updateLocation: () => { },
+  requestLocation: () => { },
+  sendEmergencyAlert: () => { },
+  acknowledgeAlert: () => { },
+  updateStatus: () => { },
+  initiateCall: () => { },
+  answerCall: () => { },
+  endCall: () => { },
+  sendCallSignal: () => { },
+  on: () => { },
+  off: () => { },
+};
+
 export const useSocket = (): SocketContextType => {
   const context = useContext(SocketContext);
+  // Return safe defaults if provider is not present (prevents crashes)
   if (context === undefined) {
-    throw new Error('useSocket must be used within a SocketProvider');
+    console.warn('useSocket: SocketProvider not found, using defaults');
+    return defaultSocketContext;
   }
   return context;
 };

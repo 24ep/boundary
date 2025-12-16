@@ -23,7 +23,7 @@ export interface AuthResponse {
 class AuthService {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${API_BASE_URL}${endpoint}`
-    
+
     const config: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
@@ -34,11 +34,11 @@ class AuthService {
 
     try {
       const response = await fetch(url, config)
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      
+
       return await response.json()
     } catch (error) {
       console.error('API request failed:', error)
@@ -47,49 +47,20 @@ class AuthService {
   }
 
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    // Demo credentials validation
-    const DEMO_EMAIL = 'admin@bondarys.com'
-    const DEMO_PASSWORD = 'admin123'
-    
-    // Check if credentials match demo account
-    if (credentials.email === DEMO_EMAIL && credentials.password === DEMO_PASSWORD) {
-      const mockUser: AuthUser = {
-        id: 'admin-1',
+    // Always call real API
+    const response = await this.request<AuthResponse>('/admin/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
         email: credentials.email,
-        firstName: 'Admin',
-        lastName: 'User',
-        role: 'admin',
-        permissions: ['read', 'write', 'delete', 'admin']
-      }
-      
-      const mockToken = 'demo-admin-token-' + Date.now()
-      
-      // Store token in localStorage
-      localStorage.setItem('admin_token', mockToken)
-      localStorage.setItem('admin_user', JSON.stringify(mockUser))
+        password: credentials.password
+      }),
+    })
 
-      return {
-        token: mockToken,
-        user: mockUser
-      }
-    }
+    // Store token in localStorage
+    localStorage.setItem('admin_token', response.token)
+    localStorage.setItem('admin_user', JSON.stringify(response.user))
 
-    // Try real API for non-demo credentials
-    try {
-      const response = await this.request<AuthResponse>('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify(credentials),
-      })
-
-      // Store token in localStorage
-      localStorage.setItem('admin_token', response.token)
-      localStorage.setItem('admin_user', JSON.stringify(response.user))
-
-      return response
-    } catch (error) {
-      console.error('Login failed:', error)
-      throw new Error('Invalid email or password')
-    }
+    return response
   }
 
   async logout(): Promise<void> {

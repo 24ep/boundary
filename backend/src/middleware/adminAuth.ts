@@ -4,7 +4,11 @@ import jwt from 'jsonwebtoken';
 export interface AdminRequest extends Request {
   admin?: {
     id: string;
-    username: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    role: string;
+    permissions: string[];
     type: string;
   };
 }
@@ -40,7 +44,11 @@ export const authenticateAdmin = async (
     // Add admin info to request
     req.admin = {
       id: decoded.id,
-      username: decoded.username,
+      email: decoded.email,
+      firstName: decoded.firstName,
+      lastName: decoded.lastName,
+      role: decoded.role,
+      permissions: decoded.permissions || [],
       type: decoded.type
     };
 
@@ -66,4 +74,36 @@ export const authenticateAdmin = async (
       message: 'Authentication failed'
     });
   }
+};
+
+/**
+ * Middleware to check if admin has required permission
+ * Usage: requirePermission('pages:write')
+ */
+export const requirePermission = (permission: string) => {
+  return (req: AdminRequest, res: Response, next: NextFunction) => {
+    if (!req.admin) {
+      return res.status(401).json({
+        error: 'Access denied',
+        message: 'Not authenticated'
+      });
+    }
+
+    const { permissions } = req.admin;
+
+    // Super admins have all permissions
+    if (permissions.includes('*')) {
+      return next();
+    }
+
+    // Check for specific permission
+    if (permissions.includes(permission)) {
+      return next();
+    }
+
+    return res.status(403).json({
+      error: 'Forbidden',
+      message: `Permission denied. Required: ${permission}`
+    });
+  };
 };

@@ -10,7 +10,28 @@ const router = express.Router();
 router.use(authenticateToken as any);
 router.use(requireFamilyMember as any);
 
-// Get hourse locations (latest location for each member)
+// Get location statistics
+router.get('/stats', async (req: any, res: any) => {
+  try {
+    // Return empty stats for now
+    res.json({
+      success: true,
+      stats: {
+        totalLocationsTracked: 0,
+        membersSharing: 0,
+        lastUpdated: null,
+        geofencesActive: 0,
+        alertsTriggered: 0,
+      }
+    });
+  } catch (error) {
+    console.error('Get location stats error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: 'An unexpected error occurred'
+    });
+  }
+});
 router.get('/', async (req: any, res: any) => {
   try {
     const supabase = getSupabaseClient();

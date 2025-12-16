@@ -1,14 +1,9 @@
 import { Server, Socket } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/UserModel';
-// import { FamilyModel } from '../models/FamilyModel';
- // TODO: Fix missing module: ../models/FamilyModel
-// import { ChatMessageModel } from '../models/ChatMessageModel';
- // TODO: Fix missing module: ../models/ChatMessageModel
-// import { EmergencyAlertModel } from '../models/EmergencyAlertModel';
- // TODO: Fix missing module: ../models/EmergencyAlertModel
-// import { logger } from '../utils/logger';
- // TODO: Fix missing module: ../utils/logger
+import { query } from '../config/database';
+import crypto from 'crypto';
+
 const logger = console; // Use console as fallback
 
 interface AuthenticatedSocket extends Socket {
@@ -193,7 +188,7 @@ class SocketService {
 
   private handleDisconnection(socket: AuthenticatedSocket) {
     const userId = socket.userId!;
-    
+
     logger.info(`User disconnected: ${userId}`);
 
     // Remove from connected users
@@ -233,13 +228,19 @@ class SocketService {
       };
 
       // Save message to database
-      // TODO: Implement ChatMessageModel
-      // const message = new ChatMessageModel({
-      //   ...messageData,
-      //   familyId: data.familyId, // TODO: Get from room context
-      // });
-      // await message.save();
-      const messageId = 'stub-message-id';
+      const messageId = crypto.randomUUID(); // Node 19+ or import crypto
+
+      await query(`
+        INSERT INTO public.messages (id, room_id, sender_id, content, message_type, created_at)
+        VALUES ($1, $2, $3, $4, $5, $6)
+      `, [
+        messageId,
+        data.familyId, // Assuming familyId maps to room_id for now
+        userId,
+        messageData.content,
+        messageData.type,
+        messageData.timestamp
+      ]);
 
       // Broadcast to hourse room
       const roomId = `family_${data.familyId}`;
@@ -533,12 +534,17 @@ class SocketService {
   private async sendEmergencyNotifications(familyIds: string[], alertData: any) {
     try {
       // Get all hourse members' device tokens
-      const familyMembers = await UserModel.find({
-        familyIds: { $in: familyIds },
-        'deviceTokens.0': { $exists: true },
-      });
+      // const familyMembers = await UserModel.find({ ... });
+      const res = await query(`
+        SELECT u.raw_user_meta_data->'deviceTokens' as device_tokens
+        FROM auth.users u
+        JOIN public.family_members fm ON u.id = fm.user_id
+        WHERE fm.family_id = ANY($1)
+        AND u.raw_user_meta_data->'deviceTokens' IS NOT NULL
+        AND jsonb_array_length(u.raw_user_meta_data->'deviceTokens') > 0
+      `, [familyIds]);
 
-      const deviceTokens = familyMembers.flatMap((member: any) => member.deviceTokens);
+      const deviceTokens = res.rows.flatMap(r => r.device_tokens || []);
 
       if (deviceTokens.length > 0) {
         // TODO: Send push notifications using Firebase

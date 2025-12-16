@@ -21,6 +21,7 @@ import { PrivacySettingsModal } from '../profile/PrivacySettingsModal';
 import { FamilySettingsModal } from '../profile/FamilySettingsModal';
 import LanguageSettings from './LanguageSettings';
 import TranslationKeysViewer from './TranslationKeysViewer';
+import { usePin } from '../../contexts/PinContext';
 
 // Types for all settings
 interface NotificationPreferences {
@@ -106,7 +107,8 @@ export const UnifiedSettingsPage: React.FC<UnifiedSettingsPageProps> = ({
   onDeleteAccount,
 }) => {
   const { t } = useTranslation();
-  
+  const { hasPin, resetPin } = usePin();
+
   // State for all settings
   const [notificationSettings, setNotificationSettings] = useState<NotificationPreferences>({
     push: true,
@@ -289,7 +291,7 @@ export const UnifiedSettingsPage: React.FC<UnifiedSettingsPageProps> = ({
           color={isDestructive ? colors.error : colors.gray[500]}
         />
       </View>
-      
+
       <View style={styles.settingContent}>
         <Text style={[
           styles.settingTitle,
@@ -306,7 +308,7 @@ export const UnifiedSettingsPage: React.FC<UnifiedSettingsPageProps> = ({
           </Text>
         )}
       </View>
-      
+
       {hasSwitch ? (
         <Switch
           value={switchValue}
@@ -358,7 +360,7 @@ export const UnifiedSettingsPage: React.FC<UnifiedSettingsPageProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-      
+
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={onBack} style={styles.backButton}>
@@ -595,6 +597,32 @@ export const UnifiedSettingsPage: React.FC<UnifiedSettingsPageProps> = ({
               title: 'Security',
               subtitle: 'Password, 2FA, recovery',
               onPress: () => Alert.alert(t('info'), 'Security settings coming soon'),
+            },
+            {
+              icon: 'lock-reset',
+              title: 'Reset PIN Code',
+              subtitle: hasPin ? 'Change or reset your 6-digit PIN' : 'Set up a new PIN',
+              onPress: () => {
+                if (hasPin) {
+                  Alert.alert(
+                    'Reset PIN Code',
+                    'This will remove your current PIN. You will need to set up a new PIN next time you use the app.',
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      {
+                        text: 'Reset PIN',
+                        style: 'destructive',
+                        onPress: async () => {
+                          await resetPin();
+                          Alert.alert('Success', 'PIN has been reset. You will be prompted to set a new PIN.');
+                        },
+                      },
+                    ]
+                  );
+                } else {
+                  Alert.alert('No PIN Set', 'You have not set up a PIN yet. A PIN will be required on your next login.');
+                }
+              },
             },
             {
               icon: 'account-heart-outline',

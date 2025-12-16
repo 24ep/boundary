@@ -232,10 +232,28 @@ router.get('/:familyId', authenticateToken as any, async (req: any, res: Respons
 });
 
 // Get user's hourse
-router.get('/my-hourse', requireFamilyMember as any, async (req: any, res: Response) => {
+router.get('/my-hourse', authenticateToken as any, async (req: any, res: Response) => {
   try {
     const supabase = getSupabaseClient();
-    const familyId = req.familyId;
+    const userId = req.user.id;
+
+    // First, find the user's family
+    const { data: membership } = await supabase
+      .from('family_members')
+      .select('family_id')
+      .eq('user_id', userId)
+      .limit(1)
+      .single();
+
+    // If user doesn't belong to any family, return null hourse (not 404)
+    if (!membership) {
+      return res.json({
+        hourse: null,
+        message: 'User does not belong to any hourse yet'
+      });
+    }
+
+    const familyId = membership.family_id;
 
     // Get hourse details
     const { data: hourse, error: familyError } = await supabase
@@ -253,8 +271,8 @@ router.get('/my-hourse', requireFamilyMember as any, async (req: any, res: Respo
       .single();
 
     if (familyError || !hourse) {
-      return res.status(404).json({
-        error: 'hourse not found',
+      return res.json({
+        hourse: null,
         message: 'hourse not found'
       });
     }
@@ -577,8 +595,8 @@ router.get('/invitations', requireFamilyMember as any, async (req: any, res: Res
         status: invitation.status,
         createdAt: invitation.created_at,
         expiresAt: invitation.expires_at,
-        invitedBy: invitation.users ? 
-          `${(invitation.users as any).first_name} ${(invitation.users as any).last_name}` : 
+        invitedBy: invitation.users ?
+          `${(invitation.users as any).first_name} ${(invitation.users as any).last_name}` :
           'Unknown'
       })) || []
     });
@@ -808,8 +826,8 @@ router.get('/invitations/pending', authenticateToken as any, async (req: any, re
           name: (inv.families as any).name,
           description: (inv.families as any).description
         } : null,
-        invitedBy: inv.users ? 
-          `${(inv.users as any).first_name} ${(inv.users as any).last_name}` : 
+        invitedBy: inv.users ?
+          `${(inv.users as any).first_name} ${(inv.users as any).last_name}` :
           'Unknown'
       })) || []
     });
@@ -916,8 +934,8 @@ router.get('/shopping-list', requireFamilyMember as any, async (req: any, res: R
         category: item.category || 'general',
         completed: item.completed || false,
         list: item.list_name || 'Groceries',
-        createdBy: item.users ? 
-          `${(item.users as any).first_name} ${(item.users as any).last_name}` : 
+        createdBy: item.users ?
+          `${(item.users as any).first_name} ${(item.users as any).last_name}` :
           'Unknown',
         createdAt: item.created_at,
         updatedAt: item.updated_at

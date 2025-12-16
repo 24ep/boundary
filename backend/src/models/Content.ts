@@ -17,7 +17,7 @@ export interface Content {
   updatedBy?: string;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Relations
   contentType?: ContentType;
   category?: Category;
@@ -63,7 +63,7 @@ export interface ContentComment {
   isApproved: boolean;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Relations
   author?: User;
   replies?: ContentComment[];
@@ -146,4 +146,4 @@ export interface ContentQuery {
 // Import types from other models
 import { ContentType } from './ContentType';
 import { Category } from './Category';
-import { User } from './User';
+import { IUser as User } from './UserModel';

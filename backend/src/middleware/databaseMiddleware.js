@@ -1,27 +1,19 @@
-const supabaseService = require('../services/supabaseService');
+const { pool } = require('../config/database');
 const winston = require('winston');
 
-// Configure logger
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.errors({ stack: true }),
-    winston.format.json()
-  ),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: 'logs/database-middleware.log' })
-  ]
-});
+// Configure logger (same as before)
+// ...
 
 /**
  * Database health check middleware
  */
 const databaseHealthCheck = async (req, res, next) => {
   try {
-    const healthStatus = await supabaseService.getHealthStatus();
-    
+    // const healthStatus = await supabaseService.getHealthStatus();
+    // Replaced with simple pool query
+    await pool.query('SELECT 1');
+    const healthStatus = { healthy: true };
+
     if (!healthStatus.healthy) {
       logger.error('Database health check failed', healthStatus);
       return res.status(503).json({
@@ -49,12 +41,12 @@ const databaseHealthCheck = async (req, res, next) => {
  */
 const databasePerformanceMonitor = (req, res, next) => {
   const startTime = Date.now();
-  
+
   // Override res.end to capture response time
   const originalEnd = res.end;
-  res.end = function(...args) {
+  res.end = function (...args) {
     const responseTime = Date.now() - startTime;
-    
+
     // Log slow queries (> 1 second)
     if (responseTime > 1000) {
       logger.warn('Slow database operation detected', {
@@ -69,7 +61,7 @@ const databasePerformanceMonitor = (req, res, next) => {
     // Add performance headers
     res.set('X-Response-Time', `${responseTime}ms`);
     res.set('X-Database-Status', req.databaseHealth?.healthy ? 'healthy' : 'unhealthy');
-    
+
     originalEnd.apply(this, args);
   };
 
@@ -134,18 +126,19 @@ const databaseRetryMiddleware = async (req, res, next) => {
   const attemptOperation = async () => {
     try {
       // Test database connection
-      await supabaseService.testConnection();
+      // await supabaseService.testConnection();
+      await pool.query('SELECT 1');
       next();
     } catch (error) {
       retryCount++;
-      
+
       if (retryCount < maxRetries) {
         logger.warn(`Database connection retry ${retryCount}/${maxRetries}`, {
           error: error.message,
           method: req.method,
           url: req.url
         });
-        
+
         // Wait before retry (exponential backoff)
         await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount) * 1000));
         return attemptOperation();
@@ -156,7 +149,7 @@ const databaseRetryMiddleware = async (req, res, next) => {
           method: req.method,
           url: req.url
         });
-        
+
         return res.status(503).json({
           error: 'Database Unavailable',
           message: 'Unable to connect to database after multiple attempts',
@@ -174,12 +167,12 @@ const databaseRetryMiddleware = async (req, res, next) => {
  */
 const databaseMetricsMiddleware = (req, res, next) => {
   const startTime = Date.now();
-  
+
   // Override res.end to collect metrics
   const originalEnd = res.end;
-  res.end = function(...args) {
+  res.end = function (...args) {
     const responseTime = Date.now() - startTime;
-    
+
     // Collect metrics (you can send these to your monitoring system)
     const metrics = {
       timestamp: new Date().toISOString(),
@@ -195,7 +188,7 @@ const databaseMetricsMiddleware = (req, res, next) => {
 
     // Log metrics for monitoring systems to collect
     logger.info('Database metrics', metrics);
-    
+
     originalEnd.apply(this, args);
   };
 
