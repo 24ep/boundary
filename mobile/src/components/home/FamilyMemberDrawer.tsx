@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, View, Text, TouchableOpacity, ScrollView, Platform, Alert, Image } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, ScrollView, Platform, Alert, Image, StyleSheet } from 'react-native';
 
 import IconMC from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -167,8 +167,13 @@ export const FamilyMemberDrawer: React.FC<FamilyMemberDrawerProps> = ({ visible,
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
-      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}>
-        <View style={{ backgroundColor: '#FFFFFF', borderTopLeftRadius: 20, borderTopRightRadius: 20, maxHeight: '85%' }}>
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' }}>
+        <TouchableOpacity style={{ ...StyleSheet.absoluteFillObject }} onPress={onClose} activeOpacity={1} />
+        <View style={{ backgroundColor: '#FFFFFF', borderTopLeftRadius: 24, borderTopRightRadius: 24, maxHeight: '90%', width: '100%' }}>
+          {/* Drag Handle */}
+          <View style={{ alignItems: 'center', paddingVertical: 10 }}>
+            <View style={{ width: 40, height: 4, backgroundColor: '#E5E7EB', borderRadius: 2 }} />
+          </View>
           {/* Header */}
           <View style={{ padding: 20, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#F3F4F6' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>

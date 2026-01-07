@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, Animated } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Animated } from 'react-native';
 import { Avatar } from 'native-base';
 import IconMC from 'react-native-vector-icons/MaterialCommunityIcons';
 import CoolIcon from '../common/CoolIcon';
 import { homeStyles } from '../../styles/homeStyles';
+import { ScalePressable } from '../common/ScalePressable';
+import { useNavigation } from '@react-navigation/native';
 import { useNavigationAnimation } from '../../contexts/NavigationAnimationContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useBranding } from '../../contexts/BrandingContext';
@@ -24,6 +26,7 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
   showFamilyDropdown,
 }) => {
   const { user } = useAuth();
+  const navigation = useNavigation<any>();
   const { familyNameScaleAnim, chatOpacityAnim } = useNavigationAnimation();
   const { setActiveSection } = useMainContent();
   const { iconUrl, mobileAppName } = useBranding();
@@ -35,6 +38,24 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
   const [showNotificationDrawer, setShowNotificationDrawer] = useState(false);
   const [showProfileDrawer, setShowProfileDrawer] = useState(false);
   const [showShareDrawer, setShowShareDrawer] = useState(false);
+
+  // ... (notifications state unchanged)
+
+  // (lines 40-113 omitted for brevity in search, but I need to be careful with replace)
+
+  // Chat handlers
+  const handleChatAvatarPress = () => {
+    // Navigate to new Chat Page
+    navigation.navigate('ChatList');
+  };
+
+  // Remove or keep handleCloseChatPage etc if widely used, 
+  // but for now I'm just replacing imports and handler.
+  // Wait, replace_file_content is single block.
+  // I need to import useNavigation and update handleChatAvatarPress.
+  // Using multi-replace is better here or I select a block containing imports.
+  // I will use multi-replace for WelcomeSection too.
+
 
   const [notifications, setNotifications] = useState([
     {
@@ -73,62 +94,11 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
     }
   ]);
 
-  // hourse member avatars for rotation
-  const familyAvatars = [
-    { name: 'account', color: '#FFB6C1' },
-    { name: 'account-circle', color: '#FF6B6B' },
-    { name: 'account-outline', color: '#FFD700' },
-    { name: 'account-group', color: '#98FB98' },
-  ];
 
-  const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
-  const fadeAnim = useRef(new Animated.Value(1)).current;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Fade out
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 400,
-        useNativeDriver: true,
-      }).start(() => {
-        // Change avatar
-        setCurrentAvatarIndex((prevIndex) =>
-          (prevIndex + 1) % familyAvatars.length
-        );
-        // Fade in
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 400,
-          useNativeDriver: true,
-        }).start();
-      });
-    }, 5000); // Change every 5 seconds
 
-    return () => clearInterval(interval);
-  }, [fadeAnim]);
 
-  const currentAvatar = familyAvatars[currentAvatarIndex];
 
-  // Chat handlers
-  const handleChatAvatarPress = () => {
-    setActiveSection('chat');
-  };
-
-  const handleCloseChatPage = () => {
-    setShowChatPage(false);
-    setShowChatConversation(false);
-  };
-
-  const handleNavigateToChat = (chatId: string, chatName: string) => {
-    setCurrentChatId(chatId);
-    setCurrentChatName(chatName);
-    setShowChatConversation(true);
-  };
-
-  const handleBackToChatList = () => {
-    setShowChatConversation(false);
-  };
 
   // Notification handlers
   const handleNotificationIconPress = () => {
@@ -181,7 +151,7 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
     <View style={homeStyles.welcomeSection}>
       {/* Greeting removed */}
       <View style={homeStyles.familyNameRow}>
-        <TouchableOpacity
+        <ScalePressable
           style={homeStyles.familyNameContainer}
           onPress={onFamilyDropdownPress}
         >
@@ -213,11 +183,11 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
               color="#666666"
             />
           </View>
-        </TouchableOpacity>
+        </ScalePressable>
         <Animated.View style={{ opacity: chatOpacityAnim }}>
           <View style={homeStyles.chatContainer}>
             {/* Notification Icon (left) */}
-            <TouchableOpacity
+            <ScalePressable
               style={homeStyles.notificationIconContainer}
               onPress={handleNotificationIconPress}
             >
@@ -231,10 +201,10 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
                   </Text>
                 </View>
               )}
-            </TouchableOpacity>
+            </ScalePressable>
 
             {/* Chat Icon (Restored) */}
-            <TouchableOpacity
+            <ScalePressable
               style={homeStyles.chatCycleCard}
               onPress={handleChatAvatarPress}
               accessibilityLabel="Chat"
@@ -245,10 +215,10 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
               <View style={homeStyles.chatBadge}>
                 <Text style={homeStyles.chatBadgeText}>3</Text>
               </View>
-            </TouchableOpacity>
+            </ScalePressable>
 
             {/* Profile Avatar (far right) */}
-            <TouchableOpacity
+            <ScalePressable
               style={homeStyles.chatCycleCard}
               onPress={() => setShowProfileDrawer(true)}
               accessibilityLabel="Open Profile"
@@ -264,7 +234,7 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
               >
                 {user?.firstName?.charAt(0)?.toUpperCase() || "U"}
               </Avatar>
-            </TouchableOpacity>
+            </ScalePressable>
           </View>
         </Animated.View>
       </View>

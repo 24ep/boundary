@@ -18,7 +18,7 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({
 }) => {
   const tabs = [
     { id: 'you', label: 'You', icon: 'account' },
-    { id: 'financial', label: 'Finance', icon: 'analytics' },
+    { id: 'family', label: 'Family', icon: 'home-heart' },
     { id: 'social', label: 'Social', icon: 'account-multiple' }
   ];
 

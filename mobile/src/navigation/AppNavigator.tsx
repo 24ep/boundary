@@ -2,10 +2,15 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import MainTabNavigator from './MainTabNavigator';
 import OnboardingScreen from '../screens/auth/OnboardingScreen';
+import EmotionCheckInScreen from '../screens/main/EmotionCheckInScreen';
+import MoodAnalysisScreen from '../screens/main/MoodAnalysisScreen';
 
 export type AppStackParamList = {
   MainApp: undefined;
   Onboarding: undefined;
+  EmotionCheckIn: { date: string };
+  MoodAnalysis: undefined;
+  ChatList: undefined;
 };
 
 const Stack = createStackNavigator<AppStackParamList>();
@@ -21,6 +26,16 @@ const AppNavigator: React.FC = () => {
     >
       <Stack.Screen name="MainApp" component={MainTabNavigator} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+      <Stack.Screen
+        name="EmotionCheckIn"
+        component={EmotionCheckInScreen}
+        options={{
+          presentation: 'card',
+          animationEnabled: true,
+          gestureEnabled: true,
+        }}
+      />
+      <Stack.Screen name="MoodAnalysis" component={MoodAnalysisScreen} />
     </Stack.Navigator>
   );
 };

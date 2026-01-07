@@ -16,15 +16,18 @@ import NotesCardContent from '../../components/card/NotesCardContent';
 import CalendarCardContent from '../../components/card/CalendarCardContent';
 import ChatCardContent from '../../components/card/ChatCardContent';
 import { YouTab } from '../../components/home/YouTab';
-import { FinancialTab } from '../../components/home/FinancialTab';
+import { FamilyTab } from '../../components/home/FamilyTab';
+import { FinancialTab } from '../../components/home/FinancialTab'; // Keeping for finance summary navigation
 import { SocialTab } from '../../components/home/SocialTab';
 import { FloatingCreatePostButton } from '../../components/home/FloatingCreatePostButton';
 import { CreatePostModal } from '../../components/home/CreatePostModal';
 import { CommentDrawer } from '../../components/home/CommentDrawer';
 import { PostDrawer } from '../../components/home/PostDrawer';
 import { FamilyDropdown } from '../../components/home/FamilyDropdown';
+import { HouseStatsDrawer } from '../../components/home/HouseStatsDrawer';
 import { AttentionDrawer } from '../../components/home/AttentionDrawer';
 import { EmotionCheckInModal } from '../../components/home/EmotionCheckInModal';
+import { ApplicationListDrawer } from '../../components/home/ApplicationListDrawer';
 import { useMainContent } from '../../contexts/MainContentContext';
 
 // Hooks and Utils
@@ -53,13 +56,15 @@ const HomeScreen: React.FC = () => {
   const [families, setFamilies] = useState<any[]>([]); // Using any[] to bypass the lint for now, but better than never[]
   const [isPosting, setIsPosting] = useState(false);
 
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [emotionData, setEmotionData] = useState<EmotionRecord[]>([]);
   const [, setLoadingEmotionData] = useState(false);
   const [familyLocations, setFamilyLocations] = useState<FamilyLocation[]>([]);
   const [socialRefreshKey, setSocialRefreshKey] = useState(0);
   const [showEmotionModal, setShowEmotionModal] = useState(false);
+  const [showHouseStatsDrawer, setShowHouseStatsDrawer] = useState(false);
+  const [showAppsDrawer, setShowAppsDrawer] = useState(false);
 
   // Safety and location stats - stored for future use
   const [, setSafetyStats] = useState<any>(null);
@@ -95,11 +100,18 @@ const HomeScreen: React.FC = () => {
     handleLinkPress,
     handleLikeComment,
     handleFamilySelect,
+    setActiveTab, // Exposed this for internal use
+    // setActiveSection removed from here as it is not in useHomeScreen
 
     // Data
     comments,
     loadingComments,
   } = useHomeScreen();
+
+  // Override handleTabPress to intercept 'apps'
+  const onTabPress = (tabId: string) => {
+    handleTabPress(tabId);
+  };
 
   // Create Post attachments state
   const [postMedia, setPostMedia] = useState<{ type: 'image' | 'video'; uri: string } | null>(null);
@@ -256,7 +268,7 @@ const HomeScreen: React.FC = () => {
   const loadEmotionData = async () => {
     setLoadingEmotionData(true);
     try {
-      const data = await emotionService.getUserEmotionHistory(30);
+      const data = await emotionService.getUserEmotionHistory(365);
       setEmotionData(data);
     } catch (error) {
       console.error('Error loading emotion data:', error);
@@ -355,7 +367,7 @@ const HomeScreen: React.FC = () => {
 
   const { animateToHome, cardMarginTopAnim } = useNavigationAnimation();
 
-  const { activeSection } = useMainContent();
+  const { setActiveSection, activeSection, contentOpacityAnim, contentScaleAnim } = useMainContent();
 
   // Load data only on Home section to avoid unnecessary loads in other tabs
   useEffect(() => {
@@ -522,6 +534,8 @@ const HomeScreen: React.FC = () => {
         return <CalendarCardContent />;
       case 'notes':
         return <NotesCardContent />;
+      case 'finance':
+        return <FinancialTab onBack={() => setActiveSection('home')} />;
       case 'chat':
         return <ChatCardContent familyMembers={familyStatusMembers} />;
       case 'home':
@@ -530,17 +544,23 @@ const HomeScreen: React.FC = () => {
           case 'you':
             return (
               <YouTab
-                showAttentionDrawer={showAttentionDrawer}
-                setShowAttentionDrawer={setShowAttentionDrawer}
+                familyStatusMembers={familyStatusMembers}
+                familyLocations={familyLocations}
+                selectedFamily={selectedFamily}
+                isFamilyLoading={loading}
+                onOpenApps={() => setShowAppsDrawer(true)}
+                onGoToFinance={() => setActiveSection('finance')}
+              />
+            );
+          case 'family':
+            return (
+              <FamilyTab
                 familyStatusMembers={familyStatusMembers}
                 familyLocations={familyLocations}
                 emotionData={emotionData}
                 selectedFamily={selectedFamily}
-                onCheckInPress={() => setShowEmotionModal(true)}
               />
             );
-          case 'financial':
-            return <FinancialTab />;
           case 'social':
             return <SocialTab
               onCommentPress={handleCommentPress}
@@ -560,8 +580,8 @@ const HomeScreen: React.FC = () => {
         {/* Fixed Welcome Section */}
         <WelcomeSection
           selectedFamily={selectedFamily}
-          onFamilyDropdownPress={() => setShowFamilyDropdown(!showFamilyDropdown)}
-          showFamilyDropdown={showFamilyDropdown}
+          onFamilyDropdownPress={() => setShowHouseStatsDrawer(true)}
+          showFamilyDropdown={showHouseStatsDrawer} // Reusing prop name but semantic is drawer likely
         />
 
         {/* Main Content Card with Fixed Tabs and Scrollable Content */}
@@ -575,36 +595,45 @@ const HomeScreen: React.FC = () => {
           {activeSection === 'home' && (
             <TabNavigation
               activeTab={activeTab}
-              onTabPress={handleTabPress}
+              onTabPress={onTabPress}
             />
           )}
 
-          {/* Scrollable Tab Content Only */}
-          <ScrollView
-            style={homeStyles.cardScrollView}
-            contentContainerStyle={homeStyles.cardScrollContent}
-            showsVerticalScrollIndicator={false}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                colors={['#D32F2F']}
-                tintColor="#D32F2F"
-              />
+          {/* Animated Content Container */}
+          <Animated.View style={[
+            { flex: 1 },
+            {
+              opacity: contentOpacityAnim,
+              transform: [{ scale: contentScaleAnim }],
             }
-          >
-            {renderMainContentBySection()}
-            {showBackToTop && (
-              <TouchableOpacity
-                style={homeStyles.quickActionButton}
-                onPress={() => {
-                  // Scroll to top logic would go here
-                }}
-              >
-                <Text style={homeStyles.quickActionText}>↑</Text>
-              </TouchableOpacity>
-            )}
-          </ScrollView>
+          ]}>
+            {/* Scrollable Tab Content Only */}
+            <ScrollView
+              style={homeStyles.cardScrollView}
+              contentContainerStyle={homeStyles.cardScrollContent}
+              showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  colors={['#D32F2F']}
+                  tintColor="#D32F2F"
+                />
+              }
+            >
+              {renderMainContentBySection()}
+              {showBackToTop && (
+                <TouchableOpacity
+                  style={homeStyles.quickActionButton}
+                  onPress={() => {
+                    // Scroll to top logic would go here
+                  }}
+                >
+                  <Text style={homeStyles.quickActionText}>↑</Text>
+                </TouchableOpacity>
+              )}
+            </ScrollView>
+          </Animated.View>
         </Animated.View>
 
         {/* Floating Create Post Button (only visible on Social tab) */}
@@ -646,13 +675,22 @@ const HomeScreen: React.FC = () => {
           onLinkPress={handleLinkPress}
         />
 
-        {/* hourse Selection Dropdown Modal */}
+
+        {/* Family Selection Dropdown Modal */}
         <FamilyDropdown
           visible={showFamilyDropdown}
           onClose={() => setShowFamilyDropdown(false)}
           selectedFamily={selectedFamily}
           onFamilySelect={handleFamilySelect}
-          availableFamilies={availableFamilies}
+          availableFamilies={availableFamilies as any[]}
+        />
+
+        {/* House Stats Drawer */}
+        <HouseStatsDrawer
+          visible={showHouseStatsDrawer}
+          onClose={() => setShowHouseStatsDrawer(false)}
+          currentFamily={(families as any[]).find(f => f.name === selectedFamily) || null}
+          onSwitchFamily={() => setShowFamilyDropdown(true)}
         />
 
         {/* Attention List Drawer Modal */}
@@ -682,6 +720,11 @@ const HomeScreen: React.FC = () => {
           }}
         />
 
+        {/* Application List Drawer */}
+        <ApplicationListDrawer
+          visible={showAppsDrawer}
+          onClose={() => setShowAppsDrawer(false)}
+        />
 
       </SafeAreaView>
     </BackgroundWrapper>

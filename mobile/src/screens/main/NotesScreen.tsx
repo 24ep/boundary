@@ -17,6 +17,10 @@ import { brandColors } from '../../theme/colors';
 import { notesApi, todosApi } from '../../services/api';
 import SegmentedTabs from '../../components/common/SegmentedTabs';
 import MainScreenLayout from '../../components/layout/MainScreenLayout';
+import { CardSkeleton } from '../../components/common/SkeletonLoader';
+import { ShoppingList } from '../../components/home/ShoppingList';
+import { ShoppingDrawer } from '../../components/home/ShoppingDrawer';
+import { familyApi } from '../../services/api';
 
 const H_PADDING = 20;
 
@@ -44,6 +48,7 @@ interface TaskItem {
 const NotesScreen: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   console.log('[UI] NotesScreen (main) using MainScreenLayout');
   const [notes, setNotes] = useState<Note[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'personal' | 'work' | 'family' | 'ideas'>('all');
   const [showCreateNote, setShowCreateNote] = useState(false);
   const [showNoteDetail, setShowNoteDetail] = useState(false);
@@ -59,8 +64,13 @@ const NotesScreen: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => 
     description: '',
     category: 'work',
     priority: 'medium',
+    priority: 'medium',
     dueDate: new Date().toISOString().split('T')[0],
   });
+
+  // Shopping List
+  const [shoppingItems, setShoppingItems] = useState<any[]>([]);
+  const [showShoppingDrawer, setShowShoppingDrawer] = useState(false);
 
   // hourse selection state
   const [showFamilyDropdown, setShowFamilyDropdown] = useState(false);
@@ -80,7 +90,7 @@ const NotesScreen: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => 
     color: '#FFB6C1',
   });
 
-  const { cardMarginTopAnim, animateToGallery, familyNameScaleAnim } = useNavigationAnimation();
+  const { cardMarginTopAnim, animateToHome, familyNameScaleAnim } = useNavigationAnimation();
   const cardOpacityAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -93,13 +103,14 @@ const NotesScreen: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => 
 
   useFocusEffect(
     React.useCallback(() => {
-      animateToGallery();
-    }, [animateToGallery])
+      animateToHome();
+    }, [animateToHome])
   );
 
   // Load from backend
   const loadNotes = async () => {
     try {
+      setIsLoading(true);
       const res = await notesApi.list();
       const items: any[] = res.data || res.notes || res;
       const mapped: Note[] = (items || []).map((n: any) => ({
@@ -115,6 +126,8 @@ const NotesScreen: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => 
       setNotes(mapped);
     } catch (e) {
       // Keep empty on error
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -143,8 +156,24 @@ const NotesScreen: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => 
     }
   };
 
+  const loadShoppingList = async () => {
+    try {
+      const shoppingResponse = await familyApi.getShoppingList();
+      if (shoppingResponse.items) {
+        const activeItems = shoppingResponse.items.filter((item: any) => !item.completed);
+        setShoppingItems(activeItems);
+      } else {
+        setShoppingItems([]);
+      }
+    } catch (e) {
+      // ignore
+      setShoppingItems([]);
+    }
+  };
+
   useEffect(() => {
     loadTodos();
+    loadShoppingList();
   }, []);
 
   const reorderTasks = async (fromIndex: number, toIndex: number) => {
@@ -164,8 +193,9 @@ const NotesScreen: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => 
 
   const onRefresh = async () => {
     setRefreshing(true);
+
     try {
-      await Promise.all([loadNotes(), loadTodos()]);
+      await Promise.all([loadNotes(), loadTodos(), loadShoppingList()]);
     } finally {
       setRefreshing(false);
     }
@@ -429,7 +459,13 @@ const NotesScreen: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => 
 
         {/* Notes List */}
         <View style={{ paddingHorizontal: H_PADDING }}>
-          {filteredNotes.length === 0 ? (
+          {isLoading ? (
+            <View style={{ gap: 20 }}>
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+            </View>
+          ) : filteredNotes.length === 0 ? (
             <View style={{ backgroundColor: '#FFFFFF', borderRadius: 16, padding: 32, alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 6, elevation: 2 }}>
               <IconMC name="note-outline" size={48} color="#9CA3AF" />
               <Text style={{ fontSize: 18, fontWeight: '600', color: '#6B7280', marginTop: 12 }}>No notes found</Text>
@@ -696,6 +732,27 @@ const NotesScreen: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => 
           </View>
         </View>
       </Modal>
+
+      {/* Shopping Drawer */}
+      <ShoppingDrawer
+        visible={showShoppingDrawer}
+        onClose={() => setShowShoppingDrawer(false)}
+        onAddItem={async (item) => {
+          try {
+            // simplified without family check for note screen context, or default
+            await familyApi.createShoppingItem({
+              item: item.item,
+              quantity: item.quantity,
+              category: item.category,
+              list: item.location || 'Groceries'
+            });
+            await loadShoppingList();
+            setShowShoppingDrawer(false);
+          } catch (error: any) {
+            console.error('Error adding item:', error);
+          }
+        }}
+      />
 
       {/* To-Do Drawer */}
       <Modal visible={showTodoDrawer} transparent animationType="slide" onRequestClose={() => setShowTodoDrawer(false)}>

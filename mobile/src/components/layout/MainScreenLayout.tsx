@@ -1,14 +1,13 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Animated, View } from 'react-native';
+import { Animated } from 'react-native';
 import { WelcomeSection } from '../home/WelcomeSection';
 
 interface MainScreenLayoutProps {
   selectedFamily: string;
   showFamilyDropdown: boolean;
   onToggleFamilyDropdown: () => void;
-  familyMembers?: any[];
   cardMarginTopAnim?: Animated.AnimatedInterpolation<string | number> | Animated.Value;
   cardOpacityAnim?: Animated.Value;
   children: ReactNode;
@@ -18,7 +17,6 @@ export const MainScreenLayout: React.FC<MainScreenLayoutProps> = ({
   selectedFamily,
   showFamilyDropdown,
   onToggleFamilyDropdown,
-  familyMembers = [],
   cardMarginTopAnim,
   cardOpacityAnim,
   children,
@@ -35,13 +33,12 @@ export const MainScreenLayout: React.FC<MainScreenLayoutProps> = ({
           selectedFamily={selectedFamily}
           onFamilyDropdownPress={onToggleFamilyDropdown}
           showFamilyDropdown={showFamilyDropdown}
-          familyMembers={familyMembers}
         />
 
         <Animated.View
           style={{
             flex: 1,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: '#FAF9F6',
             borderTopLeftRadius: 32,
             borderTopRightRadius: 32,
             marginTop: cardMarginTopAnim || 0,

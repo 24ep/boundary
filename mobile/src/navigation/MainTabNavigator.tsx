@@ -24,6 +24,7 @@ import SecondHandShopScreen from '../screens/main/SecondHandShopScreen';
 import StorageScreen from '../screens/storage/StorageScreen';
 // import LogicScreen from '../screens/main/LogicScreen'; // removed per request
 // Applications moved to drawer, not a page
+import ChatListScreen from '../screens/main/ChatListScreen';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -50,6 +51,7 @@ const HomeStackNavigator: React.FC = () => {
       <HomeStack.Screen name="Settings" component={SettingsScreen} />
       <HomeStack.Screen name="SecondHandShop" component={SecondHandShopScreen} />
       <HomeStack.Screen name="Storage" component={StorageScreen} />
+      <HomeStack.Screen name="ChatList" component={ChatListScreen} />
     </HomeStack.Navigator>
   );
 };

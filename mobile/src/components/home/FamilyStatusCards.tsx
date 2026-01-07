@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Animated } from 'react-native';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, Animated, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CoolIcon from '../common/CoolIcon';
@@ -28,6 +28,76 @@ interface FamilyStatusCardsProps {
   onMemberPress?: (member: FamilyStatusMember) => void;
 }
 
+const getMoodIconParams = (mood?: string) => {
+  switch (mood) {
+    case 'happy': return { name: 'happy', color: '#10B981', icon: 'emoticon-happy' };
+    case 'neutral': return { name: 'remove', color: '#6B7280', icon: 'emoticon-neutral' };
+    case 'sad': return { name: 'sad', color: '#EF4444', icon: 'emoticon-sad' };
+    case 'stressed': return { name: 'warning', color: '#F59E0B', icon: 'emoticon-dead' }; // using dead for stressed/warning
+    default: return { name: 'help', color: '#6B7280', icon: 'emoticon-neutral' };
+  }
+};
+
+const MoodAvatar: React.FC<{ member: FamilyStatusMember; index: number; getStatusColor: (status: string) => string }> = ({ member, index, getStatusColor }) => {
+  const [showMood, setShowMood] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowMood((prev) => !prev);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: showMood && member.mood ? 1 : 0,
+      duration: 800,
+      useNativeDriver: true,
+    }).start();
+  }, [showMood, member.mood]);
+
+  const moodParams = getMoodIconParams(member.mood);
+  const avatarBgColor = `hsl(${(index * 137.5) % 360}, 70%, 60%)`;
+
+  return (
+    <View style={homeStyles.familyStatusAvatarContainer}>
+      <View style={[homeStyles.familyStatusAvatar, { backgroundColor: avatarBgColor, overflow: 'hidden' }]}>
+        {/* Avatar Layer */}
+        <Animated.View style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          opacity: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 0] }),
+          justifyContent: 'center', alignItems: 'center'
+        }}>
+          {member.avatar && member.avatar.startsWith('http') ? (
+            <Image source={{ uri: member.avatar }} style={{ width: '100%', height: '100%' }} />
+          ) : (
+            <Text style={homeStyles.familyStatusAvatarText}>
+              {member.name.charAt(0)}
+            </Text>
+          )}
+        </Animated.View>
+
+        {/* Mood Layer */}
+        <Animated.View style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          opacity: fadeAnim,
+          backgroundColor: 'white', // White bg for mood icon
+          justifyContent: 'center', alignItems: 'center'
+        }}>
+          <CoolIcon name={moodParams.name as any} size={24} color={moodParams.color} />
+        </Animated.View>
+      </View>
+      <View style={[
+        homeStyles.familyStatusIndicator,
+        { backgroundColor: getStatusColor(member.status) }
+      ]} />
+    </View>
+  );
+};
+
 export const FamilyStatusCards: React.FC<FamilyStatusCardsProps> = ({ members, onMemberPress }) => {
   const navigation = useNavigation<any>();
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
@@ -42,13 +112,9 @@ export const FamilyStatusCards: React.FC<FamilyStatusCardsProps> = ({ members, o
   };
 
   const getMoodIcon = (mood?: string) => {
-    switch (mood) {
-      case 'happy': return { name: 'happy', color: '#10B981' };
-      case 'neutral': return { name: 'remove', color: '#6B7280' };
-      case 'sad': return { name: 'sad', color: '#EF4444' };
-      case 'stressed': return { name: 'warning', color: '#F59E0B' };
-      default: return { name: 'help', color: '#6B7280' };
-    }
+    // Wrapper to match existing return type expected by parent component usage
+    const params = getMoodIconParams(mood);
+    return { name: params.name, color: params.color };
   };
 
   const getBatteryColor = (level: number) => {
@@ -107,20 +173,7 @@ export const FamilyStatusCards: React.FC<FamilyStatusCardsProps> = ({ members, o
               {/* Single Row Layout: Avatar + Name + Stats */}
               <View style={homeStyles.familyStatusCardHeader}>
                 {/* Avatar */}
-                <View style={homeStyles.familyStatusAvatarContainer}>
-                  <View style={[
-                    homeStyles.familyStatusAvatar,
-                    { backgroundColor: `hsl(${(index * 137.5) % 360}, 70%, 60%)` }
-                  ]}>
-                    <Text style={homeStyles.familyStatusAvatarText}>
-                      {member.name.charAt(0)}
-                    </Text>
-                  </View>
-                  <View style={[
-                    homeStyles.familyStatusIndicator,
-                    { backgroundColor: getStatusColor(member.status) }
-                  ]} />
-                </View>
+                <MoodAvatar member={member} index={index} getStatusColor={getStatusColor} />
 
                 {/* Name and Location */}
                 <View style={homeStyles.familyStatusHeaderInfo}>

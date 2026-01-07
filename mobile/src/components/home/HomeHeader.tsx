@@ -1,21 +1,22 @@
 import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import CoolIcon from '../common/CoolIcon';
 import { homeStyles } from '../../styles/homeStyles';
+import { ScalePressable } from '../common/ScalePressable';
 
 interface HomeHeaderProps {
   onNotificationPress: () => void;
   onAssignedTaskPress: () => void;
-  onCustomizePress?: () => void;
-  onCreateFamilyPress?: () => void;
+  _onCustomizePress?: () => void;
+  _onCreateFamilyPress?: () => void;
   notificationCount: number;
 }
 
 const HomeHeader: React.FC<HomeHeaderProps> = ({
   onNotificationPress,
   onAssignedTaskPress,
-  onCustomizePress,
-  onCreateFamilyPress,
+  _onCustomizePress,
+  _onCreateFamilyPress,
   notificationCount,
 }) => {
   return (
@@ -24,10 +25,10 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
       <View style={homeStyles.headerLeft}>
         <Text style={homeStyles.headerLogo}>🔴 Bondarys</Text>
       </View>
-      
+
       {/* Right side - Notification and Phone buttons */}
       <View style={homeStyles.headerButtons}>
-        <TouchableOpacity
+        <ScalePressable
           style={homeStyles.notificationButton}
           onPress={onNotificationPress}
         >
@@ -39,14 +40,14 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
               </Text>
             </View>
           )}
-        </TouchableOpacity>
-        
-        <TouchableOpacity
+        </ScalePressable>
+
+        <ScalePressable
           style={homeStyles.phoneButton}
           onPress={onAssignedTaskPress}
         >
           <CoolIcon name="phone" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
+        </ScalePressable>
       </View>
     </View>
   );

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
-  ScrollView,
+  useWindowDimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,25 +13,57 @@ import { emotionService, EmotionRecord, FamilyEmotionAverage } from '../services
 interface EmotionHeatMapProps {
   type: 'personal' | 'hourse';
   data: EmotionRecord[] | FamilyEmotionAverage[];
-  onDayPress?: (date: string, emotion: number) => void;
 }
 
 const EmotionHeatMap: React.FC<EmotionHeatMapProps> = ({
   type,
   data,
-  onDayPress,
 }) => {
-  const generateLast30Days = () => {
-    const days = [];
+  const { width: screenWidth } = useWindowDimensions();
+
+  // Calculate dynamic dimensions based on screen width
+  // Available width = screen width - container margins (32) - gradient padding (32)
+  const availableWidth = screenWidth - 64;
+
+  // We want to show weeks with larger dots that fit the screen
+  // Calculate: (dotSize + gap) * numWeeks - gap = availableWidth
+  const gap = 3;
+  const dotSize = useMemo(() => {
+    // Calculate ideal size to fit ~12 weeks (3 months) for larger dots
+    const calculated = Math.floor((availableWidth + gap) / 12 - gap);
+    // Minimum 12px, maximum 24px for maximum visibility
+    return Math.max(12, Math.min(24, calculated));
+  }, [availableWidth]);
+
+  // Calculate number of weeks that fit based on dotSize
+  const numWeeks = useMemo(() => {
+    const weeksCanFit = Math.floor((availableWidth + gap) / (dotSize + gap));
+    return Math.min(12, Math.max(1, weeksCanFit)); // Show up to 12 weeks (3 months)
+  }, [availableWidth, dotSize]);
+
+  // Generate days organized by day of week (for GitHub-style layout)
+  const generateWeeksGrid = () => {
     const today = new Date();
-    
-    for (let i = 29; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
-      days.push(date.toISOString().split('T')[0]);
+    const totalDays = numWeeks * 7;
+
+    // Create a 7 x numWeeks grid (rows = days of week, columns = weeks)
+    const grid: (string | null)[][] = Array(7).fill(null).map(() => []);
+
+    for (let w = 0; w < numWeeks; w++) {
+      for (let d = 0; d < 7; d++) {
+        const daysAgo = (numWeeks - 1 - w) * 7 + (6 - d);
+        const date = new Date(today);
+        date.setDate(date.getDate() - daysAgo);
+
+        // Format as local date string
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        grid[d].push(`${year}-${month}-${day}`);
+      }
     }
-    
-    return days;
+
+    return grid;
   };
 
   const getEmotionForDate = (date: string): number | null => {
@@ -45,66 +76,99 @@ const EmotionHeatMap: React.FC<EmotionHeatMapProps> = ({
     }
   };
 
-  const getDayLabel = (date: string): string => {
-    const day = new Date(date).getDay();
-    const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    return dayNames[day];
-  };
-
-  const getMonthLabel = (date: string): string => {
-    const month = new Date(date).getMonth();
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return monthNames[month];
-  };
+  const dayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   const renderHeatMap = () => {
-    const days = generateLast30Days();
-    const weeks = [];
-    
-    // Group days into weeks
-    for (let i = 0; i < days.length; i += 7) {
-      weeks.push(days.slice(i, i + 7));
+    const grid = generateWeeksGrid();
+    const todayStr = (() => {
+      const t = new Date();
+      return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
+    })();
+
+    // Generate month labels for the top row
+    const monthLabels: { label: string; weekIndex: number }[] = [];
+    if (grid[0]) {
+      let lastMonth = -1;
+      grid[0].forEach((dateStr, weekIndex) => {
+        if (dateStr) {
+          const month = parseInt(dateStr.split('-')[1]) - 1;
+          if (month !== lastMonth) {
+            monthLabels.push({ label: monthNames[month], weekIndex });
+            lastMonth = month;
+          }
+        }
+      });
     }
 
-    return weeks.map((week, weekIndex) => (
-      <View key={weekIndex} style={styles.week}>
-        {week.map((date, dayIndex) => {
-          const emotion = getEmotionForDate(date);
-          const color = emotion ? emotionService.getEmotionColor(emotion) : '#CCCCCC';
-          const isToday = date === new Date().toISOString().split('T')[0];
-          
-          return (
-            <TouchableOpacity
-              key={date}
-              style={[
-                styles.day,
-                { backgroundColor: color },
-                isToday && styles.today
-              ]}
-              onPress={() => onDayPress && emotion && onDayPress(date, emotion)}
-              disabled={!emotion}
-            >
-              <Text style={[
-                styles.dayLabel,
-                { color: emotion ? '#FFFFFF' : '#999999' }
-              ]}>
-                {getDayLabel(date)}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
+    return (
+      <View>
+        {/* Month labels row */}
+        <View style={{ flexDirection: 'row', marginLeft: 16, marginBottom: 4 }}>
+          {grid[0] && grid[0].map((_, weekIndex) => {
+            const monthLabel = monthLabels.find(m => m.weekIndex === weekIndex);
+            return (
+              <View key={weekIndex} style={{ width: dotSize + gap, alignItems: 'flex-start' }}>
+                {monthLabel && (
+                  <Text style={{ fontSize: 9, color: 'rgba(255,255,255,0.7)' }}>{monthLabel.label}</Text>
+                )}
+              </View>
+            );
+          })}
+        </View>
+
+        <View style={{ flexDirection: 'row' }}>
+          {/* Day labels column */}
+          <View style={{ marginRight: 4, justifyContent: 'space-around' }}>
+            {dayLabels.map((label, idx) => (
+              <Text key={idx} style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', height: dotSize + gap, lineHeight: dotSize + gap }}>{label}</Text>
+            ))}
+          </View>
+
+          {/* Heat map grid - 7 rows (days) x N columns (weeks) */}
+          <View style={[styles.heatMap, { gap }]}>
+            {grid.map((row, dayIndex) => (
+              <View key={dayIndex} style={{ flexDirection: 'row', gap }}>
+                {row.map((date: string | null, weekIndex) => {
+                  if (!date) return null;
+                  const emotion = getEmotionForDate(date);
+                  const color = emotion ? emotionService.getEmotionColor(emotion) : '#E0E0E0';
+                  const isToday = date === todayStr;
+
+                  return (
+                    <View
+                      key={weekIndex}
+                      style={[
+                        {
+                          width: dotSize,
+                          height: dotSize,
+                          borderRadius: Math.max(1, dotSize / 4),
+                          backgroundColor: color,
+                        },
+                        isToday && {
+                          borderWidth: 2,
+                          borderColor: '#FFFFFF',
+                        }
+                      ]}
+                    />
+                  );
+                })}
+              </View>
+            ))}
+          </View>
+        </View>
       </View>
-    ));
+    );
   };
 
   const getStats = () => {
     if (type === 'personal') {
       const records = data as EmotionRecord[];
       const totalDays = records.length;
-      const averageEmotion = totalDays > 0 
-        ? records.reduce((sum, record) => sum + record.emotion, 0) / totalDays 
+      const averageEmotion = totalDays > 0
+        ? records.reduce((sum, record) => sum + record.emotion, 0) / totalDays
         : 0;
-      
+
       return {
         totalDays,
         averageEmotion: Math.round(averageEmotion * 10) / 10,
@@ -113,10 +177,10 @@ const EmotionHeatMap: React.FC<EmotionHeatMapProps> = ({
     } else {
       const records = data as FamilyEmotionAverage[];
       const totalDays = records.length;
-      const averageEmotion = totalDays > 0 
-        ? records.reduce((sum, record) => sum + record.average_emotion, 0) / totalDays 
+      const averageEmotion = totalDays > 0
+        ? records.reduce((sum, record) => sum + record.average_emotion, 0) / totalDays
         : 0;
-      
+
       return {
         totalDays,
         averageEmotion: Math.round(averageEmotion * 10) / 10,
@@ -135,10 +199,10 @@ const EmotionHeatMap: React.FC<EmotionHeatMapProps> = ({
       >
         <View style={styles.header}>
           <View style={styles.titleContainer}>
-            <Icon 
-              name={type === 'personal' ? 'account-heart' : 'account-group'} 
-              size={24} 
-              color="#FFFFFF" 
+            <Icon
+              name={type === 'personal' ? 'account-heart' : 'account-group'}
+              size={24}
+              color="#FFFFFF"
             />
             <Text style={styles.title}>
               {type === 'personal' ? 'Your Wellbeing' : 'hourse Wellbeing'}
@@ -149,7 +213,7 @@ const EmotionHeatMap: React.FC<EmotionHeatMapProps> = ({
             <Text style={styles.statsValue}>
               {stats.averageEmotion > 0 ? stats.averageEmotion.toFixed(1) : '--'}
             </Text>
-            <Text style={styles.statsDays}>{stats.totalDays} days</Text>
+            <Text style={styles.statsDays}>{stats.totalDays} days tracked</Text>
           </View>
         </View>
 
@@ -166,17 +230,13 @@ const EmotionHeatMap: React.FC<EmotionHeatMapProps> = ({
             <Text style={styles.legendLabel}>More</Text>
           </View>
 
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.heatMap}>
-              {renderHeatMap()}
-            </View>
-          </ScrollView>
+          {renderHeatMap()}
         </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            {type === 'personal' 
-              ? 'Track your daily emotions to see patterns over time'
+            {type === 'personal'
+              ? `Showing last ${numWeeks} weeks · Track daily for patterns`
               : 'See how your hourse is feeling together'
             }
           </Text>
@@ -257,30 +317,10 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   heatMap: {
-    flexDirection: 'row',
-    gap: 4,
+    flexDirection: 'column',
   },
   week: {
     flexDirection: 'column',
-    gap: 4,
-  },
-  day: {
-    width: 32,
-    height: 32,
-    borderRadius: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-  },
-  today: {
-    borderWidth: 2,
-    borderColor: '#FFFFFF',
-  },
-  dayLabel: {
-    fontSize: 10,
-    fontWeight: '600',
-    fontFamily: FONT_STYLES.englishSemiBold,
   },
   footer: {
     alignItems: 'center',

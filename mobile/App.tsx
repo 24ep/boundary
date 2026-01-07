@@ -7,6 +7,18 @@ import { SocketProvider } from './src/contexts/SocketContext';
 import { MainContentProvider } from './src/contexts/MainContentContext';
 import { NativeBaseProvider } from 'native-base';
 import RootNavigator from './src/navigation/RootNavigator';
+import { useFonts } from 'expo-font';
+import {
+  Montserrat_400Regular,
+  Montserrat_500Medium,
+  Montserrat_600SemiBold,
+  Montserrat_700Bold
+} from '@expo-google-fonts/montserrat';
+import {
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold
+} from '@expo-google-fonts/poppins';
 
 /**
  * Main Application Entry Point
@@ -20,8 +32,22 @@ import RootNavigator from './src/navigation/RootNavigator';
  * - MainContentProvider for main content state
  * - RootNavigator for navigation (shows Auth, PIN setup/unlock, or App based on state)
  */
-const App: React.FC = () => {
+const App = () => {
+  const [fontsLoaded] = useFonts({
+    Montserrat_400Regular,
+    Montserrat_500Medium,
+    Montserrat_600SemiBold,
+    Montserrat_700Bold,
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+  });
+
   console.log('🚀 App Starting...');
+
+  if (!fontsLoaded) {
+    return null; // Or a loading spinner
+  }
 
   return (
     <NativeBaseProvider>

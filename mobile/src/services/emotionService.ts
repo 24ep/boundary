@@ -34,20 +34,24 @@ class EmotionService {
   }
 
   /**
-   * Submit emotion check for today
+   * Submit emotion check for a specific date (defaults to today)
    */
-  async submitEmotionCheck(emotion: number): Promise<void> {
+  async submitEmotionCheck(emotion: number, date?: string, tags?: string[]): Promise<void> {
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const targetDate = date || new Date().toISOString().split('T')[0];
+
+      // Convert tags to notes string if present
+      const notes = tags && tags.length > 0 ? `Tags: ${tags.join(', ')}` : undefined;
 
       const response = await api.post('/emotions', {
         emotion,
-        date: today,
+        date: targetDate,
+        notes,
       });
 
       if (response.success) {
-        // Store today's date in AsyncStorage
-        await AsyncStorage.setItem(this.STORAGE_KEY, today);
+        // Store the date in AsyncStorage for last check-in tracking
+        await AsyncStorage.setItem(this.STORAGE_KEY, targetDate);
       }
     } catch (error) {
       console.error('Error submitting emotion check:', error);
@@ -56,18 +60,21 @@ class EmotionService {
   }
 
   /**
-   * Get user's emotion records for the last 30 days
+   * Get user's emotion records for the last N days
    */
-  async getUserEmotionHistory(days: number = 30): Promise<EmotionRecord[]> {
+  async getUserEmotionHistory(days: number = 365): Promise<EmotionRecord[]> {
     try {
       const response = await api.get('/emotions/history', {
         params: { days }
       });
 
-      return response.data.emotions || [];
+      // Handle both response.data.emotions and response.data.data.emotions structures
+      const responseData = response.data || response;
+      const emotions = responseData.data?.emotions || responseData.emotions || [];
+      return emotions;
     } catch (error) {
       console.error('Error fetching user emotion history:', error);
-      throw error;
+      return []; // Return empty array instead of throwing to prevent UI crash
     }
   }
 

@@ -14,7 +14,11 @@ import { AddAccountModal } from './AddAccountModal';
 
 import { AddTransactionModal } from './AddTransactionModal';
 
-export const FinancialTab = () => {
+interface FinancialTabProps {
+  onBack?: () => void;
+}
+
+export const FinancialTab: React.FC<FinancialTabProps> = ({ onBack }) => {
   const [accounts, setAccounts] = useState<FinancialAccount[]>([]);
   const [transactions, setTransactions] = useState<FinancialTransaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -87,6 +91,16 @@ export const FinancialTab = () => {
 
   return (
     <ScrollView style={homeStyles.tabContentScrollView} showsVerticalScrollIndicator={false}>
+      {/* Header with Back Button */}
+      {onBack && (
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginBottom: 16 }}>
+          <TouchableOpacity onPress={onBack} style={{ padding: 8, marginRight: 8, backgroundColor: '#F3F4F6', borderRadius: 20 }}>
+            <MaterialCommunityIcons name="arrow-left" size={24} color="#1F2937" />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 24, fontWeight: '700', color: '#1F2937', fontFamily: 'Montserrat_700Bold' }}>Financial Overview</Text>
+        </View>
+      )}
+
       {/* Net Worth card */}
       <View style={homeStyles.section}>
         <LinearGradient colors={["#E0EAFC", "#CFDEF3"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: 16, marginHorizontal: 20, padding: 16 }}>

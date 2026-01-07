@@ -1,0 +1,254 @@
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
+
+export const modalStyles = StyleSheet.create({
+    modalOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000,
+    },
+    modalContainer: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 16,
+        margin: 20,
+        maxHeight: '80%',
+        width: '90%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.25,
+        shadowRadius: 8,
+        elevation: 8,
+    },
+    modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F3F4F6',
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#1F2937',
+    },
+    modalCloseButton: {
+        padding: 4,
+    },
+    modalContent: {
+        maxHeight: 400,
+        padding: 20,
+    },
+    modalSection: {
+        marginBottom: 20,
+    },
+    modalLabel: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#374151',
+        marginBottom: 8,
+    },
+    modalDescription: {
+        fontSize: 14,
+        color: '#6B7280',
+        lineHeight: 20,
+        marginBottom: 20,
+    },
+    modalTextInput: {
+        borderWidth: 1,
+        borderColor: '#D1D5DB',
+        borderRadius: 8,
+        padding: 12,
+        fontSize: 16,
+        color: '#374151',
+    },
+    modalFooter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 20,
+        borderTopWidth: 1,
+        borderTopColor: '#F3F4F6',
+    },
+    modalCancelButton: {
+        flex: 1,
+        padding: 12,
+        marginRight: 8,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 182, 193, 0.2)',
+        backgroundColor: 'rgba(255, 182, 193, 0.1)',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
+        elevation: 1,
+    },
+    modalCancelText: {
+        fontSize: 16,
+        color: '#6B7280',
+        fontWeight: '500',
+    },
+    modalPostButton: {
+        flex: 1,
+        padding: 12,
+        marginLeft: 8,
+        borderRadius: 8,
+        backgroundColor: '#FFB6C1',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
+        elevation: 1,
+    },
+    modalPostText: {
+        fontSize: 16,
+        color: '#FFFFFF',
+        fontWeight: '500',
+    },
+    modalSaveButton: {
+        flex: 1,
+        padding: 12,
+        marginLeft: 8,
+        borderRadius: 8,
+        backgroundColor: '#10B981',
+        alignItems: 'center',
+    },
+    modalSaveText: {
+        fontSize: 16,
+        color: '#FFFFFF',
+        fontWeight: '500',
+    },
+
+    // Tag Styles
+    tagInputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#D1D5DB',
+        borderRadius: 8,
+        paddingHorizontal: 12,
+    },
+    tagInput: {
+        flex: 1,
+        padding: 12,
+        fontSize: 16,
+        color: '#374151',
+    },
+    addTagButton: {
+        padding: 8,
+        marginRight: 4,
+    },
+    tagsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginTop: 8,
+    },
+    tagChip: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#E0E7FF',
+        borderRadius: 16,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        marginRight: 8,
+        marginBottom: 8,
+    },
+    tagChipText: {
+        fontSize: 12,
+        color: '#4F46E5',
+        marginRight: 4,
+    },
+
+    // Report Modal Styles
+    reportOptionsContainer: {
+        gap: 8,
+    },
+    reportOptionItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 16,
+        backgroundColor: '#F9FAFB',
+        borderRadius: 8,
+    },
+    reportOptionIcon: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#FFFFFF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+    },
+    reportOptionContent: {
+        flex: 1,
+    },
+    reportOptionTitle: {
+        fontSize: 16,
+        fontWeight: '500',
+        color: '#1F2937',
+        marginBottom: 4,
+    },
+    reportOptionDescription: {
+        fontSize: 14,
+        color: '#6B7280',
+    },
+
+    // Add Wallet Modal Styles
+    iconGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 8,
+    },
+    iconOption: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        backgroundColor: '#F3F4F6',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    iconOptionActive: {
+        backgroundColor: '#4F46E5',
+    },
+    colorGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 8,
+    },
+    colorOption: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        borderWidth: 2,
+        borderColor: 'transparent',
+    },
+    colorOptionActive: {
+        borderColor: '#1F2937',
+    },
+    toggleContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 12,
+    },
+    toggleLabel: {
+        fontSize: 16,
+        color: '#374151',
+    },
+    toggle: {
+        width: 50,
+        height: 30,
+        borderRadius: 15,
+        backgroundColor: '#D1D5DB',
+    },
+});
