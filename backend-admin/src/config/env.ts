@@ -40,11 +40,19 @@ const envSchema = z.object({
   DB_USER: z.string().default('postgres'),
   DB_PASSWORD: z.string().default('postgres'),
 
-  // AWS S3 (optional)
+  // Object Storage (S3 Compatible)
+  S3_ACCESS_KEY_ID: z.string().optional(),
+  S3_SECRET_ACCESS_KEY: z.string().optional(),
+  S3_REGION: z.string().default('us-east-1'),
+  S3_BUCKET_NAME: z.string().optional(),
+  S3_ENDPOINT: z.string().optional(),
+
+  // Legacy AWS (Backward Compatibility)
   AWS_ACCESS_KEY_ID: z.string().optional(),
   AWS_SECRET_ACCESS_KEY: z.string().optional(),
-  AWS_REGION: z.string().default('us-east-1'),
+  AWS_REGION: z.string().optional(),
   AWS_S3_BUCKET: z.string().optional(),
+  AWS_S3_ENDPOINT: z.string().optional(),
 
   // Redis (optional)
   REDIS_HOST: z.string().default('localhost'),

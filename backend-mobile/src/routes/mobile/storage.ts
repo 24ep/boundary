@@ -55,13 +55,13 @@ router.get('/proxy/:fileId', async (req, res) => {
             return res.status(404).json({ error: 'File path not found' });
         }
 
-        console.log('[Storage Proxy] Fetching file:', { fileId, path, mimeType, bucket: process.env.AWS_S3_BUCKET || 'boundary-files' });
+        console.log('[Storage Proxy] Fetching file:', { fileId, path, mimeType, bucket: process.env.S3_BUCKET_NAME || process.env.AWS_S3_BUCKET || 'boundary-files' });
 
         // Fetch the image from MinIO/S3 using storageService
         const imageData = await storageService.downloadFile(path);
 
         if (!imageData) {
-            console.error('[Storage Proxy] File content not found in storage:', { fileId, path, bucket: process.env.AWS_S3_BUCKET || 'boundary-files' });
+            console.error('[Storage Proxy] File content not found in storage:', { fileId, path, bucket: process.env.S3_BUCKET_NAME || process.env.AWS_S3_BUCKET || 'boundary-files' });
             return res.status(404).json({ error: 'File content not found', details: `Path: ${path}` });
         }
 

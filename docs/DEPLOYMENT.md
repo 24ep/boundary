@@ -93,6 +93,27 @@ We provide a `docker-compose.yml` for deploying the backends and infrastructure.
     *   Set start command: `npm start`.
 *   **VPS**: Use PM2 or Docker.
 
+#### Railway Deployment Guide
+1.  **Infrastructure**: Railway does **NOT** automatically create databases defined in `docker-compose.yml`. You must manually add **PostgreSQL** and **Redis** from the Railway dashboard ("New > Database").
+2.  **Services**: Deploy this repository multiple times (once for each service).
+3.  **Configuration**: For each service, go to **Settings > Root Directory** and set:
+    *   Backend Admin: `backend-admin`
+    *   Backend Mobile: `backend-mobile`
+    *   Admin Frontend: `admin`
+4.  **Variables**: Add `DATABASE_URL` and `REDIS_URL` from your Railway database services to each application service.
+
+#### External Infrastructure (BYO Database)
+Yes! You can use any external PostgreSQL, Redis, or S3-compatible storage (like MinIO, AWS S3, DigitalOcean Spaces).
+
+**Configuration:**
+Simply update the environment variables in your deployment platform:
+- `DATABASE_URL`: `postgresql://user:pass@host:port/dbname`
+- `REDIS_URL`: `redis://:password@host:port`
+- `S3_ENDPOINT`: `https://play.min.io` (for MinIO) or your S3 endpoint
+- `S3_ACCESS_KEY_ID`: Your access key
+- `S3_SECRET_ACCESS_KEY`: Your secret key
+- `S3_BUCKET_NAME`: Your bucket name
+
 ### 4. Mobile App (Expo)
 *   **EAS Build**:
     ```bash
