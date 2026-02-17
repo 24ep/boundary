@@ -7,6 +7,8 @@ RUN npm install
 
 COPY backend-mobile/ .
 
+RUN npx prisma generate
+
 RUN npm run build
 
 EXPOSE 4000

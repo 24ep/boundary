@@ -7,6 +7,8 @@ RUN npm install
 
 COPY backend-admin/ .
 
+RUN npx prisma generate
+
 RUN npm run build
 
 EXPOSE 4001
