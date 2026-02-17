@@ -22,10 +22,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.string().transform(Number).default('4000'),
 
-  // Supabase
-  SUPABASE_URL: z.string().url(),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
-  SUPABASE_ANON_KEY: z.string().min(1).optional(),
+
 
   // JWT
   JWT_SECRET: z.string().min(32),
