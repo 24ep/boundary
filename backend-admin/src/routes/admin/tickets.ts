@@ -168,9 +168,9 @@ router.get('/', requirePermission('tickets', 'view'), async (req: Request, res: 
     res.json({
       success: true,
       tickets,
-      total: parseInt(countResult[0].count),
-      limit: parseInt(limit as string),
-      offset: parseInt(offset as string)
+      total: Number(countResult[0].count),
+      limit: Number(limit as string),
+      offset: Number(offset as string)
     });
   } catch (error) {
     console.error('Error fetching tickets:', error);
