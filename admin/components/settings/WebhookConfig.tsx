@@ -7,7 +7,7 @@ import { Badge } from '../ui/Badge'
 import { Input } from '../ui/Input'
 import { Label } from '../ui/Label'
 import { Switch } from '../ui/switch'
-import { Tabs } from '../ui/Tabs'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/Tabs'
 import { 
   Plus, 
   Trash2, 
@@ -254,7 +254,7 @@ export function WebhookConfig({ appId, onSave }: WebhookConfigProps) {
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <h4 className="font-medium">{webhook.name}</h4>
-                  <Badge variant={webhook.active ? 'default' : 'secondary'}>
+                  <Badge variant={webhook.active ? 'default' : 'outline'}>
                     {webhook.status}
                   </Badge>
                   {webhook.lastTriggered && (

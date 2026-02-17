@@ -9,12 +9,11 @@ import redisService from '../services/redisService';
 const getStore = (prefix: string) => {
   return new RedisStore({
     // @ts-ignore
-    // @ts-ignore
-  sendCommand: async (...args: any[]) => {
-    const client = await redisService.getClient();
-    if (!client) return null;
-    return await (client as any).call(...args);
-  },
+    sendCommand: async (...args: string[]) => {
+      const client = await redisService.getClient();
+      if (!client) return null;
+      return await client.call(...args);
+    },
     prefix: `rate_limit:${prefix}:`,
   });
 };

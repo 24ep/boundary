@@ -1,9 +1,9 @@
 ﻿'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/Card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/Tabs';
-import { Button } from '../../../components/ui/Button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { Button } from '@/components/ui/Button';
 import { Copy, Terminal, Code } from 'lucide-react';
 
 export default function IdentityDevGuidePage() {
@@ -37,13 +37,13 @@ export default function IdentityDevGuidePage() {
                         <CardContent className="space-y-4">
                             <div className="bg-muted p-4 rounded-md flex items-center justify-between">
                                 <code className="text-sm font-mono">npm install @appkit/identity-sdk</code>
-                                <Button variant="ghost" size="icon">
+                                <Button variant="ghost" size="sm">
                                     <Copy className="h-4 w-4" />
                                 </Button>
                             </div>
                             <div className="bg-muted p-4 rounded-md flex items-center justify-between">
                                 <code className="text-sm font-mono">yarn add @appkit/identity-sdk</code>
-                                <Button variant="ghost" size="icon">
+                                <Button variant="ghost" size="sm">
                                     <Copy className="h-4 w-4" />
                                 </Button>
                             </div>
