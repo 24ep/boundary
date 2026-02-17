@@ -7,19 +7,19 @@ UniApps is a modern, full-stack platform designed with a modular monorepo archit
 ```mermaid
 graph TD
     subgraph "Clients"
-        AppKit["AppKit Admin Console\n(Next.js)"]
-        Boundary["Boundary Mobile App\n(React Native / Expo)"]
+        AppKit[AppKit Admin Console\n(Next.js)]
+        Boundary[Boundary Mobile App\n(React Native / Expo)]
     end
 
     subgraph "API Layer"
-        AdminAPI["Backend Admin API\n(Express.js)"]
-        MobileAPI["Backend Mobile API\n(Express.js)"]
+        AdminAPI[Backend Admin API\n(Express.js)]
+        MobileAPI[Backend Mobile API\n(Express.js)]
     end
 
     subgraph "Shared Infrastructure"
-        DB[("PostgreSQL\nSchema: bondarys")]
-        Redis[("Redis Cache")]
-        MinIO[("Object Storage")]
+        DB[(PostgreSQL\nSchema: bondarys)]
+        Redis[(Redis Cache)]
+        MinIO[(Object Storage)]
     end
 
     AppKit -->|HTTP/REST| AdminAPI
