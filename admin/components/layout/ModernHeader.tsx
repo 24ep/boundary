@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
@@ -48,7 +48,7 @@ export function ModernHeader({ activeModule, onMenuClick, isMobile }: ModernHead
 
   const getModuleDescription = (module: string) => {
     const descriptions: Record<string, string> = {
-      dashboard: 'Overview of your Appkit platform',
+      dashboard: 'Overview of your AppKit platform',
       users: 'Manage platform users and their profiles',
       families: 'Manage Circle groups and members',
       'dynamic-content': 'Manage Circle content and communications',
@@ -63,10 +63,10 @@ export function ModernHeader({ activeModule, onMenuClick, isMobile }: ModernHead
       safety: 'Manage safety alerts and emergency protocols',
       localization: 'Language and regional settings',
       'roles-permissions': 'Manage user roles and access rights',
-      settings: 'Configure your Appkit CMS settings',
+      settings: 'Configure your AppKit CMS settings',
       'page-preferences': 'Manage page-specific configurations'
     }
-    return descriptions[module] || 'Overview of your Appkit platform'
+    return descriptions[module] || 'Overview of your AppKit platform'
   }
 
   return (

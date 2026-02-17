@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import React, { useState, useEffect, Fragment, useMemo } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
@@ -277,7 +277,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
                             A
                         </div>
                         <div className="hidden md:block overflow-hidden whitespace-nowrap">
-                            <h1 className="font-bold text-gray-900 dark:text-white tracking-tight text-xl leading-none mb-0.5">Appkit</h1>
+                            <h1 className="font-bold text-gray-900 dark:text-white tracking-tight text-xl leading-none mb-0.5">AppKit</h1>
                             <p className="text-[10px] text-gray-500 dark:text-gray-400 font-medium uppercase tracking-widest leading-none">Platform</p>
                         </div>
                     </div>

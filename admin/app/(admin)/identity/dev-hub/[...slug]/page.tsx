@@ -65,7 +65,7 @@ export default function DocPage() {
   const docs: Record<string, DocContent> = {
     'quick-start': {
       title: 'Quick Start',
-      description: 'Get up and running with Boundary in less than 5 minutes.',
+      description: 'Get up and running with AppKit in less than 5 minutes.',
       content: (
         <div className="space-y-8">
           <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 flex gap-4 items-start">
@@ -73,7 +73,7 @@ export default function DocPage() {
               <Info className="h-4 w-4" />
             </div>
             <p className="text-sm text-blue-800 leading-relaxed">
-              This guide assumes you already have a Boundary account and access to the Admin Dashboard.
+              This guide assumes you already have an AppKit account and access to the Admin Dashboard.
             </p>
           </div>
 
@@ -87,16 +87,16 @@ export default function DocPage() {
           <CodeBlock 
             id="install"
             language="bash"
-            code="npm install @boundary/identity-sdk"
+            code="npm install @appkit/identity-sdk"
           />
 
           <h2 className="text-2xl font-bold mt-12 mb-4">3. Initialize and Login</h2>
           <CodeBlock 
             id="init"
             language="typescript"
-            code={`import { Boundary } from '@boundary/identity-sdk';
+            code={`import { AppKit } from '@appkit/identity-sdk';
 
-const client = new Boundary({
+const client = new AppKit({
   clientId: 'YOUR_CLIENT_ID',
   domain: 'https://auth.your-app.com'
 });
@@ -114,7 +114,7 @@ await client.login();`}
       content: (
         <div className="space-y-8">
           <p className="text-slate-600 leading-relaxed text-lg">
-            Boundary provides a robust authentication gateway that abstracts the complexities of OIDC.
+            AppKit provides a robust authentication gateway that abstracts the complexities of OIDC.
           </p>
 
           <h2 className="text-2xl font-bold mt-12 mb-4">Authorization Code Flow</h2>

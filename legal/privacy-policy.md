@@ -4,13 +4,13 @@
 
 ## 1. Introduction
 
-Welcome to Bondarys ("we," "our," or "us"). We are committed to protecting your privacy and ensuring the security of your family's information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our family safety and communication platform.
+Welcome to UniApps ("we," "our," or "us"). We are committed to protecting your privacy and ensuring the security of your family's information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our family safety and communication platform.
 
 ### Contact Information
-- **Company**: Bondarys Inc.
-- **Email**: privacy@bondarys.com
+- **Company**: UniApps Inc.
+- **Email**: privacy@uniapps.com
 - **Address**: [Company Address]
-- **Website**: https://bondarys.com
+- **Website**: https://uniapps.com
 
 ## 2. Information We Collect
 
@@ -193,15 +193,14 @@ Welcome to Bondarys ("we," "our," or "us"). We are committed to protecting your 
 ### 12.1 Privacy Questions
 If you have questions about this Privacy Policy or our privacy practices, please contact us:
 
-- **Email**: privacy@bondarys.com
+- **Email**: privacy@uniapps.com
 - **Phone**: [Phone Number]
 - **Address**: [Company Address]
-- **Online Form**: https://bondarys.com/contact
+- **Online Form**: https://uniapps.com/contact
 
 ### 12.2 Data Protection Officer
-For European users, you can contact our Data Protection Officer:
-
-- **Email**: dpo@bondarys.com
+If you have questions about our data protection practices, you can contact our Data Protection Officer (DPO):
+- **Email**: dpo@uniapps.com
 - **Address**: [DPO Address]
 
 ### 12.3 Complaints
@@ -240,14 +239,14 @@ California residents have additional rights under the CCPA:
 ### 14.2 CCPA Contact
 For CCPA requests, contact us at:
 
-- **Email**: ccpa@bondarys.com
+- **Email**: ccpa@uniapps.com
 - **Phone**: [CCPA Phone Number]
-- **Online Form**: https://bondarys.com/ccpa
+- **Online Form**: https://uniapps.com/ccpa
 
 ## 15. Additional Information
 
 ### 15.1 Data Processing Details
-- **Data Controller**: Bondarys Inc.
+- **Data Controller**: UniApps Inc.
 - **Data Processor**: Various service providers
 - **Data Categories**: Personal, location, communication, safety data
 - **Processing Purposes**: Service provision, safety, communication, analytics

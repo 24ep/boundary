@@ -230,7 +230,7 @@ const SchemaTreeSidebar: React.FC<{
                                         ) : (
                                             <Folder size={16} className={colors.text} />
                                         )}
-                                        <span className={colors.text}>{schema}</span>
+                                        <span className={colors.text}>{schema === 'bondarys' ? 'AppKit' : schema}</span>
                                         <span className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${colors.badge}`}>
                                             {schemaTables.length}
                                         </span>

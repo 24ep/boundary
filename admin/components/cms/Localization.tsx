@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { cmsService } from '../../services/cmsService'
@@ -81,7 +81,7 @@ const getFallbackTranslationKeys = () => [
 
 const getFallbackTranslations = () => {
   const demoEnMap: Record<string, string> = {
-    'ui.welcome.title': 'Welcome to Appkit',
+    'ui.welcome.title': 'Welcome to AppKit',
     'ui.welcome.subtitle': 'Connect with your platform safely',
     'ui.button.save': 'Save',
     'ui.button.cancel': 'Cancel',

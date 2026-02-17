@@ -1,295 +1,121 @@
-# Bondarys - Family Management Platform
+# UniApps
 
-A comprehensive family management platform that combines communication, safety, finance, and productivity features in one unified application.
+A modular full-stack platform with separately deployable services for admin management and mobile APIs.
 
-## 🚀 Recent Updates
+## Architecture
 
-### Main Menu Redesign (Latest)
-- **Removed Add Button**: Eliminated the universal add button from the bottom navigation
-- **Applications Popup**: Replaced the Applications screen with an interactive popup menu
-- **Arrow-Up Icon**: Applications tab now uses an arrow-up icon that triggers a popup
-- **Enhanced UX**: Smooth animations and gesture support for better user experience
-- **App Grid**: All applications are displayed in a beautiful grid layout within the popup
+UniApps is composed of **4 independently deployable services**:
 
-### Navigation Structure
-```
-[📅] [🏠] [⬆️] [👤]
-Calendar | Home | Apps | Profile
-```
+| Service | Directory | Port | Description |
+|---------|-----------|------|-------------|
+| **Admin Frontend** | `admin/` | 3001 | Next.js admin console (AppKit) |
+| **Backend Admin** | `backend-admin/` | 3001 | Express API server for admin operations |
+| **Backend Mobile** | `backend-mobile/` | 4000 | Express API server for mobile app |
+| **Mobile App** | `mobile/` | 8081 | Expo/React Native mobile application |
 
-The Applications tab (⬆️) now opens a popup menu containing:
-- **Communication**: Gallery, Chat, Social
-- **Productivity**: Storage, Notes, Calendar, Tasks, Goals
-- **Safety**: Location, Health
-- **Finance**: Budget, Expenses, Savings, Investments, Bills
-- **Settings**: Family Settings
+### Supporting Packages
 
-## 🏗️ Project Structure
+| Package | Directory | Description |
+|---------|-----------|-------------|
+| `@uniapps/shared` | `packages/shared/` | Shared TypeScript types and utilities |
+| `uniapps-web` | `web/` | Web application (Next.js) |
 
-```
-bondarys/
-├── mobile/                 # React Native mobile app
-│   ├── src/
-│   │   ├── navigation/     # Navigation configuration
-│   │   ├── screens/        # App screens
-│   │   ├── components/     # Reusable components
-│   │   └── services/       # API and business logic
-├── backend/                # Node.js backend server
-├── marketing-website/      # Marketing website
-├── admin/                  # Admin dashboard (Next.js)
 ## Quick Start
 
-### Automated Setup (Recommended)
-
-**Windows (PowerShell):**
-```powershell
-.\scripts\setup-docker.ps1
-```
-
-**Linux/Mac (Bash):**
-```bash
-chmod +x scripts/setup-docker.sh
-./scripts/setup-docker.sh
-```
-
-This script will:
-- Start all Docker Compose services
-- Wait for database initialization
-- Configure required schemas (auth, realtime)
-- Verify all services are running
-
-See [scripts/README-SETUP.md](scripts/README-SETUP.md) for details.
-
-### Manual Setup
-
-```bash
-# Start dev stack (Supabase+Redis, backend, admin, mobile)
-npm run dev:all
-
-# Stop Docker services (Supabase, Redis)
-npm run dev:stop
-
-# Apply Supabase schema/seed
-npm run db:setup
-
-# Minimal deploy of Supabase+Redis
-npm run deploy:min
-```
- 
-### Supabase setup (app_settings table & seeds)
-
-1) Create or update `supabase/seed.sql` with the app settings table, RLS, policies, and defaults. Use this content:
-
-```sql
--- app_settings table (key/value)
-create table if not exists public.app_settings (
-  key text primary key,
-  value jsonb not null,
-  updated_at timestamptz default now(),
-  updated_by text
-);
-
--- Enable RLS
-alter table public.app_settings enable row level security;
-
--- Policies
-create policy if not exists app_settings_read on public.app_settings
-for select to authenticated using (true);
-
-create policy if not exists app_settings_write on public.app_settings
-for all to authenticated
-using ((auth.jwt() ->> 'role') = 'admin')
-with check ((auth.jwt() ->> 'role') = 'admin');
-
--- Seed defaults
-insert into public.app_settings (key, value)
-select 'branding', jsonb_build_object('adminAppName','Bondarys Admin','mobileAppName','Bondarys Mobile')
-where not exists (select 1 from public.app_settings where key = 'branding');
-
-insert into public.app_settings (key, value)
-select 'integrations', jsonb_build_object(
-  'mobileGA', jsonb_build_object('measurementId',''),
-  'smtpMobile', jsonb_build_object('host','', 'port',587, 'user','', 'pass','', 'from',''),
-  'smtpAdmin', jsonb_build_object('host','', 'port',587, 'user','', 'pass','', 'from',''),
-  'ssoMobile', jsonb_build_object('provider','none','clientId','', 'clientSecret','', 'issuerUrl',''),
-  'ssoAdmin', jsonb_build_object('provider','none','clientId','', 'clientSecret','', 'issuerUrl','')
-)
-where not exists (select 1 from public.app_settings where key = 'integrations');
-```
-
-2) Supabase config already points seeding to `./supabase/seed.sql`. Apply seeds:
-
-```bash
-supabase start
-supabase db reset   # WARNING: resets local DB and applies seed
-# or
-supabase db seed
-```
-
-3) Ensure your JWT includes `role=admin` to write integrations via API:
-
-```http
-PUT /api/settings/integrations
-Authorization: Bearer <admin-jwt>
-Content-Type: application/json
-```
-└── docs/                   # Documentation
-```
-
-## 🎨 Design System
-
-### Color Palette
-- **Primary**: Red (#D32F2F) - Trust and safety
-- **Secondary**: Gold (#FFD700) - Premium features
-- **Background**: White (#FFFFFF) - Clean and modern
-- **Text**: Dark Gray (#333333) - Readability
-
-### Typography
-- **Primary Font**: SF Pro Display (iOS) / Roboto (Android)
-- **Secondary Font**: SF Pro Text (iOS) / Roboto (Android)
-
-## 🚀 Getting Started
-
 ### Prerequisites
-- Node.js >= 16
-- Expo CLI
-- React Native development environment
+- Node.js >= 18
+- Docker & Docker Compose (for infrastructure services)
 
-### Quick Start (one line)
+### Development
 
-- Windows (PowerShell or CMD):
-```
-scripts\run-localhost.bat --start
-```
+```bash
+# Install all dependencies
+npm install
 
-- macOS/Linux:
-```
-bash scripts/run-localhost.sh --start
-```
+# Start all services (Windows)
+dev.bat
 
-This will start Supabase, Redis, and MongoDB via Docker, then boot the backend API, admin console, mobile Metro bundler, and marketing website. After startup, visit:
-- Backend API health: http://localhost:3000/health
-- Admin Console: http://localhost:3001
-- Marketing Website: http://localhost:3000
-- Supabase Studio: http://localhost:54321
+# Start all services (Unix/macOS)
+./dev.sh
 
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-username/bondarys.git
-   cd bondarys
-   ```
-
-2. **Install mobile app dependencies**
-   ```bash
-   cd mobile
-   npm install
-   ```
-
-3. **Install backend dependencies**
-   ```bash
-   cd ../backend
-   npm install
-   ```
-
-4. **Start the development server**
-   ```bash
-   # Start backend
-   cd backend
-   npm run dev
-   
-   # Start mobile app (in new terminal)
-   cd mobile
-   npm start
-   ```
-
-## 📱 Mobile App Features
-
-### Core Features
-- **Family Management**: Create and manage family groups
-- **Communication**: Chat, video calls, and voice messages
-- **Safety**: Location tracking and emergency alerts
-- **Finance**: Budget tracking and expense management
-- **Productivity**: Calendar, tasks, and notes
-- **Storage**: File management and sharing
-
-### Navigation
-- **Bottom Tab Navigation**: Calendar, Home, Applications (popup), Profile
-- **Applications Popup**: Access all apps from a single popup menu
-- **Smooth Animations**: Enhanced user experience with animations
-
-## 🔧 Development
-
-### Mobile App Structure
-```
-mobile/src/
-├── navigation/
-│   ├── MainTabNavigator.tsx    # Bottom tab navigation
-│   └── RootNavigator.tsx       # Stack navigation
-├── components/
-│   ├── popup/
-│   │   └── ApplicationsPopup.tsx  # Applications popup menu
-│   └── common/                 # Reusable components
-├── screens/                    # App screens
-├── services/                   # API services
-└── theme/                     # Design system
+# Or start individual services
+npm run dev:backend-admin    # Backend Admin API (port 3001)
+npm run dev:backend-mobile   # Backend Mobile API (port 4000)
+npm run dev:admin            # Admin Frontend (port 3001)
+npm run dev:mobile           # Mobile App (port 8081)
+npm run dev:web              # Web App (port 3002)
 ```
 
-### Key Components
+### Docker
 
-#### ApplicationsPopup
-- **Location**: `mobile/src/components/popup/ApplicationsPopup.tsx`
-- **Purpose**: Displays all available applications in a popup menu
-- **Features**: Grid layout, gradient icons, badges, smooth animations
-- **Trigger**: Arrow-up button in bottom navigation
+```bash
+# Start all infrastructure + backend services
+docker-compose up -d
 
-#### MainTabNavigator
-- **Location**: `mobile/src/navigation/MainTabNavigator.tsx`
-- **Purpose**: Bottom tab navigation with applications popup integration
-- **Features**: Animated arrow-up button, popup trigger, smooth transitions
+# View logs
+docker-compose logs -f backend-admin backend-mobile
+```
 
-## 🎯 Roadmap
+## Project Structure
 
-### Phase 1: Core Features ✅
-- [x] Project structure and documentation
-- [x] Mobile app foundation
-- [x] Navigation system
-- [x] Applications popup menu
-- [x] Basic screens and components
+```
+uniapps/
+├── admin/                  # Admin Frontend (Next.js)
+├── backend-admin/          # Backend Admin API (Express + Prisma)
+│   ├── src/
+│   │   ├── server.ts       # Admin server entry point
+│   │   ├── routes/admin/   # Admin-specific routes
+│   │   ├── routes/v1/      # V1 admin API routes
+│   │   ├── config/         # Database & app config
+│   │   ├── middleware/      # Express middleware
+│   │   ├── services/       # Business logic services
+│   │   └── models/         # Data models
+│   └── prisma/             # Prisma schema & migrations
+├── backend-mobile/         # Backend Mobile API (Express + Prisma)
+│   ├── src/
+│   │   ├── server.ts       # Mobile server entry point
+│   │   ├── routes/mobile/  # Mobile-specific routes
+│   │   ├── routes/v1/      # V1 mobile API routes
+│   │   ├── socket/         # WebSocket handlers
+│   │   ├── config/         # Database & app config
+│   │   ├── middleware/      # Express middleware
+│   │   └── services/       # Business logic services
+│   └── prisma/             # Prisma schema & migrations
+├── mobile/                 # Mobile App (Expo/React Native)
+├── web/                    # Web App (Next.js)
+├── packages/
+│   └── shared/             # @uniapps/shared - shared types
+├── docker-compose.yml      # Infrastructure services
+├── nginx/                  # Production nginx config
+├── dev.bat                 # Windows dev launcher
+└── dev.sh                  # Unix dev launcher
+```
 
-### Phase 2: Enhanced Features 🚧
-- [ ] Complete screen implementations
-- [ ] Real-time features (Socket.io)
-- [ ] Push notifications
-- [ ] File upload system
-- [ ] Advanced family management
+## Environment Variables
 
-### Phase 3: Advanced Features 📋
-- [ ] AI-powered features
-- [ ] Advanced analytics
-- [ ] Premium features
-- [ ] Third-party integrations
+Copy `env.example` to `.env` and configure:
 
-## 🤝 Contributing
+```env
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres
+REDIS_URL=redis://localhost:6379
+JWT_SECRET=your-secret-key
+ADMIN_PORT=3001
+MOBILE_PORT=4000
+```
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## 📚 Documentation & Deployment
 
-## 📄 License
+For detailed deployment instructions, including Docker, Vercel, and manual setup, please see the [Complete Deployment Guide](docs/DEPLOYMENT.md).
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Quick Deployment Overview
 
-## 📞 Support
+- **Local Dev**: Run `npm install` then `dev.bat` (Windows) or `./dev.sh` (Unix).
+- **Backend**: Use `docker-compose up -d` for a full stack (API + DB + Redis).
+- **Frontend**: Deploy `admin/` to Vercel/Netlify.
+- **Mobile**: Build via Expo EAS.
 
-For support and questions:
-- Email: support@bondarys.com
-- Documentation: [docs/](docs/)
-- Issues: [GitHub Issues](https://github.com/your-username/bondarys/issues)
-
----
-
-**Bondarys** - Connecting families, building communities, securing futures. 
+> **Note on Naming**:
+> *   **UniApps**: The overall platform name.
+> *   **AppKit**: The Admin Panel and CMS.
+> *   **Boundary**: The Mobile Application.
+> *   **Bondarys**: Legacy schema name (Internal DB use only).

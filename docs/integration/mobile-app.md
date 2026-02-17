@@ -1,4 +1,4 @@
-# Native Mobile App Integration Guide
+﻿# Native Mobile App Integration Guide
 
 Native applications on iOS and Android should use the system browser for authentication to ensure security and trust.
 

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -280,8 +280,8 @@ export function ModernSidebar({ activeModule, setActiveModule, isOpen, onToggle,
                 <div className="logo-icon">A</div>
               )}
               <div className="logo-text">
-                <h1 className="logo-title">{branding?.adminAppName || 'Appkit'}</h1>
-                <p className="logo-subtitle">Appkit CMS</p>
+                <h1 className="logo-title">{branding?.adminAppName || 'AppKit'}</h1>
+                <p className="logo-subtitle">AppKit CMS</p>
               </div>
             </div>
             <div className="header-actions">

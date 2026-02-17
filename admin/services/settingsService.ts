@@ -135,7 +135,7 @@ export interface GlobalComponentStyles {
   categories: CategoryConfig[]
 }
 
-const STORAGE_KEY = 'bondarys.integrations.settings.v1'
+const STORAGE_KEY = 'appkit.integrations.settings.v1'
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
 
 function getAuthToken(): string | null {
@@ -209,7 +209,7 @@ export const settingsService = {
   ,
 
   async getBranding(apiBase?: string): Promise<BrandingSettings | null> {
-    const STORAGE_KEY_BRANDING = 'bondarys.branding.settings.v1'
+    const STORAGE_KEY_BRANDING = 'appkit.branding.settings.v1'
     try {
       const base = apiBase || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
       
@@ -240,7 +240,7 @@ export const settingsService = {
   },
 
   async saveBranding(branding: BrandingSettings, apiBase?: string): Promise<BrandingSettings | null> {
-    const STORAGE_KEY_BRANDING = 'bondarys.branding.settings.v1'
+    const STORAGE_KEY_BRANDING = 'appkit.branding.settings.v1'
      // Always save local first for immediate feedback
     const storage = getStorage()
     storage?.setItem(STORAGE_KEY_BRANDING, JSON.stringify(branding))
@@ -269,7 +269,7 @@ export const settingsService = {
   },
 
   async getTheme(apiBase?: string): Promise<MobileThemeConfig | null> {
-    const STORAGE_KEY_THEME = 'bondarys.theme.settings.v1'
+    const STORAGE_KEY_THEME = 'appkit.theme.settings.v1'
     try {
       const base = apiBase || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
       const res = await fetch(`${base}/api/admin/config/themes`, {
@@ -300,7 +300,7 @@ export const settingsService = {
   },
 
   async saveTheme(themeConfig: MobileThemeConfig, apiBase?: string): Promise<MobileThemeConfig | null> {
-    const STORAGE_KEY_THEME = 'bondarys.theme.settings.v1'
+    const STORAGE_KEY_THEME = 'appkit.theme.settings.v1'
     // Save local first
     const storage = getStorage()
     storage?.setItem(STORAGE_KEY_THEME, JSON.stringify(themeConfig))
@@ -324,7 +324,7 @@ export const settingsService = {
   },
 
   async getComponentStyles(): Promise<GlobalComponentStyles | null> {
-    const COMPONENT_STYLES_KEY = 'bondarys.component.styles.v1'
+    const COMPONENT_STYLES_KEY = 'appkit.component.styles.v1'
     // Try backend first
     try {
       const token = getAuthToken()
@@ -354,7 +354,7 @@ export const settingsService = {
   },
 
   async saveComponentStyles(styles: GlobalComponentStyles): Promise<boolean> {
-    const COMPONENT_STYLES_KEY = 'bondarys.component.styles.v1'
+    const COMPONENT_STYLES_KEY = 'appkit.component.styles.v1'
     try {
       const token = getAuthToken()
       if (!token) throw new Error('Not authenticated')

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { AdminConsoleUsers } from '../users/AdminConsoleUsers'
@@ -34,8 +34,8 @@ export function Settings() {
     | 'security'
   >('integrations')
   const [branding, setBranding] = useState<BrandingSettings>({
-    adminAppName: 'Appkit Admin',
-    mobileAppName: 'Appkit Mobile',
+    adminAppName: 'AppKit Admin',
+    mobileAppName: 'AppKit Mobile',
     logoUrl: '',
     iconUrl: ''
   })
@@ -84,7 +84,7 @@ export function Settings() {
         <CardBody>
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Settings</h2>
-            <p className="text-sm text-gray-500">Configure your Appkit settings</p>
+            <p className="text-sm text-gray-500">Configure your AppKit settings</p>
           </div>
         </CardBody>
       </Card>
@@ -314,13 +314,13 @@ export function Settings() {
             </CardHeader>
             <CardBody>
               <div className="space-y-4">
-                <Input label="Site Name" defaultValue="Appkit CMS" />
+                <Input label="Site Name" defaultValue="AppKit CMS" />
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Site Description</label>
                   <textarea
                     className="macos-input w-full"
                     rows={3}
-                    defaultValue="Appkit platform"
+                    defaultValue="AppKit platform"
                   />
                 </div>
                 <Input label="Admin Email" type="email" defaultValue="admin@appkit.com" />

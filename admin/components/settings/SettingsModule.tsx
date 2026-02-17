@@ -1,11 +1,11 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 
 export function SettingsModule() {
   const [settings, setSettings] = useState({
-    siteName: 'Appkit Platform',
-    siteDescription: 'Our Appkit platform',
+    siteName: 'AppKit Platform',
+    siteDescription: 'Our AppKit platform',
     allowComments: true,
     requireApproval: false,
     emailNotifications: true,

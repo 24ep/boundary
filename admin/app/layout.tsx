@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import '../styles/content-studio.css'
@@ -9,8 +9,8 @@ import { ClientProviders } from '../components/providers/ClientProviders'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Appkit CMS',
-  description: 'Content Management System for Appkit Platform',
+  title: 'AppKit CMS',
+  description: 'Content Management System for AppKit Platform',
 }
 
 export default function RootLayout({

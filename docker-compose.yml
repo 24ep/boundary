@@ -1,66 +1,104 @@
-
+# UniApps — Full-Stack Local Development
+# Runs ALL services with shared infrastructure (single DB, Redis, MinIO)
+# For independent deployment, use the docker-compose.yml inside each service directory.
 
 services:
-  # Backend API Service
-  backend:
+  # ==========================================
+  # Application Services (independently deployable)
+  # ==========================================
+
+  # Backend Admin API Service
+  backend-admin:
     build:
-      context: ./backend
+      context: ./backend-admin
       dockerfile: Dockerfile
-    container_name: bondarys-backend
+    container_name: uniapps-backend-admin
     ports:
-      - "4000:4000"
+      - "3001:3001"
+    env_file: .env
     environment:
-      - NODE_ENV=development
-      - PORT=4000
-      - JWT_SECRET=b66a9376ab6b4e2bc8e6d15bcfe0ef52
-      - JWT_REFRESH_SECRET=bondarys-dev-refresh-secret-key-32-chars
-      - JWT_EXPIRES_IN=1d
-      - JWT_REFRESH_EXPIRES_IN=7d
-      # Database connection (uses Supabase's PostgreSQL)
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=postgres
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      # Redis
+      - NODE_ENV=${NODE_ENV:-development}
+      - ADMIN_PORT=3001
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-postgres}
       - REDIS_URL=redis://redis:6379
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      # CORS settings
-      - CORS_ORIGIN=http://localhost:3001,http://localhost:8081,http://localhost:19006
-      # S3 / MinIO Configuration
-      - AWS_ACCESS_KEY_ID=minioadmin
-      - AWS_SECRET_ACCESS_KEY=minioadmin
-      - AWS_REGION=us-east-1
-      - AWS_S3_BUCKET=bondarys-files
-      - AWS_S3_ENDPOINT=http://minio:9000
     depends_on:
-      - db
-      - minio
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
-      - bondarys-network
+      - uniapps-network
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:4000/health')" ]
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:3001/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" ]
       interval: 30s
       timeout: 10s
       retries: 3
 
+  # Backend Mobile API Service
+  backend-mobile:
+    build:
+      context: ./backend-mobile
+      dockerfile: Dockerfile
+    container_name: uniapps-backend-mobile
+    ports:
+      - "4000:4000"
+    env_file: .env
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - MOBILE_PORT=4000
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-postgres}
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - uniapps-network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:4000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Admin Frontend (Next.js)
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    container_name: uniapps-admin
+    ports:
+      - "3002:3001"
+    environment:
+      - NODE_ENV=production
+      - BACKEND_ADMIN_URL=http://backend-admin:3001
+    depends_on:
+      backend-admin:
+        condition: service_healthy
+    networks:
+      - uniapps-network
+    restart: unless-stopped
+
+  # ==========================================
+  # Infrastructure Services
+  # ==========================================
+
   # PostgreSQL Database
   db:
     image: postgis/postgis:15-3.4-alpine
-    container_name: bondarys-db
+    container_name: uniapps-db
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
+      - POSTGRES_DB=${DB_NAME:-postgres}
     volumes:
-      - ./docker-data/postgres:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     networks:
-      - bondarys-network
+      - uniapps-network
     restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
@@ -71,18 +109,18 @@ services:
   # MinIO Object Storage
   minio:
     image: minio/minio:latest
-    container_name: bondarys-minio
+    container_name: uniapps-minio
     ports:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: ${MINIO_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-minioadmin}
     command: server /data --console-address ":9001"
     volumes:
-      - ./docker-data/minio:/data
+      - minio-data:/data
     networks:
-      - bondarys-network
+      - uniapps-network
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
@@ -93,25 +131,30 @@ services:
   # MinIO Bucket Creator
   createbuckets:
     image: minio/mc
-    container_name: bondarys-createbuckets
+    container_name: uniapps-createbuckets
     depends_on:
       minio:
         condition: service_healthy
     entrypoint: >
-      /bin/sh -c " /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin; /usr/bin/mc mb myminio/bondarys-files; /usr/bin/mc anonymous set public myminio/bondarys-files; exit 0; "
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 ${MINIO_USER:-minioadmin} ${MINIO_PASSWORD:-minioadmin};
+      /usr/bin/mc mb myminio/uniapps-files;
+      /usr/bin/mc anonymous set public myminio/uniapps-files;
+      exit 0;
+      "
     networks:
-      - bondarys-network
+      - uniapps-network
 
-  # Redis for session management and caching
+  # Redis
   redis:
     image: redis:7-alpine
-    container_name: bondarys-redis
+    container_name: uniapps-redis
     ports:
       - "6379:6379"
     volumes:
-      - ./docker-data/redis:/data
+      - redis-data:/data
     networks:
-      - bondarys-network
+      - uniapps-network
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
@@ -119,19 +162,11 @@ services:
       timeout: 5s
       retries: 5
 
-  # Optional: Swagger UI for API documentation
-  swagger:
-    image: swaggerapi/swagger-ui
-    container_name: bondarys-swagger
-    ports:
-      - "8080:8080"
-    environment:
-      # Point to Backend standard docs (if we have openapi.json) or just keep as placeholder
-      API_URL: http://localhost:4000/api-docs
-    networks:
-      - bondarys-network
-    restart: unless-stopped
+volumes:
+  postgres-data:
+  minio-data:
+  redis-data:
 
 networks:
-  bondarys-network:
+  uniapps-network:
     driver: bridge

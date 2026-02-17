@@ -1,7 +1,7 @@
 {
-  "name": "@bondarys/shared",
+  "name": "@uniapps/shared",
   "version": "1.0.0",
-  "description": "Shared code for Bondarys project",
+  "description": "Shared code for UniApps project",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

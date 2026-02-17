@@ -1,32 +1,24 @@
 {
+  "name": "uniapps",
   "private": true,
   "workspaces": [
     "admin",
-    "backend",
-    "mobile",
-    "web",
-    "packages/*",
-    "sdk/*"
+    "backend-admin",
+    "backend-mobile",
+    "boundary-app",
+    "packages/*"
   ],
   "scripts": {
-    "setup": "node scripts/setup.js",
-    "setup:docker": "node scripts/setup.js",
-    "setup:no-seed": "node scripts/setup.js --skip-seed",
-    "setup:no-migrations": "node scripts/setup.js --skip-migrations",
-    "dev:all": "bash ./scripts/bondarys.sh start",
-    "dev:stop": "bash ./scripts/bondarys.sh stop",
-    "db:setup": "bash ./scripts/bondarys.sh db:setup",
-    "deploy:min": "bash ./scripts/bondarys.sh deploy",
     "dev:admin": "npm run dev --workspace=admin",
-    "dev:backend": "npm run dev --workspace=backend",
-    "dev:mobile": "npm run start --workspace=mobile",
-    "dev:web": "npm run dev --workspace=web",
+    "dev:backend-admin": "npm run dev --workspace=backend-admin",
+    "dev:backend-mobile": "npm run dev --workspace=backend-mobile",
+    "dev:boundary-app": "npm run start --workspace=boundary-app",
     "build:all": "npm run build --workspaces --if-present",
     "lint:all": "npm run lint --workspaces --if-present",
     "type-check:all": "npm run type-check --workspaces --if-present"
   },
   "dependencies": {
-    "@appkit/identity-sdk": "^1.0.0",
+    "@uniapps/shared": "*",
     "@supabase/supabase-js": "^2.74.0",
     "axios": "^1.13.2",
     "cors": "^2.8.5",

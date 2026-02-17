@@ -1,4 +1,4 @@
-# Mobile Web / PWA Integration Guide
+﻿# Mobile Web / PWA Integration Guide
 
 For Single Page Applications (SPAs) and Progressive Web Apps (PWAs), Boundary supports the OIDC Authorization Code flow with **PKCE** (Proof Key for Code Exchange).
 

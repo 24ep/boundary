@@ -325,7 +325,7 @@ try {
 
 ```jsx
 import React, { useState, useEffect } from 'react';
-import { AppKitAuthClient } from './appkit-auth';
+import { AppKitAuthClient } from './AppKit-auth';
 
 function AppKitLoginForm({ appId, onSuccess, onError }) {
   const [config, setConfig] = useState(null);
@@ -601,7 +601,7 @@ apiClient.interceptors.response.use(
 ### JavaScript/TypeScript SDK
 
 ```javascript
-// appkit-auth-sdk.js
+// AppKit-auth-sdk.js
 class AppKitAuth {
   constructor(options) {
     this.apiUrl = options.apiUrl;
@@ -675,15 +675,15 @@ const auth = new AppKitAuth({
 - [Security Best Practices](./SECURITY.md)
 
 ### SDK Downloads
-- [JavaScript SDK](https://github.com/your-org/appkit-js-sdk)
-- [React Native SDK](https://github.com/your-org/appkit-rn-sdk)
-- [iOS SDK](https://github.com/your-org/appkit-ios-sdk)
-- [Android SDK](https://github.com/your-org/appkit-android-sdk)
+- [JavaScript SDK](https://github.com/your-org/AppKit-js-sdk)
+- [React Native SDK](https://github.com/your-org/AppKit-rn-sdk)
+- [iOS SDK](https://github.com/your-org/AppKit-ios-sdk)
+- [Android SDK](https://github.com/your-org/AppKit-android-sdk)
 
 ### Support
-- Email: support@appkit.com
-- Discord: [AppKit Community](https://discord.gg/appkit)
-- Documentation: [docs.appkit.com](https://docs.appkit.com)
+- Email: support@AppKit.com
+- Discord: [AppKit Community](https://discord.gg/AppKit)
+- Documentation: [docs.AppKit.com](https://docs.AppKit.com)
 
 ---
 

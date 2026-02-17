@@ -67,7 +67,7 @@ export default function DocPage() {
   const docs: Record<string, DocContent> = {
     'quick-start': {
       title: 'Quick Start',
-      description: 'Get up and running with Boundary in less than 5 minutes.',
+      description: 'Get up and running with AppKit in less than 5 minutes.',
       content: (
         <div className="space-y-8">
           <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 flex gap-4 items-start">
@@ -75,7 +75,7 @@ export default function DocPage() {
               <Info className="h-4 w-4" />
             </div>
             <p className="text-sm text-blue-800 leading-relaxed">
-              This guide assumes you already have a Boundary account and access to the Admin Dashboard.
+              This guide assumes you already have an AppKit account and access to the Admin Dashboard.
             </p>
           </div>
 
@@ -89,16 +89,16 @@ export default function DocPage() {
           <CodeBlock 
             id="install"
             language="bash"
-            code="npm install @boundary/identity-sdk"
+            code="npm install @appkit/identity-sdk"
           />
 
           <h2 className="text-2xl font-bold mt-12 mb-4">3. Initialize and Login</h2>
           <CodeBlock 
             id="init"
             language="typescript"
-            code={`import { Boundary } from '@boundary/identity-sdk';
+            code={`import { AppKit } from '@appkit/identity-sdk';
 
-const client = new Boundary({
+const client = new AppKit({
   clientId: 'YOUR_CLIENT_ID',
   domain: 'https://auth.your-app.com'
 });
@@ -192,9 +192,9 @@ const authUrl = \`\${ISSUER}/oauth/authorize?\` +
             code={`import { authorize } from 'react-native-app-auth';
 
 const config = {
-  issuer: 'https://auth.boundary.com/oauth',
+  issuer: 'https://auth.appkit.com/oauth',
   clientId: 'YOUR_CLIENT_ID',
-  redirectUrl: 'com.boundary.app:/oauth',
+  redirectUrl: 'com.appkit.app:/oauth',
   scopes: ['openid', 'profile', 'email', 'offline_access'],
   usePKCE: true,
 };
@@ -210,7 +210,7 @@ const result = await authorize(config);`}
     <action android:name="android.intent.action.VIEW" />
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
-    <data android:scheme="com.boundary.app" android:path="/oauth" />
+    <data android:scheme="com.appkit.app" android:path="/oauth" />
 </intent-filter>`}
           />
         </div>
@@ -220,7 +220,7 @@ const result = await authorize(config);`}
     },
     'installation': {
       title: 'Installation',
-      description: 'Add Boundary SDKs to your project and configure your environment.',
+      description: 'Add AppKit SDKs to your project and configure your environment.',
       content: (
         <div className="space-y-8">
           <h2 className="text-2xl font-bold">Supported Platforms</h2>
@@ -243,7 +243,7 @@ const result = await authorize(config);`}
           <CodeBlock 
             id="npm-install"
             language="bash"
-            code="npm install @boundary/identity-core"
+            code="npm install @appkit/identity-core"
           />
 
           <h2 className="text-2xl font-bold mt-12 mb-4">Environment Configuration</h2>
@@ -253,9 +253,9 @@ const result = await authorize(config);`}
           <CodeBlock 
             id="env-config"
             language="bash"
-            code={`NEXT_PUBLIC_BOUNDARY_DOMAIN="https://auth.your-app.com"
-NEXT_PUBLIC_BOUNDARY_CLIENT_ID="your_client_id_here"
-BOUNDARY_CLIENT_SECRET="your_secret_here" # Server-side only`}
+            code={`NEXT_PUBLIC_APPKIT_DOMAIN="https://auth.your-app.com"
+NEXT_PUBLIC_APPKIT_CLIENT_ID="your_client_id_here"
+APPKIT_CLIENT_SECRET="your_secret_here" # Server-side only`}
           />
         </div>
       ),
@@ -268,7 +268,7 @@ BOUNDARY_CLIENT_SECRET="your_secret_here" # Server-side only`}
       content: (
         <div className="space-y-8">
           <p className="text-slate-600 leading-relaxed text-lg">
-            Boundary provides a robust authentication gateway that abstracts the complexities of OIDC.
+            AppKit provides a robust authentication gateway that abstracts the complexities of OIDC.
           </p>
 
           <h2 className="text-2xl font-bold mt-12 mb-4">Authorization Code Flow</h2>
@@ -344,7 +344,7 @@ await client.updateAttributes({
       content: (
         <div className="space-y-8">
           <p className="text-slate-600 leading-relaxed text-lg">
-            Boundary uses "Circles" as the primary unit for organizational grouping and data isolation.
+            AppKit uses "Circles" as the primary unit for organizational grouping and data isolation.
           </p>
 
           <h2 className="text-2xl font-bold mt-12 mb-4">Understanding Circles</h2>
@@ -402,7 +402,7 @@ await client.mfa.verify({
           
           <h2 className="text-2xl font-bold mt-12 mb-4">Token Refresh</h2>
           <p className="text-slate-600 leading-relaxed">
-            Boundary uses rotating refresh tokens. The SDK automatically detects expired access tokens and refreshes them in the background.
+            AppKit uses rotating refresh tokens. The SDK automatically detects expired access tokens and refreshes them in the background.
           </p>
 
           <h2 className="text-2xl font-bold mt-12 mb-4">Secure Logout</h2>
@@ -529,7 +529,7 @@ await client.logout({
       content: (
         <div className="space-y-8">
           <h2 className="text-2xl font-bold">POST /applications</h2>
-          <p className="text-slate-600 leading-relaxed">Register a new application in your Boundary organization.</p>
+          <p className="text-slate-600 leading-relaxed">Register a new application in your AppKit organization.</p>
           
           <div className="bg-blue-50 border border-blue-100 p-6 rounded-3xl">
             <h4 className="font-bold text-blue-900 mb-2">Internal Use Only</h4>

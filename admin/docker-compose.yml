@@ -1,0 +1,27 @@
+# Admin Frontend — Self-contained deployment
+# Usage: docker-compose up -d
+# Requires backend-admin to be running (or set BACKEND_ADMIN_URL)
+
+services:
+  admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: uniapps-admin
+    ports:
+      - "${ADMIN_FRONTEND_PORT:-3002}:3001"
+    environment:
+      - NODE_ENV=production
+      - BACKEND_ADMIN_URL=${BACKEND_ADMIN_URL:-http://host.docker.internal:3001}
+    networks:
+      - admin-net
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:3001', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  admin-net:
+    driver: bridge

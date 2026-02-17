@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { 
@@ -231,7 +231,7 @@ export function Header({ onGlobalSearch, onFilterClick, onLogout }: HeaderProps)
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-gray-900 truncate">Admin User</p>
-                      <p className="text-xs text-gray-500 truncate">admin@bondarys.com</p>
+                      <p className="text-xs text-gray-500 truncate">admin@uniapps.com</p>
                     </div>
                   </div>
                 </div>

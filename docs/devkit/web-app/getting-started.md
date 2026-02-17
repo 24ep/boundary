@@ -1,4 +1,4 @@
-# Getting Started with Boundary Web App DevKit
+﻿# Getting Started with Boundary Web App DevKit
 
 This guide will walk you through the initial setup required to integrate your web application with the Boundary Identity Gateway.
 

@@ -116,11 +116,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
             return
         }
 
-        // Try to find bondarys app
-        const bondarysApp = apps.find(a => a.slug === 'bondarys')
-        if (bondarysApp) {
-            setCurrentAppState(bondarysApp)
-            localStorage.setItem(STORAGE_KEY, bondarysApp.id)
+        // Try to find appkit app (new) or bondarys app (legacy)
+        const defaultApp = apps.find(a => a.slug === 'appkit') || apps.find(a => a.slug === 'bondarys')
+        if (defaultApp) {
+            setCurrentAppState(defaultApp)
+            localStorage.setItem(STORAGE_KEY, defaultApp.id)
             return
         }
 

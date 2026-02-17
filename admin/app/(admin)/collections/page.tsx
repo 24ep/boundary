@@ -1,4 +1,4 @@
-
+﻿
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -55,8 +55,8 @@ export default function CollectionsIndexPage() {
             if (Array.isArray(types)) {
                 // Filter out collections that have dedicated management pages and are NOT app-level:
                 // - 'users': Managed at /admin/identity/users (mobile app users - app-level but has dedicated UI)
-                // - 'admin-users': Managed at /settings/admin-users (appkit admin users - NOT app-level, separate system)
-                // Admin users are appkit-level (admin panel management), NOT app-level collections
+                // - 'admin-users': Managed at /settings/admin-users (uniapps admin users - NOT app-level, separate system)
+                // Admin users are uniapps-level (admin panel management), NOT app-level collections
                 // These are managed through dedicated routes and don't use the entity/collection system
                 const excludedNames = ['users', 'admin-users', 'admin_users']
                 const filteredTypes = types.filter(type => !excludedNames.includes(type.name))

@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { 
@@ -226,7 +226,7 @@ export function Dashboard({ onManageDashboards }: DashboardProps) {
       {
         type: 'content',
         initials: 'JF',
-        title: 'Johnson Appkit Reunion 2024',
+        title: 'Johnson AppKit Reunion 2024',
         meta: 'Johnson Account • 45 views',
         badge: 'Published',
         badgeColor: 'green',

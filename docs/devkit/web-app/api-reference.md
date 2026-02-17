@@ -1,4 +1,4 @@
-# API Reference
+﻿# API Reference
 
 While the SDK is the recommended way to integrate, you can also interact with Boundary directly via our RESTful API.
 

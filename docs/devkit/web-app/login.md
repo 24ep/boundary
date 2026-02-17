@@ -1,4 +1,4 @@
-# DevKit: Login Module (Web App)
+﻿# DevKit: Login Module (Web App)
 
 The Login Module is the core of the Boundary integration. it handles the entire authentication lifecycle, from initiating the login request to receiving secure user tokens.
 

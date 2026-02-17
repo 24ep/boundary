@@ -1,6 +1,6 @@
 # Boundary Web App DevKit
 
-Welcome to the Boundary Web App DevKit. This suite provides a set of tools, libraries, and architectural patterns to help you integrate Boundary's identity services seamlessly into your web applications.
+Welcome to the Boundary Web App DevKit. This suite provides a set of tools, libraries, and architectural patterns to help you integrate AppKit' identity services seamlessly into your web applications.
 
 ## Overview
 

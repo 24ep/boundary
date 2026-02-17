@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import React from 'react'
 import Head from 'next/head'
@@ -22,7 +22,7 @@ interface SEOMetadataProps {
 }
 
 export const SEOMetadata: React.FC<SEOMetadataProps> = ({
-  title = 'Dynamic Content Management - Appkit',
+  title = 'Dynamic Content Management - AppKit',
   description = 'Create and manage dynamic content with our powerful drag-and-drop editor. Build marketing pages, news articles, and interactive content.',
   keywords = ['content management', 'CMS', 'drag and drop', 'dynamic content', 'marketing', 'editor'],
   ogImage = '/images/og-content-management.jpg',
@@ -31,14 +31,14 @@ export const SEOMetadata: React.FC<SEOMetadataProps> = ({
   twitterCard = 'summary_large_image',
   canonicalUrl,
   robots = 'index,follow',
-  author = 'Appkit Team',
+  author = 'AppKit Team',
   publishedTime,
   modifiedTime,
   section = 'Content Management',
   tags = [],
   noindex = false
 }) => {
-  const fullTitle = title.includes('Appkit') ? title : `${title} | Appkit`
+  const fullTitle = title.includes('AppKit') ? title : `${title} | AppKit`
   const finalOgTitle = ogTitle || fullTitle
   const finalOgDescription = ogDescription || description
   const finalRobots = noindex ? 'noindex,nofollow' : robots
@@ -60,7 +60,7 @@ export const SEOMetadata: React.FC<SEOMetadataProps> = ({
       <meta property="og:title" content={finalOgTitle} />
       <meta property="og:description" content={finalOgDescription} />
       <meta property="og:image" content={ogImage} />
-      <meta property="og:site_name" content="Appkit" />
+      <meta property="og:site_name" content="AppKit" />
       {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
       
       {/* Twitter Card Meta Tags */}
@@ -205,7 +205,7 @@ export const ContentSEOMetadata: React.FC<ContentSEOMetadataProps> = ({
     <>
       <SEOMetadata
         title={content.title}
-        description={content.description || `Dynamic ${content.type} content created with Appkit content management system.`}
+        description={content.description || `Dynamic ${content.type} content created with AppKit content management system.`}
         keywords={keywords}
         canonicalUrl={isPublished ? contentUrl : undefined}
         robots={isPublished ? 'index,follow' : 'noindex,nofollow'}
@@ -225,11 +225,11 @@ export const ContentSEOMetadata: React.FC<ContentSEOMetadataProps> = ({
           datePublished={content.createdAt}
           dateModified={content.updatedAt}
           author={{
-            name: 'Appkit Team',
+            name: 'AppKit Team',
             url: baseUrl
           }}
           publisher={{
-            name: 'Appkit',
+            name: 'AppKit',
             url: baseUrl
           }}
         />

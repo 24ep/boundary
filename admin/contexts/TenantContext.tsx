@@ -164,11 +164,11 @@ export const TenantProvider: React.FC<TenantProviderProps> = ({ children }) => {
             return
         }
 
-        // Find bondarys app (default)
-        const bondarysApp = apps.find(a => a.slug === 'bondarys')
-        if (bondarysApp) {
-            setCurrentApp(bondarysApp)
-            localStorage.setItem(STORAGE_KEY_CURRENT_APP, bondarysApp.id)
+        // Find default app (appkit or legacy bondarys)
+        const defaultApp = apps.find(a => a.slug === 'appkit') || apps.find(a => a.slug === 'bondarys')
+        if (defaultApp) {
+            setCurrentApp(defaultApp)
+            localStorage.setItem(STORAGE_KEY_CURRENT_APP, defaultApp.id)
             return
         }
 

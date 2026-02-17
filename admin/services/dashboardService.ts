@@ -1,4 +1,4 @@
-export interface Dashboard {
+﻿export interface Dashboard {
   id: string
   name: string
   description: string
@@ -27,8 +27,8 @@ export interface DataSource {
 }
 
 class DashboardService {
-  private storageKey = 'bondarys_dashboards'
-  private dataSourcesKey = 'bondarys_data_sources'
+  private storageKey = 'appkit_dashboards'
+  private dataSourcesKey = 'appkit_data_sources'
 
   // Dashboard CRUD Operations
   async getDashboards(): Promise<Dashboard[]> {
@@ -226,8 +226,8 @@ class DashboardService {
     return [
       {
         id: 'default_appkit_overview',
-        name: 'Appkit Overview',
-        description: 'Main dashboard showing Appkit statistics and recent activity',
+        name: 'AppKit Overview',
+        description: 'Main dashboard showing AppKit statistics and recent activity',
         isDefault: true,
         createdAt: '2024-01-15T00:00:00.000Z',
         updatedAt: '2024-01-20T00:00:00.000Z',
@@ -235,7 +235,7 @@ class DashboardService {
           {
             id: 'comp_appkit_stats',
             type: 'stats',
-            title: 'Appkit Statistics',
+            title: 'AppKit Statistics',
             dataSource: 'appkit_stats',
             config: { showTrends: true, layout: 'grid' },
             position: { x: 0, y: 0, w: 6, h: 4 }
@@ -261,7 +261,7 @@ class DashboardService {
       {
         id: 'default_content_management',
         name: 'Content Management',
-        description: 'Dashboard for managing Appkit content and media',
+        description: 'Dashboard for managing AppKit content and media',
         isDefault: false,
         createdAt: '2024-01-16T00:00:00.000Z',
         updatedAt: '2024-01-18T00:00:00.000Z',
@@ -299,7 +299,7 @@ class DashboardService {
     return [
       {
         id: 'appkit_stats',
-        name: 'Appkit Statistics',
+        name: 'AppKit Statistics',
         type: 'computed',
         config: { 
           metrics: ['totalFamilies', 'totalUsers', 'activeUsers', 'totalContent'],

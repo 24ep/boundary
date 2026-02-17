@@ -1,0 +1,484 @@
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert, Platform } from 'react-native';
+import { config } from '../../config/environment';
+import { isDev } from '../../utils/isDev';
+
+interface ApiResponse<T = any> {
+  success: boolean;
+  data: T;
+  message?: string;
+  error?: {
+    code: string;
+    message: string;
+    details?: any;
+  };
+}
+
+interface ApiError {
+  code: string;
+  message: string;
+  details?: any;
+  isExpected?: boolean;
+}
+
+class ApiClient {
+  private instance: AxiosInstance;
+  private baseURL: string;
+  private isRefreshing = false;
+  private failedQueue: Array<{
+    resolve: (value?: any) => void;
+    reject: (error?: any) => void;
+  }> = [];
+  private logoutCallback: (() => void) | null = null;
+
+  constructor() {
+    // Backend runs on port 4000 to avoid conflicts
+    // Android emulator uses localhost to access localhost of the host machine
+    console.log('[API] Initializing ApiClient...');
+
+    console.log('[API] Initializing ApiClient...');
+
+    // Use centralized configuration
+    this.baseURL = config.apiUrl;
+
+    // Override for Android Emulator if needed (though config should handle this if configured correctly)
+    // For now, we trust config.apiUrl which defaults to localhost:4000
+    // If running on Android device (not emulator), localhost won't work, but config structure allows overriding.
+
+    // Ensure we don't have double /api/v1 if config already has it (it does)
+    // The previous hardcoded values had /api/v1. config.apiUrl has /api/v1.
+
+    if (Platform.OS === 'android' && this.baseURL.includes('localhost')) {
+      // Special case for Android Emulator to map localhost to host machine
+      this.baseURL = this.baseURL.replace('localhost', '10.0.2.2');
+    }
+
+    console.log('[API] Base URL set to:', this.baseURL);
+
+    this.instance = axios.create({
+      baseURL: this.baseURL,
+      timeout: 30000,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    this.setupInterceptors();
+  }
+
+
+  private setupInterceptors() {
+    // Request interceptor
+    this.instance.interceptors.request.use(
+      async (reqConfig) => {
+        console.log(`[API] Requesting ${reqConfig.method?.toUpperCase()} ${reqConfig.url}`);
+        try {
+          reqConfig.headers = reqConfig.headers || {};
+          
+          // Add authentication token
+          const token = await this.getAccessToken();
+          if (token) {
+            reqConfig.headers.Authorization = `Bearer ${token}`;
+          }
+          
+          // Add multi-tenant application identifier
+          // Priority: config.appId (UUID) > config.appSlug > default 'boundary'
+          if (config.appId) {
+            reqConfig.headers['X-App-ID'] = config.appId;
+          } else if (config.appSlug) {
+            reqConfig.headers['X-App-Slug'] = config.appSlug;
+          } else {
+            // Fallback to default app slug
+            reqConfig.headers['X-App-Slug'] = 'boundary';
+          }
+        } catch (error) {
+          console.error('Error in request interceptor:', error);
+        }
+        return reqConfig;
+      },
+      (error) => {
+        console.error('Request interceptor error:', error);
+        return Promise.reject(error);
+      }
+    );
+
+    // Response interceptor
+    this.instance.interceptors.response.use(
+      (response: AxiosResponse<ApiResponse>) => {
+        console.log(`[API] Response from ${response.config.url}:`, response.status);
+        return response;
+      },
+      async (error) => {
+        const originalRequest = error.config;
+        const status = error.response?.status;
+
+        // Don't try to refresh token for auth endpoints (login, register)
+        const isAuthEndpoint = originalRequest?.url?.includes('/auth/login') ||
+          originalRequest?.url?.includes('/auth/register') ||
+          originalRequest?.url?.includes('/auth/sso') ||
+          originalRequest?.url?.includes('/auth/logout');
+
+        // Handle expected errors silently (404, 401 for certain endpoints)
+        // IMPORTANT: Login/register errors should NEVER be marked as expected - they must be shown to users
+        const isExpectedError =
+          status === 404 || // Endpoint may not exist yet
+          (status === 401 && !isAuthEndpoint && ( // Exclude login/register from expected errors
+            originalRequest?.url?.includes('/auth/refresh') || // Expected when token expired
+            originalRequest?.url?.includes('/notifications') || // May require auth
+            originalRequest?.url?.includes('/mobile/branding') // May require auth
+          ));
+
+        if (status === 401 && !originalRequest._retry && !isAuthEndpoint && !isExpectedError) {
+          console.log(`[API] 🔐 401 Detected on ${originalRequest?.url}. Attempting token refresh...`);
+          if (this.isRefreshing) {
+            console.log('[API] Refresh already in progress, queuing request');
+            return new Promise((resolve, reject) => {
+              this.failedQueue.push({ resolve, reject });
+            }).then(() => {
+              return this.instance(originalRequest);
+            }).catch((err) => {
+              return Promise.reject(err);
+            });
+          }
+
+          originalRequest._retry = true;
+          this.isRefreshing = true;
+
+          try {
+            const refreshToken = await this.getRefreshToken();
+            if (refreshToken) {
+              console.log('[API] Found refresh token. Posting to /auth/refresh...');
+              const response = await this.refreshAccessToken(refreshToken);
+              console.log('[API] Refresh successful, updating token');
+              await this.setAccessToken(response.data.accessToken);
+
+              // Retry failed requests
+              console.log(`[API] Retrying ${this.failedQueue.length} queued requests`);
+              this.failedQueue.forEach(({ resolve }) => {
+                resolve();
+              });
+              this.failedQueue = [];
+
+              return this.instance(originalRequest);
+            } else {
+              // No refresh token, redirect to login
+              console.warn(`[API] ⚠️ No refresh token found during 401 on ${originalRequest?.url}. Logging out.`);
+              await this.handleLogout(originalRequest?.url);
+              return Promise.reject(error);
+            }
+          } catch (refreshError: any) {
+            // Refresh token failed, redirect to login
+            console.error(`[API] ❌ Refresh token failed for ${originalRequest?.url}:`, refreshError?.message);
+            await this.handleLogout(originalRequest?.url);
+            return Promise.reject(refreshError);
+          } finally {
+            this.isRefreshing = false;
+          }
+        }
+
+        // For expected errors, mark them so they're handled silently
+        if (isExpectedError) {
+          error.isExpectedError = true;
+        }
+
+        return Promise.reject(error);
+      }
+    );
+  }
+
+  private async getAccessToken(): Promise<string | null> {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      return token;
+    } catch (error) {
+      console.error('Error getting access token:', error);
+      return null;
+    }
+  }
+
+  private async getRefreshToken(): Promise<string | null> {
+    try {
+      const token = await AsyncStorage.getItem('refreshToken');
+      // DEV BYPASS: If no token stored and in development, use mock token
+      if (!token && isDev) {
+        console.log('[API] DEV: No refresh token found, using mock-refresh-token');
+        return 'mock-refresh-token';
+      }
+      return token;
+    } catch (error) {
+      console.error('Error getting refresh token:', error);
+      // DEV BYPASS: Return mock token on error in development
+      if (isDev) {
+        return 'mock-refresh-token';
+      }
+      return null;
+    }
+  }
+
+  private async setAccessToken(token: string): Promise<void> {
+    try {
+      await AsyncStorage.setItem('accessToken', token);
+    } catch (error) {
+      console.error('Error setting access token:', error);
+    }
+  }
+
+  private async refreshAccessToken(refreshToken: string) {
+    try {
+      return await this.instance.post('/auth/refresh', { refreshToken });
+    } catch (error: any) {
+      // Don't log 401 errors - they're expected when token is invalid/expired
+      if (error?.response?.status !== 401 && error?.code !== 'UNAUTHORIZED') {
+        console.error('Error refreshing token:', error);
+      }
+      throw error;
+    }
+  }
+
+  public async handleLogout(triggerUrl?: string): Promise<void> {
+    try {
+      if (triggerUrl) {
+        console.log(`[API] 🛑 Unauthorized access detected on ${triggerUrl} - triggering logout`);
+      } else {
+        console.log('[API] 🛑 Unauthorized access detected - triggering logout');
+      }
+      
+      await AsyncStorage.multiRemove(['accessToken', 'refreshToken', 'user']);
+
+      if (this.logoutCallback) {
+        console.log('[API] Calling logout callback');
+        this.logoutCallback();
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  }
+
+  private handleError(error: any): ApiError {
+    // Mark expected errors for silent handling
+    const isExpectedError = error.isExpectedError ||
+      error.response?.status === 404 ||
+      (error.response?.status === 401 && (
+        error.config?.url?.includes('/auth/refresh') ||
+        error.config?.url?.includes('/notifications') ||
+        error.config?.url?.includes('/mobile/branding')
+      ));
+
+    if (error.response) {
+      // Server responded with error status
+      const { status, data } = error.response;
+
+      switch (status) {
+        case 400:
+          return {
+            code: data?.code || 'VALIDATION_ERROR',
+            message: data?.message || data?.error || 'Invalid request data',
+            details: data?.details,
+          };
+        case 401:
+          // Backend returns { error: 'Invalid credentials', message: 'Email or password is incorrect' }
+          // Try both message and error fields
+          const errorMessage = data?.message || data?.error || 'Authentication required';
+          const errorCode = data?.code || 'UNAUTHORIZED';
+          return {
+            code: errorCode,
+            message: errorMessage,
+            details: data?.details,
+            isExpected: isExpectedError,
+          };
+        case 403:
+          return {
+            code: 'FORBIDDEN',
+            message: 'Access denied',
+          };
+        case 404:
+          return {
+            code: 'NOT_FOUND',
+            message: 'Resource not found',
+            isExpected: isExpectedError,
+          };
+        case 409:
+          return {
+            code: 'CONFLICT',
+            message: 'Resource conflict',
+          };
+        case 422:
+          return {
+            code: 'VALIDATION_ERROR',
+            message: data?.message || 'Validation failed',
+            details: data?.details,
+          };
+        case 429:
+          return {
+            code: 'RATE_LIMIT',
+            message: 'Too many requests',
+          };
+        case 500:
+          // Try to extract more details from the error response
+          const serverErrorMessage = data?.message || data?.error || data?.details?.message;
+          return {
+            code: 'SERVER_ERROR',
+            message: serverErrorMessage || 'Internal server error. Please try again later.',
+            details: data?.details || data,
+          };
+        default:
+          return {
+            code: 'UNKNOWN_ERROR',
+            message: data?.message || 'An unknown error occurred',
+          };
+      }
+    }
+    const msg = (error.message || '').toLowerCase();
+    const isNetworkError =
+      error.request ||
+      error.code === 'ECONNABORTED' ||
+      error.code === 'ECONNREFUSED' ||
+      error.code === 'ERR_NETWORK' ||
+      msg.includes('timeout') ||
+      msg.includes('network error') ||
+      msg.includes('err_connection_refused') ||
+      msg.includes('connection refused') ||
+      msg.includes('failed to fetch') ||
+      msg.includes('load failed');
+    if (isNetworkError) {
+      // Network error - backend server is not running or unreachable
+      return {
+        code: 'NETWORK_ERROR',
+        message: msg.includes('timeout') || error.code === 'ECONNABORTED'
+          ? 'Connection timed out. Please check your internet or firewall settings.'
+          : 'Network connection failed. Please check your internet.',
+        isExpected: true, // Mark as expected to suppress alerts
+      };
+    }
+    // Other error
+    return {
+      code: error.code || 'UNKNOWN_ERROR',
+      message: error.message || 'An unknown error occurred',
+    };
+  }
+
+  private showErrorAlert(error: ApiError) {
+    // Don't show alerts for expected errors:
+    // - 404 (endpoints may not exist yet)
+    // - 401 (user not authenticated - expected when logged out)
+    // - Network errors (to avoid spam)
+    // - Errors marked as expected
+    if (error.isExpected ||
+      error.code === 'NETWORK_ERROR' ||
+      error.code === 'NOT_FOUND' ||
+      error.code === 'UNAUTHORIZED') {
+      return; // Silently ignore expected errors
+    }
+    Alert.alert('Error', error.message);
+  }
+
+  // Public methods
+  async get<T = any>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.instance.get<ApiResponse<T>>(url, config);
+      return response.data;
+    } catch (error: any) {
+      const apiError = this.handleError(error);
+      // Don't show alerts or log for expected errors
+      if (!error.isExpectedError) {
+        this.showErrorAlert(apiError);
+      }
+      throw apiError;
+    }
+  }
+
+  async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.instance.post<ApiResponse<T>>(url, data, config);
+      return response.data;
+    } catch (error: any) {
+      const apiError = this.handleError(error);
+      // Don't show alerts or log for expected errors
+      if (!error.isExpectedError) {
+        this.showErrorAlert(apiError);
+      }
+      throw apiError;
+    }
+  }
+
+  async put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.instance.put<ApiResponse<T>>(url, data, config);
+      return response.data;
+    } catch (error) {
+      const apiError = this.handleError(error);
+      this.showErrorAlert(apiError);
+      throw apiError;
+    }
+  }
+
+  async patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.instance.patch<ApiResponse<T>>(url, data, config);
+      return response.data;
+    } catch (error) {
+      const apiError = this.handleError(error);
+      this.showErrorAlert(apiError);
+      throw apiError;
+    }
+  }
+
+  async delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.instance.delete<ApiResponse<T>>(url, config);
+      return response.data;
+    } catch (error) {
+      const apiError = this.handleError(error);
+      this.showErrorAlert(apiError);
+      throw apiError;
+    }
+  }
+
+  async upload<T = any>(url: string, formData: FormData, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+    try {
+      const response = await this.instance.post<ApiResponse<T>>(url, formData, {
+        ...config,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      const apiError = this.handleError(error);
+      this.showErrorAlert(apiError);
+      throw apiError;
+    }
+  }
+
+  // Utility methods
+  setBaseURL(url: string) {
+    this.baseURL = url;
+    this.instance.defaults.baseURL = url;
+  }
+
+  setAuthToken(token: string) {
+    this.instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+  }
+
+  removeAuthToken() {
+    delete this.instance.defaults.headers.common.Authorization;
+  }
+
+  // Health check
+  async healthCheck(): Promise<boolean> {
+    try {
+      await this.instance.get('/health');
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  setOnLogout(callback: () => void) {
+    this.logoutCallback = callback;
+  }
+}
+
+export const apiClient = new ApiClient();
+export default apiClient; 

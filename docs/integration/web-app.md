@@ -1,4 +1,4 @@
-# Web Application Integration Guide
+﻿# Web Application Integration Guide
 
 This guide describes how to integrate the Boundary Authentication Gateway into a standard server-side web application using OpenID Connect (OIDC).
 

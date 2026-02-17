@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { 
@@ -139,7 +139,7 @@ export function Sidebar({ activeModule, setActiveModule, CircleCount, safetyCoun
           )}
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <h1 className="text-lg font-bold text-gray-900 truncate">{branding?.adminAppName || 'Appkit'}</h1>
+              <h1 className="text-lg font-bold text-gray-900 truncate">{branding?.adminAppName || 'AppKit'}</h1>
               <p className="text-xs text-gray-500 truncate">Admin Console</p>
             </div>
           )}

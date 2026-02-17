@@ -4,10 +4,10 @@
 
 ## 1. Acceptance of Terms
 
-By accessing or using Bondarys ("Service"), you agree to be bound by these Terms of Service ("Terms"). If you disagree with any part of these terms, you may not access the Service.
+By accessing or using UniApps ("Service"), you agree to be bound by these Terms of Service ("Terms"). If you disagree with any part of these terms, you may not access the Service.
 
 ### 1.1 Service Description
-Bondarys is a family safety and communication platform that provides:
+UniApps is a family safety and communication platform that provides:
 - Real-time location sharing and tracking
 - Family communication tools (chat, calls, messaging)
 - Safety features (geofencing, emergency alerts, panic button)
@@ -147,7 +147,7 @@ We collect information necessary to provide the Service:
 
 ### 7.1 Our Rights
 - **Service Ownership**: We own the Service and its content
-- **Trademarks**: Bondarys trademarks are our property
+- **Trademarks**: UniApps trademarks are our property
 - **Patents**: We may hold patents on our technology
 - **Copyright**: All content is protected by copyright
 
@@ -205,7 +205,7 @@ We will indemnify you from:
 You may terminate your account at any time by:
 - **Account Settings**: Deleting your account through settings
 - **Contact Support**: Contacting customer support
-- **Email Request**: Sending email to support@bondarys.com
+- **Email Request**: Sending email to support@uniapps.com
 
 ### 10.2 Termination by Us
 We may terminate your account for:
@@ -291,20 +291,21 @@ Notices must be in writing and sent to the addresses provided.
 ## 15. Contact Information
 
 ### 15.1 General Contact
-- **Email**: support@bondarys.com
+- **Email**: support@uniapps.com
+- **Email**: support@uniapps.com
 - **Phone**: [Phone Number]
 - **Address**: [Company Address]
-- **Website**: https://bondarys.com
+- **Website**: https://uniapps.com
 
 ### 15.2 Legal Contact
-- **Legal Email**: legal@bondarys.com
+- **Legal Email**: legal@uniapps.com
 - **Legal Address**: [Legal Address]
 - **Legal Phone**: [Legal Phone Number]
 
 ### 15.3 Privacy Contact
-- **Privacy Email**: privacy@bondarys.com
-- **DPO Email**: dpo@bondarys.com
+- **Privacy Email**: privacy@uniapps.com
+- **DPO Email**: dpo@uniapps.com
 
 ---
 
-**These Terms of Service are effective as of January 1, 2024. By using Bondarys, you agree to these terms and our Privacy Policy.** 
+**These Terms of Service are effective as of January 1, 2024. By using UniApps, you agree to these terms and our Privacy Policy.**

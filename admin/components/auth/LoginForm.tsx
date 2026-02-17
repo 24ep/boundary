@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { authService } from '../../services/authService'
@@ -519,7 +519,7 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
         {/* Footer */}
         <div className="mt-8 text-center space-y-2">
           <p className="text-white/30 text-xs">
-            © 2024 Appkit. Secure Admin Portal
+            © 2024 AppKit. Secure Admin Portal
           </p>
           <div className="flex items-center justify-center gap-4 text-xs">
             <a href="#" className="text-white/40 hover:text-white/70 transition-colors">Privacy</a>

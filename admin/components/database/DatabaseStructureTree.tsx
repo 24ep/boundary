@@ -74,7 +74,7 @@ const getColumnIcon = (type: string) => {
 const SCHEMA_DESCRIPTIONS: Record<string, string> = {
     core: 'Core application tables - users, auth, sessions, settings',
     admin: 'Admin panel tables - admin users, roles, permissions, audit',
-    bondarys: 'Bondarys app-specific tables - circles, social, notes, etc.',
+    bondarys: 'AppKit app-specific tables - circles, social, notes, etc.',
     public: 'Public/system tables',
 };
 

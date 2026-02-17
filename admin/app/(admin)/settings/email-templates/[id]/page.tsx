@@ -51,7 +51,7 @@ function getAuthToken(): string | null {
 export default function EmailTemplateEditorPage() {
   const router = useRouter()
   const params = useParams()
-  const templateId = params.id as string
+  const templateId = params?.id as string
   const isNew = templateId === 'new'
 
   const [loading, setLoading] = useState(!isNew)
@@ -154,7 +154,7 @@ export default function EmailTemplateEditorPage() {
       // For new templates, render locally
       let html = template.htmlContent || ''
       let subject = template.subject || ''
-      const data = { ...template.sampleData, year: new Date().getFullYear().toString(), appName: 'Bondarys' }
+      const data = { ...template.sampleData, year: new Date().getFullYear().toString(), appName: 'AppKit' }
       
       // Simple variable replacement
       Object.entries(data).forEach(([key, value]) => {

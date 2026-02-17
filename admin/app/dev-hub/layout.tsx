@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import React from 'react'
 import Link from 'next/link'
@@ -86,9 +86,9 @@ export default function DevHubLayout({ children }: { children: React.ReactNode }
           <div className="flex items-center gap-6 text-sm font-medium">
             <Link href="/dev-hub" className="flex items-center gap-2 transition-colors hover:text-blue-600">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 font-bold text-white shadow-lg shadow-blue-500/25">
-                B
+                A
               </div>
-              <span className="hidden font-bold sm:inline-block text-lg tracking-tight">Boundary Docs</span>
+              <span className="hidden font-bold sm:inline-block text-lg tracking-tight">AppKit Docs</span>
             </Link>
             <nav className="flex items-center gap-6 hidden md:flex">
               <Link href="/identity/login-config" className="text-slate-500 hover:text-slate-900 transition-colors">Configuration</Link>
