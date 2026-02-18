@@ -29,7 +29,8 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copy package.json and install production dependencies
-COPY appkit/package.json appkit/package-lock.json* ./
+# Copy package.json and install production dependencies
+COPY --from=deps /app/package.json /app/package-lock.json ./
 RUN npm ci --omit=dev
 
 # Copy built artifacts
