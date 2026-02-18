@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "dev:admin": "npm run dev --workspace=admin",
+    "start:admin": "npm run start --workspace=admin",
     "dev:backend-admin": "npm run dev --workspace=backend-admin",
     "dev:backend-mobile": "npm run dev --workspace=backend-mobile",
     "dev:boundary-app": "npm run start --workspace=boundary-app",
