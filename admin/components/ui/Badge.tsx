@@ -4,7 +4,7 @@ import { HTMLAttributes, forwardRef } from 'react'
 import { clsx } from 'clsx'
 
 interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  variant?: 'default' | 'success' | 'warning' | 'error' | 'info' | 'outline'
+  variant?: 'default' | 'success' | 'warning' | 'error' | 'info' | 'outline' | 'secondary' | 'destructive'
   size?: 'sm' | 'md' | 'lg'
 }
 
@@ -19,6 +19,8 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
       error: 'bg-red-50 text-red-700 border border-red-200/50',
       info: 'bg-blue-50 text-blue-700 border border-blue-200/50',
       outline: 'bg-transparent text-gray-700 border border-gray-200',
+      secondary: 'bg-blue-100 text-blue-700',
+      destructive: 'bg-red-100 text-red-700',
     }
     
     const sizes = {

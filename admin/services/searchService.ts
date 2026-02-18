@@ -38,7 +38,7 @@ class SearchService {
     try {
       // Search users
       try {
-        const users = await userService.getUsers()
+        const { users } = await userService.getUsers()
         const userResults = users
           .filter(user => 
             user.firstName.toLowerCase().includes(searchTerm) ||

@@ -95,8 +95,8 @@ function LoginPageContent() {
   // Load SSO providers from identity service
   const loadSSOProviders = async () => {
     try {
-      const providers = await identityService.getOAuthProviders()
-      setSsoProviders(providers.filter((p: any) => p.isEnabled))
+      const { providers } = await identityService.getOAuthProviders()
+      setSsoProviders((providers || []).filter((p: any) => p.isEnabled))
     } catch (error) {
       console.error('Failed to load SSO providers:', error)
     }

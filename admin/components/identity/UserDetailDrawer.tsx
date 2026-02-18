@@ -89,9 +89,8 @@ export const UserDetailDrawer: React.FC<UserDetailDrawerProps> = ({ userId, onCl
         try {
             const data = await userService.getUserById(id);
             setUser(data || null);
-            // Set current role if exists
-            if (data?.roleId) {
-                setSelectedRoleId(data.roleId);
+            if (data?.role) {
+                setSelectedRoleId(data.role);
             }
         } catch (e) {
             toast({ title: "Error", description: "Failed to load user details", variant: "destructive" });
@@ -186,12 +185,8 @@ export const UserDetailDrawer: React.FC<UserDetailDrawerProps> = ({ userId, onCl
     
     const handleToggleDeviceTrust = async (deviceId: string, currentlyTrusted: boolean) => {
         try {
-            if (currentlyTrusted) {
-                await identityService.blockDevice(deviceId);
-            } else {
-                await identityService.trustDevice(deviceId);
-            }
-            toast({ title: "Success", description: currentlyTrusted ? "Device blocked" : "Device trusted" });
+            await identityService.trustDevice(deviceId, !currentlyTrusted);
+            toast({ title: "Success", description: currentlyTrusted ? "Device verification removed" : "Device trusted" });
             loadDevices();
         } catch (e) {
             toast({ title: "Error", description: "Failed to update device", variant: "destructive" });
@@ -223,8 +218,8 @@ export const UserDetailDrawer: React.FC<UserDetailDrawerProps> = ({ userId, onCl
     const handleGenerateBackupCodes = async () => {
         if (!userId || !confirm('Generate new backup codes? This will invalidate any existing codes.')) return;
         try {
-            const { backupCodes } = await identityService.generateBackupCodes(userId);
-            alert(`New backup codes generated:\n\n${backupCodes.join('\n')}\n\nShare these with the user securely.`);
+            const { codes } = await identityService.generateBackupCodes(userId);
+            alert(`New backup codes generated:\n\n${codes.join('\n')}\n\nShare these with the user securely.`);
         } catch (e) {
             toast({ title: "Error", description: "Failed to generate backup codes", variant: "destructive" });
         }

@@ -42,8 +42,8 @@ interface Ticket {
     id: string
     name: string
     email: string
-    CircleId: string
-    CircleName: string
+    circleId: string
+    circleName: string
   }
   assignedTo?: {
     id: string
@@ -271,40 +271,43 @@ export function TicketManagement() {
                 className="pl-10"
               />
             </div>
-            <Select
+            <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Status' },
-                { value: 'open', label: 'Open' },
-                { value: 'in_progress', label: 'In Progress' },
-                { value: 'resolved', label: 'Resolved' },
-                { value: 'closed', label: 'Closed' }
-              ]}
-            />
-            <Select
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm bg-white"
+              title="Filter by status"
+            >
+              <option value="all">All Status</option>
+              <option value="open">Open</option>
+              <option value="in_progress">In Progress</option>
+              <option value="resolved">Resolved</option>
+              <option value="closed">Closed</option>
+            </select>
+            <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Types' },
-                { value: 'post_report', label: 'Post Report' },
-                { value: 'user_complaint', label: 'User Complaint' },
-                { value: 'technical_issue', label: 'Technical Issue' },
-                { value: 'feature_request', label: 'Feature Request' },
-                { value: 'other', label: 'Other' }
-              ]}
-            />
-            <Select
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm bg-white"
+              title="Filter by type"
+            >
+              <option value="all">All Types</option>
+              <option value="post_report">Post Report</option>
+              <option value="user_complaint">User Complaint</option>
+              <option value="technical_issue">Technical Issue</option>
+              <option value="feature_request">Feature Request</option>
+              <option value="other">Other</option>
+            </select>
+            <select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Priorities' },
-                { value: 'urgent', label: 'Urgent' },
-                { value: 'high', label: 'High' },
-                { value: 'medium', label: 'Medium' },
-                { value: 'low', label: 'Low' }
-              ]}
-            />
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm bg-white"
+              title="Filter by priority"
+            >
+              <option value="all">All Priorities</option>
+              <option value="urgent">Urgent</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
           </div>
         </CardBody>
       </Card>
@@ -402,7 +405,7 @@ export function TicketManagement() {
                           </div>
                           <div className="min-w-0">
                             <div className="font-medium text-sm text-gray-900 truncate">{ticket.reporter.name}</div>
-                            <div className="text-xs text-gray-500 truncate">{ticket.reporter.CircleName}</div>
+                            <div className="text-xs text-gray-500 truncate">{ticket.reporter.circleName}</div>
                           </div>
                         </div>
                       </td>
@@ -568,7 +571,7 @@ export function TicketManagement() {
                     <div className="space-y-1">
                       <div className="font-medium text-gray-900">{selectedTicket.reporter.name}</div>
                       <div className="text-sm text-gray-600">{selectedTicket.reporter.email}</div>
-                      <div className="text-sm text-gray-500">{selectedTicket.reporter.CircleName}</div>
+                      <div className="text-sm text-gray-500">{selectedTicket.reporter.circleName}</div>
                     </div>
                   </div>
 

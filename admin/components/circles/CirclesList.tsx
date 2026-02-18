@@ -64,7 +64,6 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
         ownerId: entity.ownerId || entity.owner_id,
         status: entity.status || 'active',
         memberCount: entity.attributes?.member_count || entity.data?.member_count || 0,
-        is_active: entity.status === 'active',
         owner: entity.attributes?.owner || entity.data?.owner
       }))
       setFamilies(circles)
@@ -78,11 +77,11 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
   const filteredFamilies = families.filter(Circle => {
     const matchesSearch = Circle.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                              (Circle.description && Circle.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                             (Circle.owner?.first_name && Circle.owner.first_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                             (Circle.owner?.last_name && Circle.owner.last_name.toLowerCase().includes(searchTerm.toLowerCase()))
+                             (Circle.owner?.firstName && Circle.owner.firstName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                             (Circle.owner?.lastName && Circle.owner.lastName.toLowerCase().includes(searchTerm.toLowerCase()))
     const matchesStatus = filterStatus === 'all' || 
-                          (filterStatus === 'active' && Circle.is_active) ||
-                          (filterStatus === 'inactive' && !Circle.is_active)
+                          (filterStatus === 'active' && Circle.status === 'active') ||
+                          (filterStatus === 'inactive' && Circle.status !== 'active')
     return matchesSearch && matchesStatus
   })
 
@@ -156,7 +155,7 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
               <div>
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Active</p>
                 <p className="text-3xl font-bold text-green-600">
-                  {families.filter(f => f.is_active).length}
+                  {families.filter(f => f.status === 'active').length}
                 </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -172,7 +171,7 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
               <div>
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Members</p>
                 <p className="text-3xl font-bold text-blue-600">
-                  {families.reduce((sum, f) => sum + f.member_count, 0)}
+                  {families.reduce((sum, f) => sum + f.memberCount, 0)}
                 </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -188,7 +187,7 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
               <div>
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Inactive</p>
                 <p className="text-3xl font-bold text-yellow-600">
-                  {families.filter(f => !f.is_active).length}
+                  {families.filter(f => f.status !== 'active').length}
                 </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -210,16 +209,18 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <Select
-              label="Status"
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Status' },
-                { value: 'active', label: 'Active' },
-                { value: 'inactive', label: 'Inactive' }
-              ]}
-            />
+            <div className="w-full">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="content-input w-full"
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
             <div className="flex items-end">
               <Button variant="secondary" className="w-full">
                 <FunnelIcon className="h-4 w-4 mr-2" aria-hidden="true" />
@@ -269,7 +270,7 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
                 <TableCell>
                   <div>
                     <div className="font-medium text-gray-900">
-                      {Circle.owner ? `${Circle.owner.first_name} ${Circle.owner.last_name}` : 'Unknown'}
+                      {Circle.owner ? `${Circle.owner.firstName} ${Circle.owner.lastName}` : 'Unknown'}
                     </div>
                     <div className="text-sm text-gray-500">{Circle.owner?.email || 'No email'}</div>
                   </div>
@@ -277,12 +278,12 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <UsersIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
-                    <span className="font-semibold text-gray-900">{Circle.member_count}</span>
+                    <span className="font-semibold text-gray-900">{Circle.memberCount}</span>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={Circle.is_active ? 'success' : 'warning'}>
-                    {Circle.is_active ? 'Active' : 'Inactive'}
+                  <Badge variant={Circle.status === 'active' ? 'success' : 'warning'}>
+                    {Circle.status === 'active' ? 'Active' : 'Inactive'}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -293,7 +294,7 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
                 </TableCell>
                 <TableCell>
                   <div className="text-sm text-gray-600">
-                    {new Date(Circle.updated_at).toLocaleDateString()}
+                    {new Date(Circle.updatedAt).toLocaleDateString()}
                   </div>
                 </TableCell>
                 <TableCell>
@@ -335,7 +336,7 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
         {selectedCircle && (
           <div className="space-y-6">
             <div className="text-sm text-gray-500">Circle ID: {selectedCircle.id}</div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card variant="default">
                 <CardBody>
@@ -346,8 +347,8 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
               <Card variant="default">
                 <CardBody>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-                  <Badge variant={selectedCircle.is_active ? 'success' : 'warning'}>
-                    {selectedCircle.is_active ? 'Active' : 'Inactive'}
+                  <Badge variant={selectedCircle.status === 'active' ? 'success' : 'warning'}>
+                    {selectedCircle.status === 'active' ? 'Active' : 'Inactive'}
                   </Badge>
                 </CardBody>
               </Card>
@@ -356,7 +357,7 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Owner</label>
                   <div>
                     <div className="font-semibold text-gray-900">
-                      {selectedCircle.owner ? `${selectedCircle.owner.first_name} ${selectedCircle.owner.last_name}` : 'Unknown'}
+                      {selectedCircle.owner ? `${selectedCircle.owner.firstName} ${selectedCircle.owner.lastName}` : 'Unknown'}
                     </div>
                     <div className="text-sm text-gray-500">{selectedCircle.owner?.email || 'No email'}</div>
                   </div>
@@ -367,7 +368,7 @@ export function FamiliesList({ onCircleClick }: FamiliesListProps) {
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Member Count</label>
                   <div className="flex items-center gap-2">
                     <UsersIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                    <span className="font-semibold text-gray-900 text-lg">{selectedCircle.member_count}</span>
+                    <span className="font-semibold text-gray-900 text-lg">{selectedCircle.memberCount}</span>
                   </div>
                 </CardBody>
               </Card>

@@ -439,38 +439,40 @@ export function CircleSafetyIncidents() {
                 className="pl-10"
               />
             </div>
-            <Select
+            <select
               value={filterCircle}
               onChange={(e) => setFilterCircle(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Families' },
-                ...families.map(Circle => ({ value: Circle.id, label: Circle.name }))
-              ]}
-            />
-            <Select
+              className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+            >
+              <option value="all">All Families</option>
+              {families.map(Circle => (
+                <option key={Circle.id} value={Circle.id}>{Circle.name}</option>
+              ))}
+            </select>
+            <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Types' },
-                { value: 'panic', label: 'Panic' },
-                { value: 'medical', label: 'Medical' },
-                { value: 'safety', label: 'Safety' },
-                { value: 'weather', label: 'Weather' },
-                { value: 'geofence', label: 'Geofence' },
-                { value: 'check-in', label: 'Check-in' }
-              ]}
-            />
-            <Select
+              className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+            >
+              <option value="all">All Types</option>
+              <option value="panic">Panic</option>
+              <option value="medical">Medical</option>
+              <option value="safety">Safety</option>
+              <option value="weather">Weather</option>
+              <option value="geofence">Geofence</option>
+              <option value="check-in">Check-in</option>
+            </select>
+            <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Status' },
-                { value: 'active', label: 'Active' },
-                { value: 'acknowledged', label: 'Acknowledged' },
-                { value: 'resolved', label: 'Resolved' },
-                { value: 'false_alarm', label: 'False Alarm' }
-              ]}
-            />
+              className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+            >
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="acknowledged">Acknowledged</option>
+              <option value="resolved">Resolved</option>
+              <option value="false_alarm">False Alarm</option>
+            </select>
           </div>
         </CardBody>
       </Card>

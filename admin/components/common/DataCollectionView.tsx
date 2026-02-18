@@ -794,14 +794,24 @@ function GenericForm({
         switch (field.type) {
             case 'select':
                 return (
-                    <Select
-                        label={field.label}
-                        value={value || field.defaultValue || ''}
-                        onChange={(e) => handleChange(field.key, e.target.value)}
-                        options={field.options || []}
-                        required={field.required}
-                        disabled={isReadonly}
-                    />
+                    <div className="space-y-1">
+                        <label className="block text-sm font-medium text-gray-700">
+                            {field.label}
+                            {field.required && <span className="text-red-500 ml-1">*</span>}
+                        </label>
+                        <select
+                            value={value || field.defaultValue || ''}
+                            onChange={(e) => handleChange(field.key, e.target.value)}
+                            disabled={isReadonly}
+                            required={field.required}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white text-sm"
+                        >
+                            <option value="">Select {field.label}...</option>
+                            {(field.options || []).map(opt => (
+                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                        </select>
+                    </div>
                 )
 
             case 'multiselect':

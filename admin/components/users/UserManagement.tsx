@@ -66,9 +66,9 @@ export function UserManagement() {
     email: '',
     phone: '',
     dateOfBirth: '',
-    userType: 'hourse' as 'hourse' | 'children' | 'seniors',
+    userType: 'circle' as 'circle' | 'children' | 'seniors',
     subscriptionTier: 'free' as 'free' | 'premium' | 'elite',
-    CircleIds: [] as string[],
+    circleIds: [] as string[],
     isOnboardingComplete: false,
     preferences: {
       notifications: true,
@@ -82,7 +82,7 @@ export function UserManagement() {
     },
     role: 'user' as 'admin' | 'moderator' | 'user' | 'Circle_admin',
     status: 'active' as 'active' | 'inactive' | 'pending' | 'suspended' | 'banned',
-    CircleId: '',
+    circleId: '',
     permissions: [] as string[]
   })
 
@@ -148,7 +148,7 @@ export function UserManagement() {
       type: 'select',
       options: [
         { id: 'all', label: 'All Types', value: 'all' },
-        { id: 'hourse', label: 'Hourse', value: 'hourse' },
+        { id: 'circle', label: 'Circle', value: 'circle' },
         { id: 'children', label: 'Children', value: 'children' },
         { id: 'seniors', label: 'Seniors', value: 'seniors' }
       ]
@@ -203,7 +203,7 @@ export function UserManagement() {
         { id: 'user', name: 'User', description: 'Basic user access', permissions: ['read'], color: '#2563EB' }
       ]
 
-      setUsers(usersData)
+      setUsers(usersData.users)
       setRoles(rolesData)
       setCircles(circlesData)
     } catch (error) {
@@ -282,7 +282,7 @@ export function UserManagement() {
     if (!selectedPlanId) return
     try {
       setBillingLoading(true)
-      const res = await billingService.updateSubscription(selectedPlanId)
+      const res = await billingService.updateSubscription(subscription.id, selectedPlanId)
       setSubscription(res.subscription)
       alert('Subscription updated')
     } catch (e) {
@@ -391,7 +391,7 @@ export function UserManagement() {
 
       const matchesRole = !activeFilters.role || activeFilters.role === 'all' || user.role === activeFilters.role
       const matchesStatus = !activeFilters.status || activeFilters.status === 'all' || user.status === activeFilters.status
-      const matchesCircle = !activeFilters.Circle || activeFilters.Circle === 'all' || user.CircleId === activeFilters.Circle
+      const matchesCircle = !activeFilters.Circle || activeFilters.Circle === 'all' || user.circleId === activeFilters.Circle
       const matchesVerified = !activeFilters.verified || activeFilters.verified === 'all' ||
         (activeFilters.verified === 'verified' && user.isVerified) ||
         (activeFilters.verified === 'unverified' && !user.isVerified)
@@ -458,9 +458,9 @@ export function UserManagement() {
       email: '',
       phone: '',
       dateOfBirth: '',
-      userType: 'hourse' as 'hourse' | 'children' | 'seniors',
+      userType: 'circle' as 'circle' | 'children' | 'seniors',
       subscriptionTier: 'free' as 'free' | 'premium' | 'elite',
-      CircleIds: [],
+      circleIds: [],
       isOnboardingComplete: false,
       preferences: {
         notifications: true,
@@ -474,7 +474,7 @@ export function UserManagement() {
       },
       role: 'user' as 'admin' | 'moderator' | 'user' | 'Circle_admin',
       status: 'active' as 'active' | 'inactive' | 'pending' | 'suspended' | 'banned',
-      CircleId: '',
+      circleId: '',
       permissions: []
     })
     setShowForm(true)
@@ -488,9 +488,9 @@ export function UserManagement() {
       email: user.email,
       phone: user.phone || '',
       dateOfBirth: user.dateOfBirth || '',
-      userType: user.userType,
-      subscriptionTier: user.subscriptionTier,
-      CircleIds: user.CircleIds || [],
+      userType: user.userType as any,
+      subscriptionTier: (user.subscriptionTier || 'free') as any,
+      circleIds: user.circleIds || [],
       isOnboardingComplete: user.isOnboardingComplete,
       preferences: user.preferences || {
         notifications: true,
@@ -502,9 +502,9 @@ export function UserManagement() {
           categories: ['announcement', 'promotion']
         }
       },
-      role: user.role,
+      role: user.role as any,
       status: user.status,
-      CircleId: user.CircleId || '',
+      circleId: user.circleId || '',
       permissions: user.permissions
     })
     setShowForm(true)
@@ -545,7 +545,7 @@ export function UserManagement() {
 
   const handleStatusChange = async (id: string, status: string) => {
     try {
-      const updatedUser = await userService.updateUserStatus(id, status)
+      const updatedUser = await userService.updateUser(id, { status: status as any })
       setUsers(prev => prev.map(user =>
         user.id === id ? updatedUser : user
       ))
@@ -965,8 +965,8 @@ export function UserManagement() {
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-12 w-12">
                           <div className="h-12 w-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center">
-                            {user.avatar ? (
-                              <img src={user.avatar} alt={user.firstName} className="h-12 w-12 rounded-xl object-cover" />
+                            {user.avatarUrl ? (
+                              <img src={user.avatarUrl} alt={user.firstName} className="h-12 w-12 rounded-xl object-cover" />
                             ) : (
                               <UserIcon className="h-6 w-6 text-gray-500" />
                             )}
@@ -1015,10 +1015,10 @@ export function UserManagement() {
                             {user.subscriptionTier}
                           </span>
                         </div>
-                        {user.location && (
+                        {user.attributes?.location && (
                           <div className="flex items-center gap-2 text-sm text-gray-500">
                             <MapPinIcon className="h-4 w-4 text-gray-400" />
-                            {user.location}
+                            {user.attributes.location}
                           </div>
                         )}
                       </div>
@@ -1053,10 +1053,10 @@ export function UserManagement() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      {user.CircleName ? (
+                      {user.circles && user.circles.length > 0 ? (
                         <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                           <UserGroupIcon className="h-3 w-3" />
-                          {user.CircleName}
+                          {user.circles[0].name}
                         </span>
                       ) : (
                         <span className="text-sm text-gray-400">No Circle</span>
@@ -1470,7 +1470,7 @@ export function UserManagement() {
                 onChange={(e) => setFormData({ ...formData, userType: e.target.value as any })}
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 bg-gray-100 focus:bg-white"
               >
-                <option value="hourse">Hourse</option>
+                <option value="circle">Circle</option>
                 <option value="children">Children</option>
                 <option value="seniors">Seniors</option>
               </select>
@@ -1586,8 +1586,8 @@ export function UserManagement() {
               Circle
             </label>
             <select
-              value={formData.CircleId}
-              onChange={(e) => setFormData({ ...formData, CircleId: e.target.value })}
+              value={formData.circleId}
+              onChange={(e) => setFormData({ ...formData, circleId: e.target.value })}
               className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 bg-gray-100 focus:bg-white"
             >
               <option value="">No Circle</option>

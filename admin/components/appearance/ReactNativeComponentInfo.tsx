@@ -290,11 +290,11 @@ export function ReactNativeComponentList({
     const [selectedCategory, setSelectedCategory] = useState<string>('all')
 
     // Get unique categories
-    const categories = ['all', ...new Set(
+    const categories = ['all', ...Array.from(new Set(
         components
             .filter(c => c.mobileConfig)
             .map(c => getCategoryFromPath(c.mobileConfig!.filePath))
-    )]
+    ))]
 
     // Filter components
     const filteredComponents = components.filter(c => {

@@ -9,7 +9,7 @@ import { toast } from '../../src/hooks/use-toast'
 import { ThemeExporter } from '../appearance/ThemeExporter'
 import { DevicePhoneMobileIcon } from '@heroicons/react/24/outline'
 
-import { BrandingConfig, CategoryConfig, ComponentStyle } from '../appearance/types'
+import { BrandingConfig, CategoryConfig, ComponentStyle, ColorValue } from '../appearance/types'
 import { BrandingSettings } from '../appearance/BrandingSettings'
 import { IdentitySettings } from '../appearance/IdentitySettings'
 import { SplashScreenSettings } from '../appearance/SplashScreenSettings'
@@ -468,7 +468,7 @@ export function AppearanceManager() {
                   if (!prev) return null
                   const updatedScreens = prev.screens?.map(s => s.id === screenId ? { 
                       ...s, 
-                      background: { mode: 'image', image: realUrl }
+                      background: { mode: 'image' as const, image: realUrl } as ColorValue
                   } : s) || []
                   
                   console.log('[AppearanceManager] Updated screen background:', {

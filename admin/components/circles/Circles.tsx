@@ -48,7 +48,6 @@ export function Families() {
         ownerId: entity.ownerId || entity.owner_id,
         status: entity.status || 'active',
         memberCount: entity.attributes?.member_count || entity.data?.member_count || 0,
-        is_active: entity.status === 'active',
         owner: entity.attributes?.owner || entity.data?.owner
       }))
       setFamilies(circles)
@@ -112,8 +111,8 @@ export function Families() {
     const q = query.toLowerCase()
     return families.filter(f => 
       f.name.toLowerCase().includes(q) || 
-      (f.owner?.first_name && f.owner.first_name.toLowerCase().includes(q)) ||
-      (f.owner?.last_name && f.owner.last_name.toLowerCase().includes(q)) ||
+      (f.owner?.firstName && f.owner.firstName.toLowerCase().includes(q)) ||
+      (f.owner?.lastName && f.owner.lastName.toLowerCase().includes(q)) ||
       (f.owner?.email && f.owner.email.toLowerCase().includes(q))
     )
   }, [families, query])
@@ -153,7 +152,7 @@ export function Families() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-3xl font-bold text-blue-600 mb-2">{families.reduce((a, f) => a + f.member_count, 0)}</div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">{families.reduce((a, f) => a + f.memberCount, 0)}</div>
               <div className="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Members</div>
             </div>
             <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
@@ -164,7 +163,7 @@ export function Families() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-3xl font-bold text-green-600 mb-2">{families.filter(f => f.is_active).length}</div>
+              <div className="text-3xl font-bold text-green-600 mb-2">{families.filter(f => f.status === 'active').length}</div>
               <div className="text-sm font-medium text-gray-600 uppercase tracking-wide">Active Families</div>
             </div>
             <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center">
@@ -250,7 +249,7 @@ export function Families() {
                   <div className="ml-4">
                     <div className="font-semibold text-gray-900 text-lg">{f.name}</div>
                     <div className="text-sm text-gray-500">
-                      Owner: {f.owner ? `${f.owner.first_name} ${f.owner.last_name}` : 'Unknown'}
+                      Owner: {f.owner ? `${f.owner.firstName} ${f.owner.lastName}` : 'Unknown'}
                     </div>
                     <div className="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-gray-100 text-gray-600 mt-1">
                       {f.type}
@@ -280,12 +279,12 @@ export function Families() {
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <UsersIcon className="h-4 w-4 text-gray-400" />
-                  <span className="font-medium">{f.member_count} members</span>
+                  <span className="font-medium">{f.memberCount} members</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <div className={`w-2 h-2 rounded-full ${f.is_active ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-                  <span className={`font-medium ${f.is_active ? 'text-green-600' : 'text-gray-600'}`}>
-                    {f.is_active ? 'Active' : 'Inactive'}
+                  <div className={`w-2 h-2 rounded-full ${f.status === 'active' ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                  <span className={`font-medium ${f.status === 'active' ? 'text-green-600' : 'text-gray-600'}`}>
+                    {f.status === 'active' ? 'Active' : 'Inactive'}
                   </span>
                 </div>
               </div>

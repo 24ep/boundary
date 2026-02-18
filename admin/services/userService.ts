@@ -168,6 +168,11 @@ class UserService {
         const response = await this.request<{ applications: Application[] }>('/admin/applications')
         return response.applications || []
     }
+
+    async getGlobalUsers(): Promise<GlobalUser[]> {
+        const response = await this.getUsers({ limit: 1000 })
+        return response.users || []
+    }
 }
 
 export const userService = new UserService()

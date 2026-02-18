@@ -29,6 +29,8 @@ export interface UserSession {
   revokedAt?: string;
   revokedBy?: string;
   revokeReason?: string;
+  location?: string;
+  isExpired: boolean;
 }
 
 export interface UserDevice {
@@ -56,6 +58,10 @@ export interface UserDevice {
   isBlocked: boolean;
   blockedAt?: string;
   blockedReason?: string;
+  osName?: string;
+  browserName?: string;
+  appVersion?: string;
+  createdAt: string;
 }
 
 export interface UserMFA {
@@ -68,8 +74,10 @@ export interface UserMFA {
   phoneNumber?: string;
   email?: string;
   backupCodesUsed: number;
+  backupCodesRemaining: number;
   lastUsedAt?: string;
   useCount: number;
+  createdAt: string;
 }
 
 export interface SecurityPolicy {
@@ -158,8 +166,11 @@ export interface UserGroup {
   id: string;
   applicationId?: string;
   name: string;
+  groupName?: string; // Compatibility with both name and groupName
   slug: string;
   description?: string;
+  groupType?: string;
+  isActive?: boolean;
   roleId?: string;
   permissions: string[];
   isSystem: boolean;
@@ -193,15 +204,33 @@ export interface IdentityAuditEntry {
 export interface UserAnalytics {
   totalUsers: number;
   activeUsers: number;
+  newRegistrations: number;
   newUsersToday: number;
   newUsersThisWeek: number;
   newUsersThisMonth: number;
   verifiedUsers: number;
   usersWithMFA: number;
-  loginsByMethod: Record<string, number>;
-  loginsByDay: { date: string; count: number }[];
+  mfaEnabledCount: number;
+  activeSessions: number;
+  totalDevices: number;
   failedLogins: number;
   suspiciousLogins: number;
+  loginStats: {
+    totalAttempts: number;
+    successful: number;
+    failed: number;
+    byMethod?: Record<string, number>;
+  };
+  loginsByMethod: Record<string, number>;
+  loginsByDay: { date: string; count: number }[];
+  topLocations?: { city: string; country: string; count: number }[];
+  topDevices?: { deviceType: string; count: number }[];
+  usersByStatus?: {
+    active: number;
+    pending: number;
+    suspended: number;
+    inactive: number;
+  };
 }
 
 const getAuthHeaders = () => {
@@ -889,6 +918,11 @@ export async function getIdentityAuditLog(options?: {
 // ANALYTICS
 // =====================================================
 
+export async function getGroupMembers(groupId: string): Promise<{ members: any[] }> {
+  const { members } = await getUserGroup(groupId);
+  return { members };
+}
+
 export async function getUserAnalytics(options?: {
   applicationId?: string;
   startDate?: string;
@@ -969,6 +1003,7 @@ export const identityService = {
   
   // Analytics
   getUserAnalytics,
+  getGroupMembers,
 };
 
 export default identityService;

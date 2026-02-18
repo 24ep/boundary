@@ -74,13 +74,13 @@ export function SocialMedia() {
         id: entity.id,
         name: entity.attributes?.name || entity.data?.name || '',
         description: entity.attributes?.description || entity.data?.description,
-        member_count: entity.attributes?.member_count || entity.data?.member_count || 0
+        memberCount: entity.attributes?.member_count || entity.data?.member_count || 0
       }))
       const allFamiliesOption: Circle = { 
         id: 'all', 
         name: 'All Families', 
         description: 'View all families', 
-        member_count: 0 
+        memberCount: 0 
       }
       setFamilies([allFamiliesOption, ...familiesData])
       setSelectedCircle('all')
@@ -95,7 +95,7 @@ export function SocialMedia() {
     try {
       // Load posts with filters
       const postsData = await socialMediaService.getPosts({
-        CircleId: selectedCircle,
+        circleId: selectedCircle,
         status: filterStatus !== 'all' ? filterStatus : undefined,
         type: filterType !== 'all' ? filterType : undefined,
         reported: filterReported === 'reported' ? true : filterReported === 'not_reported' ? false : undefined,
@@ -121,15 +121,15 @@ export function SocialMedia() {
   }
 
   const filteredPosts = posts.filter(post => {
-    const matchesCircle = selectedCircle === 'all' || post.Circle_id === selectedCircle
+    const matchesCircle = selectedCircle === 'all' || post.circleId === selectedCircle
     const matchesSearch = post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (post.author?.first_name + ' ' + post.author?.last_name).toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (post.author?.firstName + ' ' + post.author?.lastName).toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (post.tags || []).some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
     const matchesStatus = filterStatus === 'all' || post.status === filterStatus
     const matchesType = filterType === 'all' || post.type === filterType
     const matchesReported = filterReported === 'all' || 
-                           (filterReported === 'reported' && post.is_reported) ||
-                           (filterReported === 'not_reported' && !post.is_reported)
+                           (filterReported === 'reported' && post.isReported) ||
+                           (filterReported === 'not_reported' && !post.isReported)
     return matchesCircle && matchesSearch && matchesStatus && matchesType && matchesReported
   })
 
@@ -148,11 +148,11 @@ export function SocialMedia() {
       let updates: any = {}
       
       if (moderationAction === 'hide') {
-        updates = { is_hidden: true, status: 'hidden' }
+        updates = { isHidden: true, status: 'hidden' }
       } else if (moderationAction === 'delete') {
-        updates = { is_deleted: true, status: 'deleted' }
+        updates = { isDeleted: true, status: 'deleted' }
       } else if (moderationAction === 'approve') {
-        updates = { is_hidden: false, status: 'active' }
+        updates = { isHidden: false, status: 'active' }
       }
 
       const updatedPost = await socialMediaService.updatePost(selectedPost.id, updates)
@@ -222,15 +222,20 @@ export function SocialMedia() {
       {/* Circle Selection */}
       <Card variant="frosted">
         <CardBody>
-          <Select
-            label="Select Circle"
-            value={selectedCircle}
-            onChange={(e) => setSelectedCircle(e.target.value)}
-            options={families.map(Circle => ({
-              value: Circle.id,
-              label: `${Circle.name}${Circle.member_count > 0 ? ` (${Circle.member_count} members)` : ''}`
-            }))}
-          />
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-700">Select Circle</label>
+            <select
+              value={selectedCircle}
+              onChange={(e) => setSelectedCircle(e.target.value)}
+              className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+            >
+              {families.map(Circle => (
+                <option key={Circle.id} value={Circle.id}>
+                  {Circle.name}{Circle.memberCount > 0 ? ` (${Circle.memberCount} members)` : ''}
+                </option>
+              ))}
+            </select>
+          </div>
         </CardBody>
       </Card>
 
@@ -270,7 +275,7 @@ export function SocialMedia() {
               <div>
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Reported Posts</p>
                 <p className="text-3xl font-bold text-red-600">
-                  {posts.filter(p => p.is_reported).length}
+                  {posts.filter(p => p.isReported).length}
                 </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -285,7 +290,7 @@ export function SocialMedia() {
               <div>
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Engagement</p>
                 <p className="text-3xl font-bold text-orange-600">
-                  {posts.reduce((sum, post) => sum + post.likes_count + post.shares_count + post.comments_count, 0)}
+                  {posts.reduce((sum, post) => sum + (post.likesCount || 0) + (post.sharesCount || 0) + (post.commentsCount || 0), 0)}
                 </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -310,37 +315,37 @@ export function SocialMedia() {
                 className="pl-10"
               />
             </div>
-            <Select
+            <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Status' },
-                { value: 'active', label: 'Active' },
-                { value: 'hidden', label: 'Hidden' },
-                { value: 'deleted', label: 'Deleted' },
-                { value: 'under_review', label: 'Under Review' }
-              ]}
-            />
-            <Select
+              className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+            >
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="hidden">Hidden</option>
+              <option value="deleted">Deleted</option>
+              <option value="under_review">Under Review</option>
+            </select>
+            <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Types' },
-                { value: 'text', label: 'Text' },
-                { value: 'image', label: 'Image' },
-                { value: 'video', label: 'Video' },
-                { value: 'event', label: 'Event' }
-              ]}
-            />
-            <Select
+              className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+            >
+              <option value="all">All Types</option>
+              <option value="text">Text</option>
+              <option value="image">Image</option>
+              <option value="video">Video</option>
+              <option value="event">Event</option>
+            </select>
+            <select
               value={filterReported}
               onChange={(e) => setFilterReported(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Posts' },
-                { value: 'reported', label: 'Reported' },
-                { value: 'not_reported', label: 'Not Reported' }
-              ]}
-            />
+              className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+            >
+              <option value="all">All Posts</option>
+              <option value="reported">Reported</option>
+              <option value="not_reported">Not Reported</option>
+            </select>
           </div>
         </CardBody>
       </Card>
@@ -363,34 +368,34 @@ export function SocialMedia() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-10 h-10 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-                            {post.author?.avatar_url ? (
-                              <img src={post.author.avatar_url} alt={`${post.author.first_name} ${post.author.last_name}`} className="w-10 h-10 rounded-full" />
+                            {post.author?.avatarUrl ? (
+                              <img src={post.author.avatarUrl} alt={`${post.author.firstName} ${post.author.lastName}`} className="w-10 h-10 rounded-full" />
                             ) : (
                               <UserIcon className="h-6 w-6 text-gray-500" aria-hidden="true" />
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1 flex-wrap">
-                              <h4 className="text-base font-semibold text-gray-900 truncate">{post.author?.first_name} {post.author?.last_name}</h4>
-                              <Badge variant="info" size="sm">{post.Circle?.name}</Badge>
+                              <h4 className="text-base font-semibold text-gray-900 truncate">{post.author?.firstName} {post.author?.lastName}</h4>
+                              <Badge variant="info" size="sm">{post.circle?.name}</Badge>
                               <Badge variant={getStatusColor(post.status) === 'green' ? 'success' : getStatusColor(post.status) === 'yellow' ? 'warning' : getStatusColor(post.status) === 'red' ? 'error' : 'default'} size="sm">
                                 {post.status.replace('_', ' ')}
                               </Badge>
-                              {post.is_reported && (
-                                <Badge variant="error" size="sm">Reported ({post.report_count})</Badge>
+                              {post.isReported && (
+                                <Badge variant="error" size="sm">Reported ({post.reportCount})</Badge>
                               )}
-                              {post.is_hidden && (
+                              {post.isHidden && (
                                 <Badge variant="warning" size="sm">Hidden</Badge>
                               )}
                             </div>
                             <div className="flex items-center gap-4 text-sm text-gray-500 flex-wrap">
                               <span className="flex items-center gap-1.5">
                                 <CalendarIcon className="h-4 w-4" aria-hidden="true" />
-                                {new Date(post.created_at).toLocaleDateString()}
+                                {new Date(post.createdAt).toLocaleDateString()}
                               </span>
                               <span className="flex items-center gap-1.5">
                                 <EyeIcon className="h-4 w-4" aria-hidden="true" />
-                                {post.views_count} views
+                                {post.viewsCount} views
                               </span>
                               <span className="flex items-center gap-1.5">
                                 <UsersIcon className="h-4 w-4" aria-hidden="true" />
@@ -402,9 +407,9 @@ export function SocialMedia() {
                         
                         <div className="mb-3">
                           <p className="text-gray-800">{post.content}</p>
-                          {post.media_urls && post.media_urls.length > 0 && (
+                          {post.mediaUrls && post.mediaUrls.length > 0 && (
                             <div className="mt-3 grid grid-cols-2 gap-2">
-                              {post.media_urls.map((url, index) => (
+                              {post.mediaUrls.map((url, index) => (
                                 <img key={index} src={url} alt={`Media ${index + 1}`} className="w-full h-32 object-cover rounded-lg shadow-sm" />
                               ))}
                             </div>
@@ -414,15 +419,15 @@ export function SocialMedia() {
                         <div className="flex items-center gap-4 text-sm text-gray-500 mb-3 flex-wrap">
                           <span className="flex items-center gap-1.5">
                             <HeartIcon className="h-4 w-4" aria-hidden="true" />
-                            {post.likes_count} likes
+                            {post.likesCount} likes
                           </span>
                           <span className="flex items-center gap-1.5">
                             <ShareIcon className="h-4 w-4" aria-hidden="true" />
-                            {post.shares_count} shares
+                            {post.sharesCount} shares
                           </span>
                           <span className="flex items-center gap-1.5">
                             <ChatBubbleLeftRightIcon className="h-4 w-4" aria-hidden="true" />
-                            {post.comments_count} comments
+                            {post.commentsCount} comments
                           </span>
                         </div>
                         
@@ -499,11 +504,11 @@ export function SocialMedia() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-500">Author:</span>
-                  <span>{selectedPost.author?.first_name} {selectedPost.author?.last_name}</span>
+                  <span>{selectedPost.author?.firstName} {selectedPost.author?.lastName}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Circle:</span>
-                  <span>{selectedPost.Circle?.name}</span>
+                  <span>{selectedPost.circle?.name}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Type:</span>
@@ -521,26 +526,26 @@ export function SocialMedia() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Created:</span>
-                  <span>{new Date(selectedPost.created_at).toLocaleString()}</span>
+                  <span>{new Date(selectedPost.createdAt).toLocaleString()}</span>
                 </div>
               </div>
               
               <h4 className="font-medium text-gray-900 mb-2 mt-4">Engagement</h4>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="text-center p-2 bg-gray-50 rounded">
-                  <div className="text-lg font-semibold text-red-500">{selectedPost.likes_count}</div>
+                  <div className="text-lg font-semibold text-red-500">{selectedPost.likesCount}</div>
                   <div className="text-gray-500">Likes</div>
                 </div>
                 <div className="text-center p-2 bg-gray-50 rounded">
-                  <div className="text-lg font-semibold text-blue-500">{selectedPost.shares_count}</div>
+                  <div className="text-lg font-semibold text-blue-500">{selectedPost.sharesCount}</div>
                   <div className="text-gray-500">Shares</div>
                 </div>
                 <div className="text-center p-2 bg-gray-50 rounded">
-                  <div className="text-lg font-semibold text-green-500">{selectedPost.comments_count}</div>
+                  <div className="text-lg font-semibold text-green-500">{selectedPost.commentsCount}</div>
                   <div className="text-gray-500">Comments</div>
                 </div>
                 <div className="text-center p-2 bg-gray-50 rounded">
-                  <div className="text-lg font-semibold text-purple-500">{selectedPost.views_count}</div>
+                  <div className="text-lg font-semibold text-purple-500">{selectedPost.viewsCount}</div>
                   <div className="text-gray-500">Views</div>
                 </div>
               </div>
@@ -548,19 +553,19 @@ export function SocialMedia() {
             
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Reports</h4>
-              {reports.filter(r => r.post_id === selectedPost.id).length > 0 ? (
+              {reports.filter(r => r.postId === selectedPost.id).length > 0 ? (
                 <div className="space-y-2">
-                  {reports.filter(r => r.post_id === selectedPost.id).map(report => (
+                  {reports.filter(r => r.postId === selectedPost.id).map(report => (
                     <div key={report.id} className="border border-gray-200 rounded p-3">
                       <div className="flex justify-between items-start mb-1">
-                        <span className="font-medium">{report.reporter?.first_name} {report.reporter?.last_name}</span>
+                        <span className="font-medium">{report.reporter?.firstName} {report.reporter?.lastName}</span>
                         <span className={`badge badge-${getReportReasonColor(report.reason)}`}>
                           {report.reason}
                         </span>
                       </div>
                       <p className="text-sm text-gray-600">{report.description}</p>
                       <div className="text-xs text-gray-500 mt-1">
-                        {new Date(report.created_at).toLocaleString()}
+                        {new Date(report.createdAt).toLocaleString()}
                       </div>
                     </div>
                   ))}
@@ -571,12 +576,12 @@ export function SocialMedia() {
               
               <h4 className="font-medium text-gray-900 mb-2 mt-4">Recent Activity</h4>
               <div className="space-y-2 max-h-40 overflow-y-auto">
-                {activities.filter(a => a.post_id === selectedPost.id).slice(0, 5).map(activity => (
+                {activities.filter(a => a.postId === selectedPost.id).slice(0, 5).map(activity => (
                   <div key={activity.id} className="flex items-center gap-2 text-sm">
-                    <span className="font-medium">{activity.user?.first_name} {activity.user?.last_name}</span>
+                    <span className="font-medium">{activity.user?.firstName} {activity.user?.lastName}</span>
                     <span className="text-gray-500">{activity.action}</span>
                     <span className="text-gray-400 text-xs">
-                      {new Date(activity.created_at).toLocaleString()}
+                      {new Date(activity.createdAt).toLocaleString()}
                     </span>
                   </div>
                 ))}

@@ -266,25 +266,27 @@ export function AdminConsoleUsers() {
                 className="pl-10"
               />
             </div>
-            <Select
+            <select
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Roles' },
-                ...roles.map(role => ({ value: role.id, label: role.name }))
-              ]}
-            />
-            <Select
+              className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+            >
+              <option value="all">All Roles</option>
+              {roles.map(role => (
+                <option key={role.id} value={role.id}>{role.name}</option>
+              ))}
+            </select>
+            <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              options={[
-                { value: 'all', label: 'All Status' },
-                { value: 'active', label: 'Active' },
-                { value: 'inactive', label: 'Inactive' },
-                { value: 'pending', label: 'Pending' },
-                { value: 'suspended', label: 'Suspended' }
-              ]}
-            />
+              className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+            >
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="pending">Pending</option>
+              <option value="suspended">Suspended</option>
+            </select>
           </div>
         </CardBody>
       </Card>
@@ -386,17 +388,16 @@ export function AdminConsoleUsers() {
                           >
                             {user.status}
                           </Badge>
-                          <Select
+                          <select
                             value={user.status}
                             onChange={(e) => handleStatusChange(user.id, e.target.value)}
-                            className="text-xs"
-                            options={[
-                              { value: 'active', label: 'Active' },
-                              { value: 'inactive', label: 'Inactive' },
-                              { value: 'pending', label: 'Pending' },
-                              { value: 'suspended', label: 'Suspended' }
-                            ]}
-                          />
+                            className="macos-input text-xs px-2 py-1 rounded-lg border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                          >
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="pending">Pending</option>
+                            <option value="suspended">Suspended</option>
+                          </select>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -473,7 +474,7 @@ export function AdminConsoleUsers() {
                   ></div>
                   <h4 className="text-base font-semibold text-gray-900">{role.name}</h4>
                 </div>
-                {role.isSystem && (
+                {role.is_system && (
                   <Badge variant="info" size="sm">System</Badge>
                 )}
               </div>
@@ -496,7 +497,7 @@ export function AdminConsoleUsers() {
                   <PencilIcon className="h-4 w-4 mr-1" aria-hidden="true" />
                   Edit
                 </Button>
-                {!role.isSystem && (
+                {!role.is_system && (
                   <Button variant="ghost" size="sm">
                     <TrashIcon className="h-4 w-4 mr-1" aria-hidden="true" />
                     Delete
@@ -626,24 +627,32 @@ export function AdminConsoleUsers() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Select
-                  label="Role"
-                  value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value as any })}
-                  required
-                  options={roles.map(role => ({ value: role.id, label: role.name }))}
-                />
-                <Select
-                  label="Status"
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                  options={[
-                    { value: 'active', label: 'Active' },
-                    { value: 'inactive', label: 'Inactive' },
-                    { value: 'pending', label: 'Pending' },
-                    { value: 'suspended', label: 'Suspended' }
-                  ]}
-                />
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-700">Role</label>
+                  <select
+                    value={formData.role}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value as any })}
+                    required
+                    className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                  >
+                    {roles.map(role => (
+                      <option key={role.id} value={role.id}>{role.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-gray-700">Status</label>
+                  <select
+                    value={formData.status}
+                    onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                    className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="pending">Pending</option>
+                    <option value="suspended">Suspended</option>
+                  </select>
+                </div>
               </div>
 
               <Input

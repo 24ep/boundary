@@ -67,7 +67,7 @@ const auth = new AppKitAuth({
   appId: 'your-app-id'
 });`}
                                 </pre>
-                                <Button variant="ghost" size="icon" className="absolute top-2 right-2">
+                                <Button variant="ghost" size="sm" className="absolute top-2 right-2">
                                     <Copy className="h-4 w-4" />
                                 </Button>
                             </div>
@@ -95,7 +95,7 @@ if (auth.isAuthenticated) {
   console.log('User is logged in:', auth.user);
 }`}
                                 </pre>
-                                <Button variant="ghost" size="icon" className="absolute top-2 right-2">
+                                <Button variant="ghost" size="sm" className="absolute top-2 right-2">
                                     <Copy className="h-4 w-4" />
                                 </Button>
                             </div>

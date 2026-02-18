@@ -199,16 +199,16 @@ export function CircleDetail({ CircleId, onBackToFamilies }: CircleDetailProps) 
         id: CircleData.id,
         name: CircleData.name,
         description: CircleData.description || '',
-        memberCount: CircleData.member_count || membersData.length,
-        createdAt: CircleData.created_at,
-        lastActive: CircleData.updated_at || CircleData.created_at,
-        status: CircleData.is_active ? 'active' : 'inactive',
+        memberCount: CircleData.memberCount || membersData.length,
+        createdAt: CircleData.createdAt,
+        lastActive: CircleData.updatedAt || CircleData.createdAt,
+        status: CircleData.status === 'inactive' ? 'inactive' : 'active',
         owner: CircleData.owner ? {
           id: CircleData.owner.id,
-          name: `${CircleData.owner.first_name} ${CircleData.owner.last_name}`,
+          name: `${CircleData.owner.firstName} ${CircleData.owner.lastName}`,
           email: CircleData.owner.email
         } : {
-          id: CircleData.owner_id,
+          id: CircleData.ownerId,
           name: 'Unknown',
           email: ''
         },
@@ -218,13 +218,13 @@ export function CircleDetail({ CircleId, onBackToFamilies }: CircleDetailProps) 
           moderation: true
         },
         members: membersData.map(member => ({
-          id: member.user_id,
-          name: member.user ? `${member.user.first_name} ${member.user.last_name}` : 'Unknown',
+          id: member.userId,
+          name: member.user ? `${member.user.firstName} ${member.user.lastName}` : 'Unknown',
           email: member.user?.email || '',
           role: member.role,
-          avatar: member.user?.avatar_url,
-          joinedAt: member.joined_at,
-          lastActive: (member.user as any)?.created_at || member.joined_at, // Approximate
+          avatar: member.user?.avatarUrl,
+          joinedAt: member.joinedAt,
+          lastActive: (member.user as any)?.createdAt || member.joinedAt, // Approximate
           status: 'active' // Could be enhanced with actual status
         }))
       }

@@ -4,8 +4,8 @@ import { ButtonHTMLAttributes, ReactNode } from 'react'
 import { Tooltip } from './Tooltip'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'warning' | 'success'
-  size?: 'sm' | 'md' | 'lg'
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'warning' | 'success' | 'destructive'
+  size?: 'sm' | 'md' | 'lg' | 'icon'
   tooltip?: string
   children: ReactNode
   as?: 'button' | 'span'
@@ -30,12 +30,14 @@ export function Button({
     danger: 'bg-red-500 text-white hover:bg-red-600 active:bg-red-700 shadow-sm border border-transparent',
     warning: 'bg-yellow-500 text-white hover:bg-yellow-600 active:bg-yellow-700 shadow-sm border border-transparent',
     success: 'bg-green-500 text-white hover:bg-green-600 active:bg-green-700 shadow-sm border border-transparent',
+    destructive: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 shadow-sm border border-transparent',
   }
   
   const sizeStyles = {
     sm: 'px-3 py-1.5 text-xs rounded-md',
     md: 'px-4 py-2 text-sm rounded-lg',
     lg: 'px-6 py-3 text-base rounded-xl',
+    icon: 'p-2 rounded-md',
   }
 
   const Element = as === 'span' ? 'span' : 'button'

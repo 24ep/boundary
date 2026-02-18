@@ -672,7 +672,7 @@ export function StyleConfigPopover({
                                                                             <label className="text-[9px] text-gray-400 block text-center uppercase">{side[0]}</label>
                                                                             <input
                                                                                 type="text"
-                                                                                value={val}
+                                                                                value={val as any}
                                                                                 onChange={(e) => {
                                                                                     const num = parseInt(e.target.value) || 0;
                                                                                     handleUpdateComponentStyle(activeCategory.id, component.id, key, num);

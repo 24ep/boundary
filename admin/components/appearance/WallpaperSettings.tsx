@@ -129,7 +129,7 @@ export function WallpaperSettings({
                                     }
                                 >
                                     {/* Debug: Log the background URL */}
-                                    {activeScreen.background?.mode === 'image' && activeScreen.background.image && (
+                                    {typeof activeScreen.background === 'object' && activeScreen.background?.mode === 'image' && activeScreen.background.image && (
                                         <div className="absolute top-0 left-0 text-[8px] text-gray-400 bg-white/80 p-1 rounded z-20 opacity-0 hover:opacity-100 transition-opacity">
                                             {normalizeImageUrl(activeScreen.background.image)}
                                         </div>

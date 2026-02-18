@@ -245,15 +245,18 @@ export function Notes() {
         <CardBody>
           <div className="flex items-center gap-4">
             <label className="text-sm font-medium text-gray-700">Select Circle:</label>
-            <Select
+            <select
               value={selectedCircle}
               onChange={(e) => setSelectedCircle(e.target.value)}
-              options={families.map(Circle => ({
-                value: Circle.id,
-                label: `${Circle.name} (${Circle.memberCount} members)`
-              }))}
-              className="w-auto"
-            />
+              className="macos-input w-auto px-4 py-1.5 rounded-lg border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 text-sm"
+            >
+              <option value="">Select Circle</option>
+              {families.map(Circle => (
+                <option key={Circle.id} value={Circle.id}>
+                  {Circle.name} ({Circle.memberCount} members)
+                </option>
+              ))}
+            </select>
           </div>
         </CardBody>
       </Card>
@@ -330,31 +333,29 @@ export function Notes() {
                     className="pl-10"
                   />
                 </div>
-                <Select
+                <select
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
-                  options={[
-                    { value: 'all', label: 'All Categories' },
-                    { value: 'meeting', label: 'Meeting' },
-                    { value: 'recipe', label: 'Recipe' },
-                    { value: 'memory', label: 'Memory' },
-                    { value: 'reminder', label: 'Reminder' },
-                    { value: 'important', label: 'Important' },
-                    { value: 'other', label: 'Other' }
-                  ]}
-                  className="w-auto"
-                />
-                <Select
+                  className="macos-input w-auto px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 text-sm"
+                >
+                  <option value="all">All Categories</option>
+                  <option value="meeting">Meeting</option>
+                  <option value="recipe">Recipe</option>
+                  <option value="memory">Memory</option>
+                  <option value="reminder">Reminder</option>
+                  <option value="important">Important</option>
+                  <option value="other">Other</option>
+                </select>
+                <select
                   value={filterPriority}
                   onChange={(e) => setFilterPriority(e.target.value)}
-                  options={[
-                    { value: 'all', label: 'All Priorities' },
-                    { value: 'high', label: 'High Priority' },
-                    { value: 'medium', label: 'Medium Priority' },
-                    { value: 'low', label: 'Low Priority' }
-                  ]}
-                  className="w-auto"
-                />
+                  className="macos-input w-auto px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 text-sm"
+                >
+                  <option value="all">All Priorities</option>
+                  <option value="high">High Priority</option>
+                  <option value="medium">Medium Priority</option>
+                  <option value="low">Low Priority</option>
+                </select>
               </div>
             </CardBody>
           </Card>
@@ -502,30 +503,34 @@ export function Notes() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Select
-              label="Category"
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
-              options={[
-                { value: 'meeting', label: 'Meeting' },
-                { value: 'recipe', label: 'Recipe' },
-                { value: 'memory', label: 'Memory' },
-                { value: 'reminder', label: 'Reminder' },
-                { value: 'important', label: 'Important' },
-                { value: 'other', label: 'Other' }
-              ]}
-            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+              <select
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
+                className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+              >
+                <option value="meeting">Meeting</option>
+                <option value="recipe">Recipe</option>
+                <option value="memory">Memory</option>
+                <option value="reminder">Reminder</option>
+                <option value="important">Important</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
 
-            <Select
-              label="Priority"
-              value={formData.priority}
-              onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
-              options={[
-                { value: 'low', label: 'Low' },
-                { value: 'medium', label: 'Medium' },
-                { value: 'high', label: 'High' }
-              ]}
-            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+              <select
+                value={formData.priority}
+                onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
+                className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
           </div>
 
           <Input

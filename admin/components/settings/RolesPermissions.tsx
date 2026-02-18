@@ -25,15 +25,15 @@ export function RolesPermissions() {
   const addRole = async () => {
     const name = prompt('Role name')
     if (!name) return
-    const role = await adminService.createRole({ name, description: '', permissions: [], color: '#111827', isSystem: false })
-    setRoles(prev => [...prev, role])
+    const role = await adminService.createRole({ name, description: '', permission_ids: [] })
+    setRoles(prev => [...prev, role as unknown as Role])
   }
 
   const togglePerm = async (role: Role, permId: string) => {
     const has = role.permissions.includes(permId)
-    const updated = { ...role, permissions: has ? role.permissions.filter(p => p !== permId) : [...role.permissions, permId] }
-    const saved = await adminService.updateRole(role.id, { permissions: updated.permissions })
-    setRoles(prev => prev.map(r => (r.id === role.id ? saved : r)))
+    const updatedPerms = has ? role.permissions.filter(p => p !== permId) : [...role.permissions, permId]
+    const saved = await adminService.updateRole(role.id, { permission_ids: updatedPerms })
+    setRoles(prev => prev.map(r => (r.id === role.id ? (saved as unknown as Role) : r)))
   }
 
   return (
@@ -60,10 +60,10 @@ export function RolesPermissions() {
               <tr>
                 <th className="text-left px-4 py-2 text-xs text-gray-500 uppercase">Role</th>
                 {perms.map(p => (
-                  <th key={p.id} className="text-left px-4 py-2 text-xs text-gray-500 uppercase whitespace-nowrap">{p.name}</th>
+                  <th key={p.id} className="text-left px-4 py-2 text-xs text-gray-500 uppercase whitespace-nowrap">{p.module}:{p.action}</th>
                 ))}
-              </tr>
-            </thead>
+            </tr>
+          </thead>
             <tbody>
               {roles.map(role => (
                 <tr key={role.id} className="border-t border-gray-100">
