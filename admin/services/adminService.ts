@@ -506,20 +506,20 @@ class AdminService {
 
   // Authentication
   async login(email: string, password: string): Promise<{ token: string; user: AdminUser }> {
-    return this.request<{ token: string; user: AdminUser }>('/auth/login', {
+    return this.request<{ token: string; user: AdminUser }>('/admin/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     })
   }
 
   async logout(): Promise<void> {
-    return this.request<void>('/auth/logout', {
+    return this.request<void>('/admin/auth/logout', {
       method: 'POST',
     })
   }
 
   async getCurrentUser(): Promise<AdminUser> {
-    return this.request<AdminUser>('/auth/me')
+    return this.request<AdminUser>('/admin/auth/me')
   }
 
   // Families Management (Circles Collection)

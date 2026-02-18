@@ -108,7 +108,7 @@ function startServer() {
   app.use(errorHandler);
 
   async function initializeServices() {
-    const PORT = Number(process.env.PORT || process.env.ADMIN_PORT || 3001);
+    const PORT = Number(process.env.ADMIN_PORT || process.env.PORT || 3001);
     const HOST = '0.0.0.0'; // Essential for Railway and Docker
 
     try {

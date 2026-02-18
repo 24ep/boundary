@@ -22,6 +22,6 @@ start "Boundary-App" cmd /c "cd boundary-app && npm run web"
 echo --- All services are starting in separate windows ---
 echo Backend Admin:  http://localhost:3001
 echo Backend Mobile: http://localhost:4000
-echo Admin:          http://localhost:3001
-echo Boundary App:   http://localhost:8081
+echo Admin console:   http://localhost:3002
+echo Boundary App:   http://localhost:19006
 pause

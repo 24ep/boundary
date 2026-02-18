@@ -7,9 +7,7 @@
 cleanup() {
     echo -e "\n\033[1;31mShutting down all services...\033[0m"
     # Port-based cleanup as a safety net
-    fuser -k 3001/tcp 2>/dev/null
-    fuser -k 4000/tcp 2>/dev/null
-    fuser -k 8081/tcp 2>/dev/null
+    fuser -k 3001/tcp 3002/tcp 4000/tcp 19006/tcp 2>/dev/null
     # Kill background jobs
     kill $(jobs -p) 2>/dev/null
     exit
@@ -38,8 +36,8 @@ echo -e "\033[1;32m[4/4] Launching Boundary App (Expo)...\033[0m"
 echo -e "\033[1;36m--- Services are initializing ---\033[0m"
 echo -e "Backend Admin:  http://localhost:3001"
 echo -e "Backend Mobile: http://localhost:4000"
-echo -e "Admin:          http://localhost:3001"
-echo -e "Boundary App:   http://localhost:8081"
+echo -e "Admin Console:  http://localhost:3002"
+echo -e "Boundary App:   http://localhost:19006"
 echo -e "\n\033[1;33mPress Ctrl+C to stop all services.\033[0m\n"
 
 # Keep script alive
