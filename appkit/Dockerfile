@@ -33,7 +33,7 @@ RUN adduser --system --uid 1001 nextjs
 # Copy package.json and install production dependencies
 COPY --from=deps /app/package.json /app/package-lock.json ./
 COPY --from=deps /app/prisma ./prisma/
-RUN npm ci --omit=dev
+RUN ls -R prisma && npm ci --omit=dev
 
 # Copy built artifacts
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
