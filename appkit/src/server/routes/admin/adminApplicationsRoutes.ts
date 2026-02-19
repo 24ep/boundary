@@ -327,7 +327,7 @@ router.post(
     }).single('file'),
     async (req: any, res: Response) => {
         try {
-            const file = req.file as Express.Multer.File;
+            const file = req.file as any;
             if (!file) {
                 return res.status(400).json({ error: 'No file provided' });
             }
