@@ -24,6 +24,8 @@ const handle = app.getRequestHandler();
         await app.prepare();
         console.log('✅ Next.js prepared');
 
+        console.log('🔗 Database URL Configured:', process.env.DATABASE_URL ? `${process.env.DATABASE_URL.split('@')[1]} (Masked)` : 'MISSING');
+
         // Create the Express app from the backend code
         const server = await createApp();
         const httpServer = createServer(server);

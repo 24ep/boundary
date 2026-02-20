@@ -8,24 +8,14 @@
 // ============================================================================
 
 import { PrismaClient } from '@prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
-
 // Prevent multiple instances of Prisma Client in development
 declare global {
   // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 
-// Create the PostgreSQL adapter
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL,
-});
-
 export const prisma = global.prisma || new PrismaClient({
-  adapter,
-  log: process.env.NODE_ENV === 'development' 
-    ? ['query', 'error', 'warn'] 
-    : ['error'],
+  log: ['query', 'error', 'warn'],
 });
 
 if (process.env.NODE_ENV !== 'production') {
