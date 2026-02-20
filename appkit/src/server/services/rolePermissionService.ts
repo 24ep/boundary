@@ -83,7 +83,7 @@ export async function getPermissionById(id: string): Promise<Permission | null> 
   const result = await prisma.$queryRawUnsafe<any[]>(`
     SELECT id, module, action, description, created_at
     FROM admin.admin_permissions
-    WHERE id = $1
+    WHERE id = $1::uuid
   `, id);
   return result[0] || null;
 }
@@ -157,7 +157,7 @@ export async function getRoleById(id: string): Promise<RoleWithPermissions | nul
       COUNT(DISTINCT u.id) as user_count
     FROM admin.admin_roles r
     LEFT JOIN admin.admin_users u ON u.role_id = r.id AND u.is_active = true
-    WHERE r.id = $1
+    WHERE r.id = $1::uuid
     GROUP BY r.id
   `, id);
   
@@ -172,7 +172,7 @@ export async function getRoleById(id: string): Promise<RoleWithPermissions | nul
     SELECT p.id, p.module, p.action, p.description, p.created_at
     FROM admin.admin_permissions p
     JOIN admin.admin_role_permissions rp ON rp.permission_id = p.id
-    WHERE rp.role_id = $1
+    WHERE rp.role_id = $1::uuid
     ORDER BY p.module, p.action
   `, id);
   
@@ -294,7 +294,7 @@ export async function updateRole(id: string, data: {
       // Remove all existing permissions
       await tx.$queryRawUnsafe<any[]>(`
         DELETE FROM admin.admin_role_permissions
-        WHERE role_id = $1
+        WHERE role_id = $1::uuid
       `, id);
       
       // Add new permissions
@@ -331,7 +331,7 @@ export async function deleteRole(id: string): Promise<boolean> {
     throw new Error('Cannot delete role with assigned users');
   }
   
-  await prisma.$queryRawUnsafe<any[]>('DELETE FROM admin.admin_roles WHERE id = $1', id);
+  await prisma.$queryRawUnsafe<any[]>('DELETE FROM admin.admin_roles WHERE id = $1::uuid', id);
   return true;
 }
 
@@ -347,7 +347,7 @@ export async function getRolePermissions(roleId: string): Promise<Permission[]> 
     SELECT p.id, p.module, p.action, p.description, p.created_at
     FROM admin.admin_permissions p
     JOIN admin.admin_role_permissions rp ON rp.permission_id = p.id
-    WHERE rp.role_id = $1
+    WHERE rp.role_id = $1::uuid
     ORDER BY p.module, p.action
   `, roleId);
   return result;
@@ -370,7 +370,7 @@ export async function assignPermissionToRole(roleId: string, permissionId: strin
 export async function removePermissionFromRole(roleId: string, permissionId: string): Promise<void> {
   await prisma.$queryRawUnsafe<any[]>(`
     DELETE FROM admin.admin_role_permissions
-    WHERE role_id = $1 AND permission_id = $2
+    WHERE role_id = $1::uuid AND permission_id = $2::uuid
   `, roleId, permissionId);
 }
 
@@ -382,7 +382,7 @@ export async function setRolePermissions(roleId: string, permissionIds: string[]
     // Remove all existing permissions
     await tx.$queryRawUnsafe<any[]>(`
       DELETE FROM admin.admin_role_permissions
-      WHERE role_id = $1
+      WHERE role_id = $1::uuid
     `, roleId);
     
     // Add new permissions
@@ -413,7 +413,7 @@ export async function getUserRoleAndPermissions(userId: string): Promise<AdminUs
     SELECT u.id as user_id, r.id as role_id, r.name as role_name
     FROM admin.admin_users u
     LEFT JOIN admin.admin_roles r ON r.id = COALESCE(u.role_id, u.admin_role_id)
-    WHERE (u.id = $1 OR u.user_id = $1) AND u.is_active = true
+    WHERE (u.id = $1::uuid OR u.user_id = $1::uuid) AND u.is_active = true
   `, userId);
   
   if (userResult.length === 0) {
@@ -447,8 +447,8 @@ export async function getUserRoleAndPermissions(userId: string): Promise<AdminUs
 export async function assignRoleToUser(userId: string, roleId: string): Promise<void> {
   await prisma.$queryRawUnsafe<any[]>(`
     UPDATE admin.admin_users
-    SET role_id = $2, updated_at = NOW()
-    WHERE id = $1
+    SET role_id = $2::uuid, updated_at = NOW()
+    WHERE id = $1::uuid
   `, userId, roleId);
 }
 
@@ -461,7 +461,7 @@ export async function userHasPermission(
   action: string
 ): Promise<boolean> {
   const result = await prisma.$queryRawUnsafe<any[]>(`
-    SELECT admin_has_permission($1, $2, $3) as has_permission
+    SELECT admin_has_permission($1::uuid, $2, $3) as has_permission
   `, userId, module, action);
   
   return result[0]?.has_permission || false;
@@ -484,7 +484,7 @@ export async function getUserPermissions(userId: string): Promise<{ module: stri
       SELECT r.permissions
       FROM admin.admin_users u
       JOIN admin.admin_roles r ON r.id = u.role_id
-      WHERE u.id = $1 AND u.is_active = true
+      WHERE u.id = $1::uuid AND u.is_active = true
     `, userId);
     
     if (result.length > 0 && result[0].permissions) {
@@ -517,7 +517,7 @@ export async function userIsSuperAdmin(userId: string): Promise<boolean> {
       SELECT 1
       FROM admin.admin_users u
       LEFT JOIN admin.admin_roles r ON r.id = u.role_id
-      WHERE u.id = $1
+      WHERE u.id = $1::uuid
         AND u.is_active = true
         AND (
           u.is_super_admin = true
@@ -535,7 +535,7 @@ export async function userIsSuperAdmin(userId: string): Promise<boolean> {
     SELECT EXISTS (
       SELECT 1
       FROM core.users u
-      WHERE u.id = $1
+      WHERE u.id = $1::uuid
         AND u.is_active = true
         AND u.role IN ('admin', 'super_admin')
     ) as is_super_admin
