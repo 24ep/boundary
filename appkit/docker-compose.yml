@@ -12,6 +12,7 @@ services:
       - "${ADMIN_FRONTEND_PORT:-3002}:3001"
     environment:
       - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
       - BACKEND_ADMIN_URL=${BACKEND_ADMIN_URL:-http://host.docker.internal:3001}
     networks:
       - admin-net
