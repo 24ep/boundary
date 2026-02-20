@@ -16,10 +16,10 @@ const ensurePreferencesTable = async () => {
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
                 updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
                 UNIQUE(user_id, preference_key)
-            );
-            CREATE INDEX IF NOT EXISTS idx_preferences_user ON admin_user_preferences(user_id);
-            CREATE INDEX IF NOT EXISTS idx_preferences_key ON admin_user_preferences(preference_key);
+            )
         `);
+        await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS idx_preferences_user ON admin_user_preferences(user_id)`);
+        await prisma.$executeRawUnsafe(`CREATE INDEX IF NOT EXISTS idx_preferences_key ON admin_user_preferences(preference_key)`);
 
         // Migration: Ensure user_id is VARCHAR (handle legacy UUID columns)
         // Temporarily disabled to prevent server hanging

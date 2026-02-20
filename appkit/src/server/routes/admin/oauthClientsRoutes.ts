@@ -242,11 +242,11 @@ router.post('/', [
                     privacy_policy_url = COALESCE($3, privacy_policy_url),
                     terms_of_service_url = COALESCE($4, terms_of_service_url)
                 WHERE id = $5
-            `, [
-                req.body.access_token_lifetime,
-                req.body.refresh_token_lifetime,
-                req.body.privacy_policy_url,
-                req.body.terms_of_service_url,
+            `, ...[
+                req.body.access_token_lifetime ?? null,
+                req.body.refresh_token_lifetime ?? null,
+                req.body.privacy_policy_url ?? null,
+                req.body.terms_of_service_url ?? null,
                 result.client.id
             ]);
         }
@@ -328,7 +328,7 @@ router.put('/:id', [
         const rowCount = await prisma.$executeRawUnsafe(`
             UPDATE oauth_clients SET ${updates.join(', ')}
             WHERE id = $${paramIndex}
-        `, params);
+        `, ...params);
         
         if (rowCount === 0) {
             return res.status(404).json({ error: 'OAuth client not found' });
@@ -442,7 +442,7 @@ router.get('/:id/consents', [
             WHERE uc.client_id = $1
             ORDER BY uc.granted_at DESC
             LIMIT $2 OFFSET $3
-        `, [req.params.id, limit, offset]);
+        `, req.params.id, limit, offset);
         
         const countResult = await prisma.$queryRawUnsafe<Array<{ count: bigint }>>(
             'SELECT COUNT(*) FROM oauth_user_consents WHERE client_id = $1',
@@ -576,7 +576,7 @@ router.get('/audit-log', [
             ${whereClause}
             ORDER BY ol.created_at DESC
             LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
-        `, [...params, limit, offset]);
+        `, ...params, limit, offset);
         
         const countResult = await prisma.$queryRawUnsafe<Array<{ count: bigint }>>(
             `SELECT COUNT(*) FROM oauth_audit_log ol ${whereClause}`,
