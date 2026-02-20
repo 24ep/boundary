@@ -56,10 +56,10 @@ router.get('/:key', authenticateAdmin as any, async (req: AdminRequest, res: Res
             return res.status(401).json({ error: 'Not authenticated' });
         }
 
-        const rows = await prisma.$queryRawUnsafe<any[]>(
+        const rows = await prisma.$queryRawUnsafe(
             `SELECT preference_value FROM admin_user_preferences WHERE user_id = $1 AND preference_key = $2`,
             userId, key
-        );
+        ) as any[];
 
         if (rows.length === 0) {
             return res.json({ value: null });
@@ -129,10 +129,10 @@ router.get('/', authenticateAdmin as any, async (req: AdminRequest, res: Respons
             return res.status(401).json({ error: 'Not authenticated' });
         }
 
-        const rows = await prisma.$queryRawUnsafe<any[]>(
+        const rows = await prisma.$queryRawUnsafe(
             `SELECT preference_key, preference_value FROM admin_user_preferences WHERE user_id = $1`,
             userId
-        );
+        ) as any[];
 
         const preferences: Record<string, any> = {};
         rows.forEach(row => {
