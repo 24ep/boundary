@@ -7,6 +7,8 @@ import authRoutes from '../admin/authRoutes';
 import entityRoutes from '../admin/entityRoutes';
 import uploadRoutes from '../admin/uploadRoutes';
 import dashboardRoutes from '../admin/dashboardRoutes';
+import identityRoutes from '../admin/identityRoutes';
+import legalRoutes from '../admin/legalRoutes';
 
 const router = Router();
 
@@ -17,5 +19,7 @@ router.use('/admin/auth', authRoutes);
 router.use('/admin', entityRoutes); // Entity types, settings, broadcast, etc.
 router.use('/admin', uploadRoutes); // File upload system
 router.use('/admin', dashboardRoutes); // Dashboard statistics
+router.use('/admin/identity', identityRoutes); // Identity management
+router.use('/admin/legal', legalRoutes); // Legal documents
 
 export default router;
