@@ -10,7 +10,7 @@ echo "🔄 Synchronizing database schema..."
 npx prisma db push --accept-data-loss --skip-generate
 
 echo "🌱 Seeding administrative user..."
-npx ts-node scripts/seed-admin.ts
+node scripts/seed-admin.js
 
 echo "✅ Database synchronization and seeding complete."
 
