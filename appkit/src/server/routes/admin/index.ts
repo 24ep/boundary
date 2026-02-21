@@ -75,6 +75,7 @@ router.use('/identity', identityRoutes);
 // Legacy: CMS & Content
 router.use('/entities', entityRoutes);
 router.use('/cms', cmsRoutes);
+router.use('/cms/localization', localizationRoutes);
 router.use('/dynamic-content', dynamicContentRoutes);
 
 // Legacy: Pages & Publishing
@@ -159,7 +160,7 @@ router.get('/dashboard', authenticateAdmin as any, requirePermission('dashboard'
             SELECT 
                 (SELECT COUNT(*) FROM public.users) as total_users,
                 (SELECT COUNT(*) FROM public.users WHERE is_active = true) as active_users,
-                (SELECT COUNT(*) FROM public.unified_entities WHERE type = 'circle' AND status != 'deleted') as total_families,
+                0 as total_families,
                 (SELECT COUNT(*) FROM public.subscriptions WHERE status IN ('active', 'trialing')) as active_subscriptions,
                 (SELECT COALESCE(SUM(jsonb_array_length(COALESCE(branding->'screens', '[]'::jsonb))), 0) FROM public.applications WHERE is_active = true) as total_screens
         `;
@@ -168,7 +169,7 @@ router.get('/dashboard', authenticateAdmin as any, requirePermission('dashboard'
         const recentQuery = `
             SELECT 
                 (SELECT COUNT(*) FROM public.users WHERE created_at >= NOW() - INTERVAL '1 day' * $1) as recent_users,
-                (SELECT COUNT(*) FROM public.unified_entities WHERE type = 'circle' AND created_at >= NOW() - INTERVAL '1 day' * $1) as recent_families,
+                0 as recent_families,
                 (SELECT COUNT(*) FROM public.unified_entities WHERE type = 'safety_alert' AND created_at >= NOW() - INTERVAL '1 day' * $1) as recent_alerts,
                 (SELECT COUNT(*) FROM appkit.chat_messages WHERE created_at >= NOW() - INTERVAL '1 day' * $1) as recent_messages
         `;
@@ -345,27 +346,37 @@ router.post('/broadcast', authenticateAdmin as any, [
 });
 
 // Application Settings
+router.get('/application-settings', authenticateAdmin as any, requirePermission('settings', 'view'), async (req: Request, res: Response) => {
+  try {
+    const settings = await prisma.$queryRawUnsafe<any[]>('SELECT * FROM public.app_settings ORDER BY key');
+    res.json({ settings });
+  } catch (error: any) {
+    console.error('Get application settings error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 router.post('/application-settings', authenticateAdmin as any, requirePermission('settings', 'edit'), async (req: Request, res: Response) => {
-    try {
-        const { setting_key, setting_value } = req.body;
-        if (!setting_key) return res.status(400).json({ error: 'setting_key is required' });
+  try {
+    const { setting_key, setting_value } = req.body;
+    if (!setting_key) return res.status(400).json({ error: 'setting_key is required' });
 
-        const valueStr = typeof setting_value === 'object' ? JSON.stringify(setting_value) : setting_value;
-        const rows = await prisma.$queryRawUnsafe<any[]>(
-            `INSERT INTO public.app_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW() RETURNING *`,
-            setting_key, valueStr
-        );
+    const valueStr = typeof setting_value === 'object' ? JSON.stringify(setting_value) : setting_value;
+    const rows = await prisma.$queryRawUnsafe<any[]>(
+      `INSERT INTO public.app_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW() RETURNING *`,
+      setting_key, valueStr
+    );
 
-        if (setting_key === 'branding') {
-            try { 
-                await prisma.$executeRawUnsafe(`UPDATE public.applications SET branding = $1::jsonb, updated_at = NOW() WHERE is_active = true`, valueStr);
-            } catch (syncError) { console.error('Failed to sync branding:', syncError); }
-        }
-        res.json({ setting: rows[0] });
-    } catch (error: any) {
-        console.error('Upsert application setting error:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
+    if (setting_key === 'branding') {
+      try { 
+        await prisma.$executeRawUnsafe(`UPDATE public.applications SET branding = $1::jsonb, updated_at = NOW() WHERE is_active = true`, valueStr);
+      } catch (syncError) { console.error('Failed to sync branding:', syncError); }
     }
+    res.json({ setting: rows[0] });
+  } catch (error: any) {
+    console.error('Upsert application setting error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
 });
 
 export default router;

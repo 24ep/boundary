@@ -207,6 +207,10 @@ class AdminService {
   }
 
   // Application Settings
+  async getApplicationSettings(): Promise<{ settings: any[] }> {
+    return this.request<any>('/admin/application-settings');
+  }
+
   async upsertApplicationSetting(data: {
     setting_key: string;
     setting_value: any;

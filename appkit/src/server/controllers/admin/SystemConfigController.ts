@@ -85,4 +85,27 @@ export class SystemConfigController {
       return res.status(400).json({ error: error.message });
     }
   }
+
+  async getBrandingConfig(req: Request, res: Response) {
+    try {
+      const config = await prisma.systemConfig.findUnique({ where: { key: 'branding' } });
+      return res.json({ branding: config?.value || {} });
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
+  async updateBrandingConfig(req: Request, res: Response) {
+    try {
+      const { branding } = req.body;
+      const updated = await prisma.systemConfig.upsert({
+        where: { key: 'branding' },
+        update: { value: branding },
+        create: { key: 'branding', value: branding }
+      });
+      return res.json({ branding: updated.value });
+    } catch (error: any) {
+      return res.status(400).json({ error: error.message });
+    }
+  }
 }

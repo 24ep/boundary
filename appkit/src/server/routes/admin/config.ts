@@ -20,4 +20,8 @@ router.delete('/:key', requirePermission('settings', 'delete'), (req, res) => co
 router.get('/manager-signup', requirePermission('settings', 'view'), (req, res) => controller.getManagerSignupConfig(req, res));
 router.post('/manager-signup', requirePermission('settings', 'edit'), (req, res) => controller.updateManagerSignupConfig(req, res));
 
+// Branding Routes
+router.get('/branding', requirePermission('settings', 'view'), (req, res) => controller.getBrandingConfig(req, res));
+router.put('/branding', requirePermission('settings', 'edit'), (req, res) => controller.updateBrandingConfig(req, res));
+
 export default router;
