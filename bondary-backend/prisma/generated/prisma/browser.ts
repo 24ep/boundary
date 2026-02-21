@@ -302,3 +302,23 @@ export type Note = Prisma.NoteModel
  * 
  */
 export type Todo = Prisma.TodoModel
+/**
+ * Model SocialReport
+ * 
+ */
+export type SocialReport = Prisma.SocialReportModel
+/**
+ * Model SocialActivity
+ * 
+ */
+export type SocialActivity = Prisma.SocialActivityModel
+/**
+ * Model SocialCommentLike
+ * 
+ */
+export type SocialCommentLike = Prisma.SocialCommentLikeModel
+/**
+ * Model EntityRelation
+ * 
+ */
+export type EntityRelation = Prisma.EntityRelationModel

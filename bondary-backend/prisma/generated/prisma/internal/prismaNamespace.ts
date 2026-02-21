@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.3.0
- * Query Engine version: 9d6ad21cbbceab97458517b147a6a09ff43aa735
+ * Prisma Client JS version: 7.4.0
+ * Query Engine version: ab56fe763f921d033a6c195e7ddeb3e255bdbb57
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.3.0",
-  engine: "9d6ad21cbbceab97458517b147a6a09ff43aa735"
+  client: "7.4.0",
+  engine: "ab56fe763f921d033a6c195e7ddeb3e255bdbb57"
 }
 
 /**
@@ -440,7 +440,11 @@ export const ModelName = {
   Geofence: 'Geofence',
   LocationShare: 'LocationShare',
   Note: 'Note',
-  Todo: 'Todo'
+  Todo: 'Todo',
+  SocialReport: 'SocialReport',
+  SocialActivity: 'SocialActivity',
+  SocialCommentLike: 'SocialCommentLike',
+  EntityRelation: 'EntityRelation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -456,7 +460,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "application" | "user" | "userApplication" | "country" | "language" | "currency" | "userSession" | "userDevice" | "userMFA" | "securityPolicy" | "userGroup" | "userGroupMember" | "identityAuditLog" | "oAuthProvider" | "loginHistory" | "userSettings" | "file" | "fileFolder" | "galleryItem" | "galleryAlbum" | "notification" | "userPushToken" | "emailTemplate" | "subscriptionPlan" | "subscription" | "systemConfig" | "appSetting" | "adminUser" | "adminRole" | "adminPermission" | "adminRolePermission" | "adminUserApplication" | "adminActivityLog" | "auditLog" | "circleType" | "circle" | "circleMember" | "circleInvitation" | "emergencyContact" | "safetyIncident" | "socialPost" | "socialComment" | "socialReaction" | "socialStory" | "socialStoryView" | "userFollow" | "friendRequest" | "chatRoom" | "chatParticipant" | "chatMessage" | "chatReadReceipt" | "chatReaction" | "userLocation" | "geofence" | "locationShare" | "note" | "todo"
+    modelProps: "application" | "user" | "userApplication" | "country" | "language" | "currency" | "userSession" | "userDevice" | "userMFA" | "securityPolicy" | "userGroup" | "userGroupMember" | "identityAuditLog" | "oAuthProvider" | "loginHistory" | "userSettings" | "file" | "fileFolder" | "galleryItem" | "galleryAlbum" | "notification" | "userPushToken" | "emailTemplate" | "subscriptionPlan" | "subscription" | "systemConfig" | "appSetting" | "adminUser" | "adminRole" | "adminPermission" | "adminRolePermission" | "adminUserApplication" | "adminActivityLog" | "auditLog" | "circleType" | "circle" | "circleMember" | "circleInvitation" | "emergencyContact" | "safetyIncident" | "socialPost" | "socialComment" | "socialReaction" | "socialStory" | "socialStoryView" | "userFollow" | "friendRequest" | "chatRoom" | "chatParticipant" | "chatMessage" | "chatReadReceipt" | "chatReaction" | "userLocation" | "geofence" | "locationShare" | "note" | "todo" | "socialReport" | "socialActivity" | "socialCommentLike" | "entityRelation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4678,6 +4682,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SocialReport: {
+      payload: Prisma.$SocialReportPayload<ExtArgs>
+      fields: Prisma.SocialReportFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SocialReportFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialReportPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SocialReportFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialReportPayload>
+        }
+        findFirst: {
+          args: Prisma.SocialReportFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialReportPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SocialReportFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialReportPayload>
+        }
+        findMany: {
+          args: Prisma.SocialReportFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialReportPayload>[]
+        }
+        create: {
+          args: Prisma.SocialReportCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialReportPayload>
+        }
+        createMany: {
+          args: Prisma.SocialReportCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SocialReportCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialReportPayload>[]
+        }
+        delete: {
+          args: Prisma.SocialReportDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialReportPayload>
+        }
+        update: {
+          args: Prisma.SocialReportUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialReportPayload>
+        }
+        deleteMany: {
+          args: Prisma.SocialReportDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SocialReportUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SocialReportUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialReportPayload>[]
+        }
+        upsert: {
+          args: Prisma.SocialReportUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialReportPayload>
+        }
+        aggregate: {
+          args: Prisma.SocialReportAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSocialReport>
+        }
+        groupBy: {
+          args: Prisma.SocialReportGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SocialReportGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SocialReportCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SocialReportCountAggregateOutputType> | number
+        }
+      }
+    }
+    SocialActivity: {
+      payload: Prisma.$SocialActivityPayload<ExtArgs>
+      fields: Prisma.SocialActivityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SocialActivityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialActivityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SocialActivityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialActivityPayload>
+        }
+        findFirst: {
+          args: Prisma.SocialActivityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialActivityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SocialActivityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialActivityPayload>
+        }
+        findMany: {
+          args: Prisma.SocialActivityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialActivityPayload>[]
+        }
+        create: {
+          args: Prisma.SocialActivityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialActivityPayload>
+        }
+        createMany: {
+          args: Prisma.SocialActivityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SocialActivityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialActivityPayload>[]
+        }
+        delete: {
+          args: Prisma.SocialActivityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialActivityPayload>
+        }
+        update: {
+          args: Prisma.SocialActivityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialActivityPayload>
+        }
+        deleteMany: {
+          args: Prisma.SocialActivityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SocialActivityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SocialActivityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialActivityPayload>[]
+        }
+        upsert: {
+          args: Prisma.SocialActivityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialActivityPayload>
+        }
+        aggregate: {
+          args: Prisma.SocialActivityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSocialActivity>
+        }
+        groupBy: {
+          args: Prisma.SocialActivityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SocialActivityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SocialActivityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SocialActivityCountAggregateOutputType> | number
+        }
+      }
+    }
+    SocialCommentLike: {
+      payload: Prisma.$SocialCommentLikePayload<ExtArgs>
+      fields: Prisma.SocialCommentLikeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SocialCommentLikeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialCommentLikePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SocialCommentLikeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialCommentLikePayload>
+        }
+        findFirst: {
+          args: Prisma.SocialCommentLikeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialCommentLikePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SocialCommentLikeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialCommentLikePayload>
+        }
+        findMany: {
+          args: Prisma.SocialCommentLikeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialCommentLikePayload>[]
+        }
+        create: {
+          args: Prisma.SocialCommentLikeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialCommentLikePayload>
+        }
+        createMany: {
+          args: Prisma.SocialCommentLikeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SocialCommentLikeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialCommentLikePayload>[]
+        }
+        delete: {
+          args: Prisma.SocialCommentLikeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialCommentLikePayload>
+        }
+        update: {
+          args: Prisma.SocialCommentLikeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialCommentLikePayload>
+        }
+        deleteMany: {
+          args: Prisma.SocialCommentLikeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SocialCommentLikeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SocialCommentLikeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialCommentLikePayload>[]
+        }
+        upsert: {
+          args: Prisma.SocialCommentLikeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SocialCommentLikePayload>
+        }
+        aggregate: {
+          args: Prisma.SocialCommentLikeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSocialCommentLike>
+        }
+        groupBy: {
+          args: Prisma.SocialCommentLikeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SocialCommentLikeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SocialCommentLikeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SocialCommentLikeCountAggregateOutputType> | number
+        }
+      }
+    }
+    EntityRelation: {
+      payload: Prisma.$EntityRelationPayload<ExtArgs>
+      fields: Prisma.EntityRelationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EntityRelationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EntityRelationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EntityRelationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EntityRelationPayload>
+        }
+        findFirst: {
+          args: Prisma.EntityRelationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EntityRelationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EntityRelationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EntityRelationPayload>
+        }
+        findMany: {
+          args: Prisma.EntityRelationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EntityRelationPayload>[]
+        }
+        create: {
+          args: Prisma.EntityRelationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EntityRelationPayload>
+        }
+        createMany: {
+          args: Prisma.EntityRelationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EntityRelationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EntityRelationPayload>[]
+        }
+        delete: {
+          args: Prisma.EntityRelationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EntityRelationPayload>
+        }
+        update: {
+          args: Prisma.EntityRelationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EntityRelationPayload>
+        }
+        deleteMany: {
+          args: Prisma.EntityRelationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EntityRelationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EntityRelationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EntityRelationPayload>[]
+        }
+        upsert: {
+          args: Prisma.EntityRelationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EntityRelationPayload>
+        }
+        aggregate: {
+          args: Prisma.EntityRelationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEntityRelation>
+        }
+        groupBy: {
+          args: Prisma.EntityRelationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EntityRelationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EntityRelationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EntityRelationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -5698,6 +5998,57 @@ export const TodoScalarFieldEnum = {
 export type TodoScalarFieldEnum = (typeof TodoScalarFieldEnum)[keyof typeof TodoScalarFieldEnum]
 
 
+export const SocialReportScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  reporterId: 'reporterId',
+  reason: 'reason',
+  description: 'description',
+  status: 'status',
+  reviewedBy: 'reviewedBy',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SocialReportScalarFieldEnum = (typeof SocialReportScalarFieldEnum)[keyof typeof SocialReportScalarFieldEnum]
+
+
+export const SocialActivityScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  userId: 'userId',
+  activityType: 'activityType',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type SocialActivityScalarFieldEnum = (typeof SocialActivityScalarFieldEnum)[keyof typeof SocialActivityScalarFieldEnum]
+
+
+export const SocialCommentLikeScalarFieldEnum = {
+  id: 'id',
+  commentId: 'commentId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type SocialCommentLikeScalarFieldEnum = (typeof SocialCommentLikeScalarFieldEnum)[keyof typeof SocialCommentLikeScalarFieldEnum]
+
+
+export const EntityRelationScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  targetId: 'targetId',
+  relationType: 'relationType',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EntityRelationScalarFieldEnum = (typeof EntityRelationScalarFieldEnum)[keyof typeof EntityRelationScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -6008,6 +6359,10 @@ export type GlobalOmitConfig = {
   locationShare?: Prisma.LocationShareOmit
   note?: Prisma.NoteOmit
   todo?: Prisma.TodoOmit
+  socialReport?: Prisma.SocialReportOmit
+  socialActivity?: Prisma.SocialActivityOmit
+  socialCommentLike?: Prisma.SocialCommentLikeOmit
+  entityRelation?: Prisma.EntityRelationOmit
 }
 
 /* Types for Logging */

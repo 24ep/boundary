@@ -336,6 +336,9 @@ export type UserWhereInput = {
   todos?: Prisma.TodoListRelationFilter
   assignedTodos?: Prisma.TodoListRelationFilter
   sentCircleInvitations?: Prisma.CircleInvitationListRelationFilter
+  socialReports?: Prisma.SocialReportListRelationFilter
+  socialActivities?: Prisma.SocialActivityListRelationFilter
+  entityRelations?: Prisma.EntityRelationListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -401,6 +404,9 @@ export type UserOrderByWithRelationInput = {
   todos?: Prisma.TodoOrderByRelationAggregateInput
   assignedTodos?: Prisma.TodoOrderByRelationAggregateInput
   sentCircleInvitations?: Prisma.CircleInvitationOrderByRelationAggregateInput
+  socialReports?: Prisma.SocialReportOrderByRelationAggregateInput
+  socialActivities?: Prisma.SocialActivityOrderByRelationAggregateInput
+  entityRelations?: Prisma.EntityRelationOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -469,6 +475,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   todos?: Prisma.TodoListRelationFilter
   assignedTodos?: Prisma.TodoListRelationFilter
   sentCircleInvitations?: Prisma.CircleInvitationListRelationFilter
+  socialReports?: Prisma.SocialReportListRelationFilter
+  socialActivities?: Prisma.SocialActivityListRelationFilter
+  entityRelations?: Prisma.EntityRelationListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -586,6 +595,9 @@ export type UserCreateInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -651,6 +663,9 @@ export type UserUncheckedCreateInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUpdateInput = {
@@ -716,6 +731,9 @@ export type UserUpdateInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -781,6 +799,9 @@ export type UserUncheckedUpdateInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -1552,6 +1573,48 @@ export type UserUpdateOneWithoutAssignedTodosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedTodosInput, Prisma.UserUpdateWithoutAssignedTodosInput>, Prisma.UserUncheckedUpdateWithoutAssignedTodosInput>
 }
 
+export type UserCreateNestedOneWithoutSocialReportsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSocialReportsInput, Prisma.UserUncheckedCreateWithoutSocialReportsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSocialReportsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSocialReportsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSocialReportsInput, Prisma.UserUncheckedCreateWithoutSocialReportsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSocialReportsInput
+  upsert?: Prisma.UserUpsertWithoutSocialReportsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSocialReportsInput, Prisma.UserUpdateWithoutSocialReportsInput>, Prisma.UserUncheckedUpdateWithoutSocialReportsInput>
+}
+
+export type UserCreateNestedOneWithoutSocialActivitiesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSocialActivitiesInput, Prisma.UserUncheckedCreateWithoutSocialActivitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSocialActivitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSocialActivitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSocialActivitiesInput, Prisma.UserUncheckedCreateWithoutSocialActivitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSocialActivitiesInput
+  upsert?: Prisma.UserUpsertWithoutSocialActivitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSocialActivitiesInput, Prisma.UserUpdateWithoutSocialActivitiesInput>, Prisma.UserUncheckedUpdateWithoutSocialActivitiesInput>
+}
+
+export type UserCreateNestedOneWithoutEntityRelationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEntityRelationsInput, Prisma.UserUncheckedCreateWithoutEntityRelationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEntityRelationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutEntityRelationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEntityRelationsInput, Prisma.UserUncheckedCreateWithoutEntityRelationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEntityRelationsInput
+  upsert?: Prisma.UserUpsertWithoutEntityRelationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEntityRelationsInput, Prisma.UserUpdateWithoutEntityRelationsInput>, Prisma.UserUncheckedUpdateWithoutEntityRelationsInput>
+}
+
 export type UserCreateWithoutUserApplicationsInput = {
   id?: string
   email: string
@@ -1614,6 +1677,9 @@ export type UserCreateWithoutUserApplicationsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutUserApplicationsInput = {
@@ -1678,6 +1744,9 @@ export type UserUncheckedCreateWithoutUserApplicationsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutUserApplicationsInput = {
@@ -1758,6 +1827,9 @@ export type UserUpdateWithoutUserApplicationsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserApplicationsInput = {
@@ -1822,6 +1894,9 @@ export type UserUncheckedUpdateWithoutUserApplicationsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutUserSessionsInput = {
@@ -1886,6 +1961,9 @@ export type UserCreateWithoutUserSessionsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutUserSessionsInput = {
@@ -1950,6 +2028,9 @@ export type UserUncheckedCreateWithoutUserSessionsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutUserSessionsInput = {
@@ -2030,6 +2111,9 @@ export type UserUpdateWithoutUserSessionsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserSessionsInput = {
@@ -2094,6 +2178,9 @@ export type UserUncheckedUpdateWithoutUserSessionsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutUserDevicesInput = {
@@ -2158,6 +2245,9 @@ export type UserCreateWithoutUserDevicesInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutUserDevicesInput = {
@@ -2222,6 +2312,9 @@ export type UserUncheckedCreateWithoutUserDevicesInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutUserDevicesInput = {
@@ -2302,6 +2395,9 @@ export type UserUpdateWithoutUserDevicesInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserDevicesInput = {
@@ -2366,6 +2462,9 @@ export type UserUncheckedUpdateWithoutUserDevicesInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutUserMFAInput = {
@@ -2430,6 +2529,9 @@ export type UserCreateWithoutUserMFAInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutUserMFAInput = {
@@ -2494,6 +2596,9 @@ export type UserUncheckedCreateWithoutUserMFAInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutUserMFAInput = {
@@ -2574,6 +2679,9 @@ export type UserUpdateWithoutUserMFAInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserMFAInput = {
@@ -2638,6 +2746,9 @@ export type UserUncheckedUpdateWithoutUserMFAInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutUserGroupMembersInput = {
@@ -2702,6 +2813,9 @@ export type UserCreateWithoutUserGroupMembersInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutUserGroupMembersInput = {
@@ -2766,6 +2880,9 @@ export type UserUncheckedCreateWithoutUserGroupMembersInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutUserGroupMembersInput = {
@@ -2846,6 +2963,9 @@ export type UserUpdateWithoutUserGroupMembersInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserGroupMembersInput = {
@@ -2910,6 +3030,9 @@ export type UserUncheckedUpdateWithoutUserGroupMembersInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutLoginHistoryInput = {
@@ -2974,6 +3097,9 @@ export type UserCreateWithoutLoginHistoryInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutLoginHistoryInput = {
@@ -3038,6 +3164,9 @@ export type UserUncheckedCreateWithoutLoginHistoryInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutLoginHistoryInput = {
@@ -3118,6 +3247,9 @@ export type UserUpdateWithoutLoginHistoryInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLoginHistoryInput = {
@@ -3182,6 +3314,9 @@ export type UserUncheckedUpdateWithoutLoginHistoryInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutUserSettingsInput = {
@@ -3246,6 +3381,9 @@ export type UserCreateWithoutUserSettingsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutUserSettingsInput = {
@@ -3310,6 +3448,9 @@ export type UserUncheckedCreateWithoutUserSettingsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutUserSettingsInput = {
@@ -3390,6 +3531,9 @@ export type UserUpdateWithoutUserSettingsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserSettingsInput = {
@@ -3454,6 +3598,9 @@ export type UserUncheckedUpdateWithoutUserSettingsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutFilesInput = {
@@ -3518,6 +3665,9 @@ export type UserCreateWithoutFilesInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutFilesInput = {
@@ -3582,6 +3732,9 @@ export type UserUncheckedCreateWithoutFilesInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutFilesInput = {
@@ -3662,6 +3815,9 @@ export type UserUpdateWithoutFilesInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFilesInput = {
@@ -3726,6 +3882,9 @@ export type UserUncheckedUpdateWithoutFilesInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutFileFoldersInput = {
@@ -3790,6 +3949,9 @@ export type UserCreateWithoutFileFoldersInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutFileFoldersInput = {
@@ -3854,6 +4016,9 @@ export type UserUncheckedCreateWithoutFileFoldersInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutFileFoldersInput = {
@@ -3934,6 +4099,9 @@ export type UserUpdateWithoutFileFoldersInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFileFoldersInput = {
@@ -3998,6 +4166,9 @@ export type UserUncheckedUpdateWithoutFileFoldersInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutGalleryItemsInput = {
@@ -4062,6 +4233,9 @@ export type UserCreateWithoutGalleryItemsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutGalleryItemsInput = {
@@ -4126,6 +4300,9 @@ export type UserUncheckedCreateWithoutGalleryItemsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutGalleryItemsInput = {
@@ -4206,6 +4383,9 @@ export type UserUpdateWithoutGalleryItemsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGalleryItemsInput = {
@@ -4270,6 +4450,9 @@ export type UserUncheckedUpdateWithoutGalleryItemsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutGalleryAlbumsInput = {
@@ -4334,6 +4517,9 @@ export type UserCreateWithoutGalleryAlbumsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutGalleryAlbumsInput = {
@@ -4398,6 +4584,9 @@ export type UserUncheckedCreateWithoutGalleryAlbumsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutGalleryAlbumsInput = {
@@ -4478,6 +4667,9 @@ export type UserUpdateWithoutGalleryAlbumsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGalleryAlbumsInput = {
@@ -4542,6 +4734,9 @@ export type UserUncheckedUpdateWithoutGalleryAlbumsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -4606,6 +4801,9 @@ export type UserCreateWithoutNotificationsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -4670,6 +4868,9 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -4750,6 +4951,9 @@ export type UserUpdateWithoutNotificationsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -4814,6 +5018,9 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutUserPushTokensInput = {
@@ -4878,6 +5085,9 @@ export type UserCreateWithoutUserPushTokensInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutUserPushTokensInput = {
@@ -4942,6 +5152,9 @@ export type UserUncheckedCreateWithoutUserPushTokensInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutUserPushTokensInput = {
@@ -5022,6 +5235,9 @@ export type UserUpdateWithoutUserPushTokensInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserPushTokensInput = {
@@ -5086,6 +5302,9 @@ export type UserUncheckedUpdateWithoutUserPushTokensInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutSubscriptionsInput = {
@@ -5150,6 +5369,9 @@ export type UserCreateWithoutSubscriptionsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutSubscriptionsInput = {
@@ -5214,6 +5436,9 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutSubscriptionsInput = {
@@ -5294,6 +5519,9 @@ export type UserUpdateWithoutSubscriptionsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionsInput = {
@@ -5358,6 +5586,9 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutOwnedCirclesInput = {
@@ -5422,6 +5653,9 @@ export type UserCreateWithoutOwnedCirclesInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutOwnedCirclesInput = {
@@ -5486,6 +5720,9 @@ export type UserUncheckedCreateWithoutOwnedCirclesInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutOwnedCirclesInput = {
@@ -5566,6 +5803,9 @@ export type UserUpdateWithoutOwnedCirclesInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedCirclesInput = {
@@ -5630,6 +5870,9 @@ export type UserUncheckedUpdateWithoutOwnedCirclesInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutCircleMembershipsInput = {
@@ -5694,6 +5937,9 @@ export type UserCreateWithoutCircleMembershipsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutCircleMembershipsInput = {
@@ -5758,6 +6004,9 @@ export type UserUncheckedCreateWithoutCircleMembershipsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutCircleMembershipsInput = {
@@ -5827,6 +6076,9 @@ export type UserCreateWithoutCircleInvitationsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutCircleInvitationsInput = {
@@ -5891,6 +6143,9 @@ export type UserUncheckedCreateWithoutCircleInvitationsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutCircleInvitationsInput = {
@@ -5971,6 +6226,9 @@ export type UserUpdateWithoutCircleMembershipsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCircleMembershipsInput = {
@@ -6035,6 +6293,9 @@ export type UserUncheckedUpdateWithoutCircleMembershipsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUpsertWithoutCircleInvitationsInput = {
@@ -6110,6 +6371,9 @@ export type UserUpdateWithoutCircleInvitationsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCircleInvitationsInput = {
@@ -6174,6 +6438,9 @@ export type UserUncheckedUpdateWithoutCircleInvitationsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutSentCircleInvitationsInput = {
@@ -6238,6 +6505,9 @@ export type UserCreateWithoutSentCircleInvitationsInput = {
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutSentCircleInvitationsInput = {
@@ -6302,6 +6572,9 @@ export type UserUncheckedCreateWithoutSentCircleInvitationsInput = {
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutSentCircleInvitationsInput = {
@@ -6382,6 +6655,9 @@ export type UserUpdateWithoutSentCircleInvitationsInput = {
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentCircleInvitationsInput = {
@@ -6446,6 +6722,9 @@ export type UserUncheckedUpdateWithoutSentCircleInvitationsInput = {
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutEmergencyContactsInput = {
@@ -6510,6 +6789,9 @@ export type UserCreateWithoutEmergencyContactsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutEmergencyContactsInput = {
@@ -6574,6 +6856,9 @@ export type UserUncheckedCreateWithoutEmergencyContactsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutEmergencyContactsInput = {
@@ -6654,6 +6939,9 @@ export type UserUpdateWithoutEmergencyContactsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEmergencyContactsInput = {
@@ -6718,6 +7006,9 @@ export type UserUncheckedUpdateWithoutEmergencyContactsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutSafetyIncidentsInput = {
@@ -6782,6 +7073,9 @@ export type UserCreateWithoutSafetyIncidentsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutSafetyIncidentsInput = {
@@ -6846,6 +7140,9 @@ export type UserUncheckedCreateWithoutSafetyIncidentsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutSafetyIncidentsInput = {
@@ -6915,6 +7212,9 @@ export type UserCreateWithoutResolvedIncidentsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutResolvedIncidentsInput = {
@@ -6979,6 +7279,9 @@ export type UserUncheckedCreateWithoutResolvedIncidentsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutResolvedIncidentsInput = {
@@ -7059,6 +7362,9 @@ export type UserUpdateWithoutSafetyIncidentsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSafetyIncidentsInput = {
@@ -7123,6 +7429,9 @@ export type UserUncheckedUpdateWithoutSafetyIncidentsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUpsertWithoutResolvedIncidentsInput = {
@@ -7198,6 +7507,9 @@ export type UserUpdateWithoutResolvedIncidentsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutResolvedIncidentsInput = {
@@ -7262,6 +7574,9 @@ export type UserUncheckedUpdateWithoutResolvedIncidentsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutSocialPostsInput = {
@@ -7326,6 +7641,9 @@ export type UserCreateWithoutSocialPostsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutSocialPostsInput = {
@@ -7390,6 +7708,9 @@ export type UserUncheckedCreateWithoutSocialPostsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutSocialPostsInput = {
@@ -7470,6 +7791,9 @@ export type UserUpdateWithoutSocialPostsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSocialPostsInput = {
@@ -7534,6 +7858,9 @@ export type UserUncheckedUpdateWithoutSocialPostsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutSocialCommentsInput = {
@@ -7598,6 +7925,9 @@ export type UserCreateWithoutSocialCommentsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutSocialCommentsInput = {
@@ -7662,6 +7992,9 @@ export type UserUncheckedCreateWithoutSocialCommentsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutSocialCommentsInput = {
@@ -7742,6 +8075,9 @@ export type UserUpdateWithoutSocialCommentsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSocialCommentsInput = {
@@ -7806,6 +8142,9 @@ export type UserUncheckedUpdateWithoutSocialCommentsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutSocialReactionsInput = {
@@ -7870,6 +8209,9 @@ export type UserCreateWithoutSocialReactionsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutSocialReactionsInput = {
@@ -7934,6 +8276,9 @@ export type UserUncheckedCreateWithoutSocialReactionsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutSocialReactionsInput = {
@@ -8014,6 +8359,9 @@ export type UserUpdateWithoutSocialReactionsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSocialReactionsInput = {
@@ -8078,6 +8426,9 @@ export type UserUncheckedUpdateWithoutSocialReactionsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutSocialStoriesInput = {
@@ -8142,6 +8493,9 @@ export type UserCreateWithoutSocialStoriesInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutSocialStoriesInput = {
@@ -8206,6 +8560,9 @@ export type UserUncheckedCreateWithoutSocialStoriesInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutSocialStoriesInput = {
@@ -8286,6 +8643,9 @@ export type UserUpdateWithoutSocialStoriesInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSocialStoriesInput = {
@@ -8350,6 +8710,9 @@ export type UserUncheckedUpdateWithoutSocialStoriesInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutStoryViewsInput = {
@@ -8414,6 +8777,9 @@ export type UserCreateWithoutStoryViewsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutStoryViewsInput = {
@@ -8478,6 +8844,9 @@ export type UserUncheckedCreateWithoutStoryViewsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutStoryViewsInput = {
@@ -8558,6 +8927,9 @@ export type UserUpdateWithoutStoryViewsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStoryViewsInput = {
@@ -8622,6 +8994,9 @@ export type UserUncheckedUpdateWithoutStoryViewsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutFollowingInput = {
@@ -8686,6 +9061,9 @@ export type UserCreateWithoutFollowingInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutFollowingInput = {
@@ -8750,6 +9128,9 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutFollowingInput = {
@@ -8819,6 +9200,9 @@ export type UserCreateWithoutFollowersInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutFollowersInput = {
@@ -8883,6 +9267,9 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutFollowersInput = {
@@ -8963,6 +9350,9 @@ export type UserUpdateWithoutFollowingInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -9027,6 +9417,9 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUpsertWithoutFollowersInput = {
@@ -9102,6 +9495,9 @@ export type UserUpdateWithoutFollowersInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -9166,6 +9562,9 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutSentFriendRequestsInput = {
@@ -9230,6 +9629,9 @@ export type UserCreateWithoutSentFriendRequestsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutSentFriendRequestsInput = {
@@ -9294,6 +9696,9 @@ export type UserUncheckedCreateWithoutSentFriendRequestsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutSentFriendRequestsInput = {
@@ -9363,6 +9768,9 @@ export type UserCreateWithoutReceivedFriendRequestsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutReceivedFriendRequestsInput = {
@@ -9427,6 +9835,9 @@ export type UserUncheckedCreateWithoutReceivedFriendRequestsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutReceivedFriendRequestsInput = {
@@ -9507,6 +9918,9 @@ export type UserUpdateWithoutSentFriendRequestsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentFriendRequestsInput = {
@@ -9571,6 +9985,9 @@ export type UserUncheckedUpdateWithoutSentFriendRequestsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUpsertWithoutReceivedFriendRequestsInput = {
@@ -9646,6 +10063,9 @@ export type UserUpdateWithoutReceivedFriendRequestsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReceivedFriendRequestsInput = {
@@ -9710,6 +10130,9 @@ export type UserUncheckedUpdateWithoutReceivedFriendRequestsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutChatRoomsCreatedInput = {
@@ -9774,6 +10197,9 @@ export type UserCreateWithoutChatRoomsCreatedInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutChatRoomsCreatedInput = {
@@ -9838,6 +10264,9 @@ export type UserUncheckedCreateWithoutChatRoomsCreatedInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutChatRoomsCreatedInput = {
@@ -9918,6 +10347,9 @@ export type UserUpdateWithoutChatRoomsCreatedInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChatRoomsCreatedInput = {
@@ -9982,6 +10414,9 @@ export type UserUncheckedUpdateWithoutChatRoomsCreatedInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutChatParticipationsInput = {
@@ -10046,6 +10481,9 @@ export type UserCreateWithoutChatParticipationsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutChatParticipationsInput = {
@@ -10110,6 +10548,9 @@ export type UserUncheckedCreateWithoutChatParticipationsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutChatParticipationsInput = {
@@ -10190,6 +10631,9 @@ export type UserUpdateWithoutChatParticipationsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChatParticipationsInput = {
@@ -10254,6 +10698,9 @@ export type UserUncheckedUpdateWithoutChatParticipationsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutChatMessagesInput = {
@@ -10318,6 +10765,9 @@ export type UserCreateWithoutChatMessagesInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutChatMessagesInput = {
@@ -10382,6 +10832,9 @@ export type UserUncheckedCreateWithoutChatMessagesInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutChatMessagesInput = {
@@ -10462,6 +10915,9 @@ export type UserUpdateWithoutChatMessagesInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChatMessagesInput = {
@@ -10526,6 +10982,9 @@ export type UserUncheckedUpdateWithoutChatMessagesInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutChatReadReceiptsInput = {
@@ -10590,6 +11049,9 @@ export type UserCreateWithoutChatReadReceiptsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutChatReadReceiptsInput = {
@@ -10654,6 +11116,9 @@ export type UserUncheckedCreateWithoutChatReadReceiptsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutChatReadReceiptsInput = {
@@ -10734,6 +11199,9 @@ export type UserUpdateWithoutChatReadReceiptsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChatReadReceiptsInput = {
@@ -10798,6 +11266,9 @@ export type UserUncheckedUpdateWithoutChatReadReceiptsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutChatReactionsInput = {
@@ -10862,6 +11333,9 @@ export type UserCreateWithoutChatReactionsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutChatReactionsInput = {
@@ -10926,6 +11400,9 @@ export type UserUncheckedCreateWithoutChatReactionsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutChatReactionsInput = {
@@ -11006,6 +11483,9 @@ export type UserUpdateWithoutChatReactionsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChatReactionsInput = {
@@ -11070,6 +11550,9 @@ export type UserUncheckedUpdateWithoutChatReactionsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutUserLocationsInput = {
@@ -11134,6 +11617,9 @@ export type UserCreateWithoutUserLocationsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutUserLocationsInput = {
@@ -11198,6 +11684,9 @@ export type UserUncheckedCreateWithoutUserLocationsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutUserLocationsInput = {
@@ -11278,6 +11767,9 @@ export type UserUpdateWithoutUserLocationsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserLocationsInput = {
@@ -11342,6 +11834,9 @@ export type UserUncheckedUpdateWithoutUserLocationsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutGeofencesInput = {
@@ -11406,6 +11901,9 @@ export type UserCreateWithoutGeofencesInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutGeofencesInput = {
@@ -11470,6 +11968,9 @@ export type UserUncheckedCreateWithoutGeofencesInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutGeofencesInput = {
@@ -11550,6 +12051,9 @@ export type UserUpdateWithoutGeofencesInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGeofencesInput = {
@@ -11614,6 +12118,9 @@ export type UserUncheckedUpdateWithoutGeofencesInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutLocationSharesInput = {
@@ -11678,6 +12185,9 @@ export type UserCreateWithoutLocationSharesInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutLocationSharesInput = {
@@ -11742,6 +12252,9 @@ export type UserUncheckedCreateWithoutLocationSharesInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutLocationSharesInput = {
@@ -11811,6 +12324,9 @@ export type UserCreateWithoutSharedLocationsInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutSharedLocationsInput = {
@@ -11875,6 +12391,9 @@ export type UserUncheckedCreateWithoutSharedLocationsInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutSharedLocationsInput = {
@@ -11955,6 +12474,9 @@ export type UserUpdateWithoutLocationSharesInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLocationSharesInput = {
@@ -12019,6 +12541,9 @@ export type UserUncheckedUpdateWithoutLocationSharesInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUpsertWithoutSharedLocationsInput = {
@@ -12094,6 +12619,9 @@ export type UserUpdateWithoutSharedLocationsInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSharedLocationsInput = {
@@ -12158,6 +12686,9 @@ export type UserUncheckedUpdateWithoutSharedLocationsInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutNotesInput = {
@@ -12222,6 +12753,9 @@ export type UserCreateWithoutNotesInput = {
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutNotesInput = {
@@ -12286,6 +12820,9 @@ export type UserUncheckedCreateWithoutNotesInput = {
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutNotesInput = {
@@ -12366,6 +12903,9 @@ export type UserUpdateWithoutNotesInput = {
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotesInput = {
@@ -12430,6 +12970,9 @@ export type UserUncheckedUpdateWithoutNotesInput = {
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutTodosInput = {
@@ -12494,6 +13037,9 @@ export type UserCreateWithoutTodosInput = {
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutTodosInput = {
@@ -12558,6 +13104,9 @@ export type UserUncheckedCreateWithoutTodosInput = {
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutTodosInput = {
@@ -12627,6 +13176,9 @@ export type UserCreateWithoutAssignedTodosInput = {
   notes?: Prisma.NoteCreateNestedManyWithoutUserInput
   todos?: Prisma.TodoCreateNestedManyWithoutUserInput
   sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutAssignedTodosInput = {
@@ -12691,6 +13243,9 @@ export type UserUncheckedCreateWithoutAssignedTodosInput = {
   notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
   todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutAssignedTodosInput = {
@@ -12771,6 +13326,9 @@ export type UserUpdateWithoutTodosInput = {
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTodosInput = {
@@ -12835,6 +13393,9 @@ export type UserUncheckedUpdateWithoutTodosInput = {
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUpsertWithoutAssignedTodosInput = {
@@ -12910,6 +13471,9 @@ export type UserUpdateWithoutAssignedTodosInput = {
   notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
   todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignedTodosInput = {
@@ -12974,6 +13538,861 @@ export type UserUncheckedUpdateWithoutAssignedTodosInput = {
   notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
   todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
   sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
+}
+
+export type UserCreateWithoutSocialReportsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutUserInput
+  files?: Prisma.FileCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
+}
+
+export type UserUncheckedCreateWithoutSocialReportsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutUserInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentUncheckedCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionUncheckedCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryUncheckedCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewUncheckedCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionUncheckedCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationUncheckedCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
+}
+
+export type UserCreateOrConnectWithoutSocialReportsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSocialReportsInput, Prisma.UserUncheckedCreateWithoutSocialReportsInput>
+}
+
+export type UserUpsertWithoutSocialReportsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSocialReportsInput, Prisma.UserUncheckedUpdateWithoutSocialReportsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSocialReportsInput, Prisma.UserUncheckedCreateWithoutSocialReportsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSocialReportsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSocialReportsInput, Prisma.UserUncheckedUpdateWithoutSocialReportsInput>
+}
+
+export type UserUpdateWithoutSocialReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSocialReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUncheckedUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUncheckedUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUncheckedUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUncheckedUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUncheckedUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
+}
+
+export type UserCreateWithoutSocialActivitiesInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutUserInput
+  files?: Prisma.FileCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
+}
+
+export type UserUncheckedCreateWithoutSocialActivitiesInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutUserInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentUncheckedCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionUncheckedCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryUncheckedCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewUncheckedCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionUncheckedCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationUncheckedCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
+}
+
+export type UserCreateOrConnectWithoutSocialActivitiesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSocialActivitiesInput, Prisma.UserUncheckedCreateWithoutSocialActivitiesInput>
+}
+
+export type UserUpsertWithoutSocialActivitiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSocialActivitiesInput, Prisma.UserUncheckedUpdateWithoutSocialActivitiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSocialActivitiesInput, Prisma.UserUncheckedCreateWithoutSocialActivitiesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSocialActivitiesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSocialActivitiesInput, Prisma.UserUncheckedUpdateWithoutSocialActivitiesInput>
+}
+
+export type UserUpdateWithoutSocialActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSocialActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUncheckedUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUncheckedUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUncheckedUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUncheckedUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUncheckedUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
+}
+
+export type UserCreateWithoutEntityRelationsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutUserInput
+  files?: Prisma.FileCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutEntityRelationsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutUserInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentUncheckedCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionUncheckedCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryUncheckedCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewUncheckedCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionUncheckedCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationUncheckedCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutEntityRelationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEntityRelationsInput, Prisma.UserUncheckedCreateWithoutEntityRelationsInput>
+}
+
+export type UserUpsertWithoutEntityRelationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEntityRelationsInput, Prisma.UserUncheckedUpdateWithoutEntityRelationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEntityRelationsInput, Prisma.UserUncheckedCreateWithoutEntityRelationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEntityRelationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEntityRelationsInput, Prisma.UserUncheckedUpdateWithoutEntityRelationsInput>
+}
+
+export type UserUpdateWithoutEntityRelationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEntityRelationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUncheckedUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUncheckedUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUncheckedUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUncheckedUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUncheckedUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -13024,6 +14443,9 @@ export type UserCountOutputType = {
   todos: number
   assignedTodos: number
   sentCircleInvitations: number
+  socialReports: number
+  socialActivities: number
+  entityRelations: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -13069,6 +14491,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   todos?: boolean | UserCountOutputTypeCountTodosArgs
   assignedTodos?: boolean | UserCountOutputTypeCountAssignedTodosArgs
   sentCircleInvitations?: boolean | UserCountOutputTypeCountSentCircleInvitationsArgs
+  socialReports?: boolean | UserCountOutputTypeCountSocialReportsArgs
+  socialActivities?: boolean | UserCountOutputTypeCountSocialActivitiesArgs
+  entityRelations?: boolean | UserCountOutputTypeCountEntityRelationsArgs
 }
 
 /**
@@ -13375,6 +14800,27 @@ export type UserCountOutputTypeCountSentCircleInvitationsArgs<ExtArgs extends ru
   where?: Prisma.CircleInvitationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSocialReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SocialReportWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSocialActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SocialActivityWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountEntityRelationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EntityRelationWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -13439,6 +14885,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   todos?: boolean | Prisma.User$todosArgs<ExtArgs>
   assignedTodos?: boolean | Prisma.User$assignedTodosArgs<ExtArgs>
   sentCircleInvitations?: boolean | Prisma.User$sentCircleInvitationsArgs<ExtArgs>
+  socialReports?: boolean | Prisma.User$socialReportsArgs<ExtArgs>
+  socialActivities?: boolean | Prisma.User$socialActivitiesArgs<ExtArgs>
+  entityRelations?: boolean | Prisma.User$entityRelationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -13555,6 +15004,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   todos?: boolean | Prisma.User$todosArgs<ExtArgs>
   assignedTodos?: boolean | Prisma.User$assignedTodosArgs<ExtArgs>
   sentCircleInvitations?: boolean | Prisma.User$sentCircleInvitationsArgs<ExtArgs>
+  socialReports?: boolean | Prisma.User$socialReportsArgs<ExtArgs>
+  socialActivities?: boolean | Prisma.User$socialActivitiesArgs<ExtArgs>
+  entityRelations?: boolean | Prisma.User$entityRelationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -13605,6 +15057,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     todos: Prisma.$TodoPayload<ExtArgs>[]
     assignedTodos: Prisma.$TodoPayload<ExtArgs>[]
     sentCircleInvitations: Prisma.$CircleInvitationPayload<ExtArgs>[]
+    socialReports: Prisma.$SocialReportPayload<ExtArgs>[]
+    socialActivities: Prisma.$SocialActivityPayload<ExtArgs>[]
+    entityRelations: Prisma.$EntityRelationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -14063,6 +15518,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   todos<T extends Prisma.User$todosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$todosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TodoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignedTodos<T extends Prisma.User$assignedTodosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedTodosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TodoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sentCircleInvitations<T extends Prisma.User$sentCircleInvitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentCircleInvitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CircleInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  socialReports<T extends Prisma.User$socialReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$socialReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SocialReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  socialActivities<T extends Prisma.User$socialActivitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$socialActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SocialActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  entityRelations<T extends Prisma.User$entityRelationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$entityRelationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EntityRelationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15505,6 +16963,78 @@ export type User$sentCircleInvitationsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.CircleInvitationScalarFieldEnum | Prisma.CircleInvitationScalarFieldEnum[]
+}
+
+/**
+ * User.socialReports
+ */
+export type User$socialReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SocialReport
+   */
+  select?: Prisma.SocialReportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SocialReport
+   */
+  omit?: Prisma.SocialReportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SocialReportInclude<ExtArgs> | null
+  where?: Prisma.SocialReportWhereInput
+  orderBy?: Prisma.SocialReportOrderByWithRelationInput | Prisma.SocialReportOrderByWithRelationInput[]
+  cursor?: Prisma.SocialReportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SocialReportScalarFieldEnum | Prisma.SocialReportScalarFieldEnum[]
+}
+
+/**
+ * User.socialActivities
+ */
+export type User$socialActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SocialActivity
+   */
+  select?: Prisma.SocialActivitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SocialActivity
+   */
+  omit?: Prisma.SocialActivityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SocialActivityInclude<ExtArgs> | null
+  where?: Prisma.SocialActivityWhereInput
+  orderBy?: Prisma.SocialActivityOrderByWithRelationInput | Prisma.SocialActivityOrderByWithRelationInput[]
+  cursor?: Prisma.SocialActivityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SocialActivityScalarFieldEnum | Prisma.SocialActivityScalarFieldEnum[]
+}
+
+/**
+ * User.entityRelations
+ */
+export type User$entityRelationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EntityRelation
+   */
+  select?: Prisma.EntityRelationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EntityRelation
+   */
+  omit?: Prisma.EntityRelationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EntityRelationInclude<ExtArgs> | null
+  where?: Prisma.EntityRelationWhereInput
+  orderBy?: Prisma.EntityRelationOrderByWithRelationInput | Prisma.EntityRelationOrderByWithRelationInput[]
+  cursor?: Prisma.EntityRelationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EntityRelationScalarFieldEnum | Prisma.EntityRelationScalarFieldEnum[]
 }
 
 /**

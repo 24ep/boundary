@@ -11,7 +11,7 @@ import { Server } from 'socket.io';
 import { createApp } from './src/server/server';
 
 const dev = process.env.NODE_ENV !== 'production';
-const hostname = 'localhost';
+const hostname = process.env.HOSTNAME || '0.0.0.0';
 const port = parseInt(process.env.PORT || '3002', 10);
 
 // Initialize Next.js

@@ -5,8 +5,7 @@ import jwt from 'jsonwebtoken';
 import { prisma } from '../../lib/prisma';
 import { config } from '../../config/env';
 import { AdminRequest } from '../../middleware/adminAuth';
-import { auditService, AuditAction } from '../../../services/auditService';
-
+import { auditService, AuditAction } from '../../services/auditService';
 
 export class AdminUserController {
   
@@ -79,10 +78,14 @@ export class AdminUserController {
       });
 
       // Audit login
-      await auditService.logAuthenticationEvent(adminUser.id, AuditAction.LOGIN, {
-        ip: req.ip,
-        userAgent: req.get('User-Agent')
-      });
+      await auditService.logAuthEvent(
+        adminUser.id,
+        AuditAction.LOGIN,
+        'AdminUser',
+        {},
+        req.ip,
+        req.get('User-Agent')
+      );
 
       return res.json({
 

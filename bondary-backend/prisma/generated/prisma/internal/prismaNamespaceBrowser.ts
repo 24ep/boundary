@@ -107,7 +107,11 @@ export const ModelName = {
   Geofence: 'Geofence',
   LocationShare: 'LocationShare',
   Note: 'Note',
-  Todo: 'Todo'
+  Todo: 'Todo',
+  SocialReport: 'SocialReport',
+  SocialActivity: 'SocialActivity',
+  SocialCommentLike: 'SocialCommentLike',
+  EntityRelation: 'EntityRelation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1105,6 +1109,57 @@ export const TodoScalarFieldEnum = {
 } as const
 
 export type TodoScalarFieldEnum = (typeof TodoScalarFieldEnum)[keyof typeof TodoScalarFieldEnum]
+
+
+export const SocialReportScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  reporterId: 'reporterId',
+  reason: 'reason',
+  description: 'description',
+  status: 'status',
+  reviewedBy: 'reviewedBy',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SocialReportScalarFieldEnum = (typeof SocialReportScalarFieldEnum)[keyof typeof SocialReportScalarFieldEnum]
+
+
+export const SocialActivityScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  userId: 'userId',
+  activityType: 'activityType',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type SocialActivityScalarFieldEnum = (typeof SocialActivityScalarFieldEnum)[keyof typeof SocialActivityScalarFieldEnum]
+
+
+export const SocialCommentLikeScalarFieldEnum = {
+  id: 'id',
+  commentId: 'commentId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type SocialCommentLikeScalarFieldEnum = (typeof SocialCommentLikeScalarFieldEnum)[keyof typeof SocialCommentLikeScalarFieldEnum]
+
+
+export const EntityRelationScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  targetId: 'targetId',
+  relationType: 'relationType',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EntityRelationScalarFieldEnum = (typeof EntityRelationScalarFieldEnum)[keyof typeof EntityRelationScalarFieldEnum]
 
 
 export const SortOrder = {
