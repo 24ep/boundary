@@ -497,7 +497,10 @@ router.get('/health', healthCheck);
  * GET /api/v1/admin/config/branding
  * Get branding configuration for the admin panel
  */
-router.get('/branding', async (req: Request, res: Response) => {
+router.get('/branding',
+  authenticateAdmin,
+  requirePermission('branding', 'view'),
+  async (req: Request, res: Response) => {
   try {
     const branding = await adminConfigService.getBranding();
     sendResponse(res, 200, true, branding, 'Branding retrieved successfully');
@@ -512,6 +515,7 @@ router.get('/branding', async (req: Request, res: Response) => {
  * Update branding configuration
  */
 router.put('/branding', 
+  authenticateAdmin,
   requirePermission('branding', 'update'),
   validateBrandingUpdate,
   handleValidationErrors,
@@ -551,6 +555,7 @@ router.put('/branding',
  * Get SSO/OAuth providers configuration
  */
 router.get('/sso-providers', 
+  authenticateAdmin,
   requirePermission('sso', 'view'),
   async (req: Request, res: Response) => {
     try {
@@ -568,6 +573,7 @@ router.get('/sso-providers',
  * Create new SSO provider
  */
 router.post('/sso-providers',
+  authenticateAdmin,
   requirePermission('sso', 'create'),
   validateSSOProviderCreate,
   handleValidationErrors,
@@ -601,6 +607,7 @@ router.post('/sso-providers',
  * Get all applications for admin management
  */
 router.get('/applications',
+  authenticateAdmin,
   requirePermission('applications', 'view'),
   async (req: Request, res: Response) => {
     try {
@@ -618,6 +625,7 @@ router.get('/applications',
  * Create new application
  */
 router.post('/applications',
+  authenticateAdmin,
   requirePermission('applications', 'create'),
   validateApplicationCreate,
   handleValidationErrors,
