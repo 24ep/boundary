@@ -8,13 +8,13 @@ import { Router, Response } from 'express';
 import { body, param, query, validationResult } from 'express-validator';
 import { authenticateAdmin, AdminRequest } from '../../middleware/adminAuth';
 import { requirePermission } from '../../middleware/permissionCheck';
-import { oauthServiceWrapper, ServiceError } from '../../../services/serviceWrapper';
+import { oauthServiceWrapper, ServiceError } from '../../services/serviceWrapper';
 import { prisma } from '../../lib/prisma';
 
 // Conditional import for SSOProvider
 let SSOProvider: any = null;
 try {
-  SSOProvider = require('../../../services/SSOProviderService').default;
+  SSOProvider = require('../../services/SSOProviderService').default;
 } catch (error: unknown) {
   console.warn('SSOProvider service not available:', error);
 }

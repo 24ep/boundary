@@ -33,7 +33,7 @@ class ServiceWrapperImpl implements ServiceWrapper {
   private checkServiceAvailability() {
     // Check for SSOProvider service
     try {
-      require('../services/SSOProviderService');
+      require('./SSOProviderService');
       this.availableServices.add('SSOProvider');
     } catch (error) {
       // Service not available

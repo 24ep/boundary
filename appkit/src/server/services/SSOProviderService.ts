@@ -4,7 +4,7 @@
  * Handles OAuth provider operations for the AppKit SSO system.
  */
 
-import { prisma } from '../server/lib/prisma';
+import { prisma } from '../lib/prisma';
 
 export interface OAuthClient {
   id: string;
