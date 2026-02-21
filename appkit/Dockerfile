@@ -41,6 +41,7 @@ RUN ls -R prisma && npm ci --omit=dev
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/next.config.js ./
 
 # Copy Prisma client

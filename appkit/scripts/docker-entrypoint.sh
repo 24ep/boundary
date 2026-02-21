@@ -9,7 +9,10 @@ echo "🚀 Starting UniApps Admin Server Bootstrap..."
 echo "🔄 Synchronizing database schema..."
 npx prisma db push --accept-data-loss --skip-generate
 
-echo "✅ Database synchronization complete."
+echo "🌱 Seeding administrative user..."
+npx ts-node scripts/seed-admin.ts
+
+echo "✅ Database synchronization and seeding complete."
 
 # Start the application
 echo "🎬 Starting application..."
