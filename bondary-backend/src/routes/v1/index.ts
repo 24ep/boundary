@@ -23,20 +23,11 @@ import socialRoutes from '../mobile/social';
 import socialFeaturesRoutes from '../mobile/socialFeatures';
 import financialRoutes from '../mobile/financial';
 import translationsRoutes from '../mobile/translations';
-
-// App Configuration Routes
-import appConfigRoutes from '../appConfigRoutes';
-
-// Mobile Routes
 import emotionsRoutes from '../mobile/emotions';
 import circleTypeRoutes from '../mobile/circleTypeRoutes';
 import galleryRoutes from '../mobile/gallery';
 import legalRoutes from '../mobile/legal';
 import identityRoutes from '../mobile/identity';
-import miscRoutes from '../mobile/misc';
-import settingsRoutes from '../mobile/settings';
-import notificationRoutes from '../mobile/notifications';
-import shoppingRoutes from '../mobile/shopping';
 import userHealthRoutes from '../mobile/userHealth';
 import mobileRoutes from '../mobile/mobileRoutes';
 import brandingRoutes from '../mobile/brandingRoutes';
@@ -44,6 +35,12 @@ import marketRoutes from '../mobile/marketRoutes';
 import appRoutes from '../mobile/appRoutes';
 import helpRoutes from '../mobile/helpRoutes';
 import feedbackRoutes from '../mobile/feedbackRoutes';
+
+// App Configuration Routes
+import appConfigRoutes from '../appConfigRoutes';
+
+// Mobile Authentication Routes
+import mobileAuthRoutes from '../mobile/authRoutes';
 
 // Admin Routes - Only Boundary-specific routes
 import boundaryAdminRoutes from '../admin/boundary';
@@ -60,6 +57,7 @@ router.use('/.well-known', oauthRoutes);
 
 // Mobile / Core routes
 router.use('/auth', authRoutes);
+router.use('/mobile-auth', mobileAuthRoutes); // Mobile app authentication
 router.use('/users', userRoutes);
 router.use('/circles', circleRoutes);
 router.use('/chat', chatRoutes);
