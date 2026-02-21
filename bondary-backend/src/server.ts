@@ -24,6 +24,7 @@ import os from 'os';
 import v1Router from './routes/v1';
 import healthRoutes from './routes/health';
 import webhooksRoutes from './routes/mobile/webhooks';
+import uploadsRouter from './routes/uploadsRouter';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler';
@@ -84,7 +85,7 @@ function startServer() {
     crossOriginResourcePolicy: { policy: "cross-origin" },
   }));
 
-  app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+  app.use('/uploads', uploadsRouter);
 
   app.use(cors({ origin: true, credentials: true }));
   app.use(express.json({ limit: '10mb' }));
