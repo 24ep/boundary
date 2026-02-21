@@ -25,7 +25,7 @@ import financialRoutes from '../mobile/financial';
 import translationsRoutes from '../mobile/translations';
 import emotionsRoutes from '../mobile/emotions';
 import circleTypeRoutes from '../mobile/circleTypeRoutes';
-import galleryRoutes from '../mobile/gallery';
+import galleryRoutes from '../mobile/galleryRoutes';
 import legalRoutes from '../mobile/legal';
 import identityRoutes from '../mobile/identity';
 import userHealthRoutes from '../mobile/userHealth';
@@ -35,6 +35,10 @@ import marketRoutes from '../mobile/marketRoutes';
 import appRoutes from '../mobile/appRoutes';
 import helpRoutes from '../mobile/helpRoutes';
 import feedbackRoutes from '../mobile/feedbackRoutes';
+
+import circleTypeRoutes from '../mobile/circleTypeRoutes';
+import galleryRoutes from '../mobile/galleryRoutes';
+import expensesRoutes from '../mobile/expensesRoutes';
 
 // App Configuration Routes
 import appConfigRoutes from '../appConfigRoutes';

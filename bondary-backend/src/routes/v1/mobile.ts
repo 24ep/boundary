@@ -25,6 +25,7 @@ import notificationRoutes from '../mobile/notifications';
 import shoppingRoutes from '../mobile/shopping';
 import userHealthRoutes from '../mobile/userHealth';
 import mobileRoutes from '../mobile/mobileRoutes';
+import expensesRoutes from '../mobile/expensesRoutes';
 
 const router = Router();
 
@@ -43,7 +44,7 @@ router.use('/notes', notesRoutes);
 router.use('/todos', todosRoutes);
 router.use('/social', socialRoutes);
 router.use('/finance', financialRoutes);
-router.use('/expenses', financialRoutes);
+router.use('/expenses', expensesRoutes);
 router.use('/emotions', emotionsRoutes);
 router.use('/translations', translationsRoutes);
 router.use('/circle-types', circleTypeRoutes);
