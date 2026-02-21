@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma';
 
 export enum AuditCategory {
@@ -43,24 +44,18 @@ export interface AuditLogEntry {
 class AuditService {
     async log(entry: Omit<AuditLogEntry, 'id' | 'timestamp'>): Promise<void> {
         try {
-            await prisma.$queryRaw<any[]>`
-                INSERT INTO admin.audit_logs (
-                    id, user_id, action, category, resource, resource_id, 
-                    details, ip_address, user_agent, created_at
-                )
-                VALUES (
-                    gen_random_uuid()::uuid,
-                    ${entry.userId || null}::uuid,
-                    ${entry.action},
-                    ${entry.category},
-                    ${entry.resource},
-                    ${entry.resourceId || null}::uuid,
-                    ${JSON.stringify(entry.details || {})}::jsonb,
-                    ${entry.ipAddress || null},
-                    ${entry.userAgent || null},
-                    NOW()
-                )
-            `;
+            await prisma.auditLog.create({
+                data: {
+                    userId: entry.userId || null,
+                    action: entry.action,
+                    category: entry.category,
+                    resource: entry.resource,
+                    resourceId: entry.resourceId || null,
+                    details: entry.details || {},
+                    ipAddress: entry.ipAddress || null,
+                    userAgent: entry.userAgent || null,
+                }
+            });
         } catch (error) {
             console.error('Failed to log audit entry:', error);
             // Don't throw - audit failures shouldn't break the main flow
@@ -160,57 +155,43 @@ class AuditService {
         limit?: number;
         offset?: number;
     }): Promise<AuditLogEntry[]> {
-        let whereClause = '1=1';
-        const params: any[] = [];
-
-        if (filters.userId) {
-            whereClause += ` AND user_id = $${params.length + 1}::uuid`;
-            params.push(filters.userId);
-        }
-
-        if (filters.category) {
-            whereClause += ` AND category = $${params.length + 1}`;
-            params.push(filters.category);
-        }
-
-        if (filters.action) {
-            whereClause += ` AND action = $${params.length + 1}`;
-            params.push(filters.action);
-        }
-
-        if (filters.resource) {
-            whereClause += ` AND resource = $${params.length + 1}`;
-            params.push(filters.resource);
-        }
-
-        if (filters.startDate) {
-            whereClause += ` AND created_at >= $${params.length + 1}`;
-            params.push(filters.startDate);
-        }
-
-        if (filters.endDate) {
-            whereClause += ` AND created_at <= $${params.length + 1}`;
-            params.push(filters.endDate);
-        }
-
-        const limit = filters.limit || 100;
-        const offset = filters.offset || 0;
-
-        const query = `
-            SELECT 
-                id, user_id as "userId", action, category, resource, resource_id as "resourceId",
-                details, ip_address as "ipAddress", user_agent as "userAgent", created_at as "timestamp"
-            FROM admin.audit_logs 
-            WHERE ${whereClause}
-            ORDER BY created_at DESC 
-            LIMIT ${limit} OFFSET ${offset}
-        `;
-
         try {
-            const rows = await prisma.$queryRawUnsafe<any[]>(query, ...params);
-            return rows.map(row => ({
-                ...row,
-                timestamp: new Date(row.timestamp)
+            const where: any = {};
+            
+            if (filters.userId) where.userId = filters.userId;
+            if (filters.category) where.category = filters.category;
+            if (filters.action) where.action = filters.action;
+            if (filters.resource) where.resource = filters.resource;
+            
+            if (filters.startDate || filters.endDate) {
+                where.createdAt = {};
+                if (filters.startDate) where.createdAt.gte = filters.startDate;
+                if (filters.endDate) where.createdAt.lte = filters.endDate;
+            }
+
+            const logs = await prisma.auditLog.findMany({
+                where,
+                take: filters.limit || 100,
+                skip: filters.offset || 0,
+                orderBy: {
+                    createdAt: 'desc'
+                },
+                include: {
+                    application: true
+                }
+            });
+
+            return logs.map(log => ({
+                id: log.id,
+                userId: log.userId || undefined,
+                action: log.action as AuditAction,
+                category: log.category as AuditCategory,
+                resource: log.resource || '',
+                resourceId: log.resourceId || undefined,
+                details: log.details,
+                ipAddress: log.ipAddress || undefined,
+                userAgent: log.userAgent || undefined,
+                timestamp: log.createdAt
             }));
         } catch (error) {
             console.error('Failed to query audit logs:', error);
@@ -240,47 +221,36 @@ class AuditService {
         endDate?: Date;
     }): Promise<any> {
         try {
-            let whereClause = '1=1';
-            const params: any[] = [];
-
-            if (filters.userId) {
-                whereClause += ` AND user_id = $${params.length + 1}::uuid`;
-                params.push(filters.userId);
+            const where: any = {};
+            if (filters.userId) where.userId = filters.userId;
+            if (filters.category) where.category = filters.category;
+            if (filters.action) where.action = filters.action;
+            
+            if (filters.startDate || filters.endDate) {
+                where.createdAt = {};
+                if (filters.startDate) where.createdAt.gte = filters.startDate;
+                if (filters.endDate) where.createdAt.lte = filters.endDate;
             }
 
-            if (filters.category) {
-                whereClause += ` AND category = $${params.length + 1}`;
-                params.push(filters.category);
-            }
-
-            if (filters.action) {
-                whereClause += ` AND action = $${params.length + 1}`;
-                params.push(filters.action);
-            }
-
-            if (filters.startDate) {
-                whereClause += ` AND created_at >= $${params.length + 1}`;
-                params.push(filters.startDate);
-            }
-
-            if (filters.endDate) {
-                whereClause += ` AND created_at <= $${params.length + 1}`;
-                params.push(filters.endDate);
-            }
-
-            const query = `
+            // Since we want group by date_trunc, we'll use queryRaw but WITHOUT schema prefix
+            // This will respect the search_path or the default schema
+            const rows = await prisma.$queryRaw<any[]>(Prisma.sql`
                 SELECT 
                     category,
                     action,
-                    COUNT(*) as count,
+                    COUNT(*)::int as count,
                     DATE_TRUNC('day', created_at) as date
-                FROM admin.audit_logs 
-                WHERE ${whereClause}
+                FROM audit_logs 
+                WHERE 1=1
+                ${filters.userId ? Prisma.sql`AND user_id = ${filters.userId}::uuid` : Prisma.empty}
+                ${filters.category ? Prisma.sql`AND category = ${filters.category}` : Prisma.empty}
+                ${filters.action ? Prisma.sql`AND action = ${filters.action}` : Prisma.empty}
+                ${filters.startDate ? Prisma.sql`AND created_at >= ${filters.startDate}` : Prisma.empty}
+                ${filters.endDate ? Prisma.sql`AND created_at <= ${filters.endDate}` : Prisma.empty}
                 GROUP BY category, action, DATE_TRUNC('day', created_at)
                 ORDER BY date DESC, count DESC
-            `;
+            `);
 
-            const rows = await prisma.$queryRawUnsafe<any[]>(query, ...params);
             return rows;
         } catch (error) {
             console.error('Failed to get audit statistics:', error);
