@@ -2,11 +2,16 @@ import { RequestHandler } from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
 import { v4 as uuidv4 } from 'uuid';
 
-const UPLOADS_DIR = path.resolve(process.cwd(), 'uploads');
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+const UPLOADS_DIR = process.env.UPLOADS_DIR || path.join(os.tmpdir(), 'uniapps_uploads');
+try {
+  if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  }
+} catch (e) {
+  console.warn(`Failed to create uploads directory at ${UPLOADS_DIR}:`, e);
 }
 
 // Local disk storage service implementation
