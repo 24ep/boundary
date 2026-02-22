@@ -26,12 +26,11 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy package.json and install production dependencies
 # Copy package.json and install production dependencies
 COPY --from=deps /app/package.json /app/package-lock.json ./
 COPY --from=deps /app/prisma ./prisma/
@@ -39,24 +38,22 @@ RUN ls -R prisma && npm ci --omit=dev
 
 # Copy built artifacts
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/package.json ./package.json
 
 # Copy Prisma client
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
-# Copy entrypoint script
-COPY appkit/scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# Copy standalone output
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
 EXPOSE 3001
 ENV PORT 3001
 
-# Use the bootstrap script as entrypoint
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["node", "dist/server.js"]
+# Use Next.js standalone server
+CMD ["node", "server.js"]
