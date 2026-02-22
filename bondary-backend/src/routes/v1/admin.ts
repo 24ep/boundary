@@ -32,7 +32,7 @@ router.use('/admin/legal', legalRoutes); // Legal documents
  * GET /api/v1/admin/sso-providers
  * Get SSO/OAuth providers configuration
  */
-router.get('/admin/sso-providers', 
+router.get('/sso-providers', 
   authenticateAdmin,
   requirePermission('sso', 'view'),
   async (req: AdminRequest, res: Response) => {
@@ -63,7 +63,7 @@ router.get('/admin/sso-providers',
  * GET /api/v1/admin/applications
  * Get all applications
  */
-router.get('/admin/applications',
+router.get('/applications',
   authenticateAdmin,
   requirePermission('applications', 'view'),
   async (req: AdminRequest, res: Response) => {
@@ -90,7 +90,7 @@ router.get('/admin/applications',
  * GET /api/v1/admin/auth-test
  * Test authentication without permission requirements
  */
-router.get('/admin/auth-test',
+router.get('/auth-test',
   authenticateAdmin,
   async (req: AdminRequest, res: Response) => {
     try {
@@ -115,7 +115,7 @@ router.get('/admin/auth-test',
  * POST /api/admin/applications
  * Create new application
  */
-router.post('/admin/applications',
+router.post('/applications',
   authenticateAdmin,
   requirePermission('applications', 'create'),
   async (req: AdminRequest, res: Response) => {
