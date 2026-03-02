@@ -18,7 +18,12 @@ export async function GET(
       orderBy: { updatedAt: 'desc' },
     })
 
-    return NextResponse.json({ templates })
+    const defaultTemplates = await prisma.emailTemplate.findMany({
+      where: { applicationId: null, isActive: true },
+      orderBy: { updatedAt: 'desc' },
+    })
+
+    return NextResponse.json({ templates, defaultTemplates })
   } catch (error) {
     console.error('Failed to fetch email templates:', error)
     return NextResponse.json({ error: 'Failed to fetch email templates' }, { status: 500 })
@@ -36,6 +41,46 @@ export async function POST(
     }
 
     const body = await request.json().catch(() => ({}))
+    const assignDefaultTemplateId = typeof body.assignDefaultTemplateId === 'string' ? body.assignDefaultTemplateId.trim() : ''
+
+    if (assignDefaultTemplateId) {
+      if (!UUID_REGEX.test(assignDefaultTemplateId)) {
+        return NextResponse.json({ error: 'Invalid default template ID format' }, { status: 400 })
+      }
+
+      const defaultTemplate = await prisma.emailTemplate.findUnique({
+        where: { id: assignDefaultTemplateId },
+      })
+      if (!defaultTemplate || defaultTemplate.applicationId !== null) {
+        return NextResponse.json({ error: 'Default template not found' }, { status: 404 })
+      }
+
+      const duplicateBySlug = await prisma.emailTemplate.findFirst({
+        where: { applicationId: appId, slug: defaultTemplate.slug },
+      })
+      if (duplicateBySlug) {
+        return NextResponse.json(
+          { template: duplicateBySlug, message: 'Template with this slug already assigned to application' },
+          { status: 200 }
+        )
+      }
+
+      const template = await prisma.emailTemplate.create({
+        data: {
+          applicationId: appId,
+          name: defaultTemplate.name,
+          slug: defaultTemplate.slug,
+          subject: defaultTemplate.subject,
+          htmlContent: defaultTemplate.htmlContent,
+          textContent: defaultTemplate.textContent,
+          variables: defaultTemplate.variables,
+          isActive: defaultTemplate.isActive,
+        },
+      })
+
+      return NextResponse.json({ template }, { status: 201 })
+    }
+
     const name = typeof body.name === 'string' ? body.name.trim() : ''
     const slug = typeof body.slug === 'string' ? body.slug.trim() : ''
     const subject = typeof body.subject === 'string' ? body.subject.trim() : ''

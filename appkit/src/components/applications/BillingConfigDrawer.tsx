@@ -22,6 +22,7 @@ interface BillingConfigDrawerProps {
   onClose: () => void
   appId: string
   appName: string
+  initialProvider?: string | null
 }
 
 interface BillingConfig {
@@ -87,7 +88,7 @@ const DEFAULT_BILLING_CONFIG: BillingConfig = {
   providerConfig: {},
 }
 
-export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }: BillingConfigDrawerProps) {
+export default function BillingConfigDrawer({ isOpen, onClose, appId, appName, initialProvider }: BillingConfigDrawerProps) {
   const [useDefault, setUseDefault] = useState(true)
   const [config, setConfig] = useState<BillingConfig>(DEFAULT_BILLING_CONFIG)
   const [defaultConfig, setDefaultConfig] = useState<BillingConfig>(DEFAULT_BILLING_CONFIG)
@@ -99,6 +100,11 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
   useEffect(() => {
     if (isOpen && appId) loadData()
   }, [isOpen, appId])
+
+  useEffect(() => {
+    if (!isOpen || !initialProvider) return
+    setConfig((prev) => ({ ...prev, provider: initialProvider }))
+  }, [isOpen, initialProvider])
 
   const loadData = async () => {
     try {
@@ -186,17 +192,6 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
             </div>
           ) : (
             <>
-              {/* Type Switcher */}
-              <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-gray-50/70 dark:bg-zinc-800/30">
-                <div>
-                  <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">Billing methods with inherited defaults</p>
-                  <p className="text-xs text-gray-500">{useDefault ? 'Currently using platform default values' : 'App-level override active'}</p>
-                </div>
-                <Button variant="outline" size="sm" onClick={() => toggleUseDefault(true)}>
-                  Use Platform Default
-                </Button>
-              </div>
-
               {/* Status Section */}
               <div className="p-4 rounded-xl border border-gray-200 dark:border-zinc-800 space-y-4">
                 <div className="flex items-center justify-between">
@@ -302,9 +297,29 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
                     const activeProvider = BILLING_PROVIDERS.find(p => p.value === config.provider)
                     if (!activeProvider) return null
                     const providerKey = config.provider
+                    const providerDefault = (defaultConfig.providerConfig?.[providerKey] || {}) as Record<string, string>
                     return (
                       <div className="space-y-3 pt-2 border-t border-gray-200 dark:border-zinc-700">
-                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">{activeProvider.label} Credentials</p>
+                        <div className="flex items-center justify-between">
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">{activeProvider.label} Credentials</p>
+                          <button
+                            onClick={() => {
+                              setUseDefault(false)
+                              setConfig(prev => ({
+                                ...prev,
+                                providerConfig: {
+                                  ...prev.providerConfig,
+                                  [providerKey]: providerDefault,
+                                },
+                              }))
+                            }}
+                            className="text-[10px] font-bold text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors"
+                            title={`Use default for ${activeProvider.label}`}
+                          >
+                            <RotateCcwIcon className="w-3 h-3" />
+                            Use default for this method
+                          </button>
+                        </div>
                         {activeProvider.fields.map(field => {
                           const fieldKey = `${providerKey}_${field.key}`
                           const isSecret = (field as any).secret
@@ -353,7 +368,7 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
                 <div className="flex items-center justify-between pt-2">
                   <button 
                     onClick={() => {
-                      setUseDefault(true)
+                      toggleUseDefault(true)
                       setConfig(defaultConfig)
                     }}
                     className="text-[10px] font-bold text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors"

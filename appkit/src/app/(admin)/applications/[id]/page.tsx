@@ -10,6 +10,7 @@ import UserDetailDrawer from '@/components/users/UserDetailDrawer'
 import AuthMethodsConfigDrawer from '@/components/applications/AuthMethodsConfigDrawer'
 import CommunicationConfigDrawer from '@/components/applications/CommunicationConfigDrawer'
 import LegalConfigDrawer from '@/components/applications/LegalConfigDrawer'
+import BillingConfigDrawer from '@/components/applications/BillingConfigDrawer'
 import DevGuideDrawer from '@/components/applications/DevGuideDrawer'
 import SurveyBuilder from '@/components/applications/SurveyBuilder'
 import UserAttributesConfig from '@/components/applications/UserAttributesConfig'
@@ -213,30 +214,6 @@ const BILLING_PROVIDERS = [
   { value: 'lemonsqueezy', label: 'Lemon Squeezy' },
 ] as const
 
-const BILLING_PROVIDER_FIELDS: Record<string, { key: string; label: string; placeholder: string }[]> = {
-  stripe: [
-    { key: 'publicKey', label: 'Publishable Key', placeholder: 'pk_live_...' },
-    { key: 'secretKey', label: 'Secret Key', placeholder: 'sk_live_...' },
-    { key: 'webhookSecret', label: 'Webhook Secret', placeholder: 'whsec_...' },
-    { key: 'connectedAccountId', label: 'Connected Account ID (optional)', placeholder: 'acct_...' },
-  ],
-  paypal: [
-    { key: 'clientId', label: 'Client ID', placeholder: 'AV2e...' },
-    { key: 'clientSecret', label: 'Client Secret', placeholder: '....' },
-    { key: 'webhookId', label: 'Webhook ID', placeholder: 'WH-...' },
-  ],
-  paddle: [
-    { key: 'vendorId', label: 'Vendor ID', placeholder: '12345' },
-    { key: 'apiKey', label: 'API Key', placeholder: '....' },
-    { key: 'publicKey', label: 'Public Key', placeholder: '....' },
-  ],
-  lemonsqueezy: [
-    { key: 'apiKey', label: 'API Key', placeholder: '....' },
-    { key: 'storeId', label: 'Store ID', placeholder: '12345' },
-    { key: 'webhookSecret', label: 'Webhook Secret', placeholder: 'whsec_...' },
-  ],
-}
-
 export default function ApplicationConfigPage() {
   const params = useParams()
   const router = useRouter()
@@ -251,6 +228,8 @@ export default function ApplicationConfigPage() {
   const [isAuthDrawerOpen, setIsAuthDrawerOpen] = useState(false)
   const [isCommDrawerOpen, setIsCommDrawerOpen] = useState(false)
   const [isLegalDrawerOpen, setIsLegalDrawerOpen] = useState(false)
+  const [isBillingDrawerOpen, setIsBillingDrawerOpen] = useState(false)
+  const [selectedBillingProvider, setSelectedBillingProvider] = useState<string | null>(null)
   const [copiedId, setCopiedId] = useState<string | null>(null)
   // Add User modal
   const [showAddUser, setShowAddUser] = useState(false)
@@ -350,19 +329,13 @@ export default function ApplicationConfigPage() {
     currency: 'USD',
     providerConfig: {},
   })
-  const [billingDefaultConfig, setBillingDefaultConfig] = useState<AppBillingConfig>({
-    enabled: false,
-    provider: 'stripe',
-    mode: 'test',
-    currency: 'USD',
-    providerConfig: {},
-  })
-  const [billingSaving, setBillingSaving] = useState(false)
-  const [billingMsg, setBillingMsg] = useState('')
   // Email templates
   const [emailTemplates, setEmailTemplates] = useState<AppEmailTemplate[]>([])
+  const [defaultEmailTemplates, setDefaultEmailTemplates] = useState<AppEmailTemplate[]>([])
   const [emailTemplatesLoading, setEmailTemplatesLoading] = useState(false)
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null)
+  const [selectedTemplateScope, setSelectedTemplateScope] = useState<'app' | 'default'>('app')
+  const [selectedDefaultTemplateToAssign, setSelectedDefaultTemplateToAssign] = useState('')
   const [templateEditor, setTemplateEditor] = useState({
     name: '',
     slug: '',
@@ -701,7 +674,6 @@ export default function ApplicationConfigPage() {
         providerConfig: {},
         ...(defaultRes?.config || {}),
       }
-      setBillingDefaultConfig(defaults)
       setBillingConfig({
         ...defaults,
         ...(appRes.config || {}),
@@ -722,34 +694,6 @@ export default function ApplicationConfigPage() {
     }
   }, [appId])
 
-  const saveBillingConfig = async () => {
-    try {
-      setBillingSaving(true)
-      await adminService.saveAppConfig(appId, 'billing', billingConfig)
-      setBillingMsg('Saved!')
-      setTimeout(() => setBillingMsg(''), 3000)
-    } catch (error) {
-      console.error('Failed to save billing config:', error)
-      setBillingMsg('Failed to save billing config')
-      setTimeout(() => setBillingMsg(''), 3000)
-    } finally {
-      setBillingSaving(false)
-    }
-  }
-
-  const updateBillingProviderField = (provider: string, field: string, value: string) => {
-    setBillingConfig(prev => ({
-      ...prev,
-      providerConfig: {
-        ...(prev.providerConfig || {}),
-        [provider]: {
-          ...((prev.providerConfig || {})[provider] || {}),
-          [field]: value,
-        },
-      },
-    }))
-  }
-
   const loadEmailTemplates = useCallback(async () => {
     if (!appId) return
     setEmailTemplatesLoading(true)
@@ -758,9 +702,12 @@ export default function ApplicationConfigPage() {
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data?.error || 'Failed to load templates')
       const templates = Array.isArray(data?.templates) ? data.templates : []
+      const defaults = Array.isArray(data?.defaultTemplates) ? data.defaultTemplates : []
       setEmailTemplates(templates)
+      setDefaultEmailTemplates(defaults)
       if (templates.length > 0 && !selectedTemplateId) {
         const first = templates[0]
+        setSelectedTemplateScope('app')
         setSelectedTemplateId(first.id)
         setTemplateEditor({
           name: first.name || '',
@@ -780,6 +727,20 @@ export default function ApplicationConfigPage() {
   }, [appId, selectedTemplateId])
 
   const selectTemplate = (template: AppEmailTemplate) => {
+    setSelectedTemplateScope('app')
+    setSelectedTemplateId(template.id)
+    setTemplateEditor({
+      name: template.name || '',
+      slug: template.slug || '',
+      subject: template.subject || '',
+      htmlContent: template.htmlContent || '',
+      textContent: template.textContent || '',
+      isActive: template.isActive !== false,
+    })
+  }
+
+  const selectDefaultTemplate = (template: AppEmailTemplate) => {
+    setSelectedTemplateScope('default')
     setSelectedTemplateId(template.id)
     setTemplateEditor({
       name: template.name || '',
@@ -794,8 +755,12 @@ export default function ApplicationConfigPage() {
   const saveTemplate = async () => {
     try {
       const endpoint = selectedTemplateId
-        ? `/api/v1/admin/applications/${appId}/email-templates/${selectedTemplateId}`
-        : `/api/v1/admin/applications/${appId}/email-templates`
+        ? selectedTemplateScope === 'default'
+          ? `/api/v1/admin/config/email-templates/${selectedTemplateId}`
+          : `/api/v1/admin/applications/${appId}/email-templates/${selectedTemplateId}`
+        : selectedTemplateScope === 'default'
+          ? '/api/v1/admin/config/email-templates'
+          : `/api/v1/admin/applications/${appId}/email-templates`
       const method = selectedTemplateId ? 'PATCH' : 'POST'
       const res = await fetch(endpoint, {
         method,
@@ -815,7 +780,10 @@ export default function ApplicationConfigPage() {
 
   const deleteTemplate = async (templateId: string) => {
     try {
-      const res = await fetch(`/api/v1/admin/applications/${appId}/email-templates/${templateId}`, {
+      const endpoint = selectedTemplateScope === 'default'
+        ? `/api/v1/admin/config/email-templates/${templateId}`
+        : `/api/v1/admin/applications/${appId}/email-templates/${templateId}`
+      const res = await fetch(endpoint, {
         method: 'DELETE',
       })
       const data = await res.json().catch(() => ({}))
@@ -827,6 +795,26 @@ export default function ApplicationConfigPage() {
       await loadEmailTemplates()
     } catch (error: any) {
       setTemplateMsg(error?.message || 'Failed to delete template')
+      setTimeout(() => setTemplateMsg(''), 3000)
+    }
+  }
+
+  const assignDefaultTemplateToApp = async () => {
+    if (!selectedDefaultTemplateToAssign) return
+    try {
+      const res = await fetch(`/api/v1/admin/applications/${appId}/email-templates`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ assignDefaultTemplateId: selectedDefaultTemplateToAssign }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data?.error || 'Failed to assign default template')
+      setTemplateMsg('Assigned to app. You can now override it.')
+      setSelectedDefaultTemplateToAssign('')
+      setTimeout(() => setTemplateMsg(''), 3000)
+      await loadEmailTemplates()
+    } catch (error: any) {
+      setTemplateMsg(error?.message || 'Failed to assign default template')
       setTimeout(() => setTemplateMsg(''), 3000)
     }
   }
@@ -1545,6 +1533,7 @@ export default function ApplicationConfigPage() {
       items: [
         { value: 'general', icon: <SettingsIcon className="w-4 h-4" />, label: 'General' },
         { value: 'users', icon: <UsersIcon className="w-4 h-4" />, label: 'Users' },
+        { value: 'billing', icon: <CreditCardIcon className="w-4 h-4" />, label: 'Billing & Subscriptions' },
         { value: 'circles', icon: <GlobeIcon className="w-4 h-4" />, label: 'Circles' },
         { value: 'surveys', icon: <ClipboardListIcon className="w-4 h-4" />, label: 'Surveys' },
       ],
@@ -1575,7 +1564,6 @@ export default function ApplicationConfigPage() {
         { value: 'email-templates', icon: <MailIcon className="w-4 h-4" />, label: 'Email Templates' },
         { value: 'webhooks', icon: <WebhookIcon className="w-4 h-4" />, label: 'Webhooks' },
         { value: 'legal', icon: <ScaleIcon className="w-4 h-4" />, label: 'Legal & Compliance' },
-        { value: 'billing', icon: <CreditCardIcon className="w-4 h-4" />, label: 'Billing & Subscriptions' },
         { value: 'activity', icon: <ActivityIcon className="w-4 h-4" />, label: 'Activity Log' },
       ],
     },
@@ -2590,7 +2578,7 @@ export default function ApplicationConfigPage() {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Authentication Methods</h3>
-                <p className="text-sm text-gray-500 dark:text-zinc-400">Method cards below show inherited defaults; click a card to configure per-app overrides.</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-400">Methods are grouped by category. Click Configure to manage and override per-app settings.</p>
               </div>
               <Button onClick={() => setIsAuthDrawerOpen(true)} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0 shadow-lg shadow-blue-500/25">
                 <SettingsIcon className="w-4 h-4 mr-2" />
@@ -2598,26 +2586,32 @@ export default function ApplicationConfigPage() {
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="space-y-4">
               {[
-                { name: 'Email & Password', icon: <MailIcon className="w-4 h-4" />, color: 'text-blue-500', enabled: true },
-                { name: 'Google OAuth', icon: <GlobeIcon className="w-4 h-4" />, color: 'text-red-500', enabled: true },
-                { name: 'GitHub OAuth', icon: <CogIcon className="w-4 h-4" />, color: 'text-gray-500', enabled: false },
-                { name: 'SAML SSO', icon: <ShieldCheckIcon className="w-4 h-4" />, color: 'text-violet-500', enabled: false },
-                { name: 'Magic Link', icon: <KeyIcon className="w-4 h-4" />, color: 'text-emerald-500', enabled: true },
-                { name: 'SMS OTP', icon: <SmartphoneIcon className="w-4 h-4" />, color: 'text-amber-500', enabled: false },
-              ].map((m) => (
+                { group: 'General', methods: ['Email & Password', 'SAML / SSO'] },
+                { group: 'Passwordless', methods: ['Magic Link', 'SMS OTP', 'WhatsApp OTP'] },
+                { group: 'Social Login', methods: ['Google OAuth', 'GitHub OAuth', 'Facebook OAuth', 'X OAuth', 'Microsoft OAuth', 'LINE OAuth'] },
+              ].map((section) => (
                 <button
-                  key={m.name}
+                  key={section.group}
                   onClick={() => setIsAuthDrawerOpen(true)}
-                  className="text-left p-3 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/30 dark:hover:bg-blue-500/5 transition-colors"
+                  className="w-full text-left rounded-xl border border-gray-200 dark:border-zinc-800 p-4 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/20 dark:hover:bg-blue-500/5 transition-colors"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className={m.color}>{m.icon}</span>
-                    <span className="text-sm font-semibold text-gray-800 dark:text-zinc-200">{m.name}</span>
-                    <span className={`ml-auto w-2 h-2 rounded-full ${m.enabled ? 'bg-emerald-500' : 'bg-gray-300 dark:bg-zinc-600'}`} />
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 uppercase tracking-wide">
+                      {section.group}
+                    </span>
                   </div>
-                  <p className="text-[11px] text-gray-500 mt-1">Default config active. Click to override for this app.</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {section.methods.map((method) => (
+                      <span
+                        key={method}
+                        className="inline-flex px-2 py-1 rounded-md text-[11px] border border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-zinc-300 bg-white dark:bg-zinc-900"
+                      >
+                        {method}
+                      </span>
+                    ))}
+                  </div>
                 </button>
               ))}
             </div>
@@ -2802,13 +2796,6 @@ export default function ApplicationConfigPage() {
         <TabsContent value="billing" className="space-y-4">
           {renderTabHeader('Billing & Subscriptions', 'billing')}
           <div className="rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 p-6 space-y-6">
-            <div className="rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50/60 dark:bg-zinc-800/30 p-4">
-              <p className="text-sm font-semibold text-gray-900 dark:text-white">Default methods with per-app override</p>
-              <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">
-                Billing methods inherit platform defaults. Update any field below to override for this application.
-              </p>
-            </div>
-
             <div className="rounded-lg border border-gray-200 dark:border-zinc-800 p-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -2836,89 +2823,40 @@ export default function ApplicationConfigPage() {
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="rounded-lg border border-gray-200 dark:border-zinc-800 p-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <div>
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">Provider</label>
-                    <select
-                      title="Billing provider"
-                      value={billingConfig.provider}
-                      onChange={(e) => setBillingConfig(prev => ({ ...prev, provider: e.target.value }))}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm"
-                    >
-                      {BILLING_PROVIDERS.map((provider) => (
-                        <option key={provider.value} value={provider.value}>{provider.label}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">Mode</label>
-                    <select
-                      title="Billing mode"
-                      value={billingConfig.mode}
-                      onChange={(e) => setBillingConfig(prev => ({ ...prev, mode: e.target.value as 'test' | 'live' }))}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm"
-                    >
-                      <option value="test">Test</option>
-                      <option value="live">Live</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">Currency</label>
-                    <select
-                      title="Billing currency"
-                      value={billingConfig.currency}
-                      onChange={(e) => setBillingConfig(prev => ({ ...prev, currency: e.target.value }))}
-                      className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm"
-                    >
-                      <option value="USD">USD</option>
-                      <option value="EUR">EUR</option>
-                      <option value="GBP">GBP</option>
-                      <option value="THB">THB</option>
-                    </select>
-                  </div>
-                </div>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Available Billing Methods</h4>
+                <span className="text-[11px] text-gray-500 dark:text-zinc-400">Click a method card to configure</span>
               </div>
-
-              <div className="rounded-lg border border-gray-200 dark:border-zinc-800 p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Provider Credentials</h4>
-                  <span className="text-[11px] text-gray-500 dark:text-zinc-400">
-                    App-scoped registration for `{billingConfig.provider}`
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {(BILLING_PROVIDER_FIELDS[billingConfig.provider] || []).map((field) => (
-                    <div key={field.key}>
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">{field.label}</label>
-                      <input
-                        type="text"
-                        title={field.label}
-                        value={billingConfig.providerConfig?.[billingConfig.provider]?.[field.key] || ''}
-                        onChange={(e) => updateBillingProviderField(billingConfig.provider, field.key, e.target.value)}
-                        placeholder={field.placeholder}
-                        className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono"
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-3 rounded-lg border border-blue-200/60 dark:border-blue-500/20 bg-blue-50/40 dark:bg-blue-500/5 p-3">
-                  <p className="text-[11px] text-blue-800/90 dark:text-blue-300/90">
-                    Stripe metadata for this app is auto-attached server-side (`appId`, slug, name, webhook path) when saving billing override.
-                  </p>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {BILLING_PROVIDERS.map((provider) => {
+                  const isActive = billingConfig.provider === provider.value
+                  return (
+                    <button
+                      key={provider.value}
+                      onClick={() => {
+                        setSelectedBillingProvider(provider.value)
+                        setIsBillingDrawerOpen(true)
+                      }}
+                      className={`text-left rounded-lg border p-3 transition-colors ${
+                        isActive
+                          ? 'border-blue-300 bg-blue-50/30 dark:border-blue-500/40 dark:bg-blue-500/10'
+                          : 'border-gray-200 dark:border-zinc-800 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/20 dark:hover:bg-blue-500/5'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">{provider.label}</span>
+                        {isActive && <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase">Active</span>}
+                      </div>
+                      <p className="text-[11px] text-gray-500 mt-1">
+                        {isActive ? `Current mode: ${billingConfig.mode} · Currency: ${billingConfig.currency}` : 'Configure credentials and provider settings'}
+                      </p>
+                    </button>
+                  )
+                })}
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2">
-              {billingMsg && <span className={`text-xs ${billingMsg === 'Saved!' ? 'text-emerald-600' : 'text-red-500'}`}>{billingMsg}</span>}
-              <Button variant="outline" onClick={() => setBillingConfig(billingDefaultConfig)} disabled={billingSaving}>Reset</Button>
-              <Button onClick={saveBillingConfig} disabled={billingSaving} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0">
-                {billingSaving ? <Loader2Icon className="w-4 h-4 mr-1.5 animate-spin" /> : <SaveIcon className="w-4 h-4 mr-1.5" />}
-                Save Billing
-              </Button>
-            </div>
           </div>
         </TabsContent>
 
@@ -2927,26 +2865,66 @@ export default function ApplicationConfigPage() {
           {renderTabHeader(
             'Email Templates',
             'email-templates',
-            <Button
-              size="sm"
-              onClick={() => {
-                setSelectedTemplateId(null)
-                setTemplateEditor({ name: '', slug: '', subject: '', htmlContent: '', textContent: '', isActive: true })
-              }}
-              className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0"
-            >
-              <PlusIcon className="w-4 h-4 mr-1.5" />
-              Add New
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  setSelectedTemplateScope('default')
+                  setSelectedTemplateId(null)
+                  setTemplateEditor({ name: '', slug: '', subject: '', htmlContent: '', textContent: '', isActive: true })
+                }}
+              >
+                <PlusIcon className="w-4 h-4 mr-1.5" />
+                Create Default
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setSelectedTemplateScope('app')
+                  setSelectedTemplateId(null)
+                  setTemplateEditor({ name: '', slug: '', subject: '', htmlContent: '', textContent: '', isActive: true })
+                }}
+                className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0"
+              >
+                <PlusIcon className="w-4 h-4 mr-1.5" />
+                Add App Template
+              </Button>
+            </div>
           )}
           <div className="rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-500 dark:text-zinc-400">Template list with inline editing and rendered preview.</p>
-              {templateMsg && <span className={`text-xs font-medium ${templateMsg === 'Saved!' ? 'text-emerald-600' : 'text-red-500'}`}>{templateMsg}</span>}
+              <p className="text-sm text-gray-500 dark:text-zinc-400">Create platform defaults, assign them to this app, then override app copies.</p>
+              {templateMsg && <span className={`text-xs font-medium ${templateMsg === 'Saved!' || templateMsg.startsWith('Assigned') ? 'text-emerald-600' : 'text-red-500'}`}>{templateMsg}</span>}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-2 rounded-lg border border-gray-200 dark:border-zinc-800 p-3 bg-gray-50/40 dark:bg-zinc-800/30">
+              <select
+                title="Select default template to assign"
+                value={selectedDefaultTemplateToAssign}
+                onChange={(e) => setSelectedDefaultTemplateToAssign(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm"
+              >
+                <option value="">Assign default template to this app...</option>
+                {defaultEmailTemplates
+                  .filter((tpl) => !emailTemplates.some((assigned) => assigned.slug === tpl.slug))
+                  .map((tpl) => (
+                    <option key={tpl.id} value={tpl.id}>
+                      {tpl.name} ({tpl.slug})
+                    </option>
+                  ))}
+              </select>
+              <Button
+                onClick={assignDefaultTemplateToApp}
+                disabled={!selectedDefaultTemplateToAssign}
+                className="bg-blue-600 text-white border-0"
+              >
+                Assign to App
+              </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-[280px_minmax(0,1fr)] gap-4">
               <div className="space-y-2">
-                <div className="space-y-1 max-h-[420px] overflow-y-auto">
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">App Templates</p>
+                <div className="space-y-1 max-h-[220px] overflow-y-auto">
                   {emailTemplatesLoading ? (
                     <p className="text-xs text-gray-500">Loading templates...</p>
                   ) : emailTemplates.length === 0 ? (
@@ -2966,8 +2944,35 @@ export default function ApplicationConfigPage() {
                     </button>
                   ))}
                 </div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight pt-2">Default Templates</p>
+                <div className="space-y-1 max-h-[190px] overflow-y-auto">
+                  {defaultEmailTemplates.length === 0 ? (
+                    <p className="text-xs text-gray-500">No default templates yet.</p>
+                  ) : defaultEmailTemplates.map((template) => (
+                    <button
+                      key={template.id}
+                      onClick={() => selectDefaultTemplate(template)}
+                      className={`w-full text-left px-3 py-2 rounded-lg border text-sm ${
+                        selectedTemplateId === template.id && selectedTemplateScope === 'default'
+                          ? 'border-blue-300 bg-blue-50/40 dark:border-blue-500/30 dark:bg-blue-500/10'
+                          : 'border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800/50'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <p className="font-medium text-gray-900 dark:text-white truncate">{template.name}</p>
+                        <span className="inline-flex px-1.5 py-0.5 rounded text-[9px] font-bold bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300">
+                          Default
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-gray-500 dark:text-zinc-400 truncate">{template.slug}</p>
+                    </button>
+                  ))}
+                </div>
               </div>
               <div className="space-y-3">
+                <div className="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300">
+                  Editing: {selectedTemplateScope === 'default' ? 'Default Template' : 'App Template'}
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <input
                     type="text"
@@ -3064,7 +3069,7 @@ export default function ApplicationConfigPage() {
                       </Button>
                     )}
                     <Button onClick={saveTemplate} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0">
-                      Save Template
+                      {selectedTemplateScope === 'default' ? 'Save Default Template' : 'Save App Template'}
                     </Button>
                   </div>
                 </div>
@@ -3906,6 +3911,17 @@ export default function ApplicationConfigPage() {
         onClose={() => setIsLegalDrawerOpen(false)}
         appId={appId}
         appName={application?.name || 'Application'}
+      />
+      <BillingConfigDrawer
+        isOpen={isBillingDrawerOpen}
+        onClose={() => {
+          setIsBillingDrawerOpen(false)
+          setSelectedBillingProvider(null)
+          loadBillingConfig()
+        }}
+        appId={appId}
+        appName={application?.name || 'Application'}
+        initialProvider={selectedBillingProvider}
       />
 
       {/* Confirm Client Secret Rotation */}

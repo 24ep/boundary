@@ -13,7 +13,7 @@ import {
   RotateCcwIcon,
   FileTextIcon,
   ClockIcon,
-  PlusIcon,
+  SearchIcon,
   Trash2Icon,
 } from 'lucide-react'
 
@@ -50,13 +50,14 @@ const COMPLIANCE_ITEMS = [
 ]
 
 export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: LegalConfigDrawerProps) {
-  const [useDefault, setUseDefault] = useState(true)
   const [config, setConfig] = useState<LegalConfig | null>(null)
   const [defaultConfig, setDefaultConfig] = useState<LegalConfig | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState('')
   const [editingDocumentId, setEditingDocumentId] = useState<string | null>(null)
+  const [docSearch, setDocSearch] = useState('')
+  const [showDocPicker, setShowDocPicker] = useState(false)
 
   useEffect(() => {
     if (isOpen && appId) loadData()
@@ -66,7 +67,6 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
     try {
       setLoading(true)
       const res = await adminService.getAppConfigOverride(appId, 'legal')
-      setUseDefault(res.useDefault)
 
       const defaults = await adminService.getDefaultLegalConfig()
       setDefaultConfig(defaults.config)
@@ -97,21 +97,8 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
     }
   }
 
-  const toggleUseDefault = async (val: boolean) => {
-    setUseDefault(val)
-    if (val) {
-      try {
-        await adminService.deleteAppConfig(appId, 'legal')
-        setConfig(defaultConfig)
-      } catch (err) {
-        console.error('Failed to revert to default:', err)
-      }
-    }
-  }
-
   const toggleCompliance = (key: string) => {
     if (!config) return
-    setUseDefault(false)
     setConfig({ ...config, compliance: { ...config.compliance, [key]: !config.compliance[key] } })
   }
 
@@ -129,6 +116,20 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
     } finally {
       setSaving(false)
     }
+  }
+
+  const assignDefaultDocument = (docId: string) => {
+    if (!config || !defaultConfig) return
+    const source = defaultConfig.documents.find((d) => d.id === docId)
+    if (!source) return
+    if (config.documents.some((d) => d.id === source.id)) return
+
+    setConfig({
+      ...config,
+      documents: [...config.documents, { ...source }],
+    })
+    setDocSearch('')
+    setShowDocPicker(false)
   }
 
   if (!isOpen) return null
@@ -153,14 +154,6 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-gray-50/70 dark:bg-zinc-800/30">
-                <div>
-                  <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">Legal methods with inherited defaults</p>
-                  <p className="text-xs text-gray-500">Edit methods below to override default legal/compliance settings for this app.</p>
-                </div>
-                <Button variant="outline" size="sm" onClick={() => toggleUseDefault(true)}>Use Platform Default</Button>
-              </div>
-
               {config ? (
                 <div className="space-y-6">
                   {/* Compliance Toggles */}
@@ -186,7 +179,7 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
                                 {isOverridden && <span className="px-1.5 py-0.5 bg-violet-100 dark:bg-violet-500/20 text-[9px] font-bold text-violet-600 uppercase rounded">Custom</span>}
                               </div>
                               <p className="text-[9px] text-gray-400">
-                                {isOverridden ? 'Custom policy applied' : 'Inheriting platform policy'}
+                                {isOverridden ? 'Custom policy applied' : 'Using current policy'}
                               </p>
                             </div>
                             <div className="flex items-center gap-3">
@@ -218,23 +211,39 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
                         Legal Documents
                       </h3>
                       <button
-                        onClick={() => {
-                          const newDoc: LegalDocument = {
-                            id: `custom-${Date.now()}`,
-                            title: 'New Document',
-                            type: 'custom',
-                            version: '1.0',
-                            status: 'Draft',
-                            lastUpdated: new Date().toISOString().split('T')[0],
-                            content: '',
-                          }
-                          setConfig(prev => prev ? { ...prev, documents: [...prev.documents, newDoc] } : prev)
-                        }}
+                        onClick={() => setShowDocPicker((v) => !v)}
                         className="text-[10px] font-bold text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors"
                       >
-                        <PlusIcon className="w-3 h-3" /> Add Document
+                        <SearchIcon className="w-3 h-3" /> Assign Default Document
                       </button>
                     </div>
+                    {showDocPicker && (
+                      <div className="mb-4 rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-gray-50/60 dark:bg-zinc-800/30 p-3 space-y-2">
+                        <input
+                          type="text"
+                          title="Search default documents"
+                          placeholder="Search default documents..."
+                          value={docSearch}
+                          onChange={(e) => setDocSearch(e.target.value)}
+                          className="w-full px-3 py-2 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs"
+                        />
+                        <div className="max-h-36 overflow-y-auto space-y-1">
+                          {(defaultConfig?.documents || [])
+                            .filter((d) => !config.documents.some((assigned) => assigned.id === d.id))
+                            .filter((d) => d.title.toLowerCase().includes(docSearch.trim().toLowerCase()))
+                            .map((d) => (
+                              <button
+                                key={d.id}
+                                onClick={() => assignDefaultDocument(d.id)}
+                                className="w-full text-left px-2.5 py-2 rounded-lg border border-gray-200 dark:border-zinc-700 hover:bg-blue-50 dark:hover:bg-blue-500/10 text-xs"
+                              >
+                                <p className="font-semibold text-gray-800 dark:text-zinc-200">{d.title}</p>
+                                <p className="text-[10px] text-gray-500">{d.type}</p>
+                              </button>
+                            ))}
+                        </div>
+                      </div>
+                    )}
                     <div className="space-y-4">
                       {(config.documents || []).map(doc => {
                         const defDoc = defaultConfig?.documents.find(d => d.id === doc.id)
@@ -248,21 +257,7 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
                             <div className="p-4">
                               <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center gap-2">
-                                  {isCustom ? (
-                                <input
-                                      type="text"
-                                      value={doc.title}
-                                      onChange={e => {
-                                    setUseDefault(false)
-                                        setConfig(prev => prev ? { ...prev, documents: prev.documents.map(d => d.id === doc.id ? { ...d, title: e.target.value } : d) } : prev)
-                                      }}
-                                      className="text-[10px] font-bold text-gray-700 dark:text-zinc-200 uppercase tracking-tight bg-transparent border-b border-dashed border-gray-300 dark:border-zinc-600 focus:outline-none focus:border-blue-500 px-0 py-0.5"
-                                      placeholder="Document Title"
-                                    />
-                                  ) : (
-                                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-tight">{doc.title}</label>
-                                  )}
-                                  {isCustom && <span className="px-1.5 py-0.5 bg-emerald-100 dark:bg-emerald-500/20 text-[8px] font-bold text-emerald-600 uppercase rounded">Custom</span>}
+                                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-tight">{doc.title}</label>
                                   {!isCustom && isOverridden && <span className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-500/20 text-[8px] font-bold text-blue-600 uppercase rounded">Overridden</span>}
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -271,7 +266,7 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
                                       onClick={() => setConfig({ ...config, documents: config.documents.map(d => d.id === doc.id ? { ...d, content: defDoc?.content } : d) })}
                                       className="text-[10px] font-bold text-blue-500 flex items-center gap-1"
                                     >
-                                      <RotateCcwIcon className="w-2.5 h-2.5" /> Inherit
+                                      <RotateCcwIcon className="w-2.5 h-2.5" /> Use default
                                     </button>
                                   )}
                                   {isCustom && (
@@ -310,7 +305,6 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
                                       title="Document version"
                                       value={doc.version}
                                       onChange={e => {
-                                        setUseDefault(false)
                                         setConfig(prev => prev ? { ...prev, documents: prev.documents.map(d => d.id === doc.id ? { ...d, version: e.target.value } : d) } : prev)
                                       }}
                                       className="w-14 px-1.5 py-0.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded text-[10px] text-center focus:outline-none focus:ring-1 focus:ring-blue-500/30"
@@ -322,7 +316,6 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
                                       title="Document status"
                                       value={doc.status}
                                       onChange={e => {
-                                        setUseDefault(false)
                                         setConfig(prev => prev ? { ...prev, documents: prev.documents.map(d => d.id === doc.id ? { ...d, status: e.target.value } : d) } : prev)
                                       }}
                                       className="px-1.5 py-0.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded text-[10px] focus:outline-none focus:ring-1 focus:ring-blue-500/30"
@@ -385,7 +378,6 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
                                 value={val || 0}
                                 onChange={e => {
                                   const newVal = parseInt(e.target.value) || 0
-                                  setUseDefault(false)
                                   setConfig(prev => prev ? { ...prev, retention: { ...prev.retention, [item.key]: newVal } } : prev)
                                 }}
                                 className="w-full px-3 py-1.5 bg-white dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/20"
@@ -438,7 +430,6 @@ export default function LegalConfigDrawer({ isOpen, onClose, appId, appName }: L
                 <RichTextEditor
                   content={config.documents.find((doc) => doc.id === editingDocumentId)?.content || ''}
                   onChange={(content) => {
-                    setUseDefault(false)
                     setConfig(prev => prev ? {
                       ...prev,
                       documents: prev.documents.map(d => d.id === editingDocumentId ? {

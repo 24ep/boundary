@@ -16,6 +16,7 @@ import {
   RotateCcwIcon,
   AlertTriangleIcon,
   LinkIcon,
+  MessageCircleIcon,
 } from 'lucide-react'
 
 interface AuthMethodsConfigDrawerProps {
@@ -37,23 +38,46 @@ interface AuthProvider {
 const PROVIDER_META: Record<string, { icon: React.ReactNode; color: string }> = {
   'email-password': { icon: <MailIcon className="w-4 h-4" />, color: 'bg-blue-50 dark:bg-blue-500/10 text-blue-500' },
   'google-oauth': { icon: <GlobeIcon className="w-4 h-4" />, color: 'bg-red-50 dark:bg-red-500/10 text-red-500' },
+  'facebook-oauth': { icon: <GlobeIcon className="w-4 h-4" />, color: 'bg-blue-50 dark:bg-blue-500/10 text-blue-600' },
+  'x-oauth': { icon: <GlobeIcon className="w-4 h-4" />, color: 'bg-zinc-50 dark:bg-zinc-500/10 text-zinc-700 dark:text-zinc-300' },
+  'microsoft-oauth': { icon: <GlobeIcon className="w-4 h-4" />, color: 'bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600' },
+  'line-oauth': { icon: <MessageCircleIcon className="w-4 h-4" />, color: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' },
   'github-oauth': { icon: <CogIcon className="w-4 h-4" />, color: 'bg-gray-50 dark:bg-zinc-500/10 text-gray-700 dark:text-zinc-300' },
   'saml-sso': { icon: <ShieldCheckIcon className="w-4 h-4" />, color: 'bg-violet-50 dark:bg-violet-500/10 text-violet-500' },
   'magic-link': { icon: <KeyIcon className="w-4 h-4" />, color: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500' },
   'sms-otp': { icon: <SmartphoneIcon className="w-4 h-4" />, color: 'bg-amber-50 dark:bg-amber-500/10 text-amber-500' },
+  'whatsapp-otp': { icon: <MessageCircleIcon className="w-4 h-4" />, color: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' },
 }
 
 const FALLBACK_PROVIDERS: AuthProvider[] = [
   { id: 'default-email', providerName: 'email-password', displayName: 'Email & Password', isEnabled: true },
   { id: 'default-google', providerName: 'google-oauth', displayName: 'Google OAuth', isEnabled: false },
+  { id: 'default-facebook', providerName: 'facebook-oauth', displayName: 'Facebook OAuth', isEnabled: false },
+  { id: 'default-x', providerName: 'x-oauth', displayName: 'X OAuth', isEnabled: false },
+  { id: 'default-microsoft', providerName: 'microsoft-oauth', displayName: 'Microsoft OAuth', isEnabled: false },
+  { id: 'default-line', providerName: 'line-oauth', displayName: 'LINE OAuth', isEnabled: false },
   { id: 'default-github', providerName: 'github-oauth', displayName: 'GitHub OAuth', isEnabled: false },
   { id: 'default-saml', providerName: 'saml-sso', displayName: 'SAML / SSO', isEnabled: false },
   { id: 'default-magic', providerName: 'magic-link', displayName: 'Magic Link', isEnabled: false },
   { id: 'default-sms', providerName: 'sms-otp', displayName: 'SMS OTP', isEnabled: false },
+  { id: 'default-whatsapp', providerName: 'whatsapp-otp', displayName: 'WhatsApp OTP', isEnabled: false },
 ]
 
+const PROVIDER_GROUP: Record<string, 'social login' | 'password less' | 'general'> = {
+  'email-password': 'general',
+  'saml-sso': 'general',
+  'magic-link': 'password less',
+  'sms-otp': 'password less',
+  'whatsapp-otp': 'password less',
+  'google-oauth': 'social login',
+  'github-oauth': 'social login',
+  'facebook-oauth': 'social login',
+  'x-oauth': 'social login',
+  'microsoft-oauth': 'social login',
+  'line-oauth': 'social login',
+}
+
 export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appName }: AuthMethodsConfigDrawerProps) {
-  const [useDefault, setUseDefault] = useState(true)
   const [providers, setProviders] = useState<AuthProvider[]>(FALLBACK_PROVIDERS)
   const [defaultProviders, setDefaultProviders] = useState<AuthProvider[]>(FALLBACK_PROVIDERS)
   const [loading, setLoading] = useState(true)
@@ -80,7 +104,6 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
     try {
       setLoading(true)
       const res = await adminService.getAppConfigOverride(appId, 'auth')
-      setUseDefault(res.useDefault)
 
       // Load defaults, merge with fallbacks so we always show known methods
       const defaults = await adminService.getDefaultAuthMethods()
@@ -102,20 +125,7 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
     }
   }
 
-  const toggleUseDefault = async (val: boolean) => {
-    setUseDefault(val)
-    if (val) {
-      try {
-        await adminService.deleteAppConfig(appId, 'auth')
-        setProviders(defaultProviders)
-      } catch (err) {
-        console.error('Failed to revert to default:', err)
-      }
-    }
-  }
-
   const toggleProvider = (providerName: string) => {
-    setUseDefault(false)
     setProviders(prev => prev.map(p => p.providerName === providerName ? { ...p, isEnabled: !p.isEnabled } : p))
   }
 
@@ -158,16 +168,6 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-gray-50/70 dark:bg-zinc-800/30">
-                <div>
-                  <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">Method cards inherit default config</p>
-                  <p className="text-xs text-gray-500">Edit any card to create app-specific override. No separate default/individual tab is required.</p>
-                </div>
-                <Button variant="outline" size="sm" onClick={() => toggleUseDefault(true)}>
-                  Use Platform Default
-                </Button>
-              </div>
-
               {/* OAuth Guides */}
               <div className="space-y-3">
                 <div className="p-4 rounded-xl border border-blue-200/60 dark:border-blue-500/20 bg-blue-50/40 dark:bg-blue-500/5">
@@ -200,77 +200,87 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
               <div className="space-y-4">
                 <div className="flex items-center justify-between px-1">
                   <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Authentication Methods</h3>
-                  <span className="text-[10px] text-gray-400 italic">{useDefault ? 'Using platform default state' : 'App override state'}</span>
                 </div>
-                <div className="space-y-3">
-                  {providers.map(p => {
-                    const meta = PROVIDER_META[p.providerName]
-                    const defaultP = defaultProviders.find(dp => dp.providerName === p.providerName)
-                    const isOverridden = JSON.stringify(p) !== JSON.stringify(defaultP)
-                    
-                    return (
-                      <div key={p.providerName} className={`p-4 rounded-xl border transition-all ${isOverridden ? 'border-blue-500/30 bg-blue-500/5 shadow-sm' : 'border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900'}`}>
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className={`w-9 h-9 rounded-lg ${meta?.color || 'bg-gray-50 text-gray-500'} flex items-center justify-center shadow-sm`}>{meta?.icon || <CogIcon className="w-5 h-5" />}</div>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm font-semibold text-gray-900 dark:text-white">{p.displayName}</span>
-                                {isOverridden && <span className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-500/20 text-[9px] font-bold text-blue-600 uppercase rounded">Custom</span>}
-                              </div>
-                              <p className="text-[10px] text-gray-500 dark:text-zinc-500 mt-0.5">
-                                {isOverridden ? 'Configuration overridden for this app' : 'Inheriting system default settings'}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex items-center space-x-4">
-                            <label className="relative inline-flex items-center cursor-pointer">
-                              <input type="checkbox" title={`${p.displayName} enabled`} className="sr-only peer" checked={p.isEnabled} onChange={() => toggleProvider(p.providerName)} />
-                              <div className="w-10 h-5 bg-gray-200 dark:bg-zinc-700 peer-checked:bg-blue-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-full" />
-                            </label>
-                          </div>
-                        </div>
-                        
-                        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800/50 space-y-3">
-                          <div className="grid grid-cols-1 gap-3">
-                            <div>
-                              <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-tight mb-1">Client ID</label>
-                              <input 
-                                type="text" 
-                                value={p.clientId || ''} 
-                                placeholder={defaultP?.clientId || 'Enter client id...'}
-                                onChange={(e) => {
-                                  setUseDefault(false)
-                                  setProviders(prev => prev.map(item => item.providerName === p.providerName ? { ...item, clientId: e.target.value } : item))
-                                }}
-                                className="w-full px-3 py-1.5 bg-gray-50 dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                              />
-                            </div>
-                          </div>
-                          
-                          <div className="flex items-center justify-between pt-1">
-                            {isOverridden ? (
-                              <button 
-                                onClick={() => {
-                                  if (defaultP) setProviders(prev => prev.map(item => item.providerName === p.providerName ? { ...defaultP } : item))
-                                }}
-                                className="text-[10px] font-bold text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors"
-                              >
-                                <RotateCcwIcon className="w-3 h-3" />
-                                Reset to Default
-                              </button>
-                            ) : (
-                              <div />
-                            )}
-                            <span className="text-[10px] text-gray-400">
-                              {p.isEnabled ? 'Active' : 'Disabled'}
-                            </span>
-                          </div>
-                        </div>
+                {(['social login', 'password less', 'general'] as const).map((group) => {
+                  const groupProviders = providers.filter((p) => (PROVIDER_GROUP[p.providerName] || 'general') === group)
+                  if (groupProviders.length === 0) return null
+
+                  return (
+                    <div key={group} className="space-y-3">
+                      <div className="px-1">
+                        <span className="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300">
+                          {group}
+                        </span>
                       </div>
-                    )
-                  })}
-                </div>
+                      {groupProviders.map(p => {
+                        const meta = PROVIDER_META[p.providerName]
+                        const defaultP = defaultProviders.find(dp => dp.providerName === p.providerName)
+                        const isOverridden = JSON.stringify(p) !== JSON.stringify(defaultP)
+
+                        return (
+                          <div key={p.providerName} className={`p-4 rounded-xl border transition-all ${isOverridden ? 'border-blue-500/30 bg-blue-500/5 shadow-sm' : 'border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900'}`}>
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-center space-x-3">
+                                <div className={`w-9 h-9 rounded-lg ${meta?.color || 'bg-gray-50 text-gray-500'} flex items-center justify-center shadow-sm`}>{meta?.icon || <CogIcon className="w-5 h-5" />}</div>
+                                <div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-sm font-semibold text-gray-900 dark:text-white">{p.displayName}</span>
+                                    {isOverridden && <span className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-500/20 text-[9px] font-bold text-blue-600 uppercase rounded">Custom</span>}
+                                  </div>
+                                  <p className="text-[10px] text-gray-500 dark:text-zinc-500 mt-0.5">
+                                    {isOverridden ? 'Configuration overridden for this app' : 'Using current method settings'}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-4">
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                  <input type="checkbox" title={`${p.displayName} enabled`} className="sr-only peer" checked={p.isEnabled} onChange={() => toggleProvider(p.providerName)} />
+                                  <div className="w-10 h-5 bg-gray-200 dark:bg-zinc-700 peer-checked:bg-blue-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-full" />
+                                </label>
+                              </div>
+                            </div>
+
+                            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800/50 space-y-3">
+                              <div className="grid grid-cols-1 gap-3">
+                                <div>
+                                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-tight mb-1">Client ID</label>
+                                  <input
+                                    type="text"
+                                    value={p.clientId || ''}
+                                    placeholder={defaultP?.clientId || 'Enter client id...'}
+                                    onChange={(e) => {
+                                      setProviders(prev => prev.map(item => item.providerName === p.providerName ? { ...item, clientId: e.target.value } : item))
+                                    }}
+                                    className="w-full px-3 py-1.5 bg-gray-50 dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between pt-1">
+                                {isOverridden ? (
+                                  <button
+                                    onClick={() => {
+                                      if (defaultP) setProviders(prev => prev.map(item => item.providerName === p.providerName ? { ...defaultP } : item))
+                                    }}
+                                    className="text-[10px] font-bold text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors"
+                                  >
+                                    <RotateCcwIcon className="w-3 h-3" />
+                                    Reset to Default
+                                  </button>
+                                ) : (
+                                  <div />
+                                )}
+                                <span className="text-[10px] text-gray-400">
+                                  {p.isEnabled ? 'Active' : 'Disabled'}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )
+                })}
               </div>
             </>
           )}

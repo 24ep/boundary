@@ -66,7 +66,6 @@ const DEFAULT_COMM_CONFIG: CommConfig = {
 }
 
 export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appName }: CommunicationConfigDrawerProps) {
-  const [useDefault, setUseDefault] = useState(true)
   const [config, setConfig] = useState<CommConfig>(DEFAULT_COMM_CONFIG)
   const [defaultConfig, setDefaultConfig] = useState<CommConfig>(DEFAULT_COMM_CONFIG)
   const [loading, setLoading] = useState(true)
@@ -82,7 +81,6 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
     try {
       setLoading(true)
       const res = await adminService.getAppConfigOverride(appId, 'comm')
-      setUseDefault(res.useDefault)
 
       const defaults = await adminService.getDefaultCommConfig()
       const defCfg = { ...DEFAULT_COMM_CONFIG, ...(defaults.config || {}) }
@@ -100,20 +98,7 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
     }
   }
 
-  const toggleUseDefault = async (val: boolean) => {
-    setUseDefault(val)
-    if (val) {
-      try {
-        await adminService.deleteAppConfig(appId, 'comm')
-        setConfig(defaultConfig)
-      } catch (err) {
-        console.error('Failed to revert to default:', err)
-      }
-    }
-  }
-
   const toggleChannel = (ch: keyof CommConfig['channels']) => {
-    setUseDefault(false)
     setConfig(prev => ({ ...prev, channels: { ...prev.channels, [ch]: !prev.channels[ch] } }))
   }
 
@@ -154,14 +139,6 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-gray-50/70 dark:bg-zinc-800/30">
-                <div>
-                  <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">Channel methods with inherited defaults</p>
-                  <p className="text-xs text-gray-500">Edit any method card to override defaults for this app.</p>
-                </div>
-                <Button variant="outline" size="sm" onClick={() => toggleUseDefault(true)}>Use Platform Default</Button>
-              </div>
-
               <div className="space-y-6">
                   {/* Channel Toggles + Method Selection */}
                   <div>
@@ -191,7 +168,7 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
                                     {isOverridden && <span className="px-1.5 py-0.5 bg-orange-100 dark:bg-orange-500/20 text-[9px] font-bold text-orange-600 uppercase rounded">Custom</span>}
                                   </div>
                                   <p className="text-[9px] text-gray-400">
-                                    {methods && selectedMethod ? `Provider: ${methods.find(m => m.value === selectedMethod)?.label || selectedMethod}` : (isOverridden ? 'Value adjusted for this app' : 'Inheriting system default')}
+                                    {methods && selectedMethod ? `Provider: ${methods.find(m => m.value === selectedMethod)?.label || selectedMethod}` : (isOverridden ? 'Value adjusted for this app' : 'Using current channel setting')}
                                   </p>
                                 </div>
                               </div>
@@ -230,10 +207,9 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
                                     {methods.map(m => (
                                       <button
                                         key={m.value}
-                                    onClick={() => {
-                                      setUseDefault(false)
-                                      setConfig(prev => ({ ...prev, selectedMethods: { ...prev.selectedMethods, [ch.key]: m.value } }))
-                                    }}
+                                        onClick={() => {
+                                          setConfig(prev => ({ ...prev, selectedMethods: { ...prev.selectedMethods, [ch.key]: m.value } }))
+                                        }}
                                         className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
                                           selectedMethod === m.value
                                             ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-500/50 text-blue-600 dark:text-blue-400 shadow-sm'
@@ -260,7 +236,6 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
                                             placeholder={field.placeholder}
                                             value={config.methodConfig?.[methodKey]?.[field.key] || ''}
                                             onChange={e => {
-                                              setUseDefault(false)
                                               setConfig(prev => ({
                                                 ...prev,
                                                 methodConfig: {
