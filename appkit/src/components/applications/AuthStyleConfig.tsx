@@ -381,10 +381,11 @@ export default function AuthStyleConfig({ appId, appName }: AuthStyleConfigProps
     const subtitle = isLogin ? settings.welcomeSubtitle : settings.signupSubtitle
     const isSplit = settings.layout === 'split-left' || settings.layout === 'split-right'
     const splitLeft = settings.layout === 'split-left'
+    const isMobileLike = activeDevice === 'mobileApp' || activeDevice === 'mobileWeb'
 
     const formPanel = (
-      <div className="flex flex-col items-center justify-center p-6 w-full" style={{ backgroundColor: isSplit ? settings.cardBackgroundColor : 'transparent' }}>
-        <div className="w-full max-w-[260px] space-y-3">
+      <div className={`flex flex-col items-center w-full ${isMobileLike ? 'justify-start p-4 pt-6' : 'justify-center p-6'}`} style={{ backgroundColor: isSplit ? settings.cardBackgroundColor : 'transparent' }}>
+        <div className={`w-full ${isMobileLike ? 'max-w-[280px] space-y-2.5' : 'max-w-[260px] space-y-3'}`}>
           {settings.logoPosition !== 'hidden' && (
             <div className={`flex items-center mb-2 ${settings.logoPosition === 'top' ? 'justify-center flex-col' : 'gap-2'}`}>
               <div
@@ -469,13 +470,13 @@ export default function AuthStyleConfig({ appId, appName }: AuthStyleConfigProps
 
           {settings.showSocialDivider && socialProviders.length > 0 && (
             <>
-              <div className="flex items-center gap-2 my-1">
+              <div className={`flex items-center gap-2 ${isMobileLike ? 'my-0.5' : 'my-1'}`}>
                 <div className="flex-1 h-px" style={{ backgroundColor: settings.inputBorderColor }} />
                 <span className="text-[8px]" style={{ color: settings.secondaryTextColor }}>or</span>
                 <div className="flex-1 h-px" style={{ backgroundColor: settings.inputBorderColor }} />
               </div>
               {settings.socialLoginLayout === 'horizontal' ? (
-                <div className="flex items-center justify-center gap-2">
+                <div className={`flex items-center justify-center ${isMobileLike ? 'gap-1.5' : 'gap-2'}`}>
                   {socialProviders.map(sp => (
                     <div
                       key={sp.providerName}
@@ -493,7 +494,7 @@ export default function AuthStyleConfig({ appId, appName }: AuthStyleConfigProps
                   ))}
                 </div>
               ) : (
-                <div className="space-y-1.5">
+                <div className={isMobileLike ? 'space-y-1' : 'space-y-1.5'}>
                   {socialProviders.map(sp => (
                     <button
                       key={sp.providerName}
@@ -557,7 +558,7 @@ export default function AuthStyleConfig({ appId, appName }: AuthStyleConfigProps
 
     return (
       <div
-        className="relative rounded-xl border border-gray-200 dark:border-zinc-700 overflow-hidden min-h-[420px] flex"
+        className={`relative rounded-xl border border-gray-200 dark:border-zinc-700 overflow-hidden flex ${isMobileLike ? 'min-h-[560px]' : 'min-h-[420px]'}`}
         style={toBackgroundStyle(pageBackgroundValue, settings.backgroundColor)}
       >
         {pageBackgroundValue.mode === 'video' && pageBackgroundValue.video && (
@@ -1123,14 +1124,14 @@ export default function AuthStyleConfig({ appId, appName }: AuthStyleConfigProps
         <div className={`grid grid-cols-1 ${showConfigPanel ? 'xl:grid-cols-[minmax(0,1fr)_380px]' : ''}`}>
           <div className="flex items-center justify-center p-6 min-h-[calc(100vh-240px)] border-b xl:border-b-0 xl:border-r border-gray-200/70 dark:border-zinc-800/70">
           {activeDevice === 'mobileApp' ? (
-            <div className="relative rounded-[2rem] border-[6px] border-gray-800 dark:border-zinc-600 bg-gray-800 dark:bg-zinc-600 shadow-xl overflow-hidden" style={{ width: 280, minHeight: 580 }}>
+            <div className="relative rounded-[2rem] border-[6px] border-gray-800 dark:border-zinc-600 bg-gray-800 dark:bg-zinc-600 shadow-xl overflow-hidden" style={{ width: 300, minHeight: 640 }}>
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-4 bg-gray-800 dark:bg-zinc-600 rounded-b-xl z-10" />
               <div className="rounded-[1.5rem] overflow-hidden">
                 {renderPreview()}
               </div>
             </div>
           ) : activeDevice === 'mobileWeb' ? (
-            <div className="relative rounded-xl border-2 border-gray-300 dark:border-zinc-600 shadow-lg overflow-hidden" style={{ width: 340, minHeight: 560 }}>
+            <div className="relative rounded-xl border-2 border-gray-300 dark:border-zinc-600 shadow-lg overflow-hidden" style={{ width: 360, minHeight: 680 }}>
               <div className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
                 <div className="flex gap-1">
                   <div className="w-2 h-2 rounded-full bg-red-400" />

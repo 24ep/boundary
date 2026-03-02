@@ -402,14 +402,21 @@ console.log(strings['welcome.title']); // 'Welcome to AppKit'`}
 
         <h2 className="text-2xl font-bold mt-12 mb-4">Understanding Circles</h2>
         <p className="text-slate-600 leading-relaxed">
-          A Circle can represent a team, a project, or an entire organization. Users can be members of multiple circles with different roles.
+          A Circle can represent organization, department, team, family, household, or friend group. Users can belong to multiple circles with inherited parent membership.
         </p>
 
         <CodeBlock 
           id="circle-membership"
           language="typescript"
           code={`const circles = await client.getUserCircles();
-// [ { id: 'circle_123', name: 'Engineering', role: 'admin' } ]`}
+// [ { id: 'circle_123', name: 'Engineering', role: 'owner', parentId: null } ]
+
+// Assign user to deepest child circle
+await client.circles.assignMember('circle_child', userId);
+// Parent memberships are inherited automatically.
+
+// Configure billing assignee for a circle
+await client.circles.assignBilling('circle_team', userId);`}
         />
       </div>
     ),
@@ -582,6 +589,26 @@ function verifyWebhook(payload: string, signature: string, secret: string) {
   data: { deepLink: '/messages/123' },
 });`}
         />
+
+        <h2 className="text-2xl font-bold mt-12 mb-4">Email Templates & Variables</h2>
+        <p className="text-slate-600 leading-relaxed">
+          Email templates support placeholder variables and preview rendering before sending.
+        </p>
+        <CodeBlock
+          id="email-template-vars"
+          language="typescript"
+          code={`await client.emailTemplates.create({
+  name: 'Welcome',
+  slug: 'welcome-email',
+  subject: 'Welcome {{user.firstName}}',
+  htmlContent: '<p>Hello {{user.firstName}}, welcome to {{app.name}}.</p>',
+});
+
+const preview = await client.emailTemplates.render('welcome-email', {
+  user: { firstName: 'John', lastName: 'Doe', email: 'john@example.com' },
+  app: { name: 'My App' },
+});`}
+        />
       </div>
     ),
     prev: { title: 'Webhooks', href: '/dev-hub/modules/webhooks' },
@@ -636,7 +663,7 @@ function verifyWebhook(payload: string, signature: string, secret: string) {
 
         <h2 className="text-2xl font-bold mt-12 mb-4">Document Management</h2>
         <p className="text-slate-600 leading-relaxed">
-          Each document supports URL-based linking or inline content editing with a built-in Markdown editor, version tracking, and draft/published/archived status.
+          Each document supports inline rich text editing, version tracking, and draft/published/archived status. App-level config can override default legal settings.
         </p>
 
         <h2 className="text-2xl font-bold mt-12 mb-4">Fetching Legal Docs</h2>
@@ -694,6 +721,20 @@ await client.billing.subscribe(userId, planId);`}
           language="typescript"
           code={`const usage = await client.billing.getUsage(userId);
 // { apiCalls: 1250, storage: '2.3GB', activeUsers: 45 }`}
+        />
+
+        <h2 className="text-2xl font-bold mt-12 mb-4">Default vs App Override Billing</h2>
+        <p className="text-slate-600 leading-relaxed">
+          Billing can inherit global defaults or be overridden per application, with scope set to per-user or per-circle.
+        </p>
+        <CodeBlock
+          id="billing-override"
+          language="typescript"
+          code={`await client.admin.applications.updateBilling(appId, {
+  useDefault: false,
+  billingScope: 'perCircleLevel', // or 'perAccount'
+  provider: 'stripe',
+});`}
         />
       </div>
     ),
@@ -1089,6 +1130,26 @@ curl -X PATCH https://auth.app.com/api/v1/admin/applications/:appId/users/:userI
   -H "Content-Type: application/json" \\
   -d '{ "firstName": "Demo", "lastName": "User", "role": "member", "status": "active" }'`}
         />
+
+        <h2 className="text-2xl font-bold mt-12 mb-4">Circles & Billing APIs</h2>
+        <CodeBlock
+          id="app-circles-billing-api"
+          language="bash"
+          code={`# Circles list/create
+curl https://auth.app.com/api/v1/admin/applications/:appId/circles \\
+  -H "Authorization: Bearer MGMT_TOKEN"
+
+curl -X POST https://auth.app.com/api/v1/admin/applications/:appId/circles \\
+  -H "Authorization: Bearer MGMT_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{ "name": "Engineering", "circleType": "team", "parentId": null }'
+
+# Billing mode per app
+curl -X PATCH https://auth.app.com/api/v1/admin/applications/:appId/billing-mode \\
+  -H "Authorization: Bearer MGMT_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{ "billingMode": "perCircleLevel" }'`}
+        />
       </div>
     ),
     prev: { title: 'Management API', href: '/dev-hub/api/management' },
@@ -1117,6 +1178,14 @@ curl -X PATCH https://auth.app.com/api/v1/admin/applications/:appId/users/:userI
         <p className="text-slate-600 leading-relaxed">
           Configure support channels (email, help desk, GitHub repo, GitLab repo, reference docs URL, WhatsApp, Line), social profiles (Facebook, Instagram, Twitter, LinkedIn, Discord), and app store IDs.
         </p>
+        <CodeBlock
+          id="links-support-config"
+          language="typescript"
+          code={`const links = await client.getSocialLinks();
+// Render each available key with an icon:
+// supportEmail, githubRepo, gitlabRepo, docsUrl, whatsapp, line, discord...
+renderSupportLinksWithIcons(links);`}
+        />
 
         <h2 className="text-2xl font-bold mt-12 mb-4">Splash Screen</h2>
         <p className="text-slate-600 leading-relaxed">

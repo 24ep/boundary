@@ -10,8 +10,6 @@ import {
   BellIcon,
   MessageSquareIcon,
   CogIcon,
-  CheckCircleIcon,
-  XCircleIcon,
   SaveIcon,
   Loader2Icon,
   RotateCcwIcon,
@@ -115,6 +113,7 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
   }
 
   const toggleChannel = (ch: keyof CommConfig['channels']) => {
+    setUseDefault(false)
     setConfig(prev => ({ ...prev, channels: { ...prev.channels, [ch]: !prev.channels[ch] } }))
   }
 
@@ -144,7 +143,7 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Communication Config</h2>
             <p className="text-sm text-gray-500 dark:text-zinc-400 mt-0.5">{appName}</p>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-400 dark:text-zinc-500"><XIcon className="w-5 h-5" /></button>
+          <button onClick={onClose} title="Close communication config" className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-400 dark:text-zinc-500"><XIcon className="w-5 h-5" /></button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -155,31 +154,15 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
             </div>
           ) : (
             <>
-              <div className="flex p-1 bg-gray-100 dark:bg-zinc-800 rounded-lg">
-                <button className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${useDefault ? 'bg-white dark:bg-zinc-700 shadow text-gray-900 dark:text-white' : 'text-gray-500 dark:text-zinc-400'}`} onClick={() => toggleUseDefault(true)}>Use Default</button>
-                <button className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${!useDefault ? 'bg-white dark:bg-zinc-700 shadow text-gray-900 dark:text-white' : 'text-gray-500 dark:text-zinc-400'}`} onClick={() => toggleUseDefault(false)}>Individual</button>
+              <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-gray-50/70 dark:bg-zinc-800/30">
+                <div>
+                  <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">Channel methods with inherited defaults</p>
+                  <p className="text-xs text-gray-500">Edit any method card to override defaults for this app.</p>
+                </div>
+                <Button variant="outline" size="sm" onClick={() => toggleUseDefault(true)}>Use Platform Default</Button>
               </div>
 
-              {useDefault ? (
-                <div className="p-4 rounded-xl bg-blue-50/50 dark:bg-blue-500/5 border border-blue-200/50 dark:border-blue-500/20">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-medium text-blue-900 dark:text-blue-300">Using Platform Defaults</p>
-                    <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-500/20 text-[10px] font-bold text-blue-600 uppercase tracking-tight rounded">Global</span>
-                  </div>
-                  <div className="space-y-2">
-                    {CHANNEL_META.map(ch => (
-                      <div key={ch.key} className="flex items-center justify-between py-2">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-gray-500 dark:text-zinc-400">{ch.icon}</span>
-                          <span className="text-sm text-gray-700 dark:text-zinc-300">{ch.name}</span>
-                        </div>
-                        {defaultConfig.channels[ch.key] ? <CheckCircleIcon className="w-4 h-4 text-emerald-500" /> : <XCircleIcon className="w-4 h-4 text-gray-300 dark:text-zinc-600" />}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-6">
+              <div className="space-y-6">
                   {/* Channel Toggles + Method Selection */}
                   <div>
                     <div className="flex items-center justify-between mb-3 px-1">
@@ -232,7 +215,7 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
                                   </button>
                                 )}
                                 <label className="relative inline-flex items-center cursor-pointer">
-                                  <input type="checkbox" className="sr-only peer" checked={isEnabled} onChange={() => toggleChannel(ch.key)} />
+                                  <input type="checkbox" title={`${ch.name} enabled`} className="sr-only peer" checked={isEnabled} onChange={() => toggleChannel(ch.key)} />
                                   <div className="w-9 h-5 bg-gray-200 dark:bg-zinc-700 peer-checked:bg-blue-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-full" />
                                 </label>
                               </div>
@@ -247,7 +230,10 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
                                     {methods.map(m => (
                                       <button
                                         key={m.value}
-                                        onClick={() => setConfig(prev => ({ ...prev, selectedMethods: { ...prev.selectedMethods, [ch.key]: m.value } }))}
+                                    onClick={() => {
+                                      setUseDefault(false)
+                                      setConfig(prev => ({ ...prev, selectedMethods: { ...prev.selectedMethods, [ch.key]: m.value } }))
+                                    }}
                                         className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
                                           selectedMethod === m.value
                                             ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-500/50 text-blue-600 dark:text-blue-400 shadow-sm'
@@ -274,6 +260,7 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
                                             placeholder={field.placeholder}
                                             value={config.methodConfig?.[methodKey]?.[field.key] || ''}
                                             onChange={e => {
+                                              setUseDefault(false)
                                               setConfig(prev => ({
                                                 ...prev,
                                                 methodConfig: {
@@ -300,12 +287,11 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
                     </div>
                   </div>
                 </div>
-              )}
             </>
           )}
         </div>
 
-        {!useDefault && !loading && (
+        {!loading && (
           <div className="p-6 border-t border-gray-200 dark:border-zinc-800 flex items-center justify-end space-x-2">
             {saveMessage && <span className={`text-sm font-medium mr-2 ${saveMessage === 'Saved!' ? 'text-emerald-600' : 'text-red-500'}`}>{saveMessage}</span>}
             <Button variant="outline" onClick={onClose}>Cancel</Button>

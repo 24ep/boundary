@@ -14,7 +14,6 @@ import {
   EyeIcon,
   EyeOffIcon,
   GlobeIcon,
-  DollarSignIcon,
   ShieldCheckIcon,
 } from 'lucide-react'
 
@@ -140,7 +139,11 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
   const handleSave = async () => {
     try {
       setSaving(true)
-      await adminService.saveAppConfig(appId, 'billing', config)
+      if (useDefault) {
+        await adminService.deleteAppConfig(appId, 'billing')
+      } else {
+        await adminService.saveAppConfig(appId, 'billing', config)
+      }
       setSaveMessage('Saved!')
       setTimeout(() => setSaveMessage(''), 3000)
     } catch (err) {
@@ -184,19 +187,14 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
           ) : (
             <>
               {/* Type Switcher */}
-              <div className="flex p-1 bg-gray-100 dark:bg-zinc-800 rounded-lg">
-                <button 
-                  className={`flex-1 py-1.5 px-3 rounded-md text-xs font-medium transition-all ${useDefault ? 'bg-white dark:bg-zinc-700 shadow text-gray-900 dark:text-white' : 'text-gray-500 dark:text-zinc-400'}`} 
-                  onClick={() => toggleUseDefault(true)}
-                >
-                  Use Global Defaults
-                </button>
-                <button 
-                  className={`flex-1 py-1.5 px-3 rounded-md text-xs font-medium transition-all ${!useDefault ? 'bg-white dark:bg-zinc-700 shadow text-gray-900 dark:text-white' : 'text-gray-500 dark:text-zinc-400'}`} 
-                  onClick={() => toggleUseDefault(false)}
-                >
-                  Individual App Credentials
-                </button>
+              <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-gray-50/70 dark:bg-zinc-800/30">
+                <div>
+                  <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">Billing methods with inherited defaults</p>
+                  <p className="text-xs text-gray-500">{useDefault ? 'Currently using platform default values' : 'App-level override active'}</p>
+                </div>
+                <Button variant="outline" size="sm" onClick={() => toggleUseDefault(true)}>
+                  Use Platform Default
+                </Button>
               </div>
 
               {/* Status Section */}
@@ -214,8 +212,10 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
                       className="sr-only peer" 
                       title="Toggle payment enablement"
                       checked={config.enabled} 
-                      disabled={useDefault}
-                      onChange={() => setConfig(prev => ({ ...prev, enabled: !prev.enabled }))} 
+                      onChange={() => {
+                        setUseDefault(false)
+                        setConfig(prev => ({ ...prev, enabled: !prev.enabled }))
+                      }} 
                     />
                     <div className="w-10 h-5 bg-gray-200 dark:bg-zinc-700 peer-checked:bg-blue-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-full" />
                   </label>
@@ -225,8 +225,10 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
                   <div className="text-sm font-semibold text-gray-900 dark:text-white">Currency</div>
                   <select 
                     value={config.currency}
-                    disabled={useDefault}
-                    onChange={(e) => setConfig(prev => ({ ...prev, currency: e.target.value }))}
+                    onChange={(e) => {
+                      setUseDefault(false)
+                      setConfig(prev => ({ ...prev, currency: e.target.value }))
+                    }}
                     className="px-2 py-1 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                     title="Currency"
                   >
@@ -256,8 +258,10 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
                   {BILLING_PROVIDERS.map(p => (
                     <button
                       key={p.value}
-                      disabled={useDefault}
-                      onClick={() => setConfig(prev => ({ ...prev, provider: p.value }))}
+                      onClick={() => {
+                        setUseDefault(false)
+                        setConfig(prev => ({ ...prev, provider: p.value }))
+                      }}
                       className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all ${
                         config.provider === p.value
                           ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-500/50 text-blue-600 dark:text-blue-400 shadow-sm'
@@ -277,8 +281,10 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
                       {['test', 'live'].map((m) => (
                         <button
                           key={m}
-                          disabled={useDefault}
-                          onClick={() => setConfig(prev => ({ ...prev, mode: m as any }))}
+                          onClick={() => {
+                            setUseDefault(false)
+                            setConfig(prev => ({ ...prev, mode: m as any }))
+                          }}
                           className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium border transition-all ${
                             config.mode === m 
                               ? 'bg-white dark:bg-zinc-700 border-blue-500/50 text-blue-600 dark:text-blue-400 shadow-sm'
@@ -310,18 +316,20 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
                                 <input
                                   type={isSecret && !isVisible ? 'password' : 'text'}
                                   value={config.providerConfig?.[providerKey]?.[field.key] || ''}
-                                  disabled={useDefault}
                                   placeholder={field.placeholder}
-                                  onChange={(e) => setConfig(prev => ({
-                                    ...prev,
-                                    providerConfig: {
-                                      ...prev.providerConfig,
-                                      [providerKey]: {
-                                        ...(prev.providerConfig?.[providerKey] || {}),
-                                        [field.key]: e.target.value,
+                                  onChange={(e) => {
+                                    setUseDefault(false)
+                                    setConfig(prev => ({
+                                      ...prev,
+                                      providerConfig: {
+                                        ...prev.providerConfig,
+                                        [providerKey]: {
+                                          ...(prev.providerConfig?.[providerKey] || {}),
+                                          [field.key]: e.target.value,
+                                        },
                                       },
-                                    },
-                                  }))}
+                                    }))
+                                  }}
                                   className="w-full px-3 py-2 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 pr-10"
                                 />
                                 {isSecret && (
@@ -342,21 +350,22 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
                   })()}
                 </div>
 
-                {!useDefault && (
-                  <div className="flex items-center justify-between pt-2">
-                    <button 
-                      onClick={() => setConfig(defaultConfig)}
-                      className="text-[10px] font-bold text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors"
-                    >
-                      <RotateCcwIcon className="w-3 h-3" />
-                      Revert all fields to default
-                    </button>
-                    <div className="flex items-center gap-1 text-[10px] text-gray-400">
-                      <CreditCardIcon className="w-3 h-3" />
-                      {BILLING_PROVIDERS.find(p => p.value === config.provider)?.label || config.provider}
-                    </div>
+                <div className="flex items-center justify-between pt-2">
+                  <button 
+                    onClick={() => {
+                      setUseDefault(true)
+                      setConfig(defaultConfig)
+                    }}
+                    className="text-[10px] font-bold text-blue-500 hover:text-blue-600 flex items-center gap-1 transition-colors"
+                  >
+                    <RotateCcwIcon className="w-3 h-3" />
+                    Revert all fields to default
+                  </button>
+                  <div className="flex items-center gap-1 text-[10px] text-gray-400">
+                    <CreditCardIcon className="w-3 h-3" />
+                    {BILLING_PROVIDERS.find(p => p.value === config.provider)?.label || config.provider}
                   </div>
-                )}
+                </div>
               </div>
 
               {/* Notice */}
@@ -376,7 +385,7 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName }:
         </div>
 
         {/* Footer */}
-        {!useDefault && !loading && (
+        {!loading && (
           <div className="p-6 border-t border-gray-200 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50 flex items-center justify-between">
             <div className="flex items-center gap-2">
               {saveMessage && (

@@ -48,9 +48,45 @@ export async function GET(request: NextRequest) {
       })
     ])
 
+    const applications = await prisma.application.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        _count: { select: { userApplications: true } },
+      },
+      take: 6,
+    })
+
+    const onlineRows = await prisma.$queryRaw<Array<{ application_id: string; online_users: number }>>`
+      SELECT
+        application_id,
+        COUNT(DISTINCT user_id)::int AS online_users
+      FROM user_sessions
+      WHERE is_active = true
+        AND expires_at > NOW()
+        AND last_activity_at > NOW() - INTERVAL '15 minutes'
+        AND application_id IS NOT NULL
+      GROUP BY application_id
+    `
+    const onlineByApp = new Map<string, number>(
+      onlineRows.map((row) => [row.application_id, Number(row.online_users || 0)])
+    )
+
+    const recentAudit = await prisma.auditLog.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+      select: {
+        id: true,
+        action: true,
+        category: true,
+        createdAt: true,
+      },
+    })
+
     const derivedApiCalls = apiCalls24h + authEvents24h
     const infraUsage = Math.min(100, Math.round((activeApplications * 8) + (onlineUsers * 0.4)))
     const networkUsage = Math.min(100, Math.round((derivedApiCalls / 2500) + (onlineUsers * 0.15)))
+    const uptime = Math.max(96, 100 - (openTickets * 0.2))
+    const systemHealth = openTickets > 20 ? 'warning' : openTickets > 5 ? 'good' : 'excellent'
 
     // Construct response matching what the frontend expects
     const stats = {
@@ -62,14 +98,32 @@ export async function GET(request: NextRequest) {
       activeSubscriptions,
       totalTickets,
       openTickets,
-      totalRevenue: 0, // Would need payment processor integration
+      totalRevenue: 0,
       monthlyRevenue: 0,
-      uptime: 99.99,
+      uptime,
+      systemHealth,
       apiCalls: derivedApiCalls,
       storageUsed: Math.round((totalUsers * 0.25) + (activeApplications * 1.2)),
       bandwidthUsed: networkUsage,
       infraUsage,
       networkUsage,
+      topApplications: applications.map((app) => ({
+        id: app.id,
+        name: app.name,
+        users: app._count.userApplications,
+        onlineUsers: onlineByApp.get(app.id) || 0,
+        revenue: 0,
+        growth: 0,
+        status: app.isActive ? 'active' : 'inactive',
+      })),
+      recentActivity: recentAudit.map((row) => ({
+        id: row.id,
+        type: row.category || 'system',
+        title: row.action.replace(/_/g, ' '),
+        description: row.category ? `Category: ${row.category}` : 'System event',
+        timestamp: row.createdAt.toISOString(),
+        status: 'info',
+      })),
       
       // Backward compatibility with older interfaces
       totalFamilies: 0,

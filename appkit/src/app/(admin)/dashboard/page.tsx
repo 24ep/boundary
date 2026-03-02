@@ -1,9 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
-import { useToast } from '@/hooks/use-toast'
 import { 
   ServerIcon,
   UsersIcon,
@@ -52,62 +50,52 @@ interface TopApplication {
   status: 'active' | 'inactive'
 }
 
-const fallbackStats: SystemStats = {
-  totalApplications: 12, activeApplications: 9, totalUsers: 24500,
-  activeUsers: 18200, onlineUsers: 3400, totalRevenue: 125000, monthlyRevenue: 15800,
-  systemHealth: 'excellent', uptime: 99.97, apiCalls: 2450000,
-  storageUsed: 45.2, bandwidthUsed: 78.5, infraUsage: 62, networkUsage: 55
-}
-
-const fallbackActivities: RecentActivity[] = [
-  { id: '1', type: 'application_created', title: 'New App Deployed', description: 'E-Commerce v2.0 launched', timestamp: '2 min ago', status: 'success' },
-  { id: '2', type: 'user_registered', title: 'User Milestone', description: '25,000 registered users reached', timestamp: '1 hr ago', status: 'info' },
-  { id: '3', type: 'payment_received', title: 'Revenue Update', description: 'Monthly billing cycle completed', timestamp: '3 hrs ago', status: 'success' },
-  { id: '4', type: 'system_alert', title: 'SSL Certificate', description: 'Certificate renewal in 14 days', timestamp: '5 hrs ago', status: 'warning' },
-]
-
-const fallbackTopApps: TopApplication[] = [
-  { id: '1', name: 'E-Commerce Platform', users: 8500, revenue: 45000, growth: 12.5, status: 'active' },
-  { id: '2', name: 'SaaS Dashboard', users: 6200, revenue: 32000, growth: 8.3, status: 'active' },
-  { id: '3', name: 'Mobile Banking', users: 4800, revenue: 28000, growth: 15.7, status: 'active' },
-  { id: '4', name: 'Healthcare Portal', users: 3200, revenue: 18000, growth: -2.1, status: 'active' },
-]
-
 export default function DashboardPage() {
   const [stats, setStats] = useState<SystemStats | null>(null)
   const [activities, setActivities] = useState<RecentActivity[]>([])
   const [topApps, setTopApps] = useState<TopApplication[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const { toast } = useToast()
-
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
-        // Use adminService which includes auth headers automatically
-        const dashboardStats = await adminService.getDashboardStats()
+        const dashboardStats = await adminService.getDashboardStats() as any
         setStats({
-          totalApplications: (dashboardStats as any).totalApplications || dashboardStats.totalScreens || fallbackStats.totalApplications,
-          activeApplications: (dashboardStats as any).activeApplications || fallbackStats.activeApplications,
-          totalUsers: dashboardStats.totalUsers || fallbackStats.totalUsers,
-          activeUsers: dashboardStats.activeUsers || fallbackStats.activeUsers,
-          onlineUsers: (dashboardStats as any).onlineUsers || fallbackStats.onlineUsers,
-          totalRevenue: (dashboardStats as any).totalRevenue || fallbackStats.totalRevenue,
-          monthlyRevenue: (dashboardStats as any).monthlyRevenue || fallbackStats.monthlyRevenue,
-          systemHealth: 'excellent',
-          uptime: 99.97,
-          apiCalls: (dashboardStats as any).apiCalls || fallbackStats.apiCalls,
-          storageUsed: (dashboardStats as any).storageUsed || fallbackStats.storageUsed,
-          bandwidthUsed: (dashboardStats as any).bandwidthUsed || fallbackStats.bandwidthUsed,
-          infraUsage: (dashboardStats as any).infraUsage || fallbackStats.infraUsage,
-          networkUsage: (dashboardStats as any).networkUsage || fallbackStats.networkUsage,
+          totalApplications: dashboardStats.totalApplications || dashboardStats.totalScreens || 0,
+          activeApplications: dashboardStats.activeApplications || 0,
+          totalUsers: dashboardStats.totalUsers || 0,
+          activeUsers: dashboardStats.activeUsers || 0,
+          onlineUsers: dashboardStats.onlineUsers || 0,
+          totalRevenue: dashboardStats.totalRevenue || 0,
+          monthlyRevenue: dashboardStats.monthlyRevenue || 0,
+          systemHealth: dashboardStats.systemHealth || 'good',
+          uptime: dashboardStats.uptime || 0,
+          apiCalls: dashboardStats.apiCalls || 0,
+          storageUsed: dashboardStats.storageUsed || 0,
+          bandwidthUsed: dashboardStats.bandwidthUsed || 0,
+          infraUsage: dashboardStats.infraUsage || 0,
+          networkUsage: dashboardStats.networkUsage || 0,
         })
-        setActivities(fallbackActivities)
-        setTopApps(fallbackTopApps)
+        setActivities(Array.isArray(dashboardStats.recentActivity) ? dashboardStats.recentActivity : [])
+        setTopApps(Array.isArray(dashboardStats.topApplications) ? dashboardStats.topApplications : [])
       } catch {
-        // Graceful fallback
-        setStats(fallbackStats)
-        setActivities(fallbackActivities)
-        setTopApps(fallbackTopApps)
+        setStats({
+          totalApplications: 0,
+          activeApplications: 0,
+          totalUsers: 0,
+          activeUsers: 0,
+          onlineUsers: 0,
+          totalRevenue: 0,
+          monthlyRevenue: 0,
+          systemHealth: 'warning',
+          uptime: 0,
+          apiCalls: 0,
+          storageUsed: 0,
+          bandwidthUsed: 0,
+          infraUsage: 0,
+          networkUsage: 0,
+        })
+        setActivities([])
+        setTopApps([])
       }
       setIsLoading(false)
     }
@@ -142,6 +130,19 @@ export default function DashboardPage() {
       case 'info': return 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400'
       default: return 'bg-gray-50 text-gray-600 dark:bg-gray-500/10 dark:text-gray-400'
     }
+  }
+
+  const getProgressWidthClass = (pct: number) => {
+    if (pct >= 95) return 'w-full'
+    if (pct >= 85) return 'w-11/12'
+    if (pct >= 75) return 'w-10/12'
+    if (pct >= 65) return 'w-8/12'
+    if (pct >= 50) return 'w-6/12'
+    if (pct >= 35) return 'w-4/12'
+    if (pct >= 20) return 'w-3/12'
+    if (pct >= 10) return 'w-2/12'
+    if (pct > 0) return 'w-1/12'
+    return 'w-0'
   }
 
   if (isLoading || !stats) {
@@ -245,8 +246,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="w-full h-2 bg-gray-100 dark:bg-zinc-800 rounded-full overflow-hidden">
                   <div 
-                    className={`h-full ${item.color} rounded-full transition-all duration-700`} 
-                    style={{ width: `${Math.min(item.pct, 100)}%` }}
+                    className={`h-full ${item.color} rounded-full transition-all duration-700 ${getProgressWidthClass(Math.min(item.pct, 100))}`}
                   />
                 </div>
               </div>
@@ -258,7 +258,9 @@ export default function DashboardPage() {
         <div className="lg:col-span-2 rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 p-5">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Top Applications</h3>
           <div className="space-y-3">
-            {topApps.map((app) => (
+            {topApps.length === 0 ? (
+              <p className="text-sm text-gray-500">No application metrics available yet.</p>
+            ) : topApps.map((app) => (
               <div key={app.id} className="flex items-center justify-between p-3 rounded-lg bg-gray-50/80 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold">
@@ -288,7 +290,9 @@ export default function DashboardPage() {
       <div className="rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 p-5">
         <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
         <div className="space-y-3">
-          {activities.map((activity) => (
+          {activities.length === 0 ? (
+            <p className="text-sm text-gray-500">No recent activity yet.</p>
+          ) : activities.map((activity) => (
             <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
               <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${getActivityColor(activity.status)}`}>
                 {getActivityIcon(activity.type)}
@@ -297,7 +301,7 @@ export default function DashboardPage() {
                 <p className="text-sm font-medium text-gray-900 dark:text-white">{activity.title}</p>
                 <p className="text-xs text-gray-500 dark:text-zinc-400 mt-0.5">{activity.description}</p>
               </div>
-              <span className="text-xs text-gray-400 dark:text-zinc-500 flex-shrink-0">{activity.timestamp}</span>
+              <span className="text-xs text-gray-400 dark:text-zinc-500 flex-shrink-0">{new Date(activity.timestamp).toLocaleString()}</span>
             </div>
           ))}
         </div>
