@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/Button'
 import {
   PlusIcon,
   TrashIcon,
-  RotateCcwIcon,
   SaveIcon,
   Loader2Icon,
   TagIcon,
@@ -20,6 +19,7 @@ import {
   RefreshCwIcon,
 } from 'lucide-react'
 import { adminService } from '@/services/adminService'
+import { useToast } from '@/hooks/use-toast'
 
 interface UserAttribute {
   id: string
@@ -70,6 +70,10 @@ export default function UserAttributesConfig({ appId, mode }: UserAttributesConf
   const [statusMsg, setStatusMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
   const [newAttr, setNewAttr] = useState<Partial<UserAttribute>>({ name: '', label: '', type: 'text', required: false })
+  const [assignDrawerOpen, setAssignDrawerOpen] = useState(false)
+  const [assignSearch, setAssignSearch] = useState('')
+  const [selectedDefaultIds, setSelectedDefaultIds] = useState<string[]>([])
+  const { toast } = useToast()
 
   const isAppMode = mode === 'app'
 
@@ -127,20 +131,57 @@ export default function UserAttributesConfig({ appId, mode }: UserAttributesConf
     } else {
       setDefaultAttributes(prev => [...prev, attr])
     }
+    toast({ title: 'Attribute added', description: `${attr.label} has been created.`, variant: 'success' })
     setNewAttr({ name: '', label: '', type: 'text', required: false })
     setShowAddForm(false)
   }
 
   const removeAttribute = (id: string) => {
+    const target = attributes.find((item) => item.id === id)
     if (isAppMode) {
       setAppAttributes(prev => prev.filter(a => a.id !== id))
     } else {
       setDefaultAttributes(prev => prev.filter(a => a.id !== id))
     }
+    toast({ title: 'Attribute removed', description: `${target?.label || 'Attribute'} has been removed.`, variant: 'success' })
   }
 
   const toggleOverride = (id: string) => {
-    setAppOverrides(prev => ({ ...prev, [id]: !prev[id] }))
+    setAppOverrides(prev => {
+      const nextValue = !prev[id]
+      toast({
+        title: nextValue ? 'Attribute enabled' : 'Attribute disabled',
+        description: `${defaultAttributes.find((a) => a.id === id)?.label || 'Attribute'} is now ${nextValue ? 'enabled' : 'disabled'} for this app.`,
+        variant: 'success',
+      })
+      return { ...prev, [id]: nextValue }
+    })
+  }
+
+  const openAssignDrawer = () => {
+    const preselected = defaultAttributes
+      .filter((attr) => appOverrides[attr.id] !== false)
+      .map((attr) => attr.id)
+    setSelectedDefaultIds(preselected)
+    setAssignSearch('')
+    setAssignDrawerOpen(true)
+  }
+
+  const applyAssignedDefaults = () => {
+    const selected = new Set(selectedDefaultIds)
+    setAppOverrides((prev) => {
+      const next = { ...prev }
+      for (const attr of defaultAttributes) {
+        next[attr.id] = selected.has(attr.id)
+      }
+      return next
+    })
+    setAssignDrawerOpen(false)
+    toast({
+      title: 'Default attributes assigned',
+      description: `${selectedDefaultIds.length} default attribute(s) assigned to this application.`,
+      variant: 'success',
+    })
   }
 
   const handleSave = async () => {
@@ -158,9 +199,11 @@ export default function UserAttributesConfig({ appId, mode }: UserAttributesConf
         await adminService.saveDefaultUserAttributes(defaultAttributes)
       }
       setStatusMsg({ type: 'success', text: 'Attributes saved successfully' })
+      toast({ title: 'Saved', description: 'User attributes configuration updated successfully.', variant: 'success' })
     } catch (err) {
       console.error('Failed to save attributes:', err)
       setStatusMsg({ type: 'error', text: 'Failed to save attributes' })
+      toast({ title: 'Save failed', description: 'Could not save user attributes.', variant: 'destructive' })
     } finally {
       setSaving(false)
     }
@@ -201,6 +244,11 @@ export default function UserAttributesConfig({ appId, mode }: UserAttributesConf
       {/* Actions */}
       <div className="flex items-center justify-end">
         <div className="flex items-center gap-2">
+          {isAppMode && (
+            <Button variant="outline" size="sm" onClick={openAssignDrawer}>
+              Assign from Default
+            </Button>
+          )}
           <Button variant="outline" size="sm" onClick={() => setShowAddForm(!showAddForm)}>
             <PlusIcon className="w-4 h-4 mr-1" />
             {isAppMode ? 'Custom Attribute' : 'Add Attribute'}
@@ -336,6 +384,68 @@ export default function UserAttributesConfig({ appId, mode }: UserAttributesConf
           </>
         )}
       </div>
+
+      {/* Assign Default Attributes Drawer */}
+      {isAppMode && assignDrawerOpen && (
+        <>
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40" onClick={() => setAssignDrawerOpen(false)} />
+          <div className="fixed top-4 right-4 bottom-4 w-full max-w-lg bg-white dark:bg-zinc-900 shadow-2xl z-50 flex flex-col overflow-hidden rounded-2xl border border-gray-200/80 dark:border-zinc-800/80">
+            <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-zinc-800">
+              <div>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white">Assign Default Attributes</h3>
+                <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">Search and select platform attributes for this application.</p>
+              </div>
+              <Button variant="outline" size="sm" onClick={() => setAssignDrawerOpen(false)}>Close</Button>
+            </div>
+            <div className="p-5 border-b border-gray-100 dark:border-zinc-800">
+              <input
+                type="text"
+                value={assignSearch}
+                onChange={(e) => setAssignSearch(e.target.value)}
+                placeholder="Search default attributes..."
+                title="Search default attributes"
+                className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              />
+            </div>
+            <div className="flex-1 overflow-y-auto p-5 space-y-2">
+              {defaultAttributes
+                .filter((attr) => {
+                  const q = assignSearch.trim().toLowerCase()
+                  if (!q) return true
+                  return attr.label.toLowerCase().includes(q) || attr.name.toLowerCase().includes(q)
+                })
+                .map((attr) => {
+                  const checked = selectedDefaultIds.includes(attr.id)
+                  return (
+                    <label key={attr.id} className="flex items-center justify-between p-3 rounded-lg border border-gray-200/80 dark:border-zinc-800/80 cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-800/40">
+                      <div>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">{attr.label}</p>
+                        <p className="text-[11px] text-gray-500 dark:text-zinc-400 font-mono">{attr.name}</p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        title={`Select ${attr.label}`}
+                        checked={checked}
+                        onChange={() => {
+                          setSelectedDefaultIds((prev) =>
+                            prev.includes(attr.id) ? prev.filter((id) => id !== attr.id) : [...prev, attr.id]
+                          )
+                        }}
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded"
+                      />
+                    </label>
+                  )
+                })}
+            </div>
+            <div className="p-5 border-t border-gray-200 dark:border-zinc-800 flex items-center justify-end gap-2">
+              <Button variant="outline" onClick={() => setAssignDrawerOpen(false)}>Cancel</Button>
+              <Button onClick={applyAssignedDefaults} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0">
+                Assign Selected
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

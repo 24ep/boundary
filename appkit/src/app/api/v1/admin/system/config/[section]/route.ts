@@ -3,6 +3,12 @@ import { authenticate, hasPermission } from '@/lib/auth'
 import { prisma } from '@/server/lib/prisma'
 
 type SystemSection = 'general' | 'security' | 'api-keys' | 'webhooks' | 'legal'
+  | 'auth-style'
+  | 'sso'
+  | 'smtp'
+  | '2fa'
+  | 'mfa'
+  | 'logs'
 
 const SECTION_KEYS: Record<SystemSection, string> = {
   general: 'system.general',
@@ -10,6 +16,12 @@ const SECTION_KEYS: Record<SystemSection, string> = {
   'api-keys': 'system.api-keys',
   webhooks: 'system.webhooks',
   legal: 'system.legal',
+  'auth-style': 'system.auth-style',
+  sso: 'system.sso',
+  smtp: 'system.smtp',
+  '2fa': 'system.mfa',
+  mfa: 'system.mfa',
+  logs: 'system.logs',
 }
 
 const DEFAULT_CONFIG: Record<SystemSection, any> = {
@@ -18,6 +30,11 @@ const DEFAULT_CONFIG: Record<SystemSection, any> = {
     supportEmail: 'support@appkit.io',
     timezone: 'UTC',
     language: 'English',
+    appkitLogoUrl: '',
+    loginBackground: {
+      mode: 'solid',
+      solid: '#FFFFFF',
+    },
   },
   security: {
     enforceMfa: true,
@@ -67,6 +84,90 @@ const DEFAULT_CONFIG: Record<SystemSection, any> = {
       sessionData: 30,
     },
   },
+  'auth-style': {
+    mobileCommonLayout: {
+      layout: 'card-top',
+      fullWidth: true,
+      cardHeightPercent: 80,
+      roundedTop: true,
+    },
+    devices: {
+      mobileApp: {
+        layout: 'card-top',
+        fullWidth: true,
+        cardHeightPercent: 80,
+        roundedTop: true,
+      },
+      mobileWeb: {
+        layout: 'card-top',
+        fullWidth: true,
+        cardHeightPercent: 80,
+        roundedTop: true,
+      },
+      desktopWeb: {
+        layout: 'centered',
+        fullWidth: false,
+        cardHeightPercent: 100,
+        roundedTop: false,
+      },
+    },
+  },
+  sso: {
+    enabled: false,
+    providers: {
+      google: {
+        enabled: false,
+        clientId: '',
+        clientSecret: '',
+        redirectUri: '',
+        scopes: 'openid profile email',
+      },
+      azure: {
+        enabled: false,
+        tenantId: '',
+        clientId: '',
+        clientSecret: '',
+        redirectUri: '',
+        scopes: 'openid profile email',
+      },
+    },
+  },
+  smtp: {
+    host: '',
+    port: 587,
+    secure: false,
+    user: '',
+    password: '',
+    fromEmail: '',
+    fromName: 'AppKit',
+  },
+  mfa: {
+    enforceMfa: false,
+    allowedTypes: ['totp'],
+    rememberDeviceDays: 30,
+    backupCodesEnabled: true,
+    challengeOnHighRiskOnly: false,
+  },
+  '2fa': {
+    enforceMfa: false,
+    allowedTypes: ['totp'],
+    rememberDeviceDays: 30,
+    backupCodesEnabled: true,
+    challengeOnHighRiskOnly: false,
+  },
+  logs: {
+    minLevel: 'info',
+    sourceToggles: {
+      server: true,
+      client: true,
+      api: true,
+      auth: true,
+      database: true,
+      webhook: true,
+    },
+    retentionDays: 90,
+    livePollingIntervalSeconds: 5,
+  },
 }
 
 function normalizeSection(value: string): SystemSection | null {
@@ -76,10 +177,127 @@ function normalizeSection(value: string): SystemSection | null {
   return null
 }
 
+async function syncSsoProviders(config: any) {
+  const globalEnabled = Boolean(config?.enabled)
+  const providers = config?.providers || {}
+  const providerDefs: Array<{
+    providerName: string
+    displayName: string
+    key: 'google' | 'azure'
+    authorizationUrl: string | ((tenantId?: string) => string)
+    tokenUrl: string | ((tenantId?: string) => string)
+    userinfoUrl: string | ((tenantId?: string) => string)
+  }> = [
+    {
+      providerName: 'google-oauth',
+      displayName: 'Google OAuth',
+      key: 'google',
+      authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+      tokenUrl: 'https://oauth2.googleapis.com/token',
+      userinfoUrl: 'https://openidconnect.googleapis.com/v1/userinfo',
+    },
+    {
+      providerName: 'microsoft-oauth',
+      displayName: 'Microsoft OAuth',
+      key: 'azure',
+      authorizationUrl: (tenantId?: string) =>
+        `https://login.microsoftonline.com/${tenantId || 'common'}/oauth2/v2.0/authorize`,
+      tokenUrl: (tenantId?: string) =>
+        `https://login.microsoftonline.com/${tenantId || 'common'}/oauth2/v2.0/token`,
+      userinfoUrl: 'https://graph.microsoft.com/oidc/userinfo',
+    },
+  ]
+
+  for (const def of providerDefs) {
+    const current = providers?.[def.key] || {}
+    const isEnabled = globalEnabled && Boolean(current.enabled)
+    const tenantId = typeof current.tenantId === 'string' ? current.tenantId : ''
+    const authorizationUrl =
+      typeof def.authorizationUrl === 'function' ? def.authorizationUrl(tenantId) : def.authorizationUrl
+    const tokenUrl = typeof def.tokenUrl === 'function' ? def.tokenUrl(tenantId) : def.tokenUrl
+    const userinfoUrl = typeof def.userinfoUrl === 'function' ? def.userinfoUrl(tenantId) : def.userinfoUrl
+    const scopes = typeof current.scopes === 'string'
+      ? current.scopes.split(/\s+/).map((v: string) => v.trim()).filter(Boolean)
+      : Array.isArray(current.scopes) ? current.scopes : []
+
+    const existing = await prisma.oAuthProvider.findFirst({
+      where: { applicationId: null, providerName: def.providerName },
+    })
+    const payload = {
+      applicationId: null,
+      providerName: def.providerName,
+      displayName: def.displayName,
+      isEnabled,
+      clientId: current.clientId || '',
+      clientSecret: current.clientSecret || '',
+      authorizationUrl,
+      tokenUrl,
+      userinfoUrl,
+      scopes,
+      allowSignup: true,
+      requireEmailVerified: true,
+      autoLinkByEmail: false,
+      allowedDomains: [],
+      displayOrder: def.providerName === 'google-oauth' ? 10 : 20,
+    }
+
+    if (existing) {
+      await prisma.oAuthProvider.update({ where: { id: existing.id }, data: payload })
+    } else {
+      await prisma.oAuthProvider.create({ data: payload })
+    }
+  }
+}
+
+async function syncMfaPolicy(config: any) {
+  const existingGlobal = await prisma.securityPolicy.findFirst({
+    where: { applicationId: null, policyName: 'Global Security Policy' },
+  })
+  const payload = {
+    applicationId: null,
+    policyName: 'Global Security Policy',
+    policyType: 'default',
+    isActive: true,
+    mfaRequired: Boolean(config?.enforceMfa),
+    mfaRememberDeviceDays: Number(config?.rememberDeviceDays || 30),
+    mfaAllowedTypes: Array.isArray(config?.allowedTypes) ? config.allowedTypes : ['totp'],
+  }
+  if (existingGlobal) {
+    await prisma.securityPolicy.update({ where: { id: existingGlobal.id }, data: payload })
+  } else {
+    await prisma.securityPolicy.create({ data: payload as any })
+  }
+
+  const securityKey = SECTION_KEYS.security
+  const existingSecurity = await prisma.systemConfig.findUnique({ where: { key: securityKey } })
+  const existingSecurityValue = (existingSecurity?.value || DEFAULT_CONFIG.security) as Record<string, any>
+  await prisma.systemConfig.upsert({
+    where: { key: securityKey },
+    update: {
+      value: { ...existingSecurityValue, enforceMfa: Boolean(config?.enforceMfa) },
+      description: 'System settings: security',
+    },
+    create: {
+      key: securityKey,
+      value: { ...DEFAULT_CONFIG.security, enforceMfa: Boolean(config?.enforceMfa) },
+      description: 'System settings: security',
+      isPublic: false,
+    },
+  })
+}
+
 async function readSectionConfig(section: SystemSection) {
   const key = SECTION_KEYS[section]
   const row = await prisma.systemConfig.findUnique({ where: { key } })
-  return row?.value ?? DEFAULT_CONFIG[section]
+  const config = row?.value ?? DEFAULT_CONFIG[section]
+  if (section === 'smtp' && config && typeof config === 'object') {
+    const smtpCfg = { ...(config as Record<string, any>) }
+    if (smtpCfg.password) {
+      smtpCfg.password = '********'
+    }
+    return smtpCfg
+  }
+  return config
 }
 
 export async function GET(
@@ -133,21 +351,37 @@ export async function PUT(
     }
 
     const key = SECTION_KEYS[section]
+    let nextConfig = config
+    if (section === 'smtp') {
+      const incoming = config as Record<string, any>
+      if (typeof incoming.password !== 'string' || !incoming.password || incoming.password === '********') {
+        const existing = await prisma.systemConfig.findUnique({ where: { key } })
+        const existingValue = (existing?.value || {}) as Record<string, any>
+        nextConfig = { ...incoming, password: existingValue.password || '' }
+      }
+    }
     await prisma.systemConfig.upsert({
       where: { key },
       update: {
-        value: config,
+        value: nextConfig,
         description: `System settings: ${section}`,
       },
       create: {
         key,
-        value: config,
+        value: nextConfig,
         description: `System settings: ${section}`,
         isPublic: false,
       },
     })
 
-    return NextResponse.json({ message: 'Settings saved', section, config })
+    if (section === 'sso') {
+      await syncSsoProviders(nextConfig)
+    }
+    if (section === 'mfa' || section === '2fa') {
+      await syncMfaPolicy(nextConfig)
+    }
+
+    return NextResponse.json({ message: 'Settings saved', section, config: nextConfig })
   } catch (error) {
     console.error('PUT system config error:', error)
     return NextResponse.json({ error: 'Failed to save system settings' }, { status: 500 })

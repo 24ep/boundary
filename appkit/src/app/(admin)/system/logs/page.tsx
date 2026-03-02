@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/Button'
+import { useToast } from '@/hooks/use-toast'
 import {
   AlertCircleIcon,
   AlertTriangleIcon,
@@ -21,6 +22,7 @@ import {
   DatabaseIcon,
   XIcon,
   ClockIcon,
+  SettingsIcon,
 } from 'lucide-react'
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal'
@@ -37,6 +39,27 @@ interface LogEntry {
   userId?: string
   requestId?: string
   duration?: number
+}
+
+interface LogsSettings {
+  minLevel: LogLevel
+  sourceToggles: Record<LogSource, boolean>
+  retentionDays: number
+  livePollingIntervalSeconds: number
+}
+
+const DEFAULT_LOG_SETTINGS: LogsSettings = {
+  minLevel: 'info',
+  sourceToggles: {
+    server: true,
+    client: true,
+    api: true,
+    auth: true,
+    database: true,
+    webhook: true,
+  },
+  retentionDays: 90,
+  livePollingIntervalSeconds: 5,
 }
 
 const LEVEL_CONFIG: Record<LogLevel, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
@@ -57,6 +80,7 @@ const SOURCE_CONFIG: Record<LogSource, { label: string; icon: React.ReactNode }>
 }
 
 export default function SystemLogsPage() {
+  const { toast } = useToast()
   const [logs, setLogs] = useState<LogEntry[]>([])
   const [filteredLogs, setFilteredLogs] = useState<LogEntry[]>([])
   const [searchQuery, setSearchQuery] = useState('')
@@ -65,14 +89,41 @@ export default function SystemLogsPage() {
   const [expandedLogId, setExpandedLogId] = useState<string | null>(null)
   const [isLive, setIsLive] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [settingsSaving, setSettingsSaving] = useState(false)
+  const [runningRetention, setRunningRetention] = useState(false)
+  const [logSettings, setLogSettings] = useState<LogsSettings>(DEFAULT_LOG_SETTINGS)
+
+  const loadLogSettings = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('admin_token') || ''
+      const res = await fetch('/api/v1/admin/system/config/logs', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (!res.ok) throw new Error('Failed to load log settings')
+      const data = await res.json()
+      setLogSettings((prev) => ({
+        ...prev,
+        ...(data?.config || {}),
+        sourceToggles: {
+          ...prev.sourceToggles,
+          ...(data?.config?.sourceToggles || {}),
+        },
+      }))
+    } catch (error) {
+      console.error('Failed to load log settings:', error)
+      toast({ title: 'Load failed', description: 'Could not load log settings.', variant: 'destructive' })
+    }
+  }, [toast])
 
   const fetchLogs = useCallback(async () => {
     try {
       const token = localStorage.getItem('admin_token') || ''
       const query = new URLSearchParams()
       if (searchQuery) query.set('q', searchQuery)
-      if (levelFilter !== 'all') query.set('level', levelFilter)
-      if (sourceFilter !== 'all') query.set('source', sourceFilter)
+      const effectiveLevel = levelFilter === 'all' ? logSettings.minLevel : levelFilter
+      query.set('level', effectiveLevel)
+      if (sourceFilter !== 'all' && logSettings.sourceToggles[sourceFilter]) query.set('source', sourceFilter)
       query.set('limit', '500')
 
       const res = await fetch(`/api/v1/admin/system/logs?${query.toString()}`, {
@@ -80,15 +131,21 @@ export default function SystemLogsPage() {
       })
       if (!res.ok) throw new Error('Failed to load logs')
       const data = await res.json()
-      const entries = Array.isArray(data?.logs) ? data.logs : []
-      setLogs(entries)
-      setFilteredLogs(entries)
+      const entries: LogEntry[] = Array.isArray(data?.logs) ? data.logs : []
+      const sourceFiltered = entries.filter((entry: LogEntry) => logSettings.sourceToggles[entry.source])
+      setLogs(sourceFiltered)
+      setFilteredLogs(sourceFiltered)
     } catch (error) {
       console.error('Failed to fetch logs:', error)
       setLogs([])
       setFilteredLogs([])
+      toast({ title: 'Fetch failed', description: 'Could not fetch system logs.', variant: 'destructive' })
     }
-  }, [levelFilter, searchQuery, sourceFilter])
+  }, [levelFilter, searchQuery, sourceFilter, logSettings, toast])
+
+  useEffect(() => {
+    loadLogSettings()
+  }, [loadLogSettings])
 
   useEffect(() => {
     fetchLogs()
@@ -96,13 +153,59 @@ export default function SystemLogsPage() {
 
   useEffect(() => {
     if (!isLive) return
-    const interval = setInterval(fetchLogs, 5000)
+    const intervalSeconds = Math.max(2, Number(logSettings.livePollingIntervalSeconds || 5))
+    const interval = setInterval(fetchLogs, intervalSeconds * 1000)
     return () => clearInterval(interval)
-  }, [fetchLogs, isLive])
+  }, [fetchLogs, isLive, logSettings.livePollingIntervalSeconds])
 
   const handleRefresh = () => {
     setIsRefreshing(true)
     fetchLogs().finally(() => setIsRefreshing(false))
+  }
+
+  const saveLogSettings = async () => {
+    try {
+      setSettingsSaving(true)
+      const token = localStorage.getItem('admin_token') || ''
+      const res = await fetch('/api/v1/admin/system/config/logs', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ config: logSettings }),
+      })
+      if (!res.ok) throw new Error('Failed to save log settings')
+      toast({ title: 'Saved', description: 'Log settings updated successfully.', variant: 'success' })
+      setSettingsOpen(false)
+      fetchLogs()
+    } catch (error) {
+      console.error('Failed to save log settings:', error)
+      toast({ title: 'Save failed', description: 'Could not save log settings.', variant: 'destructive' })
+    } finally {
+      setSettingsSaving(false)
+    }
+  }
+
+  const runRetentionNow = async () => {
+    try {
+      setRunningRetention(true)
+      const token = localStorage.getItem('admin_token') || ''
+      const res = await fetch('/api/v1/admin/system/logs/retention', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (!res.ok) throw new Error('Retention cleanup failed')
+      const data = await res.json()
+      const deletedTotal = Object.values(data?.deleted || {}).reduce((sum: number, value: any) => sum + Number(value || 0), 0)
+      toast({ title: 'Retention completed', description: `Deleted ${deletedTotal} old log entries.`, variant: 'success' })
+      fetchLogs()
+    } catch (error) {
+      console.error('Failed to run retention cleanup:', error)
+      toast({ title: 'Retention failed', description: 'Could not execute log retention cleanup.', variant: 'destructive' })
+    } finally {
+      setRunningRetention(false)
+    }
   }
 
   const handleExport = () => {
@@ -148,6 +251,10 @@ export default function SystemLogsPage() {
           <p className="text-sm text-gray-500 dark:text-zinc-400 mt-1">Real-time application logs, errors, and performance metrics</p>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => setSettingsOpen(true)}>
+            <SettingsIcon className="w-4 h-4 mr-1.5" />
+            Settings
+          </Button>
           <Button
             variant={isLive ? 'primary' : 'outline'}
             size="sm"
@@ -166,6 +273,84 @@ export default function SystemLogsPage() {
           </Button>
         </div>
       </div>
+
+      {settingsOpen && (
+        <div className="rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 p-4 space-y-4">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Log Settings</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400 mb-1.5">Minimum Level</label>
+              <select
+                title="Minimum log level"
+                value={logSettings.minLevel}
+                onChange={(e) => setLogSettings((prev) => ({ ...prev, minLevel: e.target.value as LogLevel }))}
+                className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm"
+              >
+                <option value="debug">Debug</option>
+                <option value="info">Info</option>
+                <option value="warn">Warning</option>
+                <option value="error">Error</option>
+                <option value="fatal">Fatal</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400 mb-1.5">Retention Days</label>
+              <input
+                type="number"
+                min={1}
+                title="Retention days"
+                value={logSettings.retentionDays}
+                onChange={(e) => setLogSettings((prev) => ({ ...prev, retentionDays: Number(e.target.value || 90) }))}
+                className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400 mb-1.5">Live Polling (seconds)</label>
+              <input
+                type="number"
+                min={2}
+                title="Live polling interval"
+                value={logSettings.livePollingIntervalSeconds}
+                onChange={(e) => setLogSettings((prev) => ({ ...prev, livePollingIntervalSeconds: Number(e.target.value || 5) }))}
+                className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm"
+              />
+            </div>
+          </div>
+          <div>
+            <p className="text-xs font-medium text-gray-600 dark:text-zinc-400 mb-2">Enabled Sources</p>
+            <div className="flex flex-wrap gap-2">
+              {(Object.keys(logSettings.sourceToggles) as LogSource[]).map((source) => (
+                <label key={source} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-zinc-800 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(logSettings.sourceToggles[source])}
+                    onChange={(e) =>
+                      setLogSettings((prev) => ({
+                        ...prev,
+                        sourceToggles: {
+                          ...prev.sourceToggles,
+                          [source]: e.target.checked,
+                        },
+                      }))
+                    }
+                    className="w-4 h-4 rounded border-gray-300"
+                  />
+                  {source}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center justify-end gap-2">
+            <Button variant="outline" onClick={runRetentionNow} disabled={runningRetention}>
+              {runningRetention ? 'Running...' : 'Run Retention Now'}
+            </Button>
+            <Button variant="outline" onClick={() => setSettingsOpen(false)}>Cancel</Button>
+            <Button onClick={saveLogSettings} disabled={settingsSaving} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0">
+              {settingsSaving ? 'Saving...' : 'Save Log Settings'}
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Stats Bar */}
       <div className="grid grid-cols-4 gap-3">

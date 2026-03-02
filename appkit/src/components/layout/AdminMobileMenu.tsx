@@ -47,9 +47,12 @@ export function AdminMobileMenu({
                                     const hasChildRoutes = hub.items.some(
                                         other => other.id !== item.id && other.href.startsWith(item.href + '/')
                                     )
-                                    const isActive = hasChildRoutes 
-                                        ? pathname === item.href 
-                                        : pathname.startsWith(item.href)
+                                    const isSystemRootItem = hub.id === 'system' && item.href === '/system'
+                                    const isActive = isSystemRootItem
+                                        ? pathname === '/system'
+                                        : hasChildRoutes
+                                            ? pathname === item.href
+                                            : pathname.startsWith(item.href)
                                     
                                     return (
                                         <button

@@ -193,6 +193,7 @@ interface AppBillingConfig {
   provider: string
   mode: 'test' | 'live'
   currency: string
+  providerEnabled?: Record<string, boolean>
   providerConfig?: Record<string, Record<string, string>>
 }
 
@@ -227,6 +228,7 @@ export default function ApplicationConfigPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isAuthDrawerOpen, setIsAuthDrawerOpen] = useState(false)
   const [isCommDrawerOpen, setIsCommDrawerOpen] = useState(false)
+  const [selectedCommChannel, setSelectedCommChannel] = useState<'email' | 'sms' | 'push' | 'inApp' | null>(null)
   const [isLegalDrawerOpen, setIsLegalDrawerOpen] = useState(false)
   const [isBillingDrawerOpen, setIsBillingDrawerOpen] = useState(false)
   const [selectedBillingProvider, setSelectedBillingProvider] = useState<string | null>(null)
@@ -304,9 +306,11 @@ export default function ApplicationConfigPage() {
   const [newCircleParentId, setNewCircleParentId] = useState<string>('')
   const [newCircleDescription, setNewCircleDescription] = useState('')
   const [circleMsg, setCircleMsg] = useState('')
-  const [circleUserIdInput, setCircleUserIdInput] = useState('')
-  const [circleOwnerUserIdInput, setCircleOwnerUserIdInput] = useState('')
-  const [circleBillingUserIdInput, setCircleBillingUserIdInput] = useState('')
+  const [circleUserSearch, setCircleUserSearch] = useState('')
+  const [circleSelectedUserId, setCircleSelectedUserId] = useState('')
+  const [circleSelectedRole, setCircleSelectedRole] = useState<'member' | 'owner'>('member')
+  const [circleBillingUserSearch, setCircleBillingUserSearch] = useState('')
+  const [circleSelectedBillingUserId, setCircleSelectedBillingUserId] = useState('')
   const [circleBillingModeSaving, setCircleBillingModeSaving] = useState(false)
   const [selectedCircleId, setSelectedCircleId] = useState<string | null>(null)
   const [selectedCircle, setSelectedCircle] = useState<AppCircle | null>(null)
@@ -327,12 +331,14 @@ export default function ApplicationConfigPage() {
     provider: 'stripe',
     mode: 'test',
     currency: 'USD',
+    providerEnabled: {},
     providerConfig: {},
   })
   // Email templates
   const [emailTemplates, setEmailTemplates] = useState<AppEmailTemplate[]>([])
   const [defaultEmailTemplates, setDefaultEmailTemplates] = useState<AppEmailTemplate[]>([])
   const [emailTemplatesLoading, setEmailTemplatesLoading] = useState(false)
+  const [isTemplateDrawerOpen, setIsTemplateDrawerOpen] = useState(false)
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null)
   const [selectedTemplateScope, setSelectedTemplateScope] = useState<'app' | 'default'>('app')
   const [selectedDefaultTemplateToAssign, setSelectedDefaultTemplateToAssign] = useState('')
@@ -448,65 +454,81 @@ export default function ApplicationConfigPage() {
     }
   }
 
-  const assignCircleMember = async (circleId: string) => {
-    if (!circleUserIdInput.trim()) return
+  const assignCircleRole = async (circleId: string, userId: string, role: 'member' | 'owner') => {
+    if (!userId.trim()) return
+    const endpoint = role === 'owner' ? 'owners' : 'members'
     try {
-      const res = await fetch(`/api/v1/admin/applications/${appId}/circles/${circleId}/members`, {
+      const res = await fetch(`/api/v1/admin/applications/${appId}/circles/${circleId}/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: circleUserIdInput.trim(), role: 'member' }),
+        body: JSON.stringify({ userId: userId.trim(), role }),
       })
       const data = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(data?.error || 'Failed to assign member')
-      setCircleUserIdInput('')
+      if (!res.ok) throw new Error(data?.error || `Failed to assign ${role}`)
       await loadCircles()
       if (selectedCircleId === circleId) {
         await refreshSelectedCircle()
       }
     } catch (error: any) {
-      setCircleMsg(error?.message || 'Failed to assign member')
+      setCircleMsg(error?.message || `Failed to assign ${role}`)
       setTimeout(() => setCircleMsg(''), 3000)
     }
   }
 
-  const assignCircleOwner = async (circleId: string) => {
-    if (!circleOwnerUserIdInput.trim()) return
-    try {
-      const res = await fetch(`/api/v1/admin/applications/${appId}/circles/${circleId}/owners`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: circleOwnerUserIdInput.trim(), role: 'owner' }),
-      })
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(data?.error || 'Failed to assign owner')
-      setCircleOwnerUserIdInput('')
-      await loadCircles()
-      if (selectedCircleId === circleId) {
-        await refreshSelectedCircle()
-      }
-    } catch (error: any) {
-      setCircleMsg(error?.message || 'Failed to assign owner')
-      setTimeout(() => setCircleMsg(''), 3000)
-    }
+  const assignSelectedCircleUser = async (circleId: string) => {
+    if (!circleSelectedUserId) return
+    await assignCircleRole(circleId, circleSelectedUserId, circleSelectedRole)
+    setCircleSelectedUserId('')
+    setCircleUserSearch('')
   }
 
   const assignCircleBilling = async (circleId: string) => {
-    if (!circleBillingUserIdInput.trim()) return
+    if (!circleSelectedBillingUserId.trim()) return
     try {
       const res = await fetch(`/api/v1/admin/applications/${appId}/circles/${circleId}/billing-assignee`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: circleBillingUserIdInput.trim() }),
+        body: JSON.stringify({ userId: circleSelectedBillingUserId.trim() }),
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data?.error || 'Failed to assign billing user')
-      setCircleBillingUserIdInput('')
+      setCircleSelectedBillingUserId('')
+      setCircleBillingUserSearch('')
       await loadCircles()
       if (selectedCircleId === circleId) {
         await refreshSelectedCircle()
       }
     } catch (error: any) {
       setCircleMsg(error?.message || 'Failed to assign billing user')
+      setTimeout(() => setCircleMsg(''), 3000)
+    }
+  }
+
+  const removeCircleRole = async (userId: string, role: 'member' | 'owner') => {
+    if (!selectedCircleId) return
+    const endpoint = role === 'owner' ? 'owners' : 'members'
+    try {
+      const res = await fetch(`/api/v1/admin/applications/${appId}/circles/${selectedCircleId}/${endpoint}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data?.error || `Failed to remove ${role}`)
+      await Promise.all([loadCircles(), refreshSelectedCircle()])
+    } catch (error: any) {
+      setCircleMsg(error?.message || `Failed to remove ${role}`)
+      setTimeout(() => setCircleMsg(''), 3000)
+    }
+  }
+
+  const switchCircleUserRole = async (userId: string, fromRole: 'member' | 'owner', toRole: 'member' | 'owner') => {
+    if (fromRole === toRole || !selectedCircleId) return
+    try {
+      await removeCircleRole(userId, fromRole)
+      await assignCircleRole(selectedCircleId, userId, toRole)
+    } catch (error: any) {
+      setCircleMsg(error?.message || 'Failed to switch role')
       setTimeout(() => setCircleMsg(''), 3000)
     }
   }
@@ -612,37 +634,11 @@ export default function ApplicationConfigPage() {
   }
 
   const removeCircleMember = async (userId: string) => {
-    if (!selectedCircleId) return
-    try {
-      const res = await fetch(`/api/v1/admin/applications/${appId}/circles/${selectedCircleId}/members`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId }),
-      })
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(data?.error || 'Failed to remove member')
-      await Promise.all([loadCircles(), refreshSelectedCircle()])
-    } catch (error: any) {
-      setCircleMsg(error?.message || 'Failed to remove member')
-      setTimeout(() => setCircleMsg(''), 3000)
-    }
+    await removeCircleRole(userId, 'member')
   }
 
   const removeCircleOwner = async (userId: string) => {
-    if (!selectedCircleId) return
-    try {
-      const res = await fetch(`/api/v1/admin/applications/${appId}/circles/${selectedCircleId}/owners`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId }),
-      })
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(data?.error || 'Failed to remove owner')
-      await Promise.all([loadCircles(), refreshSelectedCircle()])
-    } catch (error: any) {
-      setCircleMsg(error?.message || 'Failed to remove owner')
-      setTimeout(() => setCircleMsg(''), 3000)
-    }
+    await removeCircleRole(userId, 'owner')
   }
 
   const removeCircleBillingAssignee = async (userId: string) => {
@@ -689,6 +685,7 @@ export default function ApplicationConfigPage() {
         provider: 'stripe',
         mode: 'test',
         currency: 'USD',
+        providerEnabled: {},
         providerConfig: {},
       })
     }
@@ -737,6 +734,7 @@ export default function ApplicationConfigPage() {
       textContent: template.textContent || '',
       isActive: template.isActive !== false,
     })
+    setIsTemplateDrawerOpen(true)
   }
 
   const selectDefaultTemplate = (template: AppEmailTemplate) => {
@@ -750,6 +748,7 @@ export default function ApplicationConfigPage() {
       textContent: template.textContent || '',
       isActive: template.isActive !== false,
     })
+    setIsTemplateDrawerOpen(true)
   }
 
   const saveTemplate = async () => {
@@ -1527,6 +1526,18 @@ export default function ApplicationConfigPage() {
     (u.email || '').toLowerCase().includes(userSearchQuery.toLowerCase())
   )
 
+  const circleUserOptions = users.filter((u) => {
+    const q = circleUserSearch.trim().toLowerCase()
+    if (!q) return true
+    return (u.name || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q)
+  })
+
+  const circleBillingUserOptions = users.filter((u) => {
+    const q = circleBillingUserSearch.trim().toLowerCase()
+    if (!q) return true
+    return (u.name || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q)
+  })
+
   const sidebarSections = [
     {
       title: 'Core',
@@ -1536,6 +1547,7 @@ export default function ApplicationConfigPage() {
         { value: 'billing', icon: <CreditCardIcon className="w-4 h-4" />, label: 'Billing & Subscriptions' },
         { value: 'circles', icon: <GlobeIcon className="w-4 h-4" />, label: 'Circles' },
         { value: 'surveys', icon: <ClipboardListIcon className="w-4 h-4" />, label: 'Surveys' },
+        { value: 'user-attributes', icon: <UsersIcon className="w-4 h-4" />, label: 'User Attributes' },
       ],
     },
     {
@@ -1552,7 +1564,6 @@ export default function ApplicationConfigPage() {
       title: 'Identity & Security',
       items: [
         { value: 'identity', icon: <GlobeIcon className="w-4 h-4" />, label: 'Identity Scope' },
-        { value: 'user-attributes', icon: <UsersIcon className="w-4 h-4" />, label: 'User Attributes' },
         { value: 'auth', icon: <ShieldCheckIcon className="w-4 h-4" />, label: 'Auth Methods' },
         { value: 'security', icon: <LockIcon className="w-4 h-4" />, label: 'Security & MFA' },
       ],
@@ -2405,24 +2416,16 @@ export default function ApplicationConfigPage() {
               <div className="px-4 py-2 border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between">
                 <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Billing Mode</h4>
                 <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant={application.circleBillingMode === 'perAccount' ? 'primary' : 'outline'}
-                    onClick={() => saveCircleBillingMode('perAccount')}
+                  <select
+                    title="Circle billing mode"
+                    value={application.circleBillingMode || 'perAccount'}
+                    onChange={(e) => saveCircleBillingMode(e.target.value as 'perCircleLevel' | 'perAccount')}
                     disabled={circleBillingModeSaving}
+                    className="px-2.5 py-1.5 text-xs bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg"
                   >
-                    Per Account
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant={application.circleBillingMode === 'perCircleLevel' ? 'primary' : 'outline'}
-                    onClick={() => saveCircleBillingMode('perCircleLevel')}
-                    disabled={circleBillingModeSaving}
-                  >
-                    Per Circle Level
-                  </Button>
+                    <option value="perAccount">Per Account</option>
+                    <option value="perCircleLevel">Per Circle Level</option>
+                  </select>
                 </div>
               </div>
               <div className="p-4 text-xs text-gray-500 dark:text-zinc-400">
@@ -2578,7 +2581,7 @@ export default function ApplicationConfigPage() {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Authentication Methods</h3>
-                <p className="text-sm text-gray-500 dark:text-zinc-400">Methods are grouped by category. Click Configure to manage and override per-app settings.</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-400">All methods are listed below. Click any method to open the config drawer.</p>
               </div>
               <Button onClick={() => setIsAuthDrawerOpen(true)} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0 shadow-lg shadow-blue-500/25">
                 <SettingsIcon className="w-4 h-4 mr-2" />
@@ -2586,32 +2589,32 @@ export default function ApplicationConfigPage() {
               </Button>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-2">
               {[
-                { group: 'General', methods: ['Email & Password', 'SAML / SSO'] },
-                { group: 'Passwordless', methods: ['Magic Link', 'SMS OTP', 'WhatsApp OTP'] },
-                { group: 'Social Login', methods: ['Google OAuth', 'GitHub OAuth', 'Facebook OAuth', 'X OAuth', 'Microsoft OAuth', 'LINE OAuth'] },
-              ].map((section) => (
+                { name: 'Email & Password', group: 'General' },
+                { name: 'SAML / SSO', group: 'General' },
+                { name: 'Magic Link', group: 'Passwordless' },
+                { name: 'SMS OTP', group: 'Passwordless' },
+                { name: 'WhatsApp OTP', group: 'Passwordless' },
+                { name: 'Google OAuth', group: 'Social Login' },
+                { name: 'GitHub OAuth', group: 'Social Login' },
+                { name: 'Facebook OAuth', group: 'Social Login' },
+                { name: 'X OAuth', group: 'Social Login' },
+                { name: 'Microsoft OAuth', group: 'Social Login' },
+                { name: 'LINE OAuth', group: 'Social Login' },
+              ].map((method) => (
                 <button
-                  key={section.group}
+                  key={method.name}
                   onClick={() => setIsAuthDrawerOpen(true)}
-                  className="w-full text-left rounded-xl border border-gray-200 dark:border-zinc-800 p-4 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/20 dark:hover:bg-blue-500/5 transition-colors"
+                  className="w-full text-left rounded-lg border border-gray-200 dark:border-zinc-800 p-3 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/20 dark:hover:bg-blue-500/5 transition-colors"
                 >
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">{method.name}</p>
                     <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 uppercase tracking-wide">
-                      {section.group}
+                      {method.group}
                     </span>
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {section.methods.map((method) => (
-                      <span
-                        key={method}
-                        className="inline-flex px-2 py-1 rounded-md text-[11px] border border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-zinc-300 bg-white dark:bg-zinc-900"
-                      >
-                        {method}
-                      </span>
-                    ))}
-                  </div>
+                  <p className="text-[11px] text-gray-500 mt-1">Click to configure override settings in drawer.</p>
                 </button>
               ))}
             </div>
@@ -2761,31 +2764,38 @@ export default function ApplicationConfigPage() {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Communication Settings</h3>
-                <p className="text-sm text-gray-500 dark:text-zinc-400">Methods are shown as cards. Click a card to open configuration and override defaults.</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-400">Methods are shown as a list. Click a method to open its drawer configuration.</p>
               </div>
-              <Button onClick={() => setIsCommDrawerOpen(true)} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0 shadow-lg shadow-blue-500/25">
+              <Button onClick={() => { setSelectedCommChannel(null); setIsCommDrawerOpen(true) }} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0 shadow-lg shadow-blue-500/25">
                 <SettingsIcon className="w-4 h-4 mr-2" />
                 Configure
               </Button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="space-y-2">
               {[
-                { name: 'Email Channel', icon: <MailIcon className="w-4 h-4" />, provider: 'SendGrid / SES', status: 'Default enabled' },
-                { name: 'SMS Channel', icon: <SmartphoneIcon className="w-4 h-4" />, provider: 'Twilio / Vonage', status: 'Default disabled' },
-                { name: 'Push Channel', icon: <MonitorIcon className="w-4 h-4" />, provider: 'FCM / APNs', status: 'Default disabled' },
-                { name: 'In-App Channel', icon: <MessageSquareIcon className="w-4 h-4" />, provider: 'Built-in', status: 'Default enabled' },
+                { key: 'email' as const, name: 'Email Channel', icon: <MailIcon className="w-4 h-4" />, provider: 'SendGrid / SES', status: 'Channel method' },
+                { key: 'sms' as const, name: 'SMS Channel', icon: <SmartphoneIcon className="w-4 h-4" />, provider: 'Twilio / Vonage', status: 'Channel method' },
+                { key: 'push' as const, name: 'Push Channel', icon: <MonitorIcon className="w-4 h-4" />, provider: 'FCM / APNs', status: 'Channel method' },
+                { key: 'inApp' as const, name: 'In-App Channel', icon: <MessageSquareIcon className="w-4 h-4" />, provider: 'Built-in', status: 'Channel method' },
               ].map((method) => (
                 <button
-                  key={method.name}
-                  onClick={() => setIsCommDrawerOpen(true)}
-                  className="text-left rounded-lg border border-gray-200 dark:border-zinc-800 p-3 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/30 dark:hover:bg-blue-500/5 transition-colors"
+                  key={method.key}
+                  onClick={() => {
+                    setSelectedCommChannel(method.key)
+                    setIsCommDrawerOpen(true)
+                  }}
+                  className="w-full text-left rounded-lg border border-gray-200 dark:border-zinc-800 px-3 py-2.5 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/20 dark:hover:bg-blue-500/5 transition-colors"
                 >
-                  <div className="flex items-center gap-2 mb-1">
-                    {method.icon}
-                    <span className="text-sm font-semibold text-gray-800 dark:text-zinc-200">{method.name}</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      {method.icon}
+                      <span className="text-sm font-semibold text-gray-800 dark:text-zinc-200">{method.name}</span>
+                    </div>
+                    <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 uppercase tracking-wide">
+                      {method.status}
+                    </span>
                   </div>
-                  <p className="text-xs text-gray-500">{method.provider}</p>
-                  <p className="text-[11px] text-gray-500 mt-1">{method.status} — click to configure override</p>
+                  <p className="text-[11px] text-gray-500 mt-1">{method.provider}</p>
                 </button>
               ))}
             </div>
@@ -2803,22 +2813,16 @@ export default function ApplicationConfigPage() {
                   <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">Choose whether billing is charged per user account or per circle level.</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    variant={application.circleBillingMode === 'perAccount' ? 'primary' : 'outline'}
-                    onClick={() => saveCircleBillingMode('perAccount')}
+                  <select
+                    title="Billing method scope"
+                    value={application.circleBillingMode || 'perAccount'}
+                    onChange={(e) => saveCircleBillingMode(e.target.value as 'perCircleLevel' | 'perAccount')}
                     disabled={circleBillingModeSaving}
+                    className="px-2.5 py-1.5 text-xs bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg"
                   >
-                    Per User
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant={application.circleBillingMode === 'perCircleLevel' ? 'primary' : 'outline'}
-                    onClick={() => saveCircleBillingMode('perCircleLevel')}
-                    disabled={circleBillingModeSaving}
-                  >
-                    Per Circle
-                  </Button>
+                    <option value="perAccount">Per User</option>
+                    <option value="perCircleLevel">Per Circle</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -2831,6 +2835,7 @@ export default function ApplicationConfigPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {BILLING_PROVIDERS.map((provider) => {
                   const isActive = billingConfig.provider === provider.value
+                  const isEnabled = !!billingConfig.providerEnabled?.[provider.value]
                   return (
                     <button
                       key={provider.value}
@@ -2846,10 +2851,15 @@ export default function ApplicationConfigPage() {
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-semibold text-gray-900 dark:text-white">{provider.label}</span>
-                        {isActive && <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase">Active</span>}
+                        <div className="flex items-center gap-1.5">
+                          <span className={`text-[10px] font-bold uppercase ${isEnabled ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400'}`}>
+                            {isEnabled ? 'Enabled' : 'Disabled'}
+                          </span>
+                          {isActive && <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase">Selected</span>}
+                        </div>
                       </div>
                       <p className="text-[11px] text-gray-500 mt-1">
-                        {isActive ? `Current mode: ${billingConfig.mode} · Currency: ${billingConfig.currency}` : 'Configure credentials and provider settings'}
+                        {isActive ? `Mode: ${billingConfig.mode} · Currency: ${billingConfig.currency}` : 'Click to configure this method'}
                       </p>
                     </button>
                   )
@@ -2873,6 +2883,7 @@ export default function ApplicationConfigPage() {
                   setSelectedTemplateScope('default')
                   setSelectedTemplateId(null)
                   setTemplateEditor({ name: '', slug: '', subject: '', htmlContent: '', textContent: '', isActive: true })
+                  setIsTemplateDrawerOpen(true)
                 }}
               >
                 <PlusIcon className="w-4 h-4 mr-1.5" />
@@ -2884,6 +2895,7 @@ export default function ApplicationConfigPage() {
                   setSelectedTemplateScope('app')
                   setSelectedTemplateId(null)
                   setTemplateEditor({ name: '', slug: '', subject: '', htmlContent: '', textContent: '', isActive: true })
+                  setIsTemplateDrawerOpen(true)
                 }}
                 className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0"
               >
@@ -2894,7 +2906,7 @@ export default function ApplicationConfigPage() {
           )}
           <div className="rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-500 dark:text-zinc-400">Create platform defaults, assign them to this app, then override app copies.</p>
+              <p className="text-sm text-gray-500 dark:text-zinc-400">Templates are listed below. Click any item to edit in drawer.</p>
               {templateMsg && <span className={`text-xs font-medium ${templateMsg === 'Saved!' || templateMsg.startsWith('Assigned') ? 'text-emerald-600' : 'text-red-500'}`}>{templateMsg}</span>}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-2 rounded-lg border border-gray-200 dark:border-zinc-800 p-3 bg-gray-50/40 dark:bg-zinc-800/30">
@@ -2921,10 +2933,10 @@ export default function ApplicationConfigPage() {
                 Assign to App
               </Button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-[280px_minmax(0,1fr)] gap-4">
-              <div className="space-y-2">
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">App Templates</p>
-                <div className="space-y-1 max-h-[220px] overflow-y-auto">
+            <div className="space-y-4">
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight mb-2">App Templates</p>
+                <div className="space-y-2">
                   {emailTemplatesLoading ? (
                     <p className="text-xs text-gray-500">Loading templates...</p>
                   ) : emailTemplates.length === 0 ? (
@@ -2933,145 +2945,35 @@ export default function ApplicationConfigPage() {
                     <button
                       key={template.id}
                       onClick={() => selectTemplate(template)}
-                      className={`w-full text-left px-3 py-2 rounded-lg border text-sm ${
-                        selectedTemplateId === template.id
-                          ? 'border-blue-300 bg-blue-50/40 dark:border-blue-500/30 dark:bg-blue-500/10'
-                          : 'border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800/50'
-                      }`}
+                      className="w-full text-left rounded-lg border border-gray-200 dark:border-zinc-800 px-3 py-2.5 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/20 dark:hover:bg-blue-500/5 transition-colors"
                     >
-                      <p className="font-medium text-gray-900 dark:text-white truncate">{template.name}</p>
-                      <p className="text-[11px] text-gray-500 dark:text-zinc-400 truncate">{template.slug}</p>
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{template.name}</p>
+                        <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 uppercase tracking-wide">App</span>
+                      </div>
+                      <p className="text-[11px] text-gray-500 dark:text-zinc-400 truncate mt-1">{template.slug}</p>
                     </button>
                   ))}
                 </div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight pt-2">Default Templates</p>
-                <div className="space-y-1 max-h-[190px] overflow-y-auto">
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight mb-2">Default Templates</p>
+                <div className="space-y-2">
                   {defaultEmailTemplates.length === 0 ? (
                     <p className="text-xs text-gray-500">No default templates yet.</p>
                   ) : defaultEmailTemplates.map((template) => (
                     <button
                       key={template.id}
                       onClick={() => selectDefaultTemplate(template)}
-                      className={`w-full text-left px-3 py-2 rounded-lg border text-sm ${
-                        selectedTemplateId === template.id && selectedTemplateScope === 'default'
-                          ? 'border-blue-300 bg-blue-50/40 dark:border-blue-500/30 dark:bg-blue-500/10'
-                          : 'border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800/50'
-                      }`}
+                      className="w-full text-left rounded-lg border border-gray-200 dark:border-zinc-800 px-3 py-2.5 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/20 dark:hover:bg-blue-500/5 transition-colors"
                     >
-                      <div className="flex items-center gap-1.5">
-                        <p className="font-medium text-gray-900 dark:text-white truncate">{template.name}</p>
-                        <span className="inline-flex px-1.5 py-0.5 rounded text-[9px] font-bold bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300">
-                          Default
-                        </span>
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{template.name}</p>
+                        <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 uppercase tracking-wide">Default</span>
                       </div>
-                      <p className="text-[11px] text-gray-500 dark:text-zinc-400 truncate">{template.slug}</p>
+                      <p className="text-[11px] text-gray-500 dark:text-zinc-400 truncate mt-1">{template.slug}</p>
                     </button>
                   ))}
-                </div>
-              </div>
-              <div className="space-y-3">
-                <div className="inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300">
-                  Editing: {selectedTemplateScope === 'default' ? 'Default Template' : 'App Template'}
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <input
-                    type="text"
-                    title="Template name"
-                    value={templateEditor.name}
-                    onChange={(e) => setTemplateEditor(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder="Welcome Email"
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm"
-                  />
-                  <input
-                    type="text"
-                    title="Template slug"
-                    value={templateEditor.slug}
-                    onChange={(e) => setTemplateEditor(prev => ({ ...prev, slug: e.target.value }))}
-                    placeholder="welcome-email"
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono"
-                  />
-                  <input
-                    type="text"
-                    title="Template subject"
-                    value={templateEditor.subject}
-                    onChange={(e) => setTemplateEditor(prev => ({ ...prev, subject: e.target.value }))}
-                    placeholder="Welcome to {{appName}}"
-                    className="md:col-span-2 w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">HTML Content</label>
-                  <textarea
-                    title="HTML template content"
-                    value={templateEditor.htmlContent}
-                    onChange={(e) => setTemplateEditor(prev => ({ ...prev, htmlContent: e.target.value }))}
-                    rows={8}
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs font-mono"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">Text Content</label>
-                  <textarea
-                    title="Text template content"
-                    value={templateEditor.textContent}
-                    onChange={(e) => setTemplateEditor(prev => ({ ...prev, textContent: e.target.value }))}
-                    rows={5}
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs font-mono"
-                  />
-                </div>
-                <div className="rounded-lg border border-gray-200 dark:border-zinc-800 p-3 bg-gray-50/60 dark:bg-zinc-800/40">
-                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-tight mb-1">Preview</p>
-                  <p className="text-xs font-medium text-gray-800 dark:text-zinc-200 mb-1">
-                    {(templateEditor.subject || 'Welcome, {{user.firstName}}')
-                      .replace(/\{\{user\.firstName\}\}/g, 'John')
-                      .replace(/\{\{user\.lastName\}\}/g, 'Doe')
-                      .replace(/\{\{user\.email\}\}/g, 'john@example.com')
-                      .replace(/\{\{app\.name\}\}/g, application.name)}
-                  </p>
-                  <div
-                    className="text-xs text-gray-600 dark:text-zinc-300 prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{
-                      __html: (templateEditor.htmlContent || '<p>Hello {{user.firstName}}, welcome to {{app.name}}.</p>')
-                        .replace(/\{\{user\.firstName\}\}/g, 'John')
-                        .replace(/\{\{user\.lastName\}\}/g, 'Doe')
-                        .replace(/\{\{user\.email\}\}/g, 'john@example.com')
-                        .replace(/\{\{app\.name\}\}/g, application.name),
-                    }}
-                  />
-                </div>
-                <div className="rounded-lg border border-blue-200/60 dark:border-blue-500/20 bg-blue-50/40 dark:bg-blue-500/5 p-3">
-                  <p className="text-[10px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-tight mb-1">Common Template Variables</p>
-                  <div className="grid grid-cols-2 gap-1 text-[11px] text-blue-800/90 dark:text-blue-200/90 font-mono">
-                    <span>{'{{user.firstName}}'}</span>
-                    <span>{'{{user.lastName}}'}</span>
-                    <span>{'{{user.email}}'}</span>
-                    <span>{'{{app.name}}'}</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-zinc-300">
-                    <input
-                      type="checkbox"
-                      title="Template active status"
-                      checked={templateEditor.isActive}
-                      onChange={(e) => setTemplateEditor(prev => ({ ...prev, isActive: e.target.checked }))}
-                    />
-                    Active
-                  </label>
-                  <div className="flex items-center gap-2">
-                    {selectedTemplateId && (
-                      <Button
-                        variant="outline"
-                        className="text-red-600 border-red-200 hover:bg-red-50"
-                        onClick={() => deleteTemplate(selectedTemplateId)}
-                      >
-                        Delete
-                      </Button>
-                    )}
-                    <Button onClick={saveTemplate} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0">
-                      {selectedTemplateScope === 'default' ? 'Save Default Template' : 'Save App Template'}
-                    </Button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -3327,7 +3229,7 @@ export default function ApplicationConfigPage() {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Legal & Compliance</h3>
-                <p className="text-sm text-gray-500 dark:text-zinc-400">Manage legal documents and compliance settings for this application.</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-400">Legal & Compliance list. Click an item to edit in drawer.</p>
               </div>
               <Button onClick={() => setIsLegalDrawerOpen(true)} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0 shadow-lg shadow-blue-500/25">
                 <SettingsIcon className="w-4 h-4 mr-2" />
@@ -3335,24 +3237,38 @@ export default function ApplicationConfigPage() {
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <button onClick={() => setIsLegalDrawerOpen(true)} className="text-left p-3 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/30 dark:hover:bg-blue-500/5 transition-colors">
-                <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">Legal Documents</p>
-                <p className="text-xs text-gray-500 mt-1">{(legalConfig?.documents || []).length} docs configured</p>
-                <p className="text-[11px] text-gray-500 mt-1">Click to configure and edit document content</p>
-              </button>
-              <button onClick={() => setIsLegalDrawerOpen(true)} className="text-left p-3 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/30 dark:hover:bg-blue-500/5 transition-colors">
-                <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">Compliance Methods</p>
-                <p className="text-xs text-gray-500 mt-1">{legalUseDefault ? 'Using default values' : 'App override active'}</p>
-                <p className="text-[11px] text-gray-500 mt-1">GDPR, cookie consent, retention, export, erasure</p>
-              </button>
-              <button onClick={() => setIsLegalDrawerOpen(true)} className="text-left p-3 rounded-lg border border-gray-200 dark:border-zinc-800 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/30 dark:hover:bg-blue-500/5 transition-colors">
-                <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">Data Retention</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  User: {legalConfig?.retention?.userData || 0}d · Audit: {legalConfig?.retention?.auditLog || 0}d · Session: {legalConfig?.retention?.sessionData || 0}d
-                </p>
-                <p className="text-[11px] text-gray-500 mt-1">Click to configure policy overrides</p>
-              </button>
+            <div className="space-y-2">
+              {[
+                {
+                  name: 'Legal Documents',
+                  detail: `${(legalConfig?.documents || []).length} docs configured`,
+                  group: 'Documents',
+                },
+                {
+                  name: 'Compliance Methods',
+                  detail: legalUseDefault ? 'Using default values' : 'App override active',
+                  group: 'Compliance',
+                },
+                {
+                  name: 'Data Retention',
+                  detail: `User: ${legalConfig?.retention?.userData || 0}d · Audit: ${legalConfig?.retention?.auditLog || 0}d · Session: ${legalConfig?.retention?.sessionData || 0}d`,
+                  group: 'Retention',
+                },
+              ].map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => setIsLegalDrawerOpen(true)}
+                  className="w-full text-left rounded-lg border border-gray-200 dark:border-zinc-800 px-3 py-2.5 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/20 dark:hover:bg-blue-500/5 transition-colors"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">{item.name}</p>
+                    <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 uppercase tracking-wide">
+                      {item.group}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-gray-500 mt-1">{item.detail}</p>
+                </button>
+              ))}
             </div>
           </div>
         </TabsContent>
@@ -3795,39 +3711,79 @@ export default function ApplicationConfigPage() {
                     <div className="space-y-4">
                       <div className="rounded-lg border border-gray-200 dark:border-zinc-800 p-3 space-y-2">
                         <p className="text-xs font-semibold text-gray-700 dark:text-zinc-200">Manage Members and Owners</p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                          <input type="text" value={circleUserIdInput} onChange={(e) => setCircleUserIdInput(e.target.value)} placeholder="Member userId" className="px-2.5 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded text-xs" />
-                          <input type="text" value={circleOwnerUserIdInput} onChange={(e) => setCircleOwnerUserIdInput(e.target.value)} placeholder="Owner userId" className="px-2.5 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded text-xs" />
-                        </div>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => assignCircleMember(selectedCircle.id)}>Add Member</Button>
-                          <Button size="sm" variant="outline" onClick={() => assignCircleOwner(selectedCircle.id)}>Add Owner</Button>
+                        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_130px_110px] gap-2">
+                          <div className="space-y-1">
+                            <input
+                              type="text"
+                              value={circleUserSearch}
+                              onChange={(e) => setCircleUserSearch(e.target.value)}
+                              placeholder="Search user by name or email"
+                              className="w-full px-2.5 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded text-xs"
+                            />
+                            <select
+                              title="Select user"
+                              value={circleSelectedUserId}
+                              onChange={(e) => setCircleSelectedUserId(e.target.value)}
+                              className="w-full px-2.5 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded text-xs"
+                            >
+                              <option value="">Select user...</option>
+                              {circleUserOptions.map((u) => (
+                                <option key={u.id} value={u.id}>
+                                  {(u.name || 'Unknown')} ({u.email || u.id})
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <select
+                            title="Assign role"
+                            value={circleSelectedRole}
+                            onChange={(e) => setCircleSelectedRole(e.target.value as 'member' | 'owner')}
+                            className="px-2.5 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded text-xs h-fit"
+                          >
+                            <option value="member">Member</option>
+                            <option value="owner">Owner</option>
+                          </select>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-fit"
+                            disabled={!circleSelectedUserId}
+                            onClick={() => assignSelectedCircleUser(selectedCircle.id)}
+                          >
+                            Add User
+                          </Button>
                         </div>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="rounded-lg border border-gray-200 dark:border-zinc-800 p-3">
-                          <p className="text-xs font-semibold mb-2">Members</p>
-                          <div className="space-y-2">
-                            {(selectedCircle.members || []).map((m) => (
-                              <div key={m.id} className="text-xs flex items-center justify-between gap-2">
-                                <span className="truncate">{m.user?.email || m.userId}</span>
-                                <button title="Remove member" onClick={() => removeCircleMember(m.userId)} className="text-red-500 hover:text-red-600">Remove</button>
-                              </div>
-                            ))}
-                            {(selectedCircle.members || []).length === 0 && <p className="text-xs text-gray-500">No members</p>}
-                          </div>
-                        </div>
-                        <div className="rounded-lg border border-gray-200 dark:border-zinc-800 p-3">
-                          <p className="text-xs font-semibold mb-2">Owners</p>
-                          <div className="space-y-2">
-                            {(selectedCircle.owners || []).map((o) => (
-                              <div key={o.id} className="text-xs flex items-center justify-between gap-2">
-                                <span className="truncate">{o.user?.email || o.userId}</span>
-                                <button title="Remove owner" onClick={() => removeCircleOwner(o.userId)} className="text-red-500 hover:text-red-600">Remove</button>
-                              </div>
-                            ))}
-                            {(selectedCircle.owners || []).length === 0 && <p className="text-xs text-gray-500">No owners</p>}
-                          </div>
+                      <div className="rounded-lg border border-gray-200 dark:border-zinc-800 p-3">
+                        <p className="text-xs font-semibold mb-2">Assigned Users</p>
+                        <div className="space-y-2">
+                          {[
+                            ...(selectedCircle.members || []).map((m) => ({ id: m.id, userId: m.userId, email: m.user?.email || m.userId, role: 'member' as const })),
+                            ...(selectedCircle.owners || []).map((o) => ({ id: o.id, userId: o.userId, email: o.user?.email || o.userId, role: 'owner' as const })),
+                          ].map((entry) => (
+                            <div key={`${entry.role}-${entry.id}`} className="text-xs grid grid-cols-[minmax(0,1fr)_110px_70px] gap-2 items-center">
+                              <span className="truncate">{entry.email}</span>
+                              <select
+                                value={entry.role}
+                                title="Assigned role"
+                                onChange={(e) => switchCircleUserRole(entry.userId, entry.role, e.target.value as 'member' | 'owner')}
+                                className="px-2 py-1.5 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded text-xs"
+                              >
+                                <option value="member">Member</option>
+                                <option value="owner">Owner</option>
+                              </select>
+                              <button
+                                title="Remove user"
+                                onClick={() => (entry.role === 'owner' ? removeCircleOwner(entry.userId) : removeCircleMember(entry.userId))}
+                                className="text-red-500 hover:text-red-600"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          ))}
+                          {(selectedCircle.members || []).length === 0 && (selectedCircle.owners || []).length === 0 && (
+                            <p className="text-xs text-gray-500">No users assigned</p>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -3839,9 +3795,32 @@ export default function ApplicationConfigPage() {
                         <>
                           <div className="rounded-lg border border-gray-200 dark:border-zinc-800 p-3 space-y-2">
                             <p className="text-xs font-semibold text-gray-700 dark:text-zinc-200">Assign Billing User</p>
-                            <div className="flex items-center gap-2">
-                              <input type="text" value={circleBillingUserIdInput} onChange={(e) => setCircleBillingUserIdInput(e.target.value)} placeholder="Billing userId" className="flex-1 px-2.5 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded text-xs" />
-                              <Button size="sm" variant="outline" onClick={() => assignCircleBilling(selectedCircle.id)}>Set Billing Assignee</Button>
+                            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_120px] gap-2">
+                              <div className="space-y-1">
+                                <input
+                                  type="text"
+                                  value={circleBillingUserSearch}
+                                  onChange={(e) => setCircleBillingUserSearch(e.target.value)}
+                                  placeholder="Search user by name or email"
+                                  className="w-full px-2.5 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded text-xs"
+                                />
+                                <select
+                                  title="Select billing user"
+                                  value={circleSelectedBillingUserId}
+                                  onChange={(e) => setCircleSelectedBillingUserId(e.target.value)}
+                                  className="w-full px-2.5 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded text-xs"
+                                >
+                                  <option value="">Select billing user...</option>
+                                  {circleBillingUserOptions.map((u) => (
+                                    <option key={u.id} value={u.id}>
+                                      {(u.name || 'Unknown')} ({u.email || u.id})
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <Button size="sm" variant="outline" className="h-fit" disabled={!circleSelectedBillingUserId} onClick={() => assignCircleBilling(selectedCircle.id)}>
+                                Set Assignee
+                              </Button>
                             </div>
                           </div>
                           <div className="rounded-lg border border-gray-200 dark:border-zinc-800 p-3">
@@ -3893,6 +3872,85 @@ export default function ApplicationConfigPage() {
         </div>
       )}
 
+      {isTemplateDrawerOpen && (
+        <>
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40" onClick={() => setIsTemplateDrawerOpen(false)} />
+          <div className="fixed top-4 right-4 bottom-4 w-full max-w-2xl bg-white dark:bg-zinc-900 shadow-2xl z-50 flex flex-col overflow-hidden rounded-2xl border border-gray-200/80 dark:border-zinc-800/80">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-zinc-800">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Email Template Editor</h2>
+                <p className="text-sm text-gray-500 dark:text-zinc-400 mt-0.5">
+                  {selectedTemplateScope === 'default' ? 'Default Template' : 'App Template'}
+                </p>
+              </div>
+              <button
+                onClick={() => setIsTemplateDrawerOpen(false)}
+                title="Close email template drawer"
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-400 dark:text-zinc-500"
+              >
+                <XIcon className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6 space-y-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <input type="text" title="Template name" value={templateEditor.name} onChange={(e) => setTemplateEditor(prev => ({ ...prev, name: e.target.value }))} placeholder="Welcome Email" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm" />
+                <input type="text" title="Template slug" value={templateEditor.slug} onChange={(e) => setTemplateEditor(prev => ({ ...prev, slug: e.target.value }))} placeholder="welcome-email" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono" />
+                <input type="text" title="Template subject" value={templateEditor.subject} onChange={(e) => setTemplateEditor(prev => ({ ...prev, subject: e.target.value }))} placeholder="Welcome to {{appName}}" className="md:col-span-2 w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm" />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">HTML Content</label>
+                <textarea title="HTML template content" value={templateEditor.htmlContent} onChange={(e) => setTemplateEditor(prev => ({ ...prev, htmlContent: e.target.value }))} rows={8} className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs font-mono" />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">Text Content</label>
+                <textarea title="Text template content" value={templateEditor.textContent} onChange={(e) => setTemplateEditor(prev => ({ ...prev, textContent: e.target.value }))} rows={5} className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs font-mono" />
+              </div>
+              <div className="rounded-lg border border-gray-200 dark:border-zinc-800 p-3 bg-gray-50/60 dark:bg-zinc-800/40">
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-tight mb-1">Preview</p>
+                <p className="text-xs font-medium text-gray-800 dark:text-zinc-200 mb-1">
+                  {(templateEditor.subject || 'Welcome, {{user.firstName}}').replace(/\{\{user\.firstName\}\}/g, 'John').replace(/\{\{user\.lastName\}\}/g, 'Doe').replace(/\{\{user\.email\}\}/g, 'john@example.com').replace(/\{\{app\.name\}\}/g, application.name)}
+                </p>
+                <div
+                  className="text-xs text-gray-600 dark:text-zinc-300 prose prose-sm max-w-none"
+                  dangerouslySetInnerHTML={{
+                    __html: (templateEditor.htmlContent || '<p>Hello {{user.firstName}}, welcome to {{app.name}}.</p>')
+                      .replace(/\{\{user\.firstName\}\}/g, 'John')
+                      .replace(/\{\{user\.lastName\}\}/g, 'Doe')
+                      .replace(/\{\{user\.email\}\}/g, 'john@example.com')
+                      .replace(/\{\{app\.name\}\}/g, application.name),
+                  }}
+                />
+              </div>
+              <div className="rounded-lg border border-blue-200/60 dark:border-blue-500/20 bg-blue-50/40 dark:bg-blue-500/5 p-3">
+                <p className="text-[10px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-tight mb-1">Common Template Variables</p>
+                <div className="grid grid-cols-2 gap-1 text-[11px] text-blue-800/90 dark:text-blue-200/90 font-mono">
+                  <span>{'{{user.firstName}}'}</span>
+                  <span>{'{{user.lastName}}'}</span>
+                  <span>{'{{user.email}}'}</span>
+                  <span>{'{{app.name}}'}</span>
+                </div>
+              </div>
+            </div>
+            <div className="p-6 border-t border-gray-200 dark:border-zinc-800 flex items-center justify-between">
+              <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-zinc-300">
+                <input type="checkbox" title="Template active status" checked={templateEditor.isActive} onChange={(e) => setTemplateEditor(prev => ({ ...prev, isActive: e.target.checked }))} />
+                Active
+              </label>
+              <div className="flex items-center gap-2">
+                {selectedTemplateId && (
+                  <Button variant="outline" className="text-red-600 border-red-200 hover:bg-red-50" onClick={() => deleteTemplate(selectedTemplateId)}>
+                    Delete
+                  </Button>
+                )}
+                <Button onClick={saveTemplate} className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-0">
+                  {selectedTemplateScope === 'default' ? 'Save Default Template' : 'Save App Template'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Config Drawers */}
       <AuthMethodsConfigDrawer
         isOpen={isAuthDrawerOpen}
@@ -3902,9 +3960,13 @@ export default function ApplicationConfigPage() {
       />
       <CommunicationConfigDrawer
         isOpen={isCommDrawerOpen}
-        onClose={() => setIsCommDrawerOpen(false)}
+        onClose={() => {
+          setIsCommDrawerOpen(false)
+          setSelectedCommChannel(null)
+        }}
         appId={appId}
         appName={application.name}
+        initialChannel={selectedCommChannel}
       />
       <LegalConfigDrawer
         isOpen={isLegalDrawerOpen}

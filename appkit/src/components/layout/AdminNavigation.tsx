@@ -98,10 +98,14 @@ export const navigationHubs: NavHub[] = [
             { id: 'system-user-management', label: 'User Management', href: '/system', icon: 'users', group: 'Settings', permissions: [['system', 'view']] },
             { id: 'system-general', label: 'General', href: '/system/general', icon: 'settings', group: 'Settings', permissions: [['system', 'view']] },
             { id: 'system-security', label: 'Security', href: '/system/security', icon: 'lock', group: 'Settings', permissions: [['system', 'view']] },
+            { id: 'system-auth-style', label: 'Auth Style', href: '/system/auth-style', icon: 'paint', group: 'Settings', permissions: [['system', 'view']] },
+            { id: 'system-sso', label: 'SSO', href: '/system/sso', icon: 'shield', group: 'Settings', permissions: [['system', 'view']] },
+            { id: 'system-smtp', label: 'SMTP', href: '/system/smtp', icon: 'mail', group: 'Settings', permissions: [['system', 'view']] },
+            { id: 'system-mfa', label: '2FA / MFA', href: '/system/2fa', icon: 'lock-closed', group: 'Settings', permissions: [['system', 'view']] },
             { id: 'system-api-keys', label: 'API Keys', href: '/system/api-keys', icon: 'key', group: 'Settings', permissions: [['system', 'manage']] },
             { id: 'system-webhooks', label: 'Webhooks', href: '/system/webhooks', icon: 'globe', group: 'Operations', permissions: [['system', 'view']] },
             { id: 'system-legal', label: 'Legal & Compliance', href: '/system/legal', icon: 'scale', group: 'Operations', permissions: [['system', 'view']] },
-            { id: 'system-logs', label: 'System Logs', href: '/system/logs', icon: 'terminal', group: 'Operations', permissions: [['system', 'view']] },
+            { id: 'system-logs', label: 'System Logs', href: '/settings/logs', icon: 'terminal', group: 'Operations', permissions: [['system', 'view']] },
         ]
     },
 ]

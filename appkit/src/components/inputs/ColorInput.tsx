@@ -46,23 +46,15 @@ export default function ColorInput({ value = '#000000', onChange, label, classNa
                             leaveTo="opacity-0 translate-y-1"
                         >
                             <Popover.Panel className="absolute z-50 mt-1 w-[240px] overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 p-3">
-                                {/* Hex Input (Manual) */}
+                                {/* Picker */}
                                 <div className="mb-3">
-                                    <label className="text-xs font-medium text-gray-500 mb-1 block">Hex Value</label>
-                                    <div className="flex gap-2">
-                                        <div className="h-9 w-10 relative overflow-hidden rounded border border-gray-300">
-                                            <input 
-                                                type="color" 
-                                                value={value} 
-                                                onChange={(e) => onChange(e.target.value)}
-                                                className="absolute -top-2 -left-2 w-16 h-16 cursor-pointer p-0 border-0"
-                                            />
-                                        </div>
+                                    <label className="text-xs font-medium text-gray-500 mb-1 block">Choose Color</label>
+                                    <div className="h-9 w-full relative overflow-hidden rounded border border-gray-300">
                                         <input 
-                                            type="text" 
+                                            type="color" 
                                             value={value} 
                                             onChange={(e) => onChange(e.target.value)}
-                                            className="flex-1 rounded border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500"
+                                            className="absolute inset-0 h-full w-full cursor-pointer p-0 border-0 bg-transparent"
                                         />
                                     </div>
                                 </div>

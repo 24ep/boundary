@@ -46,7 +46,10 @@ export function AdminSidebarMenu({
                         )}
                         <div className="space-y-0.5">
                             {items.map((item: NavItem) => {
-                                const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href + '/'))
+                                const isSystemRootItem = activeHub.id === 'system' && item.href === '/system'
+                                const isActive = isSystemRootItem
+                                    ? pathname === '/system'
+                                    : pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href + '/'))
                                 return (
                                     <button
                                         key={item.id}

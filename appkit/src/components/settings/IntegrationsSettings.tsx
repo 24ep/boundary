@@ -134,6 +134,8 @@ export function IntegrationsSettings({ activeSub }: IntegrationsSettingsProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">APNs .p8 Key (paste)</label>
                 <textarea
                   rows={4}
+                  title="APNs .p8 key"
+                  placeholder="Paste APNs .p8 private key here"
                   className="macos-input w-full"
                   value={values.push?.apnsKeyP8 || ''}
                   onChange={e => update('push.apnsKeyP8', e.target.value)}
@@ -398,8 +400,6 @@ export function IntegrationsSettings({ activeSub }: IntegrationsSettingsProps) {
           </CardHeader>
           <CardBody>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input label="Logo URL" value={values.branding?.logoUrl || ''} onChange={e => update('branding.logoUrl', e.target.value)} />
-              <Input label="Favicon URL" value={values.branding?.faviconUrl || ''} onChange={e => update('branding.faviconUrl', e.target.value)} />
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
                 <input type="color" className="macos-input w-full h-10" value={values.branding?.primaryColor || '#FA7272'} onChange={e => update('branding.primaryColor', e.target.value)} />

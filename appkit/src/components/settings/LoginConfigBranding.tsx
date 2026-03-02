@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Image from 'next/image'
 import { Input } from '../ui/Input'
 import { Label } from '../ui/Label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select'
@@ -8,7 +9,7 @@ import { Textarea } from '../ui/textarea'
 import { Switch } from '../ui/switch'
 import { Button } from '../ui/Button'
 import ColorInput from '../inputs/ColorInput'
-import { Upload, Eye, EyeOff, Trash2 } from 'lucide-react'
+import { Upload, Trash2 } from 'lucide-react'
 import { LoginConfig } from './LoginConfigTypes'
 import { AccordionSection, AccordionProvider } from './AccordionSection'
 
@@ -19,7 +20,6 @@ interface LoginConfigBrandingProps {
 
 export function LoginConfigBranding({ config, updateConfig }: LoginConfigBrandingProps) {
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
-  const [showLogoUrl, setShowLogoUrl] = useState(false)
 
   const handleLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -109,9 +109,12 @@ export function LoginConfigBranding({ config, updateConfig }: LoginConfigBrandin
                 {/* Logo Preview */}
                 {(logoPreview || config.branding?.logoUrl) && (
                   <div className="relative inline-block">
-                    <img
-                      src={logoPreview || config.branding?.logoUrl}
+                    <Image
+                      src={(logoPreview || config.branding?.logoUrl || '') as string}
                       alt="Logo preview"
+                      width={256}
+                      height={64}
+                      unoptimized
                       className="h-16 w-auto max-w-xs object-contain border rounded"
                     />
                     <button
@@ -130,6 +133,7 @@ export function LoginConfigBranding({ config, updateConfig }: LoginConfigBrandin
                   <input
                     type="file"
                     id="logo-upload"
+                    title="Upload logo"
                     accept="image/*"
                     onChange={handleLogoUpload}
                     className="hidden"
@@ -143,25 +147,7 @@ export function LoginConfigBranding({ config, updateConfig }: LoginConfigBrandin
                     <Upload className="h-4 w-4" />
                     Upload Logo
                   </Button>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      id="use-logo-url"
-                      checked={showLogoUrl}
-                      onCheckedChange={setShowLogoUrl}
-                    />
-                    <Label htmlFor="use-logo-url" className="text-sm">Use URL</Label>
-                  </div>
                 </div>
-
-                {/* Logo URL Input */}
-                {showLogoUrl && (
-                  <Input
-                    placeholder="https://example.com/logo.png"
-                    value={config.branding?.logoUrl || ''}
-                    onChange={(e) => updateConfig('branding', 'logoUrl', e.target.value)}
-                  />
-                )}
               </div>
             </div>
           </div>
@@ -374,6 +360,7 @@ export function LoginConfigBranding({ config, updateConfig }: LoginConfigBrandin
                   <input
                     type="file"
                     id="sso-logo-upload"
+                    title="Upload SSO logo"
                     accept="image/*"
                     onChange={(e) => {
                       const file = e.target.files?.[0]
@@ -410,9 +397,12 @@ export function LoginConfigBranding({ config, updateConfig }: LoginConfigBrandin
                 {/* SSO Logo Preview */}
                 {config.branding?.ssoLogoUrl && (
                   <div className="flex items-center space-x-4 p-4 border rounded-lg bg-gray-50">
-                    <img 
-                      src={config.branding.ssoLogoUrl} 
-                      alt="SSO Logo" 
+                    <Image
+                      src={config.branding.ssoLogoUrl}
+                      alt="SSO Logo"
+                      width={48}
+                      height={48}
+                      unoptimized
                       className="h-12 w-12 object-contain border rounded"
                     />
                     <div className="flex-1">
@@ -422,28 +412,6 @@ export function LoginConfigBranding({ config, updateConfig }: LoginConfigBrandin
                   </div>
                 )}
                 
-                {/* SSO Logo URL Fallback */}
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="use-sso-url"
-                    checked={!!config.branding?.ssoLogoUrl?.startsWith('http')}
-                    onCheckedChange={(checked) => {
-                      if (!checked) {
-                        updateConfig('branding', 'ssoLogoUrl', '')
-                      }
-                    }}
-                  />
-                  <Label htmlFor="use-sso-url" className="text-sm">Use URL instead of upload</Label>
-                </div>
-                
-                {config.branding?.ssoLogoUrl?.startsWith('http') && (
-                  <Input
-                    placeholder="https://example.com/sso-logo.png"
-                    value={config.branding.ssoLogoUrl}
-                    onChange={(e) => updateConfig('branding', 'ssoLogoUrl', e.target.value)}
-                    className="mt-2"
-                  />
-                )}
               </div>
             </div>
           </div>
@@ -515,9 +483,12 @@ export function LoginConfigBranding({ config, updateConfig }: LoginConfigBrandin
                       <span className="text-sm font-medium">{provider}</span>
                       {config.branding?.providerLogos?.[provider] ? (
                         <div className="flex items-center gap-2">
-                          <img 
-                            src={config.branding.providerLogos[provider]} 
-                            alt={`${provider} Logo`} 
+                          <Image
+                            src={config.branding.providerLogos[provider]}
+                            alt={`${provider} Logo`}
+                            width={32}
+                            height={32}
+                            unoptimized
                             className="h-8 w-8 object-contain border rounded bg-gray-50 p-1"
                           />
                           <Button
@@ -546,6 +517,7 @@ export function LoginConfigBranding({ config, updateConfig }: LoginConfigBrandin
                       <input
                         type="file"
                         id={`logo-${provider.toLowerCase()}`}
+                        title={`Upload ${provider} logo`}
                         accept="image/*"
                         onChange={(e) => {
                           const file = e.target.files?.[0]

@@ -40,8 +40,8 @@ export function AdminConsoleUsers() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterRole, setFilterRole] = useState('all')
   const [filterStatus, setFilterStatus] = useState('all')
-  const [showForm, setShowForm] = useState(false)
-  const [editingUser, setEditingUser] = useState<AdminUser | null>(null)
+  const [isAdminUserDrawerOpen, setIsAdminUserDrawerOpen] = useState(false)
+  const [selectedAdminUserId, setSelectedAdminUserId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -92,7 +92,7 @@ export function AdminConsoleUsers() {
   })
 
   const handleCreate = () => {
-    setEditingUser(null)
+    setSelectedAdminUserId(null)
     setFormData({
       firstName: '',
       lastName: '',
@@ -104,11 +104,11 @@ export function AdminConsoleUsers() {
       permissions: [],
       password: ''
     })
-    setShowForm(true)
+    setIsAdminUserDrawerOpen(true)
   }
 
   const handleEdit = (user: AdminUser) => {
-    setEditingUser(user)
+    setSelectedAdminUserId(user.id)
     setFormData({
       firstName: user.firstName,
       lastName: user.lastName,
@@ -120,24 +120,24 @@ export function AdminConsoleUsers() {
       permissions: user.permissions,
       password: ''
     })
-    setShowForm(true)
+    setIsAdminUserDrawerOpen(true)
   }
 
   const handleSave = async () => {
     try {
-      if (editingUser) {
+      if (selectedAdminUserId) {
         // Update existing user
-        const updatedUser = await adminService.updateAdminUser(editingUser.id, formData as Partial<AdminUser>)
+        const updatedUser = await adminService.updateAdminUser(selectedAdminUserId, formData as Partial<AdminUser>)
         setUsers(prev => prev.map(user => 
-          user.id === editingUser.id ? updatedUser : user
+          user.id === selectedAdminUserId ? updatedUser : user
         ))
       } else {
         // Create new user
         const newUser = await adminService.createAdminUser(formData as any)
         setUsers(prev => [...prev, newUser])
       }
-      setShowForm(false)
-      setEditingUser(null)
+      setIsAdminUserDrawerOpen(false)
+      setSelectedAdminUserId(null)
     } catch (error) {
       console.error('Error saving admin user:', error)
       alert('Failed to save admin user. Please try again.')
@@ -270,6 +270,7 @@ export function AdminConsoleUsers() {
             <select
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
+              title="Filter by role"
               className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
             >
               <option value="all">All Roles</option>
@@ -280,6 +281,7 @@ export function AdminConsoleUsers() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
+              title="Filter by status"
               className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
             >
               <option value="all">All Status</option>
@@ -392,6 +394,7 @@ export function AdminConsoleUsers() {
                           <select
                             value={user.status}
                             onChange={(e) => handleStatusChange(user.id, e.target.value)}
+                            title={`Update status for ${user.firstName} ${user.lastName}`}
                             className="macos-input text-xs px-2 py-1 rounded-lg border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
                           >
                             <option value="active">Active</option>
@@ -575,124 +578,6 @@ export function AdminConsoleUsers() {
     </div>
   )
 
-  if (showForm) {
-    return (
-      <div className="space-y-6 animate-fade-in">
-        <Card variant="frosted">
-          <CardBody>
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">
-                {editingUser ? 'Edit Admin User' : 'Create Admin User'}
-              </h2>
-              <Button variant="secondary" onClick={() => setShowForm(false)}>
-                Cancel
-              </Button>
-            </div>
-          </CardBody>
-        </Card>
-
-        <Card variant="frosted">
-          <CardBody>
-            <form onSubmit={(e) => { e.preventDefault(); handleSave(); }} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  label="First Name"
-                  type="text"
-                  value={formData.firstName}
-                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                  required
-                />
-                <Input
-                  label="Last Name"
-                  type="text"
-                  value={formData.lastName}
-                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  label="Email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                />
-                <Input
-                  label="Phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-medium text-gray-700">Role</label>
-                  <select
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value as any })}
-                    required
-                    className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
-                  >
-                    {roles.map(role => (
-                      <option key={role.id} value={role.id}>{role.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-medium text-gray-700">Status</label>
-                  <select
-                    value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                    className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
-                  >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="pending">Pending</option>
-                    <option value="suspended">Suspended</option>
-                  </select>
-                </div>
-              </div>
-
-              <Input
-                label="Department"
-                type="text"
-                value={formData.department}
-                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-              />
-
-              {!editingUser && (
-                <Input
-                  label="Password"
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  required={!editingUser}
-                  placeholder="At least 8 characters"
-                />
-              )}
-
-              <div className="flex gap-3 pt-4 border-t border-gray-200/50">
-                <Button type="submit" variant="primary">
-                  {editingUser ? 'Update Admin User' : 'Create Admin User'}
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => setShowForm(false)}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </CardBody>
-        </Card>
-      </div>
-    )
-  }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64" role="status" aria-label="Loading admin users">
@@ -736,7 +621,7 @@ export function AdminConsoleUsers() {
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
               role="tab"
-              aria-selected={activeTab === 'users'}
+              aria-selected={activeTab === 'users' ? 'true' : 'false'}
             >
               <UserIcon className="h-4 w-4" aria-hidden="true" />
               Users
@@ -749,7 +634,7 @@ export function AdminConsoleUsers() {
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
               role="tab"
-              aria-selected={activeTab === 'roles'}
+              aria-selected={activeTab === 'roles' ? 'true' : 'false'}
             >
               <KeyIcon className="h-4 w-4" aria-hidden="true" />
               Roles & Permissions
@@ -762,7 +647,7 @@ export function AdminConsoleUsers() {
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
               role="tab"
-              aria-selected={activeTab === 'groups'}
+              aria-selected={activeTab === 'groups' ? 'true' : 'false'}
             >
               <UserGroupIcon className="h-4 w-4" aria-hidden="true" />
               User Groups
@@ -775,6 +660,66 @@ export function AdminConsoleUsers() {
       {activeTab === 'users' && renderUsersTab()}
       {activeTab === 'roles' && renderRolesTab()}
       {activeTab === 'groups' && renderGroupsTab()}
+
+      {isAdminUserDrawerOpen && (
+        <>
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40" onClick={() => setIsAdminUserDrawerOpen(false)} />
+          <div className="fixed top-4 right-4 bottom-4 w-full max-w-lg bg-white dark:bg-zinc-900 shadow-2xl z-50 flex flex-col overflow-hidden rounded-2xl border border-gray-200/80 dark:border-zinc-800/80">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-zinc-800">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {selectedAdminUserId ? 'Edit Admin User' : 'Create Admin User'}
+              </h2>
+              <Button variant="secondary" onClick={() => setIsAdminUserDrawerOpen(false)}>
+                Cancel
+              </Button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6">
+              <form onSubmit={(e) => { e.preventDefault(); handleSave(); }} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input label="First Name" type="text" value={formData.firstName} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} required />
+                  <Input label="Last Name" type="text" value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} required />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input label="Email" type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
+                  <Input label="Phone" type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-medium text-gray-700">Role</label>
+                    <select title="Select role" value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value as any })} required className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200">
+                      <option value="" disabled>Select role</option>
+                      {roles.map(role => (
+                        <option key={role.id} value={role.id}>{role.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-medium text-gray-700">Status</label>
+                    <select title="Select status" value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value as any })} className="macos-input w-full px-4 py-2.5 rounded-xl border border-gray-300/50 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200">
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                      <option value="pending">Pending</option>
+                      <option value="suspended">Suspended</option>
+                    </select>
+                  </div>
+                </div>
+                <Input label="Department" type="text" value={formData.department} onChange={(e) => setFormData({ ...formData, department: e.target.value })} />
+                {!selectedAdminUserId && (
+                  <Input label="Password" type="password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} required placeholder="At least 8 characters" />
+                )}
+                <div className="flex gap-3 pt-4 border-t border-gray-200/50">
+                  <Button type="submit" variant="primary">
+                    {selectedAdminUserId ? 'Update Admin User' : 'Create Admin User'}
+                  </Button>
+                  <Button type="button" variant="secondary" onClick={() => setIsAdminUserDrawerOpen(false)}>
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

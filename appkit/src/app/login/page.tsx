@@ -114,6 +114,7 @@ function LoginPageContent() {
     // Load background settings and SSO providers
     const loadSettings = async () => {
       let appConfig: any = null;
+      let systemAuthConfig: any = null;
       try {
         // 1. Try Next.js searchParams first
         let extractedClientId = searchParams?.get('client_id');
@@ -255,12 +256,34 @@ function LoginPageContent() {
           }
         }
 
-        const settings = appConfig?.branding || await settingsService.getBranding()
+        try {
+          const systemRes = await fetch('/api/v1/auth/system-config')
+          if (systemRes.ok) {
+            systemAuthConfig = await systemRes.json()
+          }
+        } catch (e) {
+          console.warn('[Login] Failed to fetch /api/v1/auth/system-config', e)
+        }
+
+        if (!settingsObj?.authStyle && systemAuthConfig?.authStyle?.devices) {
+          const fallbackStyle =
+            systemAuthConfig.authStyle.devices?.[selectedDevice] ||
+            systemAuthConfig.authStyle.devices?.desktopWeb ||
+            systemAuthConfig.authStyle.devices?.mobileWeb ||
+            systemAuthConfig.authStyle.devices?.mobileApp
+          if (fallbackStyle) {
+            setAuthStyle(fallbackStyle)
+          }
+        }
+
+        const settings = appConfig?.branding || systemAuthConfig?.general || await settingsService.getBranding()
         if (settings?.adminAppName || settings?.name) {
           setAppName(settings.name || settings.adminAppName)
         }
         if (settings?.logoUrl) {
           setLogoUrl(settings.logoUrl)
+        } else if (settings?.appkitLogoUrl) {
+          setLogoUrl(settings.appkitLogoUrl)
         }
 
         if (settings?.loginBackground) {
@@ -268,7 +291,16 @@ function LoginPageContent() {
           const style: React.CSSProperties = {}
           let videoUrl: string | undefined
   
-          if (bg.type === 'solid' && bg.value) {
+          if (bg.mode === 'solid' && bg.solid) {
+            style.backgroundColor = bg.solid
+          } else if (bg.mode === 'gradient' && bg.gradient?.stops) {
+            const stops = bg.gradient.stops.map((s: any) => `${s.color} ${s.position}%`).join(', ')
+            style.background = `linear-gradient(${bg.gradient.angle || 135}deg, ${stops})`
+          } else if (bg.mode === 'image' && bg.image) {
+            style.backgroundImage = `url(${bg.image})`
+            style.backgroundSize = 'cover'
+            style.backgroundPosition = 'center'
+          } else if (bg.type === 'solid' && bg.value) {
             style.backgroundColor = bg.value
           } else if (bg.type === 'gradient' && bg.value) {
             style.background = bg.value
@@ -292,6 +324,8 @@ function LoginPageContent() {
       // Load SSO providers
       if (appConfig?.providers && appConfig.providers.length > 0) {
         setSsoProviders(appConfig.providers);
+      } else if (systemAuthConfig?.providers?.length > 0) {
+        setSsoProviders(systemAuthConfig.providers)
       } else {
         loadSSOProviders()
       }

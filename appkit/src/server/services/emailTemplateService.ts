@@ -47,6 +47,34 @@ export interface UpdateEmailTemplateData {
  * Manages email templates for the application.
  */
 class EmailTemplateService {
+    private async getEffectiveSmtpConfig(): Promise<{
+        host: string;
+        port: number;
+        secure: boolean;
+        user?: string;
+        pass?: string;
+        from: string;
+    }> {
+        const row = await prisma.systemConfig.findUnique({ where: { key: 'system.smtp' } });
+        const cfg = (row?.value || {}) as Record<string, any>;
+        const host = String(cfg.host || process.env.SMTP_HOST || '');
+        const port = Number(cfg.port || process.env.SMTP_PORT || 587);
+        const secure = Boolean(cfg.secure ?? (process.env.SMTP_SECURE === 'true'));
+        const user = String(cfg.user || process.env.SMTP_USER || '');
+        const pass = String(cfg.password || process.env.SMTP_PASS || '');
+        const fromEmail = String(cfg.fromEmail || process.env.SMTP_FROM || 'noreply@example.com');
+        const fromName = String(cfg.fromName || 'AppKit');
+
+        return {
+            host,
+            port,
+            secure,
+            user: user || undefined,
+            pass: pass || undefined,
+            from: `${fromName} <${fromEmail}>`,
+        };
+    }
+
     async createTemplate(data: CreateEmailTemplateData): Promise<EmailTemplate> {
         const template = await prisma.emailTemplate.create({
             data: {
@@ -227,19 +255,20 @@ class EmailTemplateService {
                 subject = subject.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
             }
 
-            if (process.env.SMTP_HOST) {
+            const smtp = await this.getEffectiveSmtpConfig();
+            if (smtp.host) {
                 const transporter = nodemailer.createTransport({
-                    host: process.env.SMTP_HOST,
-                    port: parseInt(process.env.SMTP_PORT || '587'),
-                    secure: process.env.SMTP_SECURE === 'true',
-                    auth: process.env.SMTP_USER ? {
-                        user: process.env.SMTP_USER,
-                        pass: process.env.SMTP_PASS
+                    host: smtp.host,
+                    port: smtp.port,
+                    secure: smtp.secure,
+                    auth: smtp.user ? {
+                        user: smtp.user,
+                        pass: smtp.pass
                     } : undefined
                 });
                 
                 await transporter.sendMail({
-                    from: process.env.SMTP_FROM || 'noreply@example.com',
+                    from: smtp.from,
                     to,
                     subject,
                     html: renderedContent

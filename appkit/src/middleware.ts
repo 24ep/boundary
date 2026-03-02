@@ -8,6 +8,12 @@ export function middleware(request: NextRequest) {
 
   console.log(`[${requestId}] ${request.method} ${request.url} - ${request.headers.get('user-agent') || 'Unknown'}`)
 
+  if (pathname === '/system/logs') {
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/settings/logs'
+    return NextResponse.redirect(redirectUrl)
+  }
+
   const response = NextResponse.next()
 
   // CORS headers

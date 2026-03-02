@@ -33,6 +33,7 @@ interface BillingConfig {
   secretKey: string
   webhookSecret: string
   currency: string
+  providerEnabled?: Record<string, boolean>
   settings?: Record<string, any>
   providerConfig?: Record<string, Record<string, string>>
 }
@@ -84,6 +85,7 @@ const DEFAULT_BILLING_CONFIG: BillingConfig = {
   secretKey: '',
   webhookSecret: '',
   currency: 'USD',
+  providerEnabled: {},
   settings: {},
   providerConfig: {},
 }
@@ -118,9 +120,23 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName, i
       setDefaultConfig(systemDefaults)
 
       if (!res.useDefault && res.config) {
-        setConfig({ ...DEFAULT_BILLING_CONFIG, ...res.config })
+        const merged = { ...DEFAULT_BILLING_CONFIG, ...res.config }
+        const providerEnabled = merged.providerEnabled || {
+          stripe: merged.provider === 'stripe' ? !!merged.enabled : false,
+          paypal: merged.provider === 'paypal' ? !!merged.enabled : false,
+          paddle: merged.provider === 'paddle' ? !!merged.enabled : false,
+          lemonsqueezy: merged.provider === 'lemonsqueezy' ? !!merged.enabled : false,
+        }
+        setConfig({ ...merged, providerEnabled })
       } else {
-        setConfig({ ...DEFAULT_BILLING_CONFIG, ...(res.config || systemDefaults) })
+        const merged = { ...DEFAULT_BILLING_CONFIG, ...(res.config || systemDefaults) }
+        const providerEnabled = merged.providerEnabled || {
+          stripe: merged.provider === 'stripe' ? !!merged.enabled : false,
+          paypal: merged.provider === 'paypal' ? !!merged.enabled : false,
+          paddle: merged.provider === 'paddle' ? !!merged.enabled : false,
+          lemonsqueezy: merged.provider === 'lemonsqueezy' ? !!merged.enabled : false,
+        }
+        setConfig({ ...merged, providerEnabled })
       }
     } catch (err) {
       console.error('Failed to load app billing config:', err)
@@ -148,7 +164,12 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName, i
       if (useDefault) {
         await adminService.deleteAppConfig(appId, 'billing')
       } else {
-        await adminService.saveAppConfig(appId, 'billing', config)
+        const providerEnabled = config.providerEnabled || {}
+        const hasEnabledMethod = Object.values(providerEnabled).some(Boolean)
+        await adminService.saveAppConfig(appId, 'billing', {
+          ...config,
+          enabled: hasEnabledMethod,
+        })
       }
       setSaveMessage('Saved!')
       setTimeout(() => setSaveMessage(''), 3000)
@@ -162,6 +183,8 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName, i
   }
 
   if (!isOpen) return null
+
+  const activeProviderEnabled = !!config.providerEnabled?.[config.provider]
 
   return (
     <>
@@ -196,7 +219,7 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName, i
               <div className="p-4 rounded-xl border border-gray-200 dark:border-zinc-800 space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Enable Payments</span>
+                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Enable This Method</span>
                     {!useDefault && config.enabled !== defaultConfig.enabled && (
                       <span className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-500/20 text-[9px] font-bold text-blue-600 uppercase rounded">Changed</span>
                     )}
@@ -206,10 +229,16 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName, i
                       type="checkbox" 
                       className="sr-only peer" 
                       title="Toggle payment enablement"
-                      checked={config.enabled} 
+                      checked={activeProviderEnabled}
                       onChange={() => {
                         setUseDefault(false)
-                        setConfig(prev => ({ ...prev, enabled: !prev.enabled }))
+                        setConfig(prev => ({
+                          ...prev,
+                          providerEnabled: {
+                            ...(prev.providerEnabled || {}),
+                            [prev.provider]: !(prev.providerEnabled?.[prev.provider] || false),
+                          },
+                        }))
                       }} 
                     />
                     <div className="w-10 h-5 bg-gray-200 dark:bg-zinc-700 peer-checked:bg-blue-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-full" />
@@ -236,7 +265,7 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName, i
               </div>
 
               {/* Provider Selection + Configuration */}
-              <div className={`space-y-4 ${!config.enabled && 'opacity-50 grayscale pointer-events-none'}`}>
+              <div className={`space-y-4 ${!activeProviderEnabled && 'opacity-60'}`}>
                 <div className="flex items-center justify-between px-1">
                   <div className="flex items-center gap-2">
                     <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Payment Provider</h3>
@@ -255,7 +284,14 @@ export default function BillingConfigDrawer({ isOpen, onClose, appId, appName, i
                       key={p.value}
                       onClick={() => {
                         setUseDefault(false)
-                        setConfig(prev => ({ ...prev, provider: p.value }))
+                        setConfig(prev => ({
+                          ...prev,
+                          provider: p.value,
+                          providerEnabled: {
+                            ...(prev.providerEnabled || {}),
+                            [p.value]: prev.providerEnabled?.[p.value] || false,
+                          },
+                        }))
                       }}
                       className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all ${
                         config.provider === p.value

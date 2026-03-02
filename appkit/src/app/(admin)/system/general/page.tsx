@@ -2,13 +2,18 @@
 
 import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
+import { ColorPickerPopover, toColorValue } from '@/components/ui/ColorPickerPopover'
+import { useToast } from '@/hooks/use-toast'
 
 export default function GeneralSettingsPage() {
+  const { toast } = useToast()
   const [config, setConfig] = useState({
     platformName: 'AppKit',
     supportEmail: 'support@appkit.io',
     timezone: 'UTC',
     language: 'English',
+    appkitLogoUrl: '',
+    loginBackground: toColorValue('#FFFFFF'),
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -23,10 +28,17 @@ export default function GeneralSettingsPage() {
         })
         if (!res.ok) throw new Error('Failed to load settings')
         const data = await res.json()
-        if (data?.config) setConfig((prev) => ({ ...prev, ...data.config }))
+        if (data?.config) {
+          setConfig((prev) => ({
+            ...prev,
+            ...data.config,
+            loginBackground: toColorValue(data.config.loginBackground || '#FFFFFF'),
+          }))
+        }
       } catch (err) {
         console.error(err)
         setMessage('Failed to load settings')
+        toast({ title: 'Load failed', description: 'Could not load general settings.', variant: 'destructive' })
       } finally {
         setLoading(false)
       }
@@ -48,10 +60,12 @@ export default function GeneralSettingsPage() {
       })
       if (!res.ok) throw new Error('Failed to save settings')
       setMessage('Saved!')
+      toast({ title: 'Saved', description: 'General settings updated.', variant: 'success' })
       setTimeout(() => setMessage(''), 3000)
     } catch (err) {
       console.error(err)
       setMessage('Failed to save')
+      toast({ title: 'Save failed', description: 'Could not save general settings.', variant: 'destructive' })
       setTimeout(() => setMessage(''), 3000)
     } finally {
       setSaving(false)
@@ -118,6 +132,27 @@ export default function GeneralSettingsPage() {
               <option value="Japanese">Japanese</option>
               <option value="Chinese (Simplified)">Chinese (Simplified)</option>
             </select>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400 mb-1.5">AppKit Logo URL</label>
+            <input
+              type="url"
+              title="AppKit logo URL"
+              placeholder="https://example.com/logo.png"
+              value={config.appkitLogoUrl}
+              onChange={(e) => setConfig((prev) => ({ ...prev, appkitLogoUrl: e.target.value }))}
+              className="w-full max-w-md px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 dark:text-zinc-400 mb-1.5">Login Background</label>
+            <div className="max-w-md">
+              <ColorPickerPopover
+                value={config.loginBackground as any}
+                onChange={(value) => setConfig((prev) => ({ ...prev, loginBackground: value as any }))}
+              />
+            </div>
+            <p className="mt-1 text-[11px] text-gray-500 dark:text-zinc-400">Supports solid color, gradient, and image backgrounds.</p>
           </div>
         </div>
 

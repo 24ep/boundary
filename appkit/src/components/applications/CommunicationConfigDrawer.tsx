@@ -22,6 +22,7 @@ interface CommunicationConfigDrawerProps {
   onClose: () => void
   appId: string
   appName: string
+  initialChannel?: 'email' | 'sms' | 'push' | 'inApp' | null
 }
 
 interface CommConfig {
@@ -65,7 +66,7 @@ const DEFAULT_COMM_CONFIG: CommConfig = {
   methodConfig: {},
 }
 
-export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appName }: CommunicationConfigDrawerProps) {
+export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appName, initialChannel }: CommunicationConfigDrawerProps) {
   const [config, setConfig] = useState<CommConfig>(DEFAULT_COMM_CONFIG)
   const [defaultConfig, setDefaultConfig] = useState<CommConfig>(DEFAULT_COMM_CONFIG)
   const [loading, setLoading] = useState(true)
@@ -76,6 +77,11 @@ export default function CommunicationConfigDrawer({ isOpen, onClose, appId, appN
   useEffect(() => {
     if (isOpen && appId) loadData()
   }, [isOpen, appId])
+
+  useEffect(() => {
+    if (!isOpen) return
+    setExpandedChannel(initialChannel || null)
+  }, [isOpen, initialChannel])
 
   const loadData = async () => {
     try {

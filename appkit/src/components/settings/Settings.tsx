@@ -1,6 +1,7 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { AdminConsoleUsers } from '../users/AdminConsoleUsers'
 import {
   CogIcon,
@@ -106,7 +107,7 @@ export function Settings() {
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                   }`}
                 role="tab"
-                aria-selected={activeSection === id}
+                aria-selected={activeSection === id ? 'true' : 'false'}
               >
                 <Icon className="w-4 h-4" aria-hidden="true" />
                 {label}
@@ -138,32 +139,18 @@ export function Settings() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Login Background Color</label>
-                  <div className="flex gap-3">
-                    <input
-                      type="color"
-                      className="h-11 w-20 p-1 border border-gray-300 rounded-lg cursor-pointer bg-white"
-                      value={branding.loginBackgroundColor || '#FFFFFF'}
-                      onChange={(e) => setBranding({ ...branding, loginBackgroundColor: e.target.value })}
-                    />
-                    <Input
-                      placeholder="#FFFFFF"
-                      className="flex-1"
-                      value={branding.loginBackgroundColor || ''}
-                      onChange={(e) => setBranding({ ...branding, loginBackgroundColor: e.target.value })}
-                    />
-                  </div>
+                  <input
+                    type="color"
+                    title="Login background color"
+                    className="h-11 w-20 p-1 border border-gray-300 rounded-lg cursor-pointer bg-white"
+                    value={branding.loginBackgroundColor || '#FFFFFF'}
+                    onChange={(e) => setBranding({ ...branding, loginBackgroundColor: e.target.value })}
+                  />
                   <p className="mt-1.5 text-xs text-gray-500">The primary background color for the login and welcome screens.</p>
                 </div>
               </div>
 
               <div>
-                <Input
-                  label="Logo URL"
-                  type="url"
-                  placeholder="https://..."
-                  value={branding.logoUrl || ''}
-                  onChange={(e) => setBranding({ ...branding, logoUrl: e.target.value })}
-                />
                 <div className="mt-3 flex items-center gap-3">
                   <label className="cursor-pointer">
                     <input
@@ -195,19 +182,19 @@ export function Settings() {
                     </Button>
                   </label>
                   {branding.logoUrl && (
-                    <img src={branding.logoUrl} alt="Logo preview" className="h-10 rounded-lg shadow-sm" />
+                    <Image
+                      src={branding.logoUrl}
+                      alt="Logo preview"
+                      width={40}
+                      height={40}
+                      unoptimized
+                      className="h-10 w-auto rounded-lg shadow-sm"
+                    />
                   )}
                 </div>
               </div>
 
               <div>
-                <Input
-                  label="Icon URL"
-                  type="url"
-                  placeholder="https://..."
-                  value={branding.iconUrl || ''}
-                  onChange={(e) => setBranding({ ...branding, iconUrl: e.target.value })}
-                />
                 <div className="mt-3 flex items-center gap-3">
                   <label className="cursor-pointer">
                     <input
@@ -239,7 +226,14 @@ export function Settings() {
                     </Button>
                   </label>
                   {branding.iconUrl && (
-                    <img src={branding.iconUrl} alt="Icon preview" className="h-10 w-10 rounded-lg shadow-sm" />
+                    <Image
+                      src={branding.iconUrl}
+                      alt="Icon preview"
+                      width={40}
+                      height={40}
+                      unoptimized
+                      className="h-10 w-10 rounded-lg shadow-sm"
+                    />
                   )}
                 </div>
               </div>
@@ -438,7 +432,7 @@ export function Settings() {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                       }`}
                     role="tab"
-                    aria-selected={activeSubTab === (t.id as any)}
+                    aria-selected={activeSubTab === (t.id as any) ? 'true' : 'false'}
                   >
                     {t.label}
                   </button>

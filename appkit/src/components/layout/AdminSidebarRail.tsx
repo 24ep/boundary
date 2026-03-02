@@ -20,6 +20,8 @@ export function AdminSidebarRail({
     onNavigate,
     IconComponent: Icon 
 }: AdminSidebarRailProps) {
+    const hasSystemHub = hubs.some((hub) => hub.id === 'system')
+
     return (
         <aside className="hidden lg:flex flex-col bg-white dark:bg-zinc-950 border-r border-gray-200/80 dark:border-zinc-800/80 z-40 flex-shrink-0 w-[68px]">
             {/* Spacer */}
@@ -56,16 +58,19 @@ export function AdminSidebarRail({
             </nav>
 
             {/* Bottom Actions */}
-            <div className="py-4 flex flex-col items-center space-y-1.5 border-t border-gray-100 dark:border-zinc-800/80">
-                <Tooltip content="Settings" position="right">
-                    <button 
-                        onClick={() => onHubClick('/system')}
-                        className="w-11 h-11 flex items-center justify-center text-gray-400 dark:text-slate-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/8 transition-all duration-200 rounded-xl"
-                    >
-                        <Settings className="w-5 h-5" />
-                    </button>
-                </Tooltip>
-            </div>
+            {!hasSystemHub && (
+                <div className="py-4 flex flex-col items-center space-y-1.5 border-t border-gray-100 dark:border-zinc-800/80">
+                    <Tooltip content="Settings" position="right">
+                        <button 
+                            onClick={() => onHubClick('/system')}
+                            title="Open system settings"
+                            className="w-11 h-11 flex items-center justify-center text-gray-400 dark:text-slate-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/8 transition-all duration-200 rounded-xl"
+                        >
+                            <Settings className="w-5 h-5" />
+                        </button>
+                    </Tooltip>
+                </div>
+            )}
         </aside>
     )
 }
