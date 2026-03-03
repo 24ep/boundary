@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/Button'
 import { adminService } from '@/services/adminService'
 import {
@@ -15,6 +15,7 @@ import {
   Loader2Icon,
   LinkIcon,
   MessageCircleIcon,
+  PlusIcon,
 } from 'lucide-react'
 
 interface AuthMethodsConfigDrawerProps {
@@ -227,6 +228,8 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
   const [saving, setSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState('')
   const [expandedId, setExpandedId] = useState<string | null>(initialMethod || null)
+  const [addPickerOpen, setAddPickerOpen] = useState(false)
+  const addPickerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (isOpen && appId) loadData()
@@ -239,6 +242,17 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
       }, 400)
     }
   }, [isOpen, appId, initialMethod])
+
+  useEffect(() => {
+    if (!addPickerOpen) return
+    const handler = (e: MouseEvent) => {
+      if (addPickerRef.current && !addPickerRef.current.contains(e.target as Node)) {
+        setAddPickerOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [addPickerOpen])
 
   const mergeWithFallbacks = (apiProviders: AuthProvider[]): AuthProvider[] => {
     if (!apiProviders || apiProviders.length === 0) return FALLBACK_PROVIDERS
@@ -395,9 +409,57 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
               <div className="space-y-4">
                 <div className="flex items-center justify-between px-1">
                   <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Authentication Methods</h3>
+                  {/* Add method picker */}
+                  <div className="relative" ref={addPickerRef}>
+                    <button
+                      onClick={() => setAddPickerOpen((v) => !v)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
+                    >
+                      <PlusIcon className="w-3.5 h-3.5" />
+                      Add method
+                    </button>
+                    {addPickerOpen && (
+                      <div className="absolute right-0 mt-1 w-52 bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-700 shadow-lg z-10 overflow-hidden">
+                        {providers.filter((p) => !p.isEnabled).length === 0 ? (
+                          <p className="px-4 py-3 text-xs text-gray-400">All methods are enabled.</p>
+                        ) : (
+                          providers.filter((p) => !p.isEnabled).map((p) => {
+                            const meta = PROVIDER_META[p.providerName]
+                            return (
+                              <button
+                                key={p.providerName}
+                                onClick={() => {
+                                  toggleProvider(p.providerName)
+                                  setAddPickerOpen(false)
+                                }}
+                                className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-zinc-800 text-left"
+                              >
+                                <span className={`w-7 h-7 rounded-lg ${meta?.color || 'bg-gray-50 text-gray-500'} flex items-center justify-center`}>
+                                  {meta?.icon || <CogIcon className="w-4 h-4" />}
+                                </span>
+                                <span className="text-xs text-gray-700 dark:text-zinc-300 font-medium">{p.displayName}</span>
+                              </button>
+                            )
+                          })
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
+                {providers.every((p) => !p.isEnabled) && (
+                  <div className="flex flex-col items-center justify-center py-10 text-center">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-zinc-800 flex items-center justify-center mb-3">
+                      <ShieldCheckIcon className="w-5 h-5 text-gray-400" />
+                    </div>
+                    <p className="text-sm font-medium text-gray-500 dark:text-zinc-400">No auth methods enabled</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-500 mt-1">Use "Add method" to enable one.</p>
+                  </div>
+                )}
                 {(['general', 'social login', 'password less'] as const).map((group) => {
-                  const groupProviders = providers.filter((p) => (PROVIDER_GROUP[p.providerName] || 'general') === group)
+                  // Only show ENABLED providers
+                  const groupProviders = providers.filter(
+                    (p) => p.isEnabled && (PROVIDER_GROUP[p.providerName] || 'general') === group
+                  )
                   if (groupProviders.length === 0) return null
 
                   return (
@@ -413,25 +475,25 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
                         const isHighlighted = expandedId === p.providerName
 
                         return (
-                          <div key={p.providerName} id={`auth-method-${p.providerName}`} className={`p-4 rounded-xl border transition-all ${isHighlighted ? 'border-blue-400 dark:border-blue-500/60 ring-2 ring-blue-400/20 dark:ring-blue-500/20' : p.isEnabled ? 'border-blue-200/80 dark:border-blue-500/30 bg-blue-50/20 dark:bg-blue-500/5' : 'border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900'}`}>
+                          <div key={p.providerName} id={`auth-method-${p.providerName}`} className={`p-4 rounded-xl border transition-all ${isHighlighted ? 'border-blue-400 dark:border-blue-500/60 ring-2 ring-blue-400/20 dark:ring-blue-500/20' : 'border-blue-200/80 dark:border-blue-500/30 bg-blue-50/20 dark:bg-blue-500/5'}`}>
                             <div className="flex items-start justify-between">
                               <div className="flex items-center space-x-3">
                                 <div className={`w-9 h-9 rounded-lg ${meta?.color || 'bg-gray-50 text-gray-500'} flex items-center justify-center shadow-sm`}>{meta?.icon || <CogIcon className="w-5 h-5" />}</div>
                                 <div>
                                   <span className="text-sm font-semibold text-gray-900 dark:text-white">{p.displayName}</span>
-                                  <p className="text-[10px] text-gray-500 dark:text-zinc-500 mt-0.5">{p.isEnabled ? 'Enabled' : 'Disabled'}</p>
+                                  <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5">Enabled</p>
                                 </div>
                               </div>
-                              <div className="flex items-center space-x-4">
-                                <label className="relative inline-flex items-center cursor-pointer">
-                                  <input type="checkbox" title={`${p.displayName} enabled`} className="sr-only peer" checked={p.isEnabled} onChange={() => toggleProvider(p.providerName)} />
-                                  <div className="w-10 h-5 bg-gray-200 dark:bg-zinc-700 peer-checked:bg-blue-500 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:w-4 after:h-4 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-full" />
-                                </label>
-                              </div>
+                              <button
+                                onClick={() => toggleProvider(p.providerName)}
+                                title={`Remove ${p.displayName}`}
+                                className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                              >
+                                <XIcon className="w-4 h-4" />
+                              </button>
                             </div>
 
-                            {/* Only show config for ENABLED providers */}
-                            {p.isEnabled && (
+                            {(
                               <div className="mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800/50 space-y-3">
                                 <div className="p-3 rounded-lg border border-blue-200/60 dark:border-blue-500/20 bg-blue-50/30 dark:bg-blue-500/5">
                                   <div className="flex items-center gap-1.5 mb-1.5">
