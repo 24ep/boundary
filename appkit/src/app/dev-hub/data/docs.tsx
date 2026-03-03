@@ -327,10 +327,6 @@ console.log(user.name); // 'John Doe'
 console.log(user.email); // 'john@example.com'`}
         />
 
-        <h2 className="text-2xl font-bold mt-12 mb-4">Custom Attributes</h2>
-        <p className="text-slate-600 leading-relaxed">
-          Store and retrieve application-specific metadata as part of the user&apos;s identity.
-        </p>
         <CodeBlock 
           id="custom-attr"
           language="typescript"
@@ -338,7 +334,23 @@ console.log(user.email); // 'john@example.com'`}
 await client.updateAttributes({
   theme: 'dark',
   newsletter: true
+});
+
+// Update profile basic info
+await client.updateProfile({
+  firstName: 'Jane',
+  lastName: 'Doe',
+  phone: '+1234567890'
 });`}
+        />
+        <h2 className="text-2xl font-bold mt-12 mb-4">Account Management</h2>
+        <p className="text-slate-600 leading-relaxed">
+          Users can permanently delete their account and associated data.
+        </p>
+        <CodeBlock 
+          id="delete-account"
+          language="typescript"
+          code={`await client.identity.deleteAccount();`}
         />
       </div>
     ),
@@ -358,12 +370,24 @@ await client.updateAttributes({
         <p className="text-slate-600">The Content Studio provides a powerful editor for creating pages, managing templates, and analyzing content performance.</p>
         
         <h2 className="text-2xl font-bold mt-12 mb-4">Rendering Content</h2>
+        <p className="text-slate-600 leading-relaxed">Fetch content pages by slug to render dynamic marketing or support content.</p>
         <CodeBlock 
           id="render-content"
           language="typescript"
           code={`const content = await client.cms.getContent('welcome-page');
 // Render your components based on the content object
 return <div>{content.title}</div>;`}
+        />
+
+        <h2 className="text-2xl font-bold mt-12 mb-4">Listing Content</h2>
+        <p className="text-slate-600 leading-relaxed">List all published content pages, useful for creating index pages or links repositories.</p>
+        <CodeBlock 
+          id="list-content"
+          language="typescript"
+          code={`const { pages, total } = await client.cms.listContent({ 
+  type: 'marketing',
+  limit: 20 
+});`}
         />
       </div>
     ),
@@ -408,15 +432,15 @@ console.log(strings['welcome.title']); // 'Welcome to AppKit'`}
         <CodeBlock 
           id="circle-membership"
           language="typescript"
-          code={`const circles = await client.getUserCircles();
-// [ { id: 'circle_123', name: 'Engineering', role: 'owner', parentId: null } ]
+          code={`// Get user circles
+const circles = await client.getUserCircles();
 
-// Assign user to deepest child circle
-await client.circles.assignMember('circle_child', userId);
-// Parent memberships are inherited automatically.
+// Get specific circle and members
+const circle = await client.groups.getCircle('circle_123');
+const members = await client.groups.getMembers('circle_123');
 
-// Configure billing assignee for a circle
-await client.circles.assignBilling('circle_team', userId);`}
+// Manage members (requires management scope)
+await client.groups.addMember('circle_123', userId, 'editor');`}
         />
       </div>
     ),
@@ -1107,6 +1131,29 @@ await fetch('/api/v1/admin/applications/{appId}/billing-mode', {
           ))}
         </div>
 
+        <h2 className="text-2xl font-bold mt-12 mb-4">Communication Configuration</h2>
+        <p className="text-slate-600 leading-relaxed">
+          Configure enabled communication channels (Email, SMS, Push) and their respective providers (SendGrid, Twilio, Firebase).
+        </p>
+        <CodeBlock 
+          id="comm-config"
+          language="json"
+          code={`// Example Communication Configuration
+{
+  "email": {
+    "enabled": true,
+    "provider": "sendgrid",
+    "apiKey": "SG.xxx"
+  },
+  "sms": {
+    "enabled": true,
+    "provider": "twilio",
+    "accountSid": "ACxxx",
+    "authToken": "xxx"
+  }
+}`}
+        />
+
         <h2 className="text-2xl font-bold mt-12 mb-4">Fetching App Config</h2>
         <CodeBlock 
           id="fetch-app-config"
@@ -1215,8 +1262,8 @@ curl -X PATCH https://auth.app.com/api/v1/notifications \\
     next: { title: 'Appearance & Branding', href: '/dev-hub/admin/appearance' }
   },
   'admin/appearance': {
-    title: 'Appearance & Branding',
-    description: 'Configure branding, banners, links, splash screen, and version control per application.',
+    title: 'Identity & Branding',
+    description: 'Configure identity assets, branding, banners, links, splash screen, and version control per application.',
     content: ({ CodeBlock }) => (
       <div className="space-y-8">
         <p className="text-slate-600 leading-relaxed text-lg">
