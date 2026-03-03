@@ -4,57 +4,30 @@ import { prisma } from '@/server/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
-    console.log('[Admin Branding API] Fetching default branding...');
-    // Branding is public — needed by the login page before authentication
-    // Try to find an active application with branding settings
-    const activeApplication = await prisma.application.findFirst({
-      where: { isActive: true },
-      include: {
-        appSettings: {
-          where: { key: 'branding' },
-          select: { value: true }
-        }
-      }
-    })
+    // Read platform name and logo from system settings (system.general)
+    const systemRow = await prisma.systemConfig.findUnique({ where: { key: 'system.general' } })
+    const systemGeneral = (systemRow?.value || {}) as Record<string, any>
 
-    console.log('[Admin Branding API] Active application found:', activeApplication ? activeApplication.name : 'None');
-
-    if (!activeApplication) {
-      return NextResponse.json({ success: true, data: {}, message: 'No active application found' })
-    }
-
-    let branding = {}
-    const brandingSetting = activeApplication.appSettings?.[0]
-    
-    if (brandingSetting?.value) {
-      branding = typeof brandingSetting.value === 'string' 
-        ? JSON.parse(brandingSetting.value) 
-        : brandingSetting.value
-    } else if (activeApplication.branding) {
-      branding = typeof activeApplication.branding === 'string' 
-        ? JSON.parse(activeApplication.branding as string) 
-        : activeApplication.branding
-    }
-
-    console.log('[Admin Branding API] Branding data extracted successfully');
+    const platformName: string = systemGeneral.platformName || 'AppKit'
+    const logoUrl: string | null = systemGeneral.appkitLogoUrl || null
 
     const responseData = {
-      ...((branding as any) || {}),
-      adminAppName: activeApplication.name,
-      logoUrl: activeApplication.logoUrl
-    };
+      adminAppName: platformName,
+      name: platformName,
+      logoUrl: logoUrl || undefined,
+    }
 
     return NextResponse.json({
       success: true,
       data: responseData,
-      branding: responseData, // Add for compatibility with settingsService.ts
+      branding: responseData,
       message: 'Branding retrieved successfully',
       timestamp: new Date().toISOString()
     })
 
   } catch (error: any) {
     console.error('[Admin Branding API] Local branding fetch error:', error)
-    return NextResponse.json({ 
+    return NextResponse.json({
       error: 'Failed to fetch branding',
       message: error?.message,
       stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined

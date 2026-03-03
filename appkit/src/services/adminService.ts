@@ -256,7 +256,7 @@ class AdminService {
 
   // Dashboard
   async getDashboardStats(): Promise<DashboardStats> {
-    return this.request<DashboardStats>('/v1/admin/dashboard/stats');
+    return this.request<DashboardStats>('/v1/admin/dashboard');
   }
 
   // Roles & Permissions
@@ -299,7 +299,7 @@ class AdminService {
   // Audit Logs
   async getAuditLogs(params: any = {}): Promise<{ logs: any[], total: number }> {
     const query = new URLSearchParams(params).toString();
-    return this.request<{ logs: any[], total: number }>(`/v1/admin/audit/logs?${query}`);
+    return this.request<{ logs: any[], total: number }>(`/v1/admin/audit?${query}`);
   }
 
   async getAuditStats(params: any = {}): Promise<any[]> {

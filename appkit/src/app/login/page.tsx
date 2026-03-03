@@ -367,11 +367,12 @@ function LoginPageContent() {
         console.error('Failed to load settings:', error)
       }
 
-      // Load SSO providers
+      // Load SSO providers (exclude email-password — it's shown as the main form)
+      const filterSso = (list: any[]) => list.filter((p: any) => p.providerName !== 'email-password' && p.providerName !== 'email_password')
       if (appConfig?.providers && appConfig.providers.length > 0) {
-        setSsoProviders(appConfig.providers);
+        setSsoProviders(filterSso(appConfig.providers));
       } else if (systemAuthConfig?.providers?.length > 0) {
-        setSsoProviders(systemAuthConfig.providers)
+        setSsoProviders(filterSso(systemAuthConfig.providers))
       } else {
         loadSSOProviders()
       }
@@ -384,7 +385,7 @@ function LoginPageContent() {
   const loadSSOProviders = async () => {
     try {
       const { providers } = await identityService.getOAuthProviders()
-      setSsoProviders((providers || []).filter((p: any) => p.isEnabled))
+      setSsoProviders((providers || []).filter((p: any) => p.isEnabled && p.providerName !== 'email-password' && p.providerName !== 'email_password'))
     } catch (error) {
       console.error('Failed to load SSO providers:', error)
     }

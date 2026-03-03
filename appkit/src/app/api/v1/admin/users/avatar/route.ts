@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { mkdir, writeFile } from 'fs/promises'
 import path from 'path'
+import os from 'os'
 import { randomBytes } from 'crypto'
 import { authenticate } from '@/lib/auth'
 import { prisma } from '@/server/lib/prisma'
@@ -8,6 +9,16 @@ import { prisma } from '@/server/lib/prisma'
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024 // 5MB
 
 export const runtime = 'nodejs'
+
+async function tryWrite(dir: string, filePath: string, buffer: Buffer): Promise<boolean> {
+  try {
+    await mkdir(dir, { recursive: true })
+    await writeFile(filePath, buffer)
+    return true
+  } catch {
+    return false
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,20 +51,39 @@ export async function POST(request: NextRequest) {
     const extFromMime = file.type.split('/')[1] || ''
     const extension = (extFromName || extFromMime || 'bin').replace(/[^a-zA-Z0-9]/g, '').toLowerCase()
     const fileName = `avatar_${Date.now()}_${randomBytes(8).toString('hex')}.${extension}`
-
-    const baseUploadDir = process.env.APP_UPLOAD_DIR
-      ? path.resolve(process.cwd(), process.env.APP_UPLOAD_DIR)
-      : path.join(process.cwd(), 'public', 'uploads')
-    const publicBaseUrl = (process.env.APP_UPLOAD_BASE_URL || '/uploads').replace(/\/+$/, '')
-    const outputDir = path.join(baseUploadDir, 'avatars')
-
     const buffer = Buffer.from(await file.arrayBuffer())
-    const outputPath = path.join(outputDir, fileName)
 
-    await mkdir(outputDir, { recursive: true })
-    await writeFile(outputPath, buffer)
+    let url: string | null = null
 
-    const url = `${publicBaseUrl}/avatars/${fileName}`
+    // Primary: configured dir
+    if (process.env.APP_UPLOAD_DIR) {
+      const baseDir = path.resolve(process.cwd(), process.env.APP_UPLOAD_DIR)
+      const outDir = path.join(baseDir, 'avatars')
+      if (await tryWrite(outDir, path.join(outDir, fileName), buffer)) {
+        const publicBaseUrl = (process.env.APP_UPLOAD_BASE_URL || '/uploads').replace(/\/+$/, '')
+        url = `${publicBaseUrl}/avatars/${fileName}`
+      }
+    }
+
+    // Try public/uploads (static serving, works in local dev)
+    if (!url) {
+      const outDir = path.join(process.cwd(), 'public', 'uploads', 'avatars')
+      if (await tryWrite(outDir, path.join(outDir, fileName), buffer)) {
+        url = `/uploads/avatars/${fileName}`
+      }
+    }
+
+    // Fallback: os.tmpdir()
+    if (!url) {
+      const outDir = path.join(os.tmpdir(), 'appkit_uploads', 'avatars')
+      if (await tryWrite(outDir, path.join(outDir, fileName), buffer)) {
+        url = `/api/v1/admin/files/avatars/${fileName}`
+      }
+    }
+
+    if (!url) {
+      return NextResponse.json({ error: 'Upload storage is not writable. Please configure APP_UPLOAD_DIR.' }, { status: 500 })
+    }
 
     // If userId provided, update the user in DB
     if (userId) {
