@@ -2,13 +2,10 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/Badge'
-import { useToast } from '@/hooks/use-toast'
-import { 
-  ServerIcon, 
-  PlusIcon, 
+import {
+  ServerIcon,
+  PlusIcon,
   SearchIcon,
   UsersIcon,
   GlobeIcon,
@@ -16,7 +13,6 @@ import {
 } from 'lucide-react'
 
 import { adminService } from '@/services/adminService'
-import { AdminConsoleUsers } from '@/components/users/AdminConsoleUsers'
 
 interface Application {
   id: string
@@ -42,10 +38,8 @@ const fallbackApps: Application[] = [
 export default function ApplicationsPage() {
   const router = useRouter()
   const [applications, setApplications] = useState<Application[]>([])
-  const [activeTab, setActiveTab] = useState<'apps' | 'users'>('apps')
   const [isLoading, setIsLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
-  const { toast } = useToast()
 
   useEffect(() => {
     const loadApplications = async () => {
@@ -129,36 +123,8 @@ export default function ApplicationsPage() {
         </Button>
       </div>
 
-      {/* Navigation Header */}
-      <div className="flex border-b border-gray-200 dark:border-zinc-800 mb-6">
-        <button 
-          onClick={() => setActiveTab('apps')}
-          className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-            activeTab === 'apps' 
-              ? 'border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-400' 
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-zinc-400 dark:hover:text-zinc-300'
-          }`}
-        >
-          Applications
-        </button>
-        <button 
-          onClick={() => setActiveTab('users')} 
-          className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-            activeTab === 'users' 
-              ? 'border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-400' 
-              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-zinc-400 dark:hover:text-zinc-300'
-          }`}
-        >
-          All Users
-        </button>
-      </div>
-
-      {activeTab === 'users' ? (
-        <AdminConsoleUsers />
-      ) : (
-        <>
-          {/* Search */}
-          <div className="relative max-w-md">
+      {/* Search */}
+      <div className="relative max-w-md">
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input
           type="text"
@@ -240,8 +206,6 @@ export default function ApplicationsPage() {
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">No applications found</h3>
           <p className="text-sm text-gray-500 dark:text-zinc-400">Try adjusting your search or create a new application.</p>
         </div>
-      )}
-        </>
       )}
     </div>
   )

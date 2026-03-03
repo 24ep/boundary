@@ -22,6 +22,7 @@ interface AuthMethodsConfigDrawerProps {
   onClose: () => void
   appId: string
   appName: string
+  initialMethod?: string | null
 }
 
 interface AuthProvider {
@@ -220,15 +221,24 @@ const PROVIDER_FIELDS: Record<string, ProviderField[]> = {
   'line-oauth': COMMON_OAUTH_FIELDS,
 }
 
-export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appName }: AuthMethodsConfigDrawerProps) {
+export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appName, initialMethod }: AuthMethodsConfigDrawerProps) {
   const [providers, setProviders] = useState<AuthProvider[]>(FALLBACK_PROVIDERS)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState('')
+  const [expandedId, setExpandedId] = useState<string | null>(initialMethod || null)
 
   useEffect(() => {
     if (isOpen && appId) loadData()
-  }, [isOpen, appId])
+    if (isOpen && initialMethod) {
+      setExpandedId(initialMethod)
+      // Scroll to the method after data loads
+      setTimeout(() => {
+        const el = document.getElementById(`auth-method-${initialMethod}`)
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 400)
+    }
+  }, [isOpen, appId, initialMethod])
 
   const mergeWithFallbacks = (apiProviders: AuthProvider[]): AuthProvider[] => {
     if (!apiProviders || apiProviders.length === 0) return FALLBACK_PROVIDERS
@@ -400,9 +410,10 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
                       {groupProviders.map(p => {
                         const meta = PROVIDER_META[p.providerName]
                         const fields = PROVIDER_FIELDS[p.providerName] || []
+                        const isHighlighted = expandedId === p.providerName
 
                         return (
-                          <div key={p.providerName} className={`p-4 rounded-xl border ${p.isEnabled ? 'border-blue-200/80 dark:border-blue-500/30 bg-blue-50/20 dark:bg-blue-500/5' : 'border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900'}`}>
+                          <div key={p.providerName} id={`auth-method-${p.providerName}`} className={`p-4 rounded-xl border transition-all ${isHighlighted ? 'border-blue-400 dark:border-blue-500/60 ring-2 ring-blue-400/20 dark:ring-blue-500/20' : p.isEnabled ? 'border-blue-200/80 dark:border-blue-500/30 bg-blue-50/20 dark:bg-blue-500/5' : 'border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900'}`}>
                             <div className="flex items-start justify-between">
                               <div className="flex items-center space-x-3">
                                 <div className={`w-9 h-9 rounded-lg ${meta?.color || 'bg-gray-50 text-gray-500'} flex items-center justify-center shadow-sm`}>{meta?.icon || <CogIcon className="w-5 h-5" />}</div>
