@@ -140,10 +140,11 @@ export const AdminUserDetailDrawer: React.FC<AdminUserDetailDrawerProps> = ({
         setRolesLoading(true)
         try {
             const rolesData = await adminService.getRoles()
-            setRoles(rolesData)
+            const rolesList = rolesData?.roles || []
+            setRoles(rolesList)
             // If admin is already loaded, set the current role
             if (admin) {
-                const currentRole = rolesData.find(r => r.name === admin.role)
+                const currentRole = rolesList.find(r => r.name === admin.role)
                 if (currentRole) {
                     setSelectedRoleId(currentRole.id)
                 }

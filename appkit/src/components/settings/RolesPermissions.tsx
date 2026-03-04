@@ -13,8 +13,8 @@ export function RolesPermissions() {
       setLoading(true)
       try {
         const [r, p] = await Promise.all([adminService.getRoles(), adminService.getPermissions()])
-        setRoles(r || [])
-        setPerms(p || [])
+        setRoles(r?.roles || [])
+        setPerms(p?.permissions || [])
       } finally {
         setLoading(false)
       }

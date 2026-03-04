@@ -1817,6 +1817,7 @@ export default function ApplicationConfigPage() {
         {/* ==================== TAB: General Settings ==================== */}
         <TabsContent value="general" className="space-y-4">
           <GeneralSettings
+            appId={appId}
             application={application}
             setApplication={setApplication}
             appBranding={appBranding}
@@ -1827,13 +1828,21 @@ export default function ApplicationConfigPage() {
             logoUploading={logoUploading}
             onLogoUpload={handleGeneralLogoUpload}
             logoFileInputRef={logoFileInputRef}
+            faviconFileInputRef={faviconFileInputRef}
+            onFaviconUpload={handleFaviconUpload}
             newRedirectUri={newRedirectUri}
             setNewRedirectUri={setNewRedirectUri}
             onAddRedirectUri={handleAddRedirectUri}
             onRemoveRedirectUri={handleRemoveRedirectUri}
             onMoveRedirectUri={handleMoveRedirectUri}
+            onRedirectUriDragStart={handleRedirectUriDragStart}
+            onRedirectUriDragOver={handleRedirectUriDragOver}
+            onRedirectUriDrop={handleRedirectUriDrop}
+            onRedirectUriDragEnd={handleRedirectUriDragEnd}
+            dragOverRedirectUri={dragOverRedirectUri}
             onCopy={handleCopy}
             copiedId={copiedId}
+            canonicalRedirectUri={canonicalRedirectUri}
             generatedClientId={generatedClientId}
             generatedClientSecret={generatedClientSecret}
             showGeneratedClientSecret={showGeneratedClientSecret}
@@ -1841,6 +1850,8 @@ export default function ApplicationConfigPage() {
             generateClientIdOnSave={generateClientIdOnSave}
             setGenerateClientIdOnSave={setGenerateClientIdOnSave}
             setShowRotateSecretConfirm={setShowRotateSecretConfirm}
+            apiKeyVisible={apiKeyVisible}
+            setApiKeyVisible={setApiKeyVisible}
             setActiveDevGuide={setActiveDevGuide}
           />
         </TabsContent>

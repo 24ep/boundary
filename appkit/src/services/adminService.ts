@@ -261,8 +261,8 @@ class AdminService {
   }
 
   // Roles & Permissions
-  async getRoles(): Promise<Role[]> {
-    return this.request<Role[]>('/v1/admin/roles');
+  async getRoles(): Promise<{ roles: Role[], total?: number, success?: boolean }> {
+    return this.request<{ roles: Role[], total?: number, success?: boolean }>('/v1/admin/roles');
   }
 
   async getRole(id: string): Promise<RoleWithPermissions> {
@@ -289,8 +289,8 @@ class AdminService {
     });
   }
 
-  async getPermissions(): Promise<Permission[]> {
-    return this.request<Permission[]>('/v1/admin/permissions');
+  async getPermissions(): Promise<{ permissions: Permission[] }> {
+    return this.request<{ permissions: Permission[] }>('/v1/admin/permissions');
   }
 
   async getPermissionsGrouped(): Promise<PermissionsByModule> {
