@@ -55,8 +55,9 @@ export async function GET(
       id: ua.user.id,
       email: ua.user.email,
       name: `${ua.user.firstName} ${ua.user.lastName}`.trim() || 'Unknown User',
-      status: ua.status.toLowerCase(), // 'active', 'inactive', 'suspended'
-      plan: 'Free', // Mocked since plan depends on UserSubscription 
+      status: ua.status.toLowerCase(),
+      isActive: ua.user.isActive,
+      plan: 'Free', // Mocked since plan depends on UserSubscription
       joinedAt: ua.joinedAt.toISOString(),
       lastActive: ua.lastActiveAt?.toISOString() || ua.user.lastLoginAt?.toISOString() || ua.joinedAt.toISOString(),
       phone: ua.user.phoneNumber || undefined,

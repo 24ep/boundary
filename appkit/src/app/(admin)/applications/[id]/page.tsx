@@ -88,6 +88,7 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
   GripVerticalIcon,
+  UserXIcon,
 } from 'lucide-react'
 
 export interface Application {
@@ -147,7 +148,8 @@ export interface ApplicationUser {
   id: string
   email: string
   name: string
-  status: 'active' | 'inactive' | 'suspended'
+  status: 'active' | 'inactive' | 'suspended' | 'banned'
+  isActive?: boolean
   plan: string
   joinedAt: string
   lastActive: string
@@ -243,6 +245,8 @@ export default function ApplicationConfigPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('general')
   const [userSearchQuery, setUserSearchQuery] = useState('')
+  const [banModal, setBanModal] = useState<{ userId: string; userName: string; type: 'app' | 'all' | 'unban-app' | 'unban-all' } | null>(null)
+  const [banning, setBanning] = useState(false)
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isAuthDrawerOpen, setIsAuthDrawerOpen] = useState(false)
@@ -1587,6 +1591,48 @@ export default function ApplicationConfigPage() {
     (u.email || '').toLowerCase().includes(userSearchQuery.toLowerCase())
   )
 
+  const executeBanAction = async () => {
+    if (!banModal) return
+    setBanning(true)
+    try {
+      const { userId, type } = banModal
+      if (type === 'app') {
+        await fetch(`/api/v1/admin/applications/${appId}/users/${userId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'banned' }),
+        })
+        setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: 'banned' as const } : u))
+      } else if (type === 'all') {
+        await fetch(`/api/v1/admin/applications/${appId}/users/${userId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ isActive: false }),
+        })
+        setUsers(prev => prev.map(u => u.id === userId ? { ...u, isActive: false, status: 'banned' as const } : u))
+      } else if (type === 'unban-app') {
+        await fetch(`/api/v1/admin/applications/${appId}/users/${userId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'active' }),
+        })
+        setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: 'active' as const } : u))
+      } else if (type === 'unban-all') {
+        await fetch(`/api/v1/admin/applications/${appId}/users/${userId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ isActive: true }),
+        })
+        setUsers(prev => prev.map(u => u.id === userId ? { ...u, isActive: true, status: 'active' as const } : u))
+      }
+      setBanModal(null)
+    } catch (err) {
+      console.error('Ban action failed:', err)
+    } finally {
+      setBanning(false)
+    }
+  }
+
   const circleUserOptions = users.filter((u) => {
     const q = circleUserSearch.trim().toLowerCase()
     if (!q) return true
@@ -1840,21 +1886,25 @@ export default function ApplicationConfigPage() {
                   <tr className="border-b border-gray-100 dark:border-zinc-800">
                     <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wider">User</th>
                     <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wider">Role</th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wider">Status</th>
                     <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wider">Last Active</th>
                     <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50 dark:divide-zinc-800/50">
                   {filteredUsers.map((user) => {
+                    const isBannedGlobally = user.isActive === false
+                    const isBannedApp = user.status === 'banned'
+                    const isBannedAny = isBannedGlobally || isBannedApp
                     return (
-                      <tr 
-                        key={user.id} 
-                        className="hover:bg-gray-50/80 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer"
+                      <tr
+                        key={user.id}
+                        className={`hover:bg-gray-50/80 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer ${isBannedAny ? 'opacity-60' : ''}`}
                         onClick={() => handleUserClick(user.id)}
                       >
                         <td className="px-4 py-3">
                           <div className="flex items-center space-x-3">
-                            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 ${isBannedAny ? 'bg-gray-400 dark:bg-zinc-600' : 'bg-gradient-to-br from-blue-400 to-indigo-500'}`}>
                               {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                             </div>
                             <div>
@@ -1867,20 +1917,72 @@ export default function ApplicationConfigPage() {
                           <span className="text-sm text-gray-700 dark:text-zinc-300">{user.role || 'User'}</span>
                         </td>
                         <td className="px-4 py-3">
+                          {isBannedGlobally ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300 uppercase">
+                              <UserXIcon className="w-3 h-3" />Banned (All Apps)
+                            </span>
+                          ) : isBannedApp ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-300 uppercase">
+                              <UserXIcon className="w-3 h-3" />Banned (App)
+                            </span>
+                          ) : user.status === 'suspended' ? (
+                            <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 uppercase">Suspended</span>
+                          ) : (
+                            <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 uppercase">Active</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3">
                           <span className="text-sm text-gray-500 dark:text-zinc-400">{new Date(user.lastActive).toLocaleString()}</span>
                         </td>
                         <td className="px-4 py-3 text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={(e: React.MouseEvent) => {
-                              e.stopPropagation()
-                              handleUserClick(user.id)
-                            }}
-                            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
-                          >
-                            View Details
-                          </Button>
+                          <div className="flex items-center justify-end gap-1" onClick={e => e.stopPropagation()}>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleUserClick(user.id)}
+                              className="text-blue-600 dark:text-blue-400 hover:text-blue-700"
+                            >
+                              View
+                            </Button>
+                            {isBannedApp ? (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setBanModal({ userId: user.id, userName: user.name, type: 'unban-app' })}
+                                className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-500/10"
+                              >
+                                Unban App
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setBanModal({ userId: user.id, userName: user.name, type: 'app' })}
+                                className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:hover:bg-orange-500/10"
+                              >
+                                Ban App
+                              </Button>
+                            )}
+                            {isBannedGlobally ? (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setBanModal({ userId: user.id, userName: user.name, type: 'unban-all' })}
+                                className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-500/10"
+                              >
+                                Unban All
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setBanModal({ userId: user.id, userName: user.name, type: 'all' })}
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/10"
+                              >
+                                Ban All
+                              </Button>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     )
@@ -2332,6 +2434,46 @@ export default function ApplicationConfigPage() {
         }}
         onSaveCircleDetail={saveCircleDetail}
       />
+
+      {/* Ban Confirmation Modal */}
+      {banModal && (
+        <>
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" onClick={() => !banning && setBanModal(null)} />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-gray-200/80 dark:border-zinc-800/80 w-full max-w-sm p-6 space-y-4 pointer-events-auto">
+              <div className="flex items-start gap-3">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${banModal.type.startsWith('unban') ? 'bg-emerald-100 dark:bg-emerald-500/20' : banModal.type === 'all' ? 'bg-red-100 dark:bg-red-500/20' : 'bg-orange-100 dark:bg-orange-500/20'}`}>
+                  <UserXIcon className={`w-5 h-5 ${banModal.type.startsWith('unban') ? 'text-emerald-600' : banModal.type === 'all' ? 'text-red-600' : 'text-orange-600'}`} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                    {banModal.type === 'app' && 'Ban from This Application'}
+                    {banModal.type === 'all' && 'Ban from All Applications'}
+                    {banModal.type === 'unban-app' && 'Unban from This Application'}
+                    {banModal.type === 'unban-all' && 'Restore All Applications Access'}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">
+                    {banModal.type === 'app' && <><span className="font-medium text-gray-700 dark:text-zinc-200">{banModal.userName}</span> will be banned from this application only and cannot log in to it.</>}
+                    {banModal.type === 'all' && <><span className="font-medium text-gray-700 dark:text-zinc-200">{banModal.userName}</span>&apos;s account will be globally deactivated across all applications.</>}
+                    {banModal.type === 'unban-app' && <><span className="font-medium text-gray-700 dark:text-zinc-200">{banModal.userName}</span>&apos;s access to this application will be restored.</>}
+                    {banModal.type === 'unban-all' && <><span className="font-medium text-gray-700 dark:text-zinc-200">{banModal.userName}</span>&apos;s account will be reactivated across all applications.</>}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center justify-end gap-2 pt-2">
+                <Button variant="outline" onClick={() => setBanModal(null)} disabled={banning}>Cancel</Button>
+                <Button
+                  onClick={executeBanAction}
+                  disabled={banning}
+                  className={banModal.type.startsWith('unban') ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-0' : banModal.type === 'all' ? 'bg-red-600 hover:bg-red-700 text-white border-0' : 'bg-orange-500 hover:bg-orange-600 text-white border-0'}
+                >
+                  {banning ? <Loader2Icon className="w-4 h-4 animate-spin" /> : (banModal.type.startsWith('unban') ? 'Confirm Unban' : 'Confirm Ban')}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Config Drawers */}
       <AuthMethodsConfigDrawer
