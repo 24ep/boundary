@@ -1,5 +1,22 @@
 import { API_BASE_URL } from './apiConfig'
 
+/** Convert raw JWT permissions (strings or objects) to { module, action } objects. */
+function parsePermissions(raw: any, isSuperAdminFlag: boolean): { permissions: any[], is_super_admin: boolean } {
+  const arr: any[] = Array.isArray(raw) ? raw : []
+  const hasWildcard = arr.includes('*') || arr.includes('all')
+  const permissions = arr
+    .filter((p: any) => typeof p === 'object' || (typeof p === 'string' && p.includes(':')))
+    .map((p: any) => {
+      if (typeof p === 'object') return p
+      const [module, action] = p.split(':')
+      return { module, action }
+    })
+  return {
+    permissions,
+    is_super_admin: Boolean(isSuperAdminFlag) || hasWildcard,
+  }
+}
+
 export interface AdminUser {
   id: string;
   name: string;
@@ -542,21 +559,13 @@ class AdminService {
 
   // Permissions
   async getCurrentUserPermissions(): Promise<{ permissions: any[], is_super_admin: boolean }> {
-    // AdminUserController.getCurrentUser (mounted at /admin/auth/me) returns permissions
     const result = await this.request<any>('/v1/admin/auth/me');
-    return {
-      permissions: result.permissions || [],
-      is_super_admin: result.isSuperAdmin || false
-    };
+    return parsePermissions(result.permissions, result.isSuperAdmin);
   }
 
   async getUserPermissions(userId: string): Promise<{ permissions: any[], is_super_admin: boolean }> {
-    // AdminUserController attributes permissions to users
     const result = await this.request<any>(`/v1/admin/admin-users/${userId}`);
-    return {
-      permissions: result.permissions || [],
-      is_super_admin: result.isSuperAdmin || false
-    };
+    return parsePermissions(result.permissions, result.isSuperAdmin);
   }
 
   // Application Settings

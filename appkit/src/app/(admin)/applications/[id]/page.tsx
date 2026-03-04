@@ -2025,7 +2025,7 @@ export default function ApplicationConfigPage() {
             onSaveBillingMode={saveCircleBillingMode}
             billingModeSaving={circleBillingModeSaving}
             onRefresh={loadCircles}
-            onOpenDetail={setSelectedCircleId}
+            onOpenDetail={openCircleDetail}
             setActiveDevGuide={setActiveDevGuide}
           />
         </TabsContent>
