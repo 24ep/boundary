@@ -257,6 +257,19 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
     setExpandedId(initialMethod || null)
   }, [isOpen, initialMethod])
 
+  // When opened from the list, show only the selected method
+  const isSingleMethodMode = !!initialMethod
+  const displayProviders = isSingleMethodMode
+    ? providers.filter(p => p.providerName === initialMethod)
+    : providers
+
+  const singleMethodMeta = isSingleMethodMode
+    ? PROVIDER_META[initialMethod] || null
+    : null
+  const singleMethodName = isSingleMethodMode
+    ? displayProviders[0]?.displayName || initialMethod
+    : null
+
   useEffect(() => {
     if (!addPickerOpen) return
     const handler = (e: MouseEvent) => {
@@ -388,7 +401,7 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-zinc-800">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Auth Methods Config</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{isSingleMethodMode ? `${singleMethodName} Config` : 'Auth Methods Config'}</h2>
             <p className="text-sm text-gray-500 dark:text-zinc-400 mt-0.5">{appName}</p>
           </div>
           <button onClick={onClose} title="Close auth methods config" className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-400 dark:text-zinc-500"><XIcon className="w-5 h-5" /></button>
@@ -405,9 +418,9 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
             <>
               <div className="space-y-4">
                 <div className="flex items-center justify-between px-1">
-                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Authentication Methods</h3>
-                  {/* Add method picker */}
-                  <div className="relative" ref={addPickerRef}>
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">{isSingleMethodMode ? 'Method Configuration' : 'Authentication Methods'}</h3>
+                  {/* Add method picker — hidden in single-method mode */}
+                  {!isSingleMethodMode && <div className="relative" ref={addPickerRef}>
                     <button
                       onClick={() => setAddPickerOpen((v) => !v)}
                       className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
@@ -441,9 +454,9 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
                         )}
                       </div>
                     )}
-                  </div>
+                  </div>}
                 </div>
-                {providers.every((p) => !p.isEnabled) && (
+                {displayProviders.every((p) => !p.isEnabled) && (
                   <div className="flex flex-col items-center justify-center py-10 text-center">
                     <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-zinc-800 flex items-center justify-center mb-3">
                       <ShieldCheckIcon className="w-5 h-5 text-gray-400" />
@@ -453,9 +466,9 @@ export default function AuthMethodsConfigDrawer({ isOpen, onClose, appId, appNam
                   </div>
                 )}
                 {(['general', 'social login', 'password less'] as const).map((group) => {
-                  // Only show ENABLED providers
-                  const groupProviders = providers.filter(
-                    (p) => p.isEnabled && (PROVIDER_GROUP[p.providerName] || 'general') === group
+                  // Only show ENABLED providers (or all in single-method mode)
+                  const groupProviders = displayProviders.filter(
+                    (p) => (isSingleMethodMode || p.isEnabled) && (PROVIDER_GROUP[p.providerName] || 'general') === group
                   )
                   if (groupProviders.length === 0) return null
 
