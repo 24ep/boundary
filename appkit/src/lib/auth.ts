@@ -16,7 +16,9 @@ export interface AuthenticatedRequest extends NextRequest {
 
 export async function authenticate(req: NextRequest) {
   const authHeader = req.headers.get('authorization');
-  const token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
+  const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
+  const cookieToken = req.cookies.get('appkit_token')?.value;
+  const token = bearerToken || cookieToken;
 
   if (!token) {
     return { error: 'Access denied', status: 401 };

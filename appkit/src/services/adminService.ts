@@ -1,4 +1,5 @@
 import { API_BASE_URL } from './apiConfig'
+import { authService } from './authService'
 
 /** Convert raw JWT permissions (strings or objects) to { module, action } objects. */
 function parsePermissions(raw: any, isSuperAdminFlag: boolean): { permissions: any[], is_super_admin: boolean } {
@@ -116,9 +117,10 @@ export interface LoginHistoryEntry {
 class AdminService {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${API_BASE_URL}${endpoint}`;
-    const token = localStorage.getItem('admin_token');
-    
+    const token = authService.getToken();
+
     const config: RequestInit = {
+      credentials: 'include', // always send httpOnly cookie
       headers: {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
@@ -128,15 +130,10 @@ class AdminService {
     };
 
     const response = await fetch(url, config);
-    
+
     if (response.status === 401) {
-      // Only redirect if NOT already on login page and NOT calling login endpoint
       const isLoginPage = typeof window !== 'undefined' && window.location.pathname === '/login';
       const isAuthEndpoint = endpoint.includes('/auth/login');
-
-      localStorage.removeItem('admin_token');
-      localStorage.removeItem('admin_user');
-
       if (!isLoginPage && !isAuthEndpoint && typeof window !== 'undefined') {
         window.location.href = '/login';
       }

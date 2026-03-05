@@ -1,16 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
-    // In local implementation, we just return success
-    // The client will clear its own localStorage
-    return NextResponse.json({
-      success: true,
-      message: 'Logout successful',
-      timestamp: new Date().toISOString()
+    const response = NextResponse.json({ success: true, message: 'Logout successful' })
+    response.cookies.set('appkit_token', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 0,
     })
+    return response
   } catch (error: any) {
-    console.error('Local admin logout error:', error)
+    console.error('Admin logout error:', error)
     return NextResponse.json({ error: 'Logout failed' }, { status: 500 })
   }
 }

@@ -16,10 +16,8 @@ function errorRedirect(base: string, code: string): NextResponse {
   return NextResponse.redirect(new URL(`/login?error=${code}`, base))
 }
 
-/** Returns an HTML page that stores the token in localStorage then navigates. */
-function bridgePage(token: string, user: object, redirectTo: string): NextResponse {
-  const safeToken = JSON.stringify(token)
-  const safeUser = JSON.stringify(user)
+/** Returns an HTML page that navigates after SSO — relies on httpOnly cookie set above. */
+function bridgePage(token: string, _user: object, redirectTo: string): NextResponse {
   const safeRedirect = JSON.stringify(redirectTo)
 
   const html = `<!DOCTYPE html>
@@ -28,10 +26,6 @@ function bridgePage(token: string, user: object, redirectTo: string): NextRespon
 <body>
 <p style="font-family:sans-serif;text-align:center;margin-top:20vh">Signing in…</p>
 <script>
-try {
-  localStorage.setItem('admin_token', ${safeToken});
-  localStorage.setItem('admin_user', ${safeUser});
-} catch(e) {}
 window.location.replace(${safeRedirect});
 </script>
 </body>

@@ -50,15 +50,16 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
             })
     }, [hasAnyPermission, isSuperAdmin])
 
-    // Check auth on mount
+    // Check auth on mount — restore session from httpOnly cookie
     useEffect(() => {
-        const storedUser = authService.getUser()
-        if (!authService.isAuthenticated()) {
-            router.push('/login')
-        } else {
-            setUser(storedUser)
-        }
-        setIsLoading(false)
+        authService.initSession().then(user => {
+            if (!user) {
+                router.push('/login')
+            } else {
+                setUser(user)
+            }
+            setIsLoading(false)
+        })
     }, [router])
 
     const handleLogout = async () => {
