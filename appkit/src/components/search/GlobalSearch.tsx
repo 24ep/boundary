@@ -23,8 +23,7 @@ interface SearchResult {
 // Static nav links included in search
 const NAV_LINKS: SearchResult[] = [
   { type: 'nav', id: 'nav-dashboard', label: 'Dashboard', sub: 'Overview', href: '/dashboard' },
-  { type: 'nav', id: 'nav-users', label: 'Users', sub: 'Mobile app users', href: '/users' },
-  { type: 'nav', id: 'nav-billing', label: 'Billing Plans', sub: 'Subscription plans', href: '/billing' },
+{ type: 'nav', id: 'nav-billing', label: 'Billing Plans', sub: 'Subscription plans', href: '/billing' },
 { type: 'nav', id: 'nav-storage', label: 'File Manager', sub: 'Storage', href: '/storage' },
   { type: 'nav', id: 'nav-roles', label: 'Roles & Permissions', sub: 'System', href: '/system/roles' },
   { type: 'nav', id: 'nav-audit', label: 'Audit Trail', sub: 'System', href: '/system/audit' },

@@ -90,16 +90,6 @@ export const navigationHubs: NavHub[] = [
         ]
     },
     {
-        id: 'users',
-        label: 'Users',
-        icon: 'users',
-        href: '/users',
-        permissions: [['users', 'view']],
-        items: [
-            { id: 'users-all', label: 'All Users', href: '/users', icon: 'users', group: 'Management', permissions: [['users', 'view']] },
-        ]
-    },
-    {
         id: 'billing',
         label: 'Billing',
         icon: 'payment',
