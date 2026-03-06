@@ -117,7 +117,6 @@ export const navigationHubs: NavHub[] = [
         permissions: [['system', 'view']],
         items: [
             { id: 'system-user-management', label: 'Admin Users', href: '/system', icon: 'users', group: 'Access', permissions: [['system', 'view']] },
-            { id: 'system-roles', label: 'Roles & Permissions', href: '/system/roles', icon: 'shield', group: 'Access', permissions: [['system', 'view']] },
             { id: 'system-organization', label: 'Organization', href: '/system/organization', icon: 'building-office', group: 'Settings', permissions: [['system', 'view']] },
             { id: 'system-general', label: 'General', href: '/system/general', icon: 'settings', group: 'Settings', permissions: [['system', 'view']] },
             { id: 'system-security', label: 'Security', href: '/system/security', icon: 'lock', group: 'Settings', permissions: [['system', 'view']] },
