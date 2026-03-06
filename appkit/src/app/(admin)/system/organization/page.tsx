@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { OrganizationManagement } from '@/components/settings/OrganizationManagement'
+import { InviteManagement } from '@/components/settings/InviteManagement'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card'
 import { BuildingOfficeIcon } from '@heroicons/react/24/outline'
 
@@ -21,6 +22,7 @@ export default function OrganizationPage() {
             </div>
 
             <OrganizationManagement />
+            <InviteManagement />
         </div>
     )
 }

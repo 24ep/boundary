@@ -70,6 +70,7 @@ model Application {
   unifiedEntities       UnifiedEntity[]
   entityTypes           EntityType[]
   supportTickets        SupportTicket[]
+  organizationInvites   OrganizationInvite[]
 
   @@map("applications")
   }
@@ -773,6 +774,7 @@ model AdminUser {
   assignedTickets       SupportTicket[]
   authoredUserComments  UserComment[]
   authoredUserReminders UserReminder[]
+  createdInvites        OrganizationInvite[]
 
   @@index([email])
   @@map("admin_users")
@@ -868,6 +870,30 @@ model AdminActivityLog {
   @@index([createdAt])
   @@map("admin_activity_log")
   }
+
+// ============================================================================
+// ADMIN: Organization Invites
+// ============================================================================
+
+model OrganizationInvite {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  applicationId String    @map("application_id") @db.Uuid
+  code          String    @unique @db.VarChar(64)
+  createdById   String?   @map("created_by_id") @db.Uuid
+  role          String    @default("admin") @db.VarChar(50)
+  maxUses       Int?      @map("max_uses")
+  useCount      Int       @default(0) @map("use_count")
+  expiresAt     DateTime? @map("expires_at") @db.Timestamptz
+  isActive      Boolean   @default(true) @map("is_active")
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  createdBy   AdminUser?  @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([code])
+  @@index([applicationId])
+  @@map("organization_invites")
+}
 
 model AuditLog {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid

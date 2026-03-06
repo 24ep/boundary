@@ -174,6 +174,7 @@ export async function GET(
     let roleName = 'admin'
     let isSuperAdmin = false
     let permissions: string[] = ['*']
+    let isNewUser = false
 
     const adminUser = await prisma.adminUser.findFirst({
       where: { email: email.toLowerCase() },
@@ -207,6 +208,7 @@ export async function GET(
       let user = await prisma.user.findFirst({ where: { email: email.toLowerCase() } })
       if (!user) {
         if (!oauthProvider.allowSignup) return errorRedirect(base, 'sso_signup_disabled')
+        isNewUser = true
         user = await prisma.user.create({
           data: {
             email: email.toLowerCase(),
@@ -278,8 +280,9 @@ export async function GET(
       isSuperAdmin,
     }
 
-    console.log(`[SSO Callback] ✓ ${email} authenticated via ${provider}`)
-    return bridgePage(appkitToken, userObj, redirectAfter)
+    console.log(`[SSO Callback] ✓ ${email} authenticated via ${provider} (new=${isNewUser})`)
+    const finalRedirect = isNewUser ? '/onboarding' : redirectAfter
+    return bridgePage(appkitToken, userObj, finalRedirect)
   } catch (error: any) {
     console.error(`[SSO Callback] Unhandled error for "${provider}":`, error)
     return errorRedirect(base, 'sso_failed')

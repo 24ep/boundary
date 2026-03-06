@@ -516,8 +516,7 @@ function LoginPageContent() {
           const redirect =
             searchParams?.get('redirect') ||
             data.redirectTo ||
-            authBehavior.postSignupRedirect ||
-            '/dashboard'
+            '/onboarding'
           navigateAfterAuth(redirect)
         } else {
           throw new Error('No access token received')

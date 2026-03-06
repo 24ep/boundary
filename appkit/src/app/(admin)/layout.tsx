@@ -50,14 +50,35 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
             })
     }, [hasAnyPermission, isSuperAdmin])
 
-    // Check auth on mount — restore session from httpOnly cookie
+    // Check auth on mount — restore session from httpOnly cookie, then verify org membership
     useEffect(() => {
-        authService.initSession().then(user => {
+        authService.initSession().then(async user => {
             if (!user) {
                 router.push('/login')
-            } else {
-                setUser(user)
+                return
             }
+
+            // SuperAdmins bypass the org gate
+            if (!user.isSuperAdmin) {
+                try {
+                    const token = authService.getToken()
+                    const res = await fetch('/api/v1/admin/auth/me/organization', {
+                        credentials: 'include',
+                        headers: token ? { Authorization: `Bearer ${token}` } : {},
+                    })
+                    if (res.ok) {
+                        const data = await res.json()
+                        if (!data.hasOrganization) {
+                            router.push('/onboarding')
+                            return
+                        }
+                    }
+                } catch {
+                    // Network error — proceed; the page itself will handle it
+                }
+            }
+
+            setUser(user)
             setIsLoading(false)
         })
     }, [router])
