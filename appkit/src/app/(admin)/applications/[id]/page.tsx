@@ -29,6 +29,7 @@ import { ComplianceSettings } from './components/ComplianceSettings'
 import { SandboxSettings } from './components/SandboxSettings'
 import { WebhookSettings } from './components/WebhookSettings'
 import { AuditLog } from './components/AuditLog'
+import { BroadcastTab } from './components/BroadcastTab'
 import { CommunicationSettings } from './components/CommunicationSettings'
 import { BillingSettings } from './components/BillingSettings'
 import { CircleDrawers } from './components/CircleDrawers'
@@ -1678,6 +1679,7 @@ export default function ApplicationConfigPage() {
       title: 'Operations',
       items: [
         { value: 'communication', icon: <MessageSquareIcon className="w-4 h-4" />, label: 'Communication' },
+        { value: 'broadcast', icon: <MegaphoneIcon className="w-4 h-4" />, label: 'Broadcast' },
         { value: 'email-templates', icon: <MailIcon className="w-4 h-4" />, label: 'Email Templates' },
         { value: 'webhooks', icon: <WebhookIcon className="w-4 h-4" />, label: 'Webhooks' },
         { value: 'legal', icon: <ScaleIcon className="w-4 h-4" />, label: 'Legal & Compliance' },
@@ -2158,6 +2160,12 @@ export default function ApplicationConfigPage() {
             }}
             onToggleCommChannel={handleToggleCommChannel}
           />
+        </TabsContent>
+
+        {/* ==================== TAB: Broadcast ==================== */}
+        <TabsContent value="broadcast" className="space-y-4">
+          {renderTabHeader('Broadcast', 'broadcast')}
+          <BroadcastTab appId={appId} />
         </TabsContent>
 
         {/* ==================== TAB: Billing ==================== */}

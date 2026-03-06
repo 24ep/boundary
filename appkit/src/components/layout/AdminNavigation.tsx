@@ -110,16 +110,6 @@ export const navigationHubs: NavHub[] = [
         ]
     },
     {
-        id: 'broadcast',
-        label: 'Broadcast',
-        icon: 'megaphone',
-        href: '/broadcast',
-        permissions: [['communications', 'view']],
-        items: [
-            { id: 'broadcast-send', label: 'Send Message', href: '/broadcast', icon: 'megaphone', group: 'Notifications', permissions: [['communications', 'view']] },
-        ]
-    },
-    {
         id: 'storage',
         label: 'Storage',
         icon: 'database',
