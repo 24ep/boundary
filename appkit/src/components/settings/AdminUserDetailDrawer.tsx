@@ -109,6 +109,7 @@ export const AdminUserDetailDrawer: React.FC<AdminUserDetailDrawerProps> = ({
         groupId: '' as string
     })
 
+    useEffect(() => {
         if (adminId) {
             loadAdmin(adminId)
             loadRoles()
