@@ -7,7 +7,7 @@ import { useTheme } from 'next-themes'
 import { LogOut } from 'lucide-react'
 import { authService } from '../../services/authService'
 import { PermissionProvider, usePermissions } from '../../contexts/PermissionContext'
-import { AccountSettingsModal } from '../../components/settings/AccountSettingsModal'
+import { AdminUserDetailDrawer } from '../../components/settings/AdminUserDetailDrawer'
 import { AdminHeader } from '../../components/layout/AdminHeader'
 import { AdminSidebarRail } from '../../components/layout/AdminSidebarRail'
 import { AdminSidebarMenu } from '../../components/layout/AdminSidebarMenu'
@@ -191,9 +191,10 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
                 </div>
             </div>
             
-            <AccountSettingsModal 
-                isOpen={showAccountSettings} 
-                onClose={() => setShowAccountSettings(false)} 
+            <AdminUserDetailDrawer
+                adminId={showAccountSettings ? (user?.id ?? null) : null}
+                onClose={() => setShowAccountSettings(false)}
+                onUserUpdated={() => {}}
             />
         </Fragment>
     )
