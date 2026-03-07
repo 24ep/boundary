@@ -24,30 +24,28 @@ export const Decimal = runtime.Decimal
 
 
 export const NullTypes = {
-  DbNull: runtime.NullTypes.DbNull as (new (secret: never) => typeof runtime.DbNull),
-  JsonNull: runtime.NullTypes.JsonNull as (new (secret: never) => typeof runtime.JsonNull),
-  AnyNull: runtime.NullTypes.AnyNull as (new (secret: never) => typeof runtime.AnyNull),
+  DbNull: runtime.objectEnumValues.classes.DbNull as (new (secret: never) => typeof runtime.objectEnumValues.instances.DbNull),
+  JsonNull: runtime.objectEnumValues.classes.JsonNull as (new (secret: never) => typeof runtime.objectEnumValues.instances.JsonNull),
+  AnyNull: runtime.objectEnumValues.classes.AnyNull as (new (secret: never) => typeof runtime.objectEnumValues.instances.AnyNull),
 }
 /**
  * Helper for filtering JSON entries that have `null` on the database (empty on the db)
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export const DbNull = runtime.DbNull
-
+export const DbNull = runtime.objectEnumValues.instances.DbNull
 /**
  * Helper for filtering JSON entries that have JSON `null` values (not empty on the db)
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export const JsonNull = runtime.JsonNull
-
+export const JsonNull = runtime.objectEnumValues.instances.JsonNull
 /**
  * Helper for filtering JSON entries that are `Prisma.DbNull` or `Prisma.JsonNull`
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export const AnyNull = runtime.AnyNull
+export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 
 
 export const ModelName = {
@@ -76,8 +74,10 @@ export const ModelName = {
   EmailTemplate: 'EmailTemplate',
   SubscriptionPlan: 'SubscriptionPlan',
   Subscription: 'Subscription',
+  CoinTransaction: 'CoinTransaction',
   SystemConfig: 'SystemConfig',
   AppSetting: 'AppSetting',
+  AdminGroup: 'AdminGroup',
   AdminUser: 'AdminUser',
   AdminRole: 'AdminRole',
   AdminPermission: 'AdminPermission',
@@ -168,6 +168,7 @@ export const UserScalarFieldEnum = {
   userType: 'userType',
   circleIds: 'circleIds',
   isOnboardingComplete: 'isOnboardingComplete',
+  coins: 'coins',
   preferences: 'preferences',
   isActive: 'isActive',
   isVerified: 'isVerified',
@@ -626,6 +627,10 @@ export const SubscriptionPlanScalarFieldEnum = {
   features: 'features',
   limits: 'limits',
   isActive: 'isActive',
+  stripePriceIdMonthly: 'stripePriceIdMonthly',
+  stripePriceIdYearly: 'stripePriceIdYearly',
+  stripeLookupKeyMonthly: 'stripeLookupKeyMonthly',
+  stripeLookupKeyYearly: 'stripeLookupKeyYearly',
   createdAt: 'createdAt'
 } as const
 
@@ -651,6 +656,19 @@ export const SubscriptionScalarFieldEnum = {
 export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
 
 
+export const CoinTransactionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  type: 'type',
+  description: 'description',
+  referenceId: 'referenceId',
+  createdAt: 'createdAt'
+} as const
+
+export type CoinTransactionScalarFieldEnum = (typeof CoinTransactionScalarFieldEnum)[keyof typeof CoinTransactionScalarFieldEnum]
+
+
 export const SystemConfigScalarFieldEnum = {
   key: 'key',
   value: 'value',
@@ -674,6 +692,17 @@ export const AppSettingScalarFieldEnum = {
 export type AppSettingScalarFieldEnum = (typeof AppSettingScalarFieldEnum)[keyof typeof AppSettingScalarFieldEnum]
 
 
+export const AdminGroupScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdminGroupScalarFieldEnum = (typeof AdminGroupScalarFieldEnum)[keyof typeof AdminGroupScalarFieldEnum]
+
+
 export const AdminUserScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -681,6 +710,9 @@ export const AdminUserScalarFieldEnum = {
   name: 'name',
   avatarUrl: 'avatarUrl',
   roleId: 'roleId',
+  groupId: 'groupId',
+  loginMethods: 'loginMethods',
+  mfaEnabled: 'mfaEnabled',
   isSuperAdmin: 'isSuperAdmin',
   isActive: 'isActive',
   lastLoginAt: 'lastLoginAt',

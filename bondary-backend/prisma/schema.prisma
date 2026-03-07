@@ -16,6 +16,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
   schemas  = ["public", "admin", "bondarys", "core"]
 }
 
@@ -91,6 +92,7 @@ model User {
   userType             String    @default("user") @map("user_type") @db.VarChar(50)
   circleIds            String[]  @default([]) @map("circle_ids")
   isOnboardingComplete Boolean?  @default(false) @map("is_onboarding_complete")
+  coins                Int       @default(0)
   preferences          Json      @default("{}")
   isActive             Boolean   @default(true) @map("is_active")
   isVerified           Boolean   @default(false) @map("is_verified")
@@ -149,6 +151,7 @@ model User {
   fileTags               FileTag[]
   fileShares             FileShare[]
   fileRecentAccesses     FileRecentAccess[]
+  coinTransactions       CoinTransaction[]
 
   @@index([email])
   @@index([isActive])
@@ -721,7 +724,7 @@ model SubscriptionPlan {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   applicationId String?  @map("application_id") @db.Uuid
   name          String   @db.VarChar(100)
-  slug          String   @db.VarChar(100)
+  slug          String   @unique @db.VarChar(100)
   description   String?  @db.Text
   priceMonthly  Decimal? @map("price_monthly") @db.Decimal(10, 2)
   priceYearly   Decimal? @map("price_yearly") @db.Decimal(10, 2)
@@ -729,6 +732,10 @@ model SubscriptionPlan {
   features      Json     @default("[]")
   limits        Json     @default("{}")
   isActive      Boolean  @default(true) @map("is_active")
+  stripePriceIdMonthly  String?  @map("stripe_price_id_monthly") @db.VarChar(255)
+  stripePriceIdYearly   String?  @map("stripe_price_id_yearly") @db.VarChar(255)
+  stripeLookupKeyMonthly String? @map("stripe_lookup_key_monthly") @db.VarChar(255)
+  stripeLookupKeyYearly  String? @map("stripe_lookup_key_yearly") @db.VarChar(255)
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
 
   application   Application?   @relation(fields: [applicationId], references: [id], onDelete: SetNull)
@@ -760,6 +767,22 @@ model Subscription {
   @@index([userId])
   @@index([status])
   @@map("subscriptions")
+  @@schema("public")
+}
+
+model CoinTransaction {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String   @map("user_id") @db.Uuid
+  amount        Int
+  type          String   @db.VarChar(50) // "purchase", "bonus", "spend"
+  description   String?  @db.Text
+  referenceId   String?  @map("reference_id") @db.VarChar(255)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("coin_transactions")
   @@schema("public")
 }
 

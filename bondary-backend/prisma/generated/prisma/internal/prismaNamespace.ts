@@ -15,7 +15,7 @@
  * model files in the `model` directory!
  */
 
-import * as runtime from "@prisma/client/runtime/client"
+import * as runtime from "@prisma/client/runtime/library"
 import type * as Prisma from "../models"
 import { type PrismaClient } from "./class"
 
@@ -65,6 +65,14 @@ export type Decimal = runtime.Decimal
 export type DecimalJsLike = runtime.DecimalJsLike
 
 /**
+ * Metrics
+ */
+export type Metrics = runtime.Metrics
+export type Metric<T> = runtime.Metric<T>
+export type MetricHistogram = runtime.MetricHistogram
+export type MetricHistogramBucket = runtime.MetricHistogramBucket
+
+/**
 * Extensions
 */
 export type Extension = runtime.Types.Extensions.UserArgs
@@ -80,12 +88,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.4.1
- * Query Engine version: 55ae170b1ced7fc6ed07a15f110549408c501bb3
+ * Prisma Client JS version: 6.19.2
+ * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.4.1",
-  engine: "55ae170b1ced7fc6ed07a15f110549408c501bb3"
+  client: "6.19.2",
+  engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
 }
 
 /**
@@ -102,30 +110,28 @@ export type InputJsonValue = runtime.InputJsonValue
 
 
 export const NullTypes = {
-  DbNull: runtime.NullTypes.DbNull as (new (secret: never) => typeof runtime.DbNull),
-  JsonNull: runtime.NullTypes.JsonNull as (new (secret: never) => typeof runtime.JsonNull),
-  AnyNull: runtime.NullTypes.AnyNull as (new (secret: never) => typeof runtime.AnyNull),
+  DbNull: runtime.objectEnumValues.classes.DbNull as (new (secret: never) => typeof runtime.objectEnumValues.instances.DbNull),
+  JsonNull: runtime.objectEnumValues.classes.JsonNull as (new (secret: never) => typeof runtime.objectEnumValues.instances.JsonNull),
+  AnyNull: runtime.objectEnumValues.classes.AnyNull as (new (secret: never) => typeof runtime.objectEnumValues.instances.AnyNull),
 }
 /**
  * Helper for filtering JSON entries that have `null` on the database (empty on the db)
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export const DbNull = runtime.DbNull
-
+export const DbNull = runtime.objectEnumValues.instances.DbNull
 /**
  * Helper for filtering JSON entries that have JSON `null` values (not empty on the db)
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export const JsonNull = runtime.JsonNull
-
+export const JsonNull = runtime.objectEnumValues.instances.JsonNull
 /**
  * Helper for filtering JSON entries that are `Prisma.DbNull` or `Prisma.JsonNull`
  *
  * @see https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-on-a-json-field
  */
-export const AnyNull = runtime.AnyNull
+export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 
 
 type SelectAndInclude = {
@@ -409,8 +415,10 @@ export const ModelName = {
   EmailTemplate: 'EmailTemplate',
   SubscriptionPlan: 'SubscriptionPlan',
   Subscription: 'Subscription',
+  CoinTransaction: 'CoinTransaction',
   SystemConfig: 'SystemConfig',
   AppSetting: 'AppSetting',
+  AdminGroup: 'AdminGroup',
   AdminUser: 'AdminUser',
   AdminRole: 'AdminRole',
   AdminPermission: 'AdminPermission',
@@ -464,7 +472,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "application" | "user" | "userApplication" | "country" | "language" | "currency" | "userSession" | "userDevice" | "userMFA" | "securityPolicy" | "userGroup" | "userGroupMember" | "identityAuditLog" | "oAuthProvider" | "loginHistory" | "userSettings" | "file" | "fileFolder" | "galleryItem" | "galleryAlbum" | "notification" | "userPushToken" | "emailTemplate" | "subscriptionPlan" | "subscription" | "systemConfig" | "appSetting" | "adminUser" | "adminRole" | "adminPermission" | "adminRolePermission" | "adminUserApplication" | "adminActivityLog" | "auditLog" | "circleType" | "circle" | "circleMember" | "circleInvitation" | "emergencyContact" | "safetyIncident" | "socialPost" | "socialComment" | "socialReaction" | "socialStory" | "socialStoryView" | "userFollow" | "friendRequest" | "chatRoom" | "chatParticipant" | "chatMessage" | "chatReadReceipt" | "chatReaction" | "userLocation" | "geofence" | "locationShare" | "note" | "todo" | "socialReport" | "socialActivity" | "socialCommentLike" | "entityRelation" | "fileTag" | "fileTagAssignment" | "fileShare" | "fileRecentAccess"
+    modelProps: "application" | "user" | "userApplication" | "country" | "language" | "currency" | "userSession" | "userDevice" | "userMFA" | "securityPolicy" | "userGroup" | "userGroupMember" | "identityAuditLog" | "oAuthProvider" | "loginHistory" | "userSettings" | "file" | "fileFolder" | "galleryItem" | "galleryAlbum" | "notification" | "userPushToken" | "emailTemplate" | "subscriptionPlan" | "subscription" | "coinTransaction" | "systemConfig" | "appSetting" | "adminGroup" | "adminUser" | "adminRole" | "adminPermission" | "adminRolePermission" | "adminUserApplication" | "adminActivityLog" | "auditLog" | "circleType" | "circle" | "circleMember" | "circleInvitation" | "emergencyContact" | "safetyIncident" | "socialPost" | "socialComment" | "socialReaction" | "socialStory" | "socialStoryView" | "userFollow" | "friendRequest" | "chatRoom" | "chatParticipant" | "chatMessage" | "chatReadReceipt" | "chatReaction" | "userLocation" | "geofence" | "locationShare" | "note" | "todo" | "socialReport" | "socialActivity" | "socialCommentLike" | "entityRelation" | "fileTag" | "fileTagAssignment" | "fileShare" | "fileRecentAccess"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2318,6 +2326,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CoinTransaction: {
+      payload: Prisma.$CoinTransactionPayload<ExtArgs>
+      fields: Prisma.CoinTransactionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CoinTransactionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinTransactionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CoinTransactionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+        }
+        findFirst: {
+          args: Prisma.CoinTransactionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinTransactionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CoinTransactionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+        }
+        findMany: {
+          args: Prisma.CoinTransactionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinTransactionPayload>[]
+        }
+        create: {
+          args: Prisma.CoinTransactionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+        }
+        createMany: {
+          args: Prisma.CoinTransactionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CoinTransactionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinTransactionPayload>[]
+        }
+        delete: {
+          args: Prisma.CoinTransactionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+        }
+        update: {
+          args: Prisma.CoinTransactionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+        }
+        deleteMany: {
+          args: Prisma.CoinTransactionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CoinTransactionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CoinTransactionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinTransactionPayload>[]
+        }
+        upsert: {
+          args: Prisma.CoinTransactionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+        }
+        aggregate: {
+          args: Prisma.CoinTransactionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCoinTransaction>
+        }
+        groupBy: {
+          args: Prisma.CoinTransactionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoinTransactionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CoinTransactionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoinTransactionCountAggregateOutputType> | number
+        }
+      }
+    }
     SystemConfig: {
       payload: Prisma.$SystemConfigPayload<ExtArgs>
       fields: Prisma.SystemConfigFieldRefs
@@ -2463,6 +2545,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AppSettingCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AppSettingCountAggregateOutputType> | number
+        }
+      }
+    }
+    AdminGroup: {
+      payload: Prisma.$AdminGroupPayload<ExtArgs>
+      fields: Prisma.AdminGroupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdminGroupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminGroupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdminGroupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminGroupPayload>
+        }
+        findFirst: {
+          args: Prisma.AdminGroupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminGroupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdminGroupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminGroupPayload>
+        }
+        findMany: {
+          args: Prisma.AdminGroupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminGroupPayload>[]
+        }
+        create: {
+          args: Prisma.AdminGroupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminGroupPayload>
+        }
+        createMany: {
+          args: Prisma.AdminGroupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AdminGroupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminGroupPayload>[]
+        }
+        delete: {
+          args: Prisma.AdminGroupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminGroupPayload>
+        }
+        update: {
+          args: Prisma.AdminGroupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminGroupPayload>
+        }
+        deleteMany: {
+          args: Prisma.AdminGroupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdminGroupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AdminGroupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminGroupPayload>[]
+        }
+        upsert: {
+          args: Prisma.AdminGroupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminGroupPayload>
+        }
+        aggregate: {
+          args: Prisma.AdminGroupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdminGroup>
+        }
+        groupBy: {
+          args: Prisma.AdminGroupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdminGroupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdminGroupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdminGroupCountAggregateOutputType> | number
         }
       }
     }
@@ -5351,6 +5507,7 @@ export const UserScalarFieldEnum = {
   userType: 'userType',
   circleIds: 'circleIds',
   isOnboardingComplete: 'isOnboardingComplete',
+  coins: 'coins',
   preferences: 'preferences',
   isActive: 'isActive',
   isVerified: 'isVerified',
@@ -5809,6 +5966,10 @@ export const SubscriptionPlanScalarFieldEnum = {
   features: 'features',
   limits: 'limits',
   isActive: 'isActive',
+  stripePriceIdMonthly: 'stripePriceIdMonthly',
+  stripePriceIdYearly: 'stripePriceIdYearly',
+  stripeLookupKeyMonthly: 'stripeLookupKeyMonthly',
+  stripeLookupKeyYearly: 'stripeLookupKeyYearly',
   createdAt: 'createdAt'
 } as const
 
@@ -5834,6 +5995,19 @@ export const SubscriptionScalarFieldEnum = {
 export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
 
 
+export const CoinTransactionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  type: 'type',
+  description: 'description',
+  referenceId: 'referenceId',
+  createdAt: 'createdAt'
+} as const
+
+export type CoinTransactionScalarFieldEnum = (typeof CoinTransactionScalarFieldEnum)[keyof typeof CoinTransactionScalarFieldEnum]
+
+
 export const SystemConfigScalarFieldEnum = {
   key: 'key',
   value: 'value',
@@ -5857,6 +6031,17 @@ export const AppSettingScalarFieldEnum = {
 export type AppSettingScalarFieldEnum = (typeof AppSettingScalarFieldEnum)[keyof typeof AppSettingScalarFieldEnum]
 
 
+export const AdminGroupScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdminGroupScalarFieldEnum = (typeof AdminGroupScalarFieldEnum)[keyof typeof AdminGroupScalarFieldEnum]
+
+
 export const AdminUserScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -5864,6 +6049,9 @@ export const AdminUserScalarFieldEnum = {
   name: 'name',
   avatarUrl: 'avatarUrl',
   roleId: 'roleId',
+  groupId: 'groupId',
+  loginMethods: 'loginMethods',
+  mfaEnabled: 'mfaEnabled',
   isSuperAdmin: 'isSuperAdmin',
   isActive: 'isActive',
   lastLoginAt: 'lastLoginAt',
@@ -6572,22 +6760,26 @@ export type BatchPayload = {
   count: number
 }
 
+
+export type Datasource = {
+  url?: string
+}
+export type Datasources = {
+  db?: Datasource
+}
+
 export const defineExtension = runtime.Extensions.defineExtension as unknown as runtime.Types.Extensions.ExtendsHook<"define", TypeMapCb, runtime.Types.Extensions.DefaultArgs>
 export type DefaultPrismaClient = PrismaClient
 export type ErrorFormat = 'pretty' | 'colorless' | 'minimal'
-export type PrismaClientOptions = ({
+export interface PrismaClientOptions {
   /**
-   * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-pg`.
+   * Overwrites the datasource url from your schema.prisma file
    */
-  adapter: runtime.SqlDriverAdapterFactory
-  accelerateUrl?: never
-} | {
+  datasources?: Datasources
   /**
-   * Prisma Accelerate URL allowing the client to connect through Accelerate instead of a direct database.
+   * Overwrites the datasource url from your schema.prisma file
    */
-  accelerateUrl: string
-  adapter?: never
-}) & {
+  datasourceUrl?: string
   /**
    * @default "colorless"
    */
@@ -6614,7 +6806,7 @@ export type PrismaClientOptions = ({
    *  { emit: 'stdout', level: 'error' }
    * 
    * ```
-   * Read more in our [docs](https://pris.ly/d/logging).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
    */
   log?: (LogLevel | LogDefinition)[]
   /**
@@ -6627,6 +6819,10 @@ export type PrismaClientOptions = ({
     timeout?: number
     isolationLevel?: TransactionIsolationLevel
   }
+  /**
+   * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
+   */
+  adapter?: runtime.SqlDriverAdapterFactory | null
   /**
    * Global configuration for omitting model fields by default.
    * 
@@ -6642,22 +6838,6 @@ export type PrismaClientOptions = ({
    * ```
    */
   omit?: GlobalOmitConfig
-  /**
-   * SQL commenter plugins that add metadata to SQL queries as comments.
-   * Comments follow the sqlcommenter format: https://google.github.io/sqlcommenter/
-   * 
-   * @example
-   * ```
-   * const prisma = new PrismaClient({
-   *   adapter,
-   *   comments: [
-   *     traceContext(),
-   *     queryInsights(),
-   *   ],
-   * })
-   * ```
-   */
-  comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
   application?: Prisma.ApplicationOmit
@@ -6685,8 +6865,10 @@ export type GlobalOmitConfig = {
   emailTemplate?: Prisma.EmailTemplateOmit
   subscriptionPlan?: Prisma.SubscriptionPlanOmit
   subscription?: Prisma.SubscriptionOmit
+  coinTransaction?: Prisma.CoinTransactionOmit
   systemConfig?: Prisma.SystemConfigOmit
   appSetting?: Prisma.AppSettingOmit
+  adminGroup?: Prisma.AdminGroupOmit
   adminUser?: Prisma.AdminUserOmit
   adminRole?: Prisma.AdminRoleOmit
   adminPermission?: Prisma.AdminPermissionOmit

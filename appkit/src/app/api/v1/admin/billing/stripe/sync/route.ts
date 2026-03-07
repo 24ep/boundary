@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     // Dynamically import Stripe to avoid bundling issues when key is absent
     const Stripe = (await import('stripe')).default
-    const stripe = new Stripe(stripeSecretKey, { apiVersion: '2024-06-20' })
+    const stripe = new Stripe(stripeSecretKey, { apiVersion: '2023-10-16' })
 
     // Fetch all active products
     const products = await stripe.products.list({ active: true, limit: 100 })
@@ -30,23 +30,28 @@ export async function POST(request: NextRequest) {
     // Fetch all active prices
     const prices = await stripe.prices.list({ active: true, limit: 100, expand: ['data.product'] })
 
-    const pricesByProduct: Record<string, { monthly: string | null; yearly: string | null; amount: number | null; currency: string }> = {}
+    const pricesByProduct: Record<string, { monthly: string | null; yearly: string | null; monthlyLookup: string | null; yearlyLookup: string | null; amount: number | null; currency: string }> = {}
 
     for (const price of prices.data) {
       const productId = typeof price.product === 'string' ? price.product : price.product.id
       if (!pricesByProduct[productId]) {
-        pricesByProduct[productId] = { monthly: null, yearly: null, amount: null, currency: price.currency.toUpperCase() }
+        pricesByProduct[productId] = { monthly: null, yearly: null, monthlyLookup: null, yearlyLookup: null, amount: null, currency: price.currency.toUpperCase() }
       }
       const entry = pricesByProduct[productId]
       const unitAmount = price.unit_amount != null ? price.unit_amount / 100 : null
       if (price.recurring?.interval === 'month') {
         entry.monthly = price.id
+        entry.monthlyLookup = price.lookup_key || null
         if (entry.amount == null) entry.amount = unitAmount
       } else if (price.recurring?.interval === 'year') {
         entry.yearly = price.id
+        entry.yearlyLookup = price.lookup_key || null
       } else if (!price.recurring) {
         // one-time — use as monthly fallback
-        if (!entry.monthly) entry.monthly = price.id
+        if (!entry.monthly) {
+          entry.monthly = price.id
+          entry.monthlyLookup = price.lookup_key || null
+        }
         if (entry.amount == null) entry.amount = unitAmount
       }
     }
@@ -78,6 +83,8 @@ export async function POST(request: NextRequest) {
             currency: pricing?.currency || 'USD',
             stripePriceIdMonthly: pricing?.monthly || null,
             stripePriceIdYearly: pricing?.yearly || null,
+            stripeLookupKeyMonthly: pricing?.monthlyLookup || null,
+            stripeLookupKeyYearly: pricing?.yearlyLookup || null,
             isActive: product.active,
             isPublic: true,
             features: [],
@@ -128,7 +135,7 @@ export async function GET(request: NextRequest) {
 
     try {
       const Stripe = (await import('stripe')).default
-      const stripe = new Stripe(stripeSecretKey, { apiVersion: '2024-06-20' })
+      const stripe = new Stripe(stripeSecretKey, { apiVersion: '2023-10-16' })
       const account = await stripe.accounts.retrieve()
       return NextResponse.json({ connected: true, accountId: account.id, email: (account as any).email || null })
     } catch (e: any) {

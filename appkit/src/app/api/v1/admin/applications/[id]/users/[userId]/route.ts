@@ -44,7 +44,8 @@ export async function PATCH(
             phoneNumber: true,
             avatarUrl: true,
             lastLoginAt: true,
-            points: true
+            points: true,
+            coins: true
           }
         }
       }
@@ -67,6 +68,7 @@ export async function PATCH(
     const isActive = typeof body.isActive === 'boolean' ? body.isActive : undefined
     const points = typeof body.points === 'number' ? body.points : undefined
     const appPoints = typeof body.appPoints === 'number' ? body.appPoints : undefined
+    const coins = typeof body.coins === 'number' ? body.coins : undefined
 
     if (status && !APP_USER_STATUS.has(status)) {
       return NextResponse.json(
@@ -81,7 +83,8 @@ export async function PATCH(
       phoneNumber !== undefined ||
       avatarUrl !== undefined ||
       isActive !== undefined ||
-      points !== undefined
+      points !== undefined ||
+      coins !== undefined
     const hasMembershipUpdates = role !== undefined || status !== undefined || appPoints !== undefined
 
     if (!hasUserUpdates && !hasMembershipUpdates) {
@@ -102,6 +105,7 @@ export async function PATCH(
               ...(avatarUrl !== undefined ? { avatarUrl: avatarUrl || null } : {}),
               ...(isActive !== undefined ? { isActive } : {}),
               ...(points !== undefined ? { points } : {}),
+              ...(coins !== undefined ? { coins } : {}),
               updatedAt: new Date()
             }
           })
@@ -131,7 +135,8 @@ export async function PATCH(
                   phoneNumber: true,
                   avatarUrl: true,
                   lastLoginAt: true,
-                  points: true
+                  points: true,
+                  coins: true
                 }
               }
             }
@@ -154,7 +159,8 @@ export async function PATCH(
                   phoneNumber: true,
                   avatarUrl: true,
                   lastLoginAt: true,
-                  points: true
+                  points: true,
+                  coins: true
                 }
               }
             }
@@ -175,7 +181,8 @@ export async function PATCH(
           updatedMembership.lastActiveAt?.toISOString() ||
           updatedMembership.user.lastLoginAt?.toISOString() ||
           updatedMembership.joinedAt.toISOString(),
-        points: updatedMembership.user.points || 0
+        points: updatedMembership.user.points || 0,
+        coins: updatedMembership.user.coins || 0
       },
       message: 'Application user updated successfully'
     })

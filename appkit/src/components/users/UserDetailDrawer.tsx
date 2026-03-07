@@ -38,6 +38,7 @@ interface UserDetail {
   role?: string
   points?: number
   appPoints?: number
+  coins?: number
 }
 
 interface BillingInfo {
@@ -133,6 +134,7 @@ export default function UserDetailDrawer({ isOpen, onClose, userId, applicationI
     avatar: '',
     points: 0,
     appPoints: 0,
+    coins: 0,
   })
   const { toast } = useToast()
 
@@ -162,6 +164,7 @@ export default function UserDetailDrawer({ isOpen, onClose, userId, applicationI
         avatar: nextUser?.avatar || '',
         points: nextUser?.points || 0,
         appPoints: nextUser?.appPoints || 0,
+        coins: nextUser?.coins || 0,
       })
       
       // Load billing information
@@ -260,6 +263,7 @@ export default function UserDetailDrawer({ isOpen, onClose, userId, applicationI
           isActive: editForm.status === 'active',
           points: editForm.points,
           appPoints: editForm.appPoints,
+          coins: editForm.coins,
         }),
       })
 
@@ -283,6 +287,7 @@ export default function UserDetailDrawer({ isOpen, onClose, userId, applicationI
           lastActive: updatedUser.lastActive || prev.lastActive,
           points: updatedUser.points ?? prev.points,
           appPoints: updatedUser.appPoints ?? prev.appPoints,
+          coins: updatedUser.coins ?? prev.coins,
         } : prev)
       }
 
@@ -656,6 +661,22 @@ export default function UserDetailDrawer({ isOpen, onClose, userId, applicationI
                               </div>
                             )}
                           </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Coins</label>
+                            {isEditing ? (
+                              <Input
+                                type="number"
+                                value={editForm.coins}
+                                onChange={(e) => setEditForm(prev => ({ ...prev, coins: parseInt(e.target.value, 10) || 0 }))}
+                                placeholder="0"
+                              />
+                            ) : (
+                              <div className="flex items-center space-x-2">
+                                <span className="mr-1">💰</span>
+                                <span className="text-gray-900">{user.coins ?? 0}</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
@@ -987,6 +1008,7 @@ export default function UserDetailDrawer({ isOpen, onClose, userId, applicationI
                           avatar: user.avatar || '',
                           points: user.points || 0,
                           appPoints: user.appPoints || 0,
+                          coins: user.coins || 0,
                         })
                       }
                     }}

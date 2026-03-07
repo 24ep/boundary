@@ -7,10 +7,6 @@ import { adminService } from '../../services/adminService'
 
 const GATEWAYS = [
     { id: 'stripe', name: 'Stripe', icon: 'S' },
-    { id: 'paypal', name: 'PayPal', icon: 'P' },
-    { id: 'apple_pay', name: 'Apple Pay', icon: '' },
-    { id: 'google_pay', name: 'Google Pay', icon: 'G' },
-    { id: 'razorpay', name: 'Razorpay', icon: 'R' },
 ]
 
 export function PaymentMethodsTab({ app, onSave }: any) {

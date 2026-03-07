@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums"
 import type * as Prisma from "../internal/prismaNamespace"
 
@@ -31,6 +31,8 @@ export type AdminUserMinAggregateOutputType = {
   name: string | null
   avatarUrl: string | null
   roleId: string | null
+  groupId: string | null
+  mfaEnabled: boolean | null
   isSuperAdmin: boolean | null
   isActive: boolean | null
   lastLoginAt: Date | null
@@ -45,6 +47,8 @@ export type AdminUserMaxAggregateOutputType = {
   name: string | null
   avatarUrl: string | null
   roleId: string | null
+  groupId: string | null
+  mfaEnabled: boolean | null
   isSuperAdmin: boolean | null
   isActive: boolean | null
   lastLoginAt: Date | null
@@ -59,6 +63,9 @@ export type AdminUserCountAggregateOutputType = {
   name: number
   avatarUrl: number
   roleId: number
+  groupId: number
+  loginMethods: number
+  mfaEnabled: number
   isSuperAdmin: number
   isActive: number
   lastLoginAt: number
@@ -75,6 +82,8 @@ export type AdminUserMinAggregateInputType = {
   name?: true
   avatarUrl?: true
   roleId?: true
+  groupId?: true
+  mfaEnabled?: true
   isSuperAdmin?: true
   isActive?: true
   lastLoginAt?: true
@@ -89,6 +98,8 @@ export type AdminUserMaxAggregateInputType = {
   name?: true
   avatarUrl?: true
   roleId?: true
+  groupId?: true
+  mfaEnabled?: true
   isSuperAdmin?: true
   isActive?: true
   lastLoginAt?: true
@@ -103,6 +114,9 @@ export type AdminUserCountAggregateInputType = {
   name?: true
   avatarUrl?: true
   roleId?: true
+  groupId?: true
+  loginMethods?: true
+  mfaEnabled?: true
   isSuperAdmin?: true
   isActive?: true
   lastLoginAt?: true
@@ -190,6 +204,9 @@ export type AdminUserGroupByOutputType = {
   name: string
   avatarUrl: string | null
   roleId: string | null
+  groupId: string | null
+  loginMethods: string[]
+  mfaEnabled: boolean
   isSuperAdmin: boolean
   isActive: boolean
   lastLoginAt: Date | null
@@ -225,12 +242,16 @@ export type AdminUserWhereInput = {
   name?: Prisma.StringFilter<"AdminUser"> | string
   avatarUrl?: Prisma.StringNullableFilter<"AdminUser"> | string | null
   roleId?: Prisma.UuidNullableFilter<"AdminUser"> | string | null
+  groupId?: Prisma.UuidNullableFilter<"AdminUser"> | string | null
+  loginMethods?: Prisma.StringNullableListFilter<"AdminUser">
+  mfaEnabled?: Prisma.BoolFilter<"AdminUser"> | boolean
   isSuperAdmin?: Prisma.BoolFilter<"AdminUser"> | boolean
   isActive?: Prisma.BoolFilter<"AdminUser"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"AdminUser"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   role?: Prisma.XOR<Prisma.AdminRoleNullableScalarRelationFilter, Prisma.AdminRoleWhereInput> | null
+  group?: Prisma.XOR<Prisma.AdminGroupNullableScalarRelationFilter, Prisma.AdminGroupWhereInput> | null
   adminUserApplications?: Prisma.AdminUserApplicationListRelationFilter
   adminActivityLogs?: Prisma.AdminActivityLogListRelationFilter
 }
@@ -242,12 +263,16 @@ export type AdminUserOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   roleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  groupId?: Prisma.SortOrderInput | Prisma.SortOrder
+  loginMethods?: Prisma.SortOrder
+  mfaEnabled?: Prisma.SortOrder
   isSuperAdmin?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   role?: Prisma.AdminRoleOrderByWithRelationInput
+  group?: Prisma.AdminGroupOrderByWithRelationInput
   adminUserApplications?: Prisma.AdminUserApplicationOrderByRelationAggregateInput
   adminActivityLogs?: Prisma.AdminActivityLogOrderByRelationAggregateInput
 }
@@ -262,12 +287,16 @@ export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"AdminUser"> | string
   avatarUrl?: Prisma.StringNullableFilter<"AdminUser"> | string | null
   roleId?: Prisma.UuidNullableFilter<"AdminUser"> | string | null
+  groupId?: Prisma.UuidNullableFilter<"AdminUser"> | string | null
+  loginMethods?: Prisma.StringNullableListFilter<"AdminUser">
+  mfaEnabled?: Prisma.BoolFilter<"AdminUser"> | boolean
   isSuperAdmin?: Prisma.BoolFilter<"AdminUser"> | boolean
   isActive?: Prisma.BoolFilter<"AdminUser"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"AdminUser"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   role?: Prisma.XOR<Prisma.AdminRoleNullableScalarRelationFilter, Prisma.AdminRoleWhereInput> | null
+  group?: Prisma.XOR<Prisma.AdminGroupNullableScalarRelationFilter, Prisma.AdminGroupWhereInput> | null
   adminUserApplications?: Prisma.AdminUserApplicationListRelationFilter
   adminActivityLogs?: Prisma.AdminActivityLogListRelationFilter
 }, "id" | "email">
@@ -279,6 +308,9 @@ export type AdminUserOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   roleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  groupId?: Prisma.SortOrderInput | Prisma.SortOrder
+  loginMethods?: Prisma.SortOrder
+  mfaEnabled?: Prisma.SortOrder
   isSuperAdmin?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -299,6 +331,9 @@ export type AdminUserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"AdminUser"> | string
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"AdminUser"> | string | null
   roleId?: Prisma.UuidNullableWithAggregatesFilter<"AdminUser"> | string | null
+  groupId?: Prisma.UuidNullableWithAggregatesFilter<"AdminUser"> | string | null
+  loginMethods?: Prisma.StringNullableListFilter<"AdminUser">
+  mfaEnabled?: Prisma.BoolWithAggregatesFilter<"AdminUser"> | boolean
   isSuperAdmin?: Prisma.BoolWithAggregatesFilter<"AdminUser"> | boolean
   isActive?: Prisma.BoolWithAggregatesFilter<"AdminUser"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AdminUser"> | Date | string | null
@@ -312,12 +347,15 @@ export type AdminUserCreateInput = {
   passwordHash: string
   name: string
   avatarUrl?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   role?: Prisma.AdminRoleCreateNestedOneWithoutAdminUsersInput
+  group?: Prisma.AdminGroupCreateNestedOneWithoutAdminUsersInput
   adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutAdminUserInput
   adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutAdminUserInput
 }
@@ -329,6 +367,9 @@ export type AdminUserUncheckedCreateInput = {
   name: string
   avatarUrl?: string | null
   roleId?: string | null
+  groupId?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -344,12 +385,15 @@ export type AdminUserUpdateInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.AdminRoleUpdateOneWithoutAdminUsersNestedInput
+  group?: Prisma.AdminGroupUpdateOneWithoutAdminUsersNestedInput
   adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutAdminUserNestedInput
   adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutAdminUserNestedInput
 }
@@ -361,6 +405,9 @@ export type AdminUserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -377,6 +424,9 @@ export type AdminUserCreateManyInput = {
   name: string
   avatarUrl?: string | null
   roleId?: string | null
+  groupId?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -390,6 +440,8 @@ export type AdminUserUpdateManyMutationInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -404,11 +456,24 @@ export type AdminUserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AdminUserListRelationFilter = {
+  every?: Prisma.AdminUserWhereInput
+  some?: Prisma.AdminUserWhereInput
+  none?: Prisma.AdminUserWhereInput
+}
+
+export type AdminUserOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type AdminUserCountOrderByAggregateInput = {
@@ -418,6 +483,9 @@ export type AdminUserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
+  loginMethods?: Prisma.SortOrder
+  mfaEnabled?: Prisma.SortOrder
   isSuperAdmin?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -432,6 +500,8 @@ export type AdminUserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
+  mfaEnabled?: Prisma.SortOrder
   isSuperAdmin?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
@@ -446,21 +516,13 @@ export type AdminUserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  groupId?: Prisma.SortOrder
+  mfaEnabled?: Prisma.SortOrder
   isSuperAdmin?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type AdminUserListRelationFilter = {
-  every?: Prisma.AdminUserWhereInput
-  some?: Prisma.AdminUserWhereInput
-  none?: Prisma.AdminUserWhereInput
-}
-
-export type AdminUserOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type AdminUserScalarRelationFilter = {
@@ -471,6 +533,57 @@ export type AdminUserScalarRelationFilter = {
 export type AdminUserNullableScalarRelationFilter = {
   is?: Prisma.AdminUserWhereInput | null
   isNot?: Prisma.AdminUserWhereInput | null
+}
+
+export type AdminUserCreateNestedManyWithoutGroupInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutGroupInput, Prisma.AdminUserUncheckedCreateWithoutGroupInput> | Prisma.AdminUserCreateWithoutGroupInput[] | Prisma.AdminUserUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutGroupInput | Prisma.AdminUserCreateOrConnectWithoutGroupInput[]
+  createMany?: Prisma.AdminUserCreateManyGroupInputEnvelope
+  connect?: Prisma.AdminUserWhereUniqueInput | Prisma.AdminUserWhereUniqueInput[]
+}
+
+export type AdminUserUncheckedCreateNestedManyWithoutGroupInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutGroupInput, Prisma.AdminUserUncheckedCreateWithoutGroupInput> | Prisma.AdminUserCreateWithoutGroupInput[] | Prisma.AdminUserUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutGroupInput | Prisma.AdminUserCreateOrConnectWithoutGroupInput[]
+  createMany?: Prisma.AdminUserCreateManyGroupInputEnvelope
+  connect?: Prisma.AdminUserWhereUniqueInput | Prisma.AdminUserWhereUniqueInput[]
+}
+
+export type AdminUserUpdateManyWithoutGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutGroupInput, Prisma.AdminUserUncheckedCreateWithoutGroupInput> | Prisma.AdminUserCreateWithoutGroupInput[] | Prisma.AdminUserUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutGroupInput | Prisma.AdminUserCreateOrConnectWithoutGroupInput[]
+  upsert?: Prisma.AdminUserUpsertWithWhereUniqueWithoutGroupInput | Prisma.AdminUserUpsertWithWhereUniqueWithoutGroupInput[]
+  createMany?: Prisma.AdminUserCreateManyGroupInputEnvelope
+  set?: Prisma.AdminUserWhereUniqueInput | Prisma.AdminUserWhereUniqueInput[]
+  disconnect?: Prisma.AdminUserWhereUniqueInput | Prisma.AdminUserWhereUniqueInput[]
+  delete?: Prisma.AdminUserWhereUniqueInput | Prisma.AdminUserWhereUniqueInput[]
+  connect?: Prisma.AdminUserWhereUniqueInput | Prisma.AdminUserWhereUniqueInput[]
+  update?: Prisma.AdminUserUpdateWithWhereUniqueWithoutGroupInput | Prisma.AdminUserUpdateWithWhereUniqueWithoutGroupInput[]
+  updateMany?: Prisma.AdminUserUpdateManyWithWhereWithoutGroupInput | Prisma.AdminUserUpdateManyWithWhereWithoutGroupInput[]
+  deleteMany?: Prisma.AdminUserScalarWhereInput | Prisma.AdminUserScalarWhereInput[]
+}
+
+export type AdminUserUncheckedUpdateManyWithoutGroupNestedInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutGroupInput, Prisma.AdminUserUncheckedCreateWithoutGroupInput> | Prisma.AdminUserCreateWithoutGroupInput[] | Prisma.AdminUserUncheckedCreateWithoutGroupInput[]
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutGroupInput | Prisma.AdminUserCreateOrConnectWithoutGroupInput[]
+  upsert?: Prisma.AdminUserUpsertWithWhereUniqueWithoutGroupInput | Prisma.AdminUserUpsertWithWhereUniqueWithoutGroupInput[]
+  createMany?: Prisma.AdminUserCreateManyGroupInputEnvelope
+  set?: Prisma.AdminUserWhereUniqueInput | Prisma.AdminUserWhereUniqueInput[]
+  disconnect?: Prisma.AdminUserWhereUniqueInput | Prisma.AdminUserWhereUniqueInput[]
+  delete?: Prisma.AdminUserWhereUniqueInput | Prisma.AdminUserWhereUniqueInput[]
+  connect?: Prisma.AdminUserWhereUniqueInput | Prisma.AdminUserWhereUniqueInput[]
+  update?: Prisma.AdminUserUpdateWithWhereUniqueWithoutGroupInput | Prisma.AdminUserUpdateWithWhereUniqueWithoutGroupInput[]
+  updateMany?: Prisma.AdminUserUpdateManyWithWhereWithoutGroupInput | Prisma.AdminUserUpdateManyWithWhereWithoutGroupInput[]
+  deleteMany?: Prisma.AdminUserScalarWhereInput | Prisma.AdminUserScalarWhereInput[]
+}
+
+export type AdminUserCreateloginMethodsInput = {
+  set: string[]
+}
+
+export type AdminUserUpdateloginMethodsInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type AdminUserCreateNestedManyWithoutRoleInput = {
@@ -545,17 +658,102 @@ export type AdminUserUpdateOneWithoutAdminActivityLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutAdminActivityLogsInput, Prisma.AdminUserUpdateWithoutAdminActivityLogsInput>, Prisma.AdminUserUncheckedUpdateWithoutAdminActivityLogsInput>
 }
 
+export type AdminUserCreateWithoutGroupInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  avatarUrl?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
+  isSuperAdmin?: boolean
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: Prisma.AdminRoleCreateNestedOneWithoutAdminUsersInput
+  adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutAdminUserInput
+  adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutAdminUserInput
+}
+
+export type AdminUserUncheckedCreateWithoutGroupInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  avatarUrl?: string | null
+  roleId?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
+  isSuperAdmin?: boolean
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutAdminUserInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutAdminUserInput
+}
+
+export type AdminUserCreateOrConnectWithoutGroupInput = {
+  where: Prisma.AdminUserWhereUniqueInput
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutGroupInput, Prisma.AdminUserUncheckedCreateWithoutGroupInput>
+}
+
+export type AdminUserCreateManyGroupInputEnvelope = {
+  data: Prisma.AdminUserCreateManyGroupInput | Prisma.AdminUserCreateManyGroupInput[]
+  skipDuplicates?: boolean
+}
+
+export type AdminUserUpsertWithWhereUniqueWithoutGroupInput = {
+  where: Prisma.AdminUserWhereUniqueInput
+  update: Prisma.XOR<Prisma.AdminUserUpdateWithoutGroupInput, Prisma.AdminUserUncheckedUpdateWithoutGroupInput>
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutGroupInput, Prisma.AdminUserUncheckedCreateWithoutGroupInput>
+}
+
+export type AdminUserUpdateWithWhereUniqueWithoutGroupInput = {
+  where: Prisma.AdminUserWhereUniqueInput
+  data: Prisma.XOR<Prisma.AdminUserUpdateWithoutGroupInput, Prisma.AdminUserUncheckedUpdateWithoutGroupInput>
+}
+
+export type AdminUserUpdateManyWithWhereWithoutGroupInput = {
+  where: Prisma.AdminUserScalarWhereInput
+  data: Prisma.XOR<Prisma.AdminUserUpdateManyMutationInput, Prisma.AdminUserUncheckedUpdateManyWithoutGroupInput>
+}
+
+export type AdminUserScalarWhereInput = {
+  AND?: Prisma.AdminUserScalarWhereInput | Prisma.AdminUserScalarWhereInput[]
+  OR?: Prisma.AdminUserScalarWhereInput[]
+  NOT?: Prisma.AdminUserScalarWhereInput | Prisma.AdminUserScalarWhereInput[]
+  id?: Prisma.UuidFilter<"AdminUser"> | string
+  email?: Prisma.StringFilter<"AdminUser"> | string
+  passwordHash?: Prisma.StringFilter<"AdminUser"> | string
+  name?: Prisma.StringFilter<"AdminUser"> | string
+  avatarUrl?: Prisma.StringNullableFilter<"AdminUser"> | string | null
+  roleId?: Prisma.UuidNullableFilter<"AdminUser"> | string | null
+  groupId?: Prisma.UuidNullableFilter<"AdminUser"> | string | null
+  loginMethods?: Prisma.StringNullableListFilter<"AdminUser">
+  mfaEnabled?: Prisma.BoolFilter<"AdminUser"> | boolean
+  isSuperAdmin?: Prisma.BoolFilter<"AdminUser"> | boolean
+  isActive?: Prisma.BoolFilter<"AdminUser"> | boolean
+  lastLoginAt?: Prisma.DateTimeNullableFilter<"AdminUser"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
+}
+
 export type AdminUserCreateWithoutRoleInput = {
   id?: string
   email: string
   passwordHash: string
   name: string
   avatarUrl?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  group?: Prisma.AdminGroupCreateNestedOneWithoutAdminUsersInput
   adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutAdminUserInput
   adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutAdminUserInput
 }
@@ -566,6 +764,9 @@ export type AdminUserUncheckedCreateWithoutRoleInput = {
   passwordHash: string
   name: string
   avatarUrl?: string | null
+  groupId?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -601,35 +802,21 @@ export type AdminUserUpdateManyWithWhereWithoutRoleInput = {
   data: Prisma.XOR<Prisma.AdminUserUpdateManyMutationInput, Prisma.AdminUserUncheckedUpdateManyWithoutRoleInput>
 }
 
-export type AdminUserScalarWhereInput = {
-  AND?: Prisma.AdminUserScalarWhereInput | Prisma.AdminUserScalarWhereInput[]
-  OR?: Prisma.AdminUserScalarWhereInput[]
-  NOT?: Prisma.AdminUserScalarWhereInput | Prisma.AdminUserScalarWhereInput[]
-  id?: Prisma.UuidFilter<"AdminUser"> | string
-  email?: Prisma.StringFilter<"AdminUser"> | string
-  passwordHash?: Prisma.StringFilter<"AdminUser"> | string
-  name?: Prisma.StringFilter<"AdminUser"> | string
-  avatarUrl?: Prisma.StringNullableFilter<"AdminUser"> | string | null
-  roleId?: Prisma.UuidNullableFilter<"AdminUser"> | string | null
-  isSuperAdmin?: Prisma.BoolFilter<"AdminUser"> | boolean
-  isActive?: Prisma.BoolFilter<"AdminUser"> | boolean
-  lastLoginAt?: Prisma.DateTimeNullableFilter<"AdminUser"> | Date | string | null
-  createdAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
-}
-
 export type AdminUserCreateWithoutAdminUserApplicationsInput = {
   id?: string
   email: string
   passwordHash: string
   name: string
   avatarUrl?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   role?: Prisma.AdminRoleCreateNestedOneWithoutAdminUsersInput
+  group?: Prisma.AdminGroupCreateNestedOneWithoutAdminUsersInput
   adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutAdminUserInput
 }
 
@@ -640,6 +827,9 @@ export type AdminUserUncheckedCreateWithoutAdminUserApplicationsInput = {
   name: string
   avatarUrl?: string | null
   roleId?: string | null
+  groupId?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -670,12 +860,15 @@ export type AdminUserUpdateWithoutAdminUserApplicationsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.AdminRoleUpdateOneWithoutAdminUsersNestedInput
+  group?: Prisma.AdminGroupUpdateOneWithoutAdminUsersNestedInput
   adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutAdminUserNestedInput
 }
 
@@ -686,6 +879,9 @@ export type AdminUserUncheckedUpdateWithoutAdminUserApplicationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -700,12 +896,15 @@ export type AdminUserCreateWithoutAdminActivityLogsInput = {
   passwordHash: string
   name: string
   avatarUrl?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   role?: Prisma.AdminRoleCreateNestedOneWithoutAdminUsersInput
+  group?: Prisma.AdminGroupCreateNestedOneWithoutAdminUsersInput
   adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutAdminUserInput
 }
 
@@ -716,6 +915,9 @@ export type AdminUserUncheckedCreateWithoutAdminActivityLogsInput = {
   name: string
   avatarUrl?: string | null
   roleId?: string | null
+  groupId?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -746,12 +948,15 @@ export type AdminUserUpdateWithoutAdminActivityLogsInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.AdminRoleUpdateOneWithoutAdminUsersNestedInput
+  group?: Prisma.AdminGroupUpdateOneWithoutAdminUsersNestedInput
   adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutAdminUserNestedInput
 }
 
@@ -762,6 +967,9 @@ export type AdminUserUncheckedUpdateWithoutAdminActivityLogsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -770,12 +978,83 @@ export type AdminUserUncheckedUpdateWithoutAdminActivityLogsInput = {
   adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutAdminUserNestedInput
 }
 
+export type AdminUserCreateManyGroupInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  avatarUrl?: string | null
+  roleId?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
+  isSuperAdmin?: boolean
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AdminUserUpdateWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.AdminRoleUpdateOneWithoutAdminUsersNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutAdminUserNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutAdminUserNestedInput
+}
+
+export type AdminUserUncheckedUpdateWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutAdminUserNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutAdminUserNestedInput
+}
+
+export type AdminUserUncheckedUpdateManyWithoutGroupInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type AdminUserCreateManyRoleInput = {
   id?: string
   email: string
   passwordHash: string
   name: string
   avatarUrl?: string | null
+  groupId?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: Date | string | null
@@ -789,11 +1068,14 @@ export type AdminUserUpdateWithoutRoleInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  group?: Prisma.AdminGroupUpdateOneWithoutAdminUsersNestedInput
   adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutAdminUserNestedInput
   adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutAdminUserNestedInput
 }
@@ -804,6 +1086,9 @@ export type AdminUserUncheckedUpdateWithoutRoleInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -819,6 +1104,9 @@ export type AdminUserUncheckedUpdateManyWithoutRoleInput = {
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -873,12 +1161,16 @@ export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   name?: boolean
   avatarUrl?: boolean
   roleId?: boolean
+  groupId?: boolean
+  loginMethods?: boolean
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   role?: boolean | Prisma.AdminUser$roleArgs<ExtArgs>
+  group?: boolean | Prisma.AdminUser$groupArgs<ExtArgs>
   adminUserApplications?: boolean | Prisma.AdminUser$adminUserApplicationsArgs<ExtArgs>
   adminActivityLogs?: boolean | Prisma.AdminUser$adminActivityLogsArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
@@ -891,12 +1183,16 @@ export type AdminUserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   name?: boolean
   avatarUrl?: boolean
   roleId?: boolean
+  groupId?: boolean
+  loginMethods?: boolean
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   role?: boolean | Prisma.AdminUser$roleArgs<ExtArgs>
+  group?: boolean | Prisma.AdminUser$groupArgs<ExtArgs>
 }, ExtArgs["result"]["adminUser"]>
 
 export type AdminUserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -906,12 +1202,16 @@ export type AdminUserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   name?: boolean
   avatarUrl?: boolean
   roleId?: boolean
+  groupId?: boolean
+  loginMethods?: boolean
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   role?: boolean | Prisma.AdminUser$roleArgs<ExtArgs>
+  group?: boolean | Prisma.AdminUser$groupArgs<ExtArgs>
 }, ExtArgs["result"]["adminUser"]>
 
 export type AdminUserSelectScalar = {
@@ -921,6 +1221,9 @@ export type AdminUserSelectScalar = {
   name?: boolean
   avatarUrl?: boolean
   roleId?: boolean
+  groupId?: boolean
+  loginMethods?: boolean
+  mfaEnabled?: boolean
   isSuperAdmin?: boolean
   isActive?: boolean
   lastLoginAt?: boolean
@@ -928,24 +1231,28 @@ export type AdminUserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AdminUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "avatarUrl" | "roleId" | "isSuperAdmin" | "isActive" | "lastLoginAt" | "createdAt" | "updatedAt", ExtArgs["result"]["adminUser"]>
+export type AdminUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "avatarUrl" | "roleId" | "groupId" | "loginMethods" | "mfaEnabled" | "isSuperAdmin" | "isActive" | "lastLoginAt" | "createdAt" | "updatedAt", ExtArgs["result"]["adminUser"]>
 export type AdminUserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.AdminUser$roleArgs<ExtArgs>
+  group?: boolean | Prisma.AdminUser$groupArgs<ExtArgs>
   adminUserApplications?: boolean | Prisma.AdminUser$adminUserApplicationsArgs<ExtArgs>
   adminActivityLogs?: boolean | Prisma.AdminUser$adminActivityLogsArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AdminUserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.AdminUser$roleArgs<ExtArgs>
+  group?: boolean | Prisma.AdminUser$groupArgs<ExtArgs>
 }
 export type AdminUserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.AdminUser$roleArgs<ExtArgs>
+  group?: boolean | Prisma.AdminUser$groupArgs<ExtArgs>
 }
 
 export type $AdminUserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AdminUser"
   objects: {
     role: Prisma.$AdminRolePayload<ExtArgs> | null
+    group: Prisma.$AdminGroupPayload<ExtArgs> | null
     adminUserApplications: Prisma.$AdminUserApplicationPayload<ExtArgs>[]
     adminActivityLogs: Prisma.$AdminActivityLogPayload<ExtArgs>[]
   }
@@ -956,6 +1263,9 @@ export type $AdminUserPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     name: string
     avatarUrl: string | null
     roleId: string | null
+    groupId: string | null
+    loginMethods: string[]
+    mfaEnabled: boolean
     isSuperAdmin: boolean
     isActive: boolean
     lastLoginAt: Date | null
@@ -1356,6 +1666,7 @@ readonly fields: AdminUserFieldRefs;
 export interface Prisma__AdminUserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   role<T extends Prisma.AdminUser$roleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$roleArgs<ExtArgs>>): Prisma.Prisma__AdminRoleClient<runtime.Types.Result.GetResult<Prisma.$AdminRolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  group<T extends Prisma.AdminUser$groupArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$groupArgs<ExtArgs>>): Prisma.Prisma__AdminGroupClient<runtime.Types.Result.GetResult<Prisma.$AdminGroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   adminUserApplications<T extends Prisma.AdminUser$adminUserApplicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$adminUserApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdminUserApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   adminActivityLogs<T extends Prisma.AdminUser$adminActivityLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$adminActivityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdminActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1393,6 +1704,9 @@ export interface AdminUserFieldRefs {
   readonly name: Prisma.FieldRef<"AdminUser", 'String'>
   readonly avatarUrl: Prisma.FieldRef<"AdminUser", 'String'>
   readonly roleId: Prisma.FieldRef<"AdminUser", 'String'>
+  readonly groupId: Prisma.FieldRef<"AdminUser", 'String'>
+  readonly loginMethods: Prisma.FieldRef<"AdminUser", 'String[]'>
+  readonly mfaEnabled: Prisma.FieldRef<"AdminUser", 'Boolean'>
   readonly isSuperAdmin: Prisma.FieldRef<"AdminUser", 'Boolean'>
   readonly isActive: Prisma.FieldRef<"AdminUser", 'Boolean'>
   readonly lastLoginAt: Prisma.FieldRef<"AdminUser", 'DateTime'>
@@ -1810,6 +2124,25 @@ export type AdminUser$roleArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.AdminRoleInclude<ExtArgs> | null
   where?: Prisma.AdminRoleWhereInput
+}
+
+/**
+ * AdminUser.group
+ */
+export type AdminUser$groupArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AdminGroup
+   */
+  select?: Prisma.AdminGroupSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AdminGroup
+   */
+  omit?: Prisma.AdminGroupOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminGroupInclude<ExtArgs> | null
+  where?: Prisma.AdminGroupWhereInput
 }
 
 /**

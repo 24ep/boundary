@@ -124,6 +124,44 @@ async function handlePaymentSucceeded(invoice: any) {
         });
 
         if (subscription && subscription.user) {
+            const amountPaid = invoice.amount_paid / 100
+            const coinsToAward = Math.floor(amountPaid)
+
+            await prisma.$transaction([
+                prisma.user.update({
+                    where: { id: subscription.userId },
+                    data: { coins: { increment: coinsToAward } }
+                }),
+                prisma.coinTransaction.create({
+                    data: {
+                        userId: subscription.userId,
+                        amount: coinsToAward,
+                        type: 'PURCHASE',
+                        description: `Coins awarded for payment of ${amountPaid} ${invoice.currency.toUpperCase()}`,
+                        metadata: {
+                            invoiceId: invoice.id,
+                            subscriptionId: subscription.id,
+                            amount: amountPaid,
+                            currency: invoice.currency
+                        }
+                    }
+                }),
+                prisma.payment.create({
+                    data: {
+                        userId: subscription.userId,
+                        subscriptionId: subscription.id,
+                        amount: amountPaid,
+                        currency: invoice.currency.toUpperCase(),
+                        status: 'SUCCESS',
+                        paymentMethod: 'STRIPE',
+                        transactionId: invoice.id,
+                        coinsEarned: coinsToAward,
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                    }
+                })
+            ]);
+
             await emailService.sendEmail({
                 to: subscription.user.email,
                 subject: 'Payment Successful',

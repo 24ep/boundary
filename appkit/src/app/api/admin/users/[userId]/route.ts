@@ -53,7 +53,8 @@ export async function GET(
       company: prefs.company || undefined,
       role: primaryRole,
       points: dbUser.points || 0,
-      appPoints: (dbUser as any).userApplications?.[0]?.appPoints || 0
+      appPoints: (dbUser as any).userApplications?.[0]?.appPoints || 0,
+      coins: dbUser.coins || 0
     }
 
     return NextResponse.json({ user })

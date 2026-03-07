@@ -143,6 +143,11 @@ export type SubscriptionPlan = Prisma.SubscriptionPlanModel
  */
 export type Subscription = Prisma.SubscriptionModel
 /**
+ * Model CoinTransaction
+ * 
+ */
+export type CoinTransaction = Prisma.CoinTransactionModel
+/**
  * Model SystemConfig
  * 
  */
@@ -152,6 +157,11 @@ export type SystemConfig = Prisma.SystemConfigModel
  * 
  */
 export type AppSetting = Prisma.AppSettingModel
+/**
+ * Model AdminGroup
+ * 
+ */
+export type AdminGroup = Prisma.AdminGroupModel
 /**
  * Model AdminUser
  * 

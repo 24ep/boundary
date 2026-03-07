@@ -92,6 +92,7 @@ model User {
   bio          String?   @db.Text
   userType     String    @default("user") @map("user_type") @db.VarChar(50)
   points       Int       @default(0)
+  coins        Int       @default(0)
   preferences  Json      @default("{}")
   isActive     Boolean   @default(true) @map("is_active")
   isVerified   Boolean   @default(false) @map("is_verified")
@@ -122,6 +123,7 @@ model User {
   circleBillingAssignments CircleBillingAssignment[]
   userComments     UserComment[]
   userReminders    UserReminder[]
+  coinTransactions CoinTransaction[]
 
   @@index([email])
   @@index([isActive])
@@ -674,7 +676,7 @@ model SubscriptionPlan {
   id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   applicationId         String?  @map("application_id") @db.Uuid
   name                  String   @db.VarChar(100)
-  slug                  String   @db.VarChar(100)
+  slug                  String   @unique @db.VarChar(100)
   description           String?  @db.Text
   priceMonthly          Decimal? @map("price_monthly") @db.Decimal(10, 2)
   priceYearly           Decimal? @map("price_yearly") @db.Decimal(10, 2)
@@ -687,6 +689,8 @@ model SubscriptionPlan {
   sortOrder             Int      @default(0) @map("sort_order")
   stripePriceIdMonthly  String?  @map("stripe_price_id_monthly") @db.VarChar(255)
   stripePriceIdYearly   String?  @map("stripe_price_id_yearly") @db.VarChar(255)
+  stripeLookupKeyMonthly String? @map("stripe_lookup_key_monthly") @db.VarChar(255)
+  stripeLookupKeyYearly  String? @map("stripe_lookup_key_yearly") @db.VarChar(255)
   createdAt             DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt             DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
@@ -1424,8 +1428,10 @@ model Payment {
   amount         Decimal  @db.Decimal(10, 2)
   currency       String   @default("USD") @db.VarChar(3)
   status         String   @default("succeeded") @db.VarChar(50)
-  provider       String?  @db.VarChar(50)
-  transactionId  String?  @map("transaction_id") @db.VarChar(255)
+  provider       String   @db.VarChar(50)
+  transactionId  String?  @unique @map("transaction_id") @db.VarChar(255)
+  coinsEarned    Int?     @map("coins_earned")
+  metadata       Json     @default("{}")
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
@@ -1593,6 +1599,21 @@ model UserReminder {
   @@index([applicationId, userId])
   @@index([remindAt])
   @@map("user_reminders")
+}
+
+model CoinTransaction {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String   @map("user_id") @db.Uuid
+  amount        Int
+  type          String   @db.VarChar(50) // "purchase", "bonus", "spend"
+  description   String?  @db.Text
+  referenceId   String?  @map("reference_id") @db.VarChar(255)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("coin_transactions")
 }
 
 model UnifiedEntity {

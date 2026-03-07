@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums"
 import type * as Prisma from "../internal/prismaNamespace"
 
@@ -46,6 +46,10 @@ export type SubscriptionPlanMinAggregateOutputType = {
   priceYearly: runtime.Decimal | null
   currency: string | null
   isActive: boolean | null
+  stripePriceIdMonthly: string | null
+  stripePriceIdYearly: string | null
+  stripeLookupKeyMonthly: string | null
+  stripeLookupKeyYearly: string | null
   createdAt: Date | null
 }
 
@@ -59,6 +63,10 @@ export type SubscriptionPlanMaxAggregateOutputType = {
   priceYearly: runtime.Decimal | null
   currency: string | null
   isActive: boolean | null
+  stripePriceIdMonthly: string | null
+  stripePriceIdYearly: string | null
+  stripeLookupKeyMonthly: string | null
+  stripeLookupKeyYearly: string | null
   createdAt: Date | null
 }
 
@@ -74,6 +82,10 @@ export type SubscriptionPlanCountAggregateOutputType = {
   features: number
   limits: number
   isActive: number
+  stripePriceIdMonthly: number
+  stripePriceIdYearly: number
+  stripeLookupKeyMonthly: number
+  stripeLookupKeyYearly: number
   createdAt: number
   _all: number
 }
@@ -99,6 +111,10 @@ export type SubscriptionPlanMinAggregateInputType = {
   priceYearly?: true
   currency?: true
   isActive?: true
+  stripePriceIdMonthly?: true
+  stripePriceIdYearly?: true
+  stripeLookupKeyMonthly?: true
+  stripeLookupKeyYearly?: true
   createdAt?: true
 }
 
@@ -112,6 +128,10 @@ export type SubscriptionPlanMaxAggregateInputType = {
   priceYearly?: true
   currency?: true
   isActive?: true
+  stripePriceIdMonthly?: true
+  stripePriceIdYearly?: true
+  stripeLookupKeyMonthly?: true
+  stripeLookupKeyYearly?: true
   createdAt?: true
 }
 
@@ -127,6 +147,10 @@ export type SubscriptionPlanCountAggregateInputType = {
   features?: true
   limits?: true
   isActive?: true
+  stripePriceIdMonthly?: true
+  stripePriceIdYearly?: true
+  stripeLookupKeyMonthly?: true
+  stripeLookupKeyYearly?: true
   createdAt?: true
   _all?: true
 }
@@ -229,6 +253,10 @@ export type SubscriptionPlanGroupByOutputType = {
   features: runtime.JsonValue
   limits: runtime.JsonValue
   isActive: boolean
+  stripePriceIdMonthly: string | null
+  stripePriceIdYearly: string | null
+  stripeLookupKeyMonthly: string | null
+  stripeLookupKeyYearly: string | null
   createdAt: Date
   _count: SubscriptionPlanCountAggregateOutputType | null
   _avg: SubscriptionPlanAvgAggregateOutputType | null
@@ -267,6 +295,10 @@ export type SubscriptionPlanWhereInput = {
   features?: Prisma.JsonFilter<"SubscriptionPlan">
   limits?: Prisma.JsonFilter<"SubscriptionPlan">
   isActive?: Prisma.BoolFilter<"SubscriptionPlan"> | boolean
+  stripePriceIdMonthly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
+  stripePriceIdYearly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
+  stripeLookupKeyMonthly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
+  stripeLookupKeyYearly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPlan"> | Date | string
   application?: Prisma.XOR<Prisma.ApplicationNullableScalarRelationFilter, Prisma.ApplicationWhereInput> | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
@@ -284,6 +316,10 @@ export type SubscriptionPlanOrderByWithRelationInput = {
   features?: Prisma.SortOrder
   limits?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  stripePriceIdMonthly?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripePriceIdYearly?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeLookupKeyMonthly?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeLookupKeyYearly?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   application?: Prisma.ApplicationOrderByWithRelationInput
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
@@ -291,12 +327,12 @@ export type SubscriptionPlanOrderByWithRelationInput = {
 
 export type SubscriptionPlanWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  slug?: string
   AND?: Prisma.SubscriptionPlanWhereInput | Prisma.SubscriptionPlanWhereInput[]
   OR?: Prisma.SubscriptionPlanWhereInput[]
   NOT?: Prisma.SubscriptionPlanWhereInput | Prisma.SubscriptionPlanWhereInput[]
   applicationId?: Prisma.UuidNullableFilter<"SubscriptionPlan"> | string | null
   name?: Prisma.StringFilter<"SubscriptionPlan"> | string
-  slug?: Prisma.StringFilter<"SubscriptionPlan"> | string
   description?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
   priceMonthly?: Prisma.DecimalNullableFilter<"SubscriptionPlan"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   priceYearly?: Prisma.DecimalNullableFilter<"SubscriptionPlan"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -304,10 +340,14 @@ export type SubscriptionPlanWhereUniqueInput = Prisma.AtLeast<{
   features?: Prisma.JsonFilter<"SubscriptionPlan">
   limits?: Prisma.JsonFilter<"SubscriptionPlan">
   isActive?: Prisma.BoolFilter<"SubscriptionPlan"> | boolean
+  stripePriceIdMonthly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
+  stripePriceIdYearly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
+  stripeLookupKeyMonthly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
+  stripeLookupKeyYearly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPlan"> | Date | string
   application?: Prisma.XOR<Prisma.ApplicationNullableScalarRelationFilter, Prisma.ApplicationWhereInput> | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
-}, "id">
+}, "id" | "slug">
 
 export type SubscriptionPlanOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -321,6 +361,10 @@ export type SubscriptionPlanOrderByWithAggregationInput = {
   features?: Prisma.SortOrder
   limits?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  stripePriceIdMonthly?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripePriceIdYearly?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeLookupKeyMonthly?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeLookupKeyYearly?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.SubscriptionPlanCountOrderByAggregateInput
   _avg?: Prisma.SubscriptionPlanAvgOrderByAggregateInput
@@ -344,6 +388,10 @@ export type SubscriptionPlanScalarWhereWithAggregatesInput = {
   features?: Prisma.JsonWithAggregatesFilter<"SubscriptionPlan">
   limits?: Prisma.JsonWithAggregatesFilter<"SubscriptionPlan">
   isActive?: Prisma.BoolWithAggregatesFilter<"SubscriptionPlan"> | boolean
+  stripePriceIdMonthly?: Prisma.StringNullableWithAggregatesFilter<"SubscriptionPlan"> | string | null
+  stripePriceIdYearly?: Prisma.StringNullableWithAggregatesFilter<"SubscriptionPlan"> | string | null
+  stripeLookupKeyMonthly?: Prisma.StringNullableWithAggregatesFilter<"SubscriptionPlan"> | string | null
+  stripeLookupKeyYearly?: Prisma.StringNullableWithAggregatesFilter<"SubscriptionPlan"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SubscriptionPlan"> | Date | string
 }
 
@@ -358,6 +406,10 @@ export type SubscriptionPlanCreateInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  stripePriceIdMonthly?: string | null
+  stripePriceIdYearly?: string | null
+  stripeLookupKeyMonthly?: string | null
+  stripeLookupKeyYearly?: string | null
   createdAt?: Date | string
   application?: Prisma.ApplicationCreateNestedOneWithoutSubscriptionPlansInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutPlanInput
@@ -375,6 +427,10 @@ export type SubscriptionPlanUncheckedCreateInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  stripePriceIdMonthly?: string | null
+  stripePriceIdYearly?: string | null
+  stripeLookupKeyMonthly?: string | null
+  stripeLookupKeyYearly?: string | null
   createdAt?: Date | string
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutPlanInput
 }
@@ -390,6 +446,10 @@ export type SubscriptionPlanUpdateInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripePriceIdMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripePriceIdYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   application?: Prisma.ApplicationUpdateOneWithoutSubscriptionPlansNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutPlanNestedInput
@@ -407,6 +467,10 @@ export type SubscriptionPlanUncheckedUpdateInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripePriceIdMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripePriceIdYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutPlanNestedInput
 }
@@ -423,6 +487,10 @@ export type SubscriptionPlanCreateManyInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  stripePriceIdMonthly?: string | null
+  stripePriceIdYearly?: string | null
+  stripeLookupKeyMonthly?: string | null
+  stripeLookupKeyYearly?: string | null
   createdAt?: Date | string
 }
 
@@ -437,6 +505,10 @@ export type SubscriptionPlanUpdateManyMutationInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripePriceIdMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripePriceIdYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -452,6 +524,10 @@ export type SubscriptionPlanUncheckedUpdateManyInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripePriceIdMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripePriceIdYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -477,6 +553,10 @@ export type SubscriptionPlanCountOrderByAggregateInput = {
   features?: Prisma.SortOrder
   limits?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  stripePriceIdMonthly?: Prisma.SortOrder
+  stripePriceIdYearly?: Prisma.SortOrder
+  stripeLookupKeyMonthly?: Prisma.SortOrder
+  stripeLookupKeyYearly?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -495,6 +575,10 @@ export type SubscriptionPlanMaxOrderByAggregateInput = {
   priceYearly?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  stripePriceIdMonthly?: Prisma.SortOrder
+  stripePriceIdYearly?: Prisma.SortOrder
+  stripeLookupKeyMonthly?: Prisma.SortOrder
+  stripeLookupKeyYearly?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -508,6 +592,10 @@ export type SubscriptionPlanMinOrderByAggregateInput = {
   priceYearly?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  stripePriceIdMonthly?: Prisma.SortOrder
+  stripePriceIdYearly?: Prisma.SortOrder
+  stripeLookupKeyMonthly?: Prisma.SortOrder
+  stripeLookupKeyYearly?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -590,6 +678,10 @@ export type SubscriptionPlanCreateWithoutApplicationInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  stripePriceIdMonthly?: string | null
+  stripePriceIdYearly?: string | null
+  stripeLookupKeyMonthly?: string | null
+  stripeLookupKeyYearly?: string | null
   createdAt?: Date | string
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutPlanInput
 }
@@ -605,6 +697,10 @@ export type SubscriptionPlanUncheckedCreateWithoutApplicationInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  stripePriceIdMonthly?: string | null
+  stripePriceIdYearly?: string | null
+  stripeLookupKeyMonthly?: string | null
+  stripeLookupKeyYearly?: string | null
   createdAt?: Date | string
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutPlanInput
 }
@@ -650,6 +746,10 @@ export type SubscriptionPlanScalarWhereInput = {
   features?: Prisma.JsonFilter<"SubscriptionPlan">
   limits?: Prisma.JsonFilter<"SubscriptionPlan">
   isActive?: Prisma.BoolFilter<"SubscriptionPlan"> | boolean
+  stripePriceIdMonthly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
+  stripePriceIdYearly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
+  stripeLookupKeyMonthly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
+  stripeLookupKeyYearly?: Prisma.StringNullableFilter<"SubscriptionPlan"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPlan"> | Date | string
 }
 
@@ -664,6 +764,10 @@ export type SubscriptionPlanCreateWithoutSubscriptionsInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  stripePriceIdMonthly?: string | null
+  stripePriceIdYearly?: string | null
+  stripeLookupKeyMonthly?: string | null
+  stripeLookupKeyYearly?: string | null
   createdAt?: Date | string
   application?: Prisma.ApplicationCreateNestedOneWithoutSubscriptionPlansInput
 }
@@ -680,6 +784,10 @@ export type SubscriptionPlanUncheckedCreateWithoutSubscriptionsInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  stripePriceIdMonthly?: string | null
+  stripePriceIdYearly?: string | null
+  stripeLookupKeyMonthly?: string | null
+  stripeLookupKeyYearly?: string | null
   createdAt?: Date | string
 }
 
@@ -710,6 +818,10 @@ export type SubscriptionPlanUpdateWithoutSubscriptionsInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripePriceIdMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripePriceIdYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   application?: Prisma.ApplicationUpdateOneWithoutSubscriptionPlansNestedInput
 }
@@ -726,6 +838,10 @@ export type SubscriptionPlanUncheckedUpdateWithoutSubscriptionsInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripePriceIdMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripePriceIdYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -740,6 +856,10 @@ export type SubscriptionPlanCreateManyApplicationInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
+  stripePriceIdMonthly?: string | null
+  stripePriceIdYearly?: string | null
+  stripeLookupKeyMonthly?: string | null
+  stripeLookupKeyYearly?: string | null
   createdAt?: Date | string
 }
 
@@ -754,6 +874,10 @@ export type SubscriptionPlanUpdateWithoutApplicationInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripePriceIdMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripePriceIdYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutPlanNestedInput
 }
@@ -769,6 +893,10 @@ export type SubscriptionPlanUncheckedUpdateWithoutApplicationInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripePriceIdMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripePriceIdYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutPlanNestedInput
 }
@@ -784,6 +912,10 @@ export type SubscriptionPlanUncheckedUpdateManyWithoutApplicationInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   limits?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stripePriceIdMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripePriceIdYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyMonthly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeLookupKeyYearly?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -830,6 +962,10 @@ export type SubscriptionPlanSelect<ExtArgs extends runtime.Types.Extensions.Inte
   features?: boolean
   limits?: boolean
   isActive?: boolean
+  stripePriceIdMonthly?: boolean
+  stripePriceIdYearly?: boolean
+  stripeLookupKeyMonthly?: boolean
+  stripeLookupKeyYearly?: boolean
   createdAt?: boolean
   application?: boolean | Prisma.SubscriptionPlan$applicationArgs<ExtArgs>
   subscriptions?: boolean | Prisma.SubscriptionPlan$subscriptionsArgs<ExtArgs>
@@ -848,6 +984,10 @@ export type SubscriptionPlanSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   features?: boolean
   limits?: boolean
   isActive?: boolean
+  stripePriceIdMonthly?: boolean
+  stripePriceIdYearly?: boolean
+  stripeLookupKeyMonthly?: boolean
+  stripeLookupKeyYearly?: boolean
   createdAt?: boolean
   application?: boolean | Prisma.SubscriptionPlan$applicationArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionPlan"]>
@@ -864,6 +1004,10 @@ export type SubscriptionPlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   features?: boolean
   limits?: boolean
   isActive?: boolean
+  stripePriceIdMonthly?: boolean
+  stripePriceIdYearly?: boolean
+  stripeLookupKeyMonthly?: boolean
+  stripeLookupKeyYearly?: boolean
   createdAt?: boolean
   application?: boolean | Prisma.SubscriptionPlan$applicationArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionPlan"]>
@@ -880,10 +1024,14 @@ export type SubscriptionPlanSelectScalar = {
   features?: boolean
   limits?: boolean
   isActive?: boolean
+  stripePriceIdMonthly?: boolean
+  stripePriceIdYearly?: boolean
+  stripeLookupKeyMonthly?: boolean
+  stripeLookupKeyYearly?: boolean
   createdAt?: boolean
 }
 
-export type SubscriptionPlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationId" | "name" | "slug" | "description" | "priceMonthly" | "priceYearly" | "currency" | "features" | "limits" | "isActive" | "createdAt", ExtArgs["result"]["subscriptionPlan"]>
+export type SubscriptionPlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationId" | "name" | "slug" | "description" | "priceMonthly" | "priceYearly" | "currency" | "features" | "limits" | "isActive" | "stripePriceIdMonthly" | "stripePriceIdYearly" | "stripeLookupKeyMonthly" | "stripeLookupKeyYearly" | "createdAt", ExtArgs["result"]["subscriptionPlan"]>
 export type SubscriptionPlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   application?: boolean | Prisma.SubscriptionPlan$applicationArgs<ExtArgs>
   subscriptions?: boolean | Prisma.SubscriptionPlan$subscriptionsArgs<ExtArgs>
@@ -914,6 +1062,10 @@ export type $SubscriptionPlanPayload<ExtArgs extends runtime.Types.Extensions.In
     features: runtime.JsonValue
     limits: runtime.JsonValue
     isActive: boolean
+    stripePriceIdMonthly: string | null
+    stripePriceIdYearly: string | null
+    stripeLookupKeyMonthly: string | null
+    stripeLookupKeyYearly: string | null
     createdAt: Date
   }, ExtArgs["result"]["subscriptionPlan"]>
   composites: {}
@@ -1351,6 +1503,10 @@ export interface SubscriptionPlanFieldRefs {
   readonly features: Prisma.FieldRef<"SubscriptionPlan", 'Json'>
   readonly limits: Prisma.FieldRef<"SubscriptionPlan", 'Json'>
   readonly isActive: Prisma.FieldRef<"SubscriptionPlan", 'Boolean'>
+  readonly stripePriceIdMonthly: Prisma.FieldRef<"SubscriptionPlan", 'String'>
+  readonly stripePriceIdYearly: Prisma.FieldRef<"SubscriptionPlan", 'String'>
+  readonly stripeLookupKeyMonthly: Prisma.FieldRef<"SubscriptionPlan", 'String'>
+  readonly stripeLookupKeyYearly: Prisma.FieldRef<"SubscriptionPlan", 'String'>
   readonly createdAt: Prisma.FieldRef<"SubscriptionPlan", 'DateTime'>
 }
     

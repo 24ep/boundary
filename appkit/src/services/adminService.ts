@@ -305,8 +305,15 @@ class AdminService {
   }
 
   async deleteApplication(id: string): Promise<void> {
-    return this.request<void>(`/v1/admin/applications/${id}`, {
+    return this.request<void>(`/v1/admin/applications?id=${id}`, {
       method: 'DELETE',
+    });
+  }
+
+  async cloneApplication(id: string, data: { targetEnvironmentId?: string; name?: string }): Promise<{ application: Application }> {
+    return this.request<{ application: Application }>(`/v1/admin/applications/${id}/clone`, {
+      method: 'POST',
+      body: JSON.stringify(data),
     });
   }
 

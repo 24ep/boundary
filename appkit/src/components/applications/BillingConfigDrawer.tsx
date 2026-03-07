@@ -48,33 +48,6 @@ const BILLING_PROVIDERS = [
       { key: 'webhookSecret', label: 'Webhook Signing Secret', placeholder: 'whsec_...', secret: true, icon: <ShieldCheckIcon className="w-3.5 h-3.5 text-gray-400" /> },
     ],
   },
-  {
-    value: 'paypal',
-    label: 'PayPal',
-    fields: [
-      { key: 'clientId', label: 'Client ID', placeholder: 'AV2e...' },
-      { key: 'clientSecret', label: 'Client Secret', placeholder: 'EKj8...', secret: true },
-      { key: 'webhookId', label: 'Webhook ID', placeholder: 'WH-...' },
-    ],
-  },
-  {
-    value: 'paddle',
-    label: 'Paddle',
-    fields: [
-      { key: 'vendorId', label: 'Vendor ID', placeholder: '12345' },
-      { key: 'apiKey', label: 'API Key', placeholder: 'xxxx...', secret: true },
-      { key: 'publicKey', label: 'Public Key', placeholder: 'xxxx...' },
-    ],
-  },
-  {
-    value: 'lemonsqueezy',
-    label: 'Lemon Squeezy',
-    fields: [
-      { key: 'apiKey', label: 'API Key', placeholder: 'eyJ0...', secret: true },
-      { key: 'storeId', label: 'Store ID', placeholder: '12345' },
-      { key: 'webhookSecret', label: 'Webhook Secret', placeholder: 'whsec_...', secret: true },
-    ],
-  },
 ]
 
 const DEFAULT_BILLING_CONFIG: BillingConfig = {

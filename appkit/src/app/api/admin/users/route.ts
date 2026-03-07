@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
       avatarUrl: user.avatarUrl,
       lastLoginAt: user.lastLoginAt,
       createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      coins: user.coins,
       applications: user.userApplications.map((ua: any) => ({
         id: ua.application.id,
         name: ua.application.name,
@@ -119,7 +119,8 @@ export async function POST(request: NextRequest) {
       userType = 'user',
       isActive = true,
       isVerified = false,
-      avatarUrl = null 
+      avatarUrl = null,
+      coins = 0
     } = body
     
     if (!email || !password) {
@@ -155,6 +156,7 @@ export async function POST(request: NextRequest) {
         isActive,
         isVerified,
         avatarUrl,
+        coins,
         createdAt: new Date(),
         updatedAt: new Date()
       }
@@ -174,6 +176,7 @@ export async function POST(request: NextRequest) {
         isActive: newUser.isActive,
         isVerified: newUser.isVerified,
         avatarUrl: newUser.avatarUrl,
+        coins: newUser.coins,
         createdAt: newUser.createdAt,
         updatedAt: newUser.updatedAt
       },
@@ -191,7 +194,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-    const { id, firstName, lastName, userType, isActive } = body
+    const { id, firstName, lastName, userType, isActive, coins } = body
     
     if (!id) {
       return NextResponse.json(
@@ -220,6 +223,7 @@ export async function PUT(request: NextRequest) {
         ...(lastName && { lastName }),
         ...(userType && { userType }),
         ...(isActive !== undefined && { isActive }),
+        ...(coins !== undefined && { coins }),
         updatedAt: new Date()
       }
     })
@@ -238,6 +242,7 @@ export async function PUT(request: NextRequest) {
         isActive: updatedUser.isActive,
         isVerified: updatedUser.isVerified,
         avatarUrl: updatedUser.avatarUrl,
+        coins: updatedUser.coins,
         createdAt: updatedUser.createdAt,
         updatedAt: updatedUser.updatedAt
       },

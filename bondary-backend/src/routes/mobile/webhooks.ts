@@ -285,9 +285,44 @@ async function handleStripePaymentSucceeded(invoice: any) {
     });
 
     if (subscription) {
-      // Note: addBillingRecord would need to be moved to a service or direct query here
-      // For now, we'll just send the email
-      
+      const amountPaid = invoice.amount_paid / 100
+      const coinsToAward = Math.floor(amountPaid) // 1 coin per 1.00 currency unit
+
+      await prisma.$transaction([
+        prisma.user.update({
+          where: { id: subscription.userId },
+          data: { coins: { increment: coinsToAward } }
+        }),
+        prisma.coinTransaction.create({
+          data: {
+            userId: subscription.userId,
+            amount: coinsToAward,
+            type: 'PURCHASE',
+            description: `Coins awarded for payment of ${amountPaid} ${invoice.currency.toUpperCase()}`,
+            metadata: {
+              invoiceId: invoice.id,
+              subscriptionId: subscription.id,
+              amount: amountPaid,
+              currency: invoice.currency
+            }
+          }
+        }),
+        prisma.payment.create({
+          data: {
+            userId: subscription.userId,
+            subscriptionId: subscription.id,
+            amount: amountPaid,
+            currency: invoice.currency.toUpperCase(),
+            status: 'SUCCESS',
+            paymentMethod: 'STRIPE',
+            transactionId: invoice.id,
+            coinsEarned: coinsToAward,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }
+        })
+      ])
+
       await emailService.sendEmail({
         to: subscription.user.email,
         subject: 'Payment Successful',
