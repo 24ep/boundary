@@ -63,6 +63,7 @@ export interface AdminUser {
       mfaSuccess: boolean | null;
       createdAt: string;
     }[];
+    ssoAttributes: Record<string, any> | null;
   };
 }
 

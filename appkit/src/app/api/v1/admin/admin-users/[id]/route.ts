@@ -74,10 +74,11 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         id: true,
         passwordHash: true,
         isVerified: true,
+        preferences: true,
         createdAt: true,
         loginHistory: {
           orderBy: { createdAt: 'desc' },
-          take: 10,
+          take: 20,
           select: {
             id: true,
             loginMethod: true,
@@ -104,12 +105,30 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         )]
       : []
 
+    // Extract SSO-related attributes from user preferences
+    const rawPrefs = linkedUser?.preferences as Record<string, any> | null
+    const ssoAttributes: Record<string, any> = {}
+    if (rawPrefs) {
+      // Include known SSO claim fields stored during OAuth flow
+      const ssoKeys = ['google', 'github', 'facebook', 'twitter', 'linkedin', 'microsoft', 'apple', 'sso_claims', 'oauth_profile', 'social_profile']
+      for (const key of ssoKeys) {
+        if (rawPrefs[key]) ssoAttributes[key] = rawPrefs[key]
+      }
+      // Fallback: include any object-valued preference that looks like OAuth claims
+      for (const [k, v] of Object.entries(rawPrefs)) {
+        if (!ssoAttributes[k] && typeof v === 'object' && v !== null && ('sub' in v || 'email' in v || 'name' in v || 'picture' in v)) {
+          ssoAttributes[k] = v
+        }
+      }
+    }
+
     const ssoInfo = {
       linkedUserId: linkedUser?.id ?? null,
       hasPassword: !!linkedUser?.passwordHash,
       isVerified: linkedUser?.isVerified ?? false,
       ssoProviders,
       loginHistory: linkedUser?.loginHistory ?? [],
+      ssoAttributes: Object.keys(ssoAttributes).length > 0 ? ssoAttributes : null,
     }
 
     // Format for frontend

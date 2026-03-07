@@ -219,6 +219,22 @@ export interface AppBillingConfig {
   providerConfig?: Record<string, Record<string, string>>
 }
 
+export interface AppEnvironment {
+  id: string
+  name: string
+  type: 'development' | 'staging' | 'production' | 'custom'
+  apiKey: string
+  variables: { key: string; value: string }[]
+  createdAt: string
+}
+
+const ENV_TYPE_STYLES: Record<string, { badge: string; dot: string; label: string }> = {
+  production:  { badge: 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800',  dot: 'bg-green-500',  label: 'Production' },
+  staging:     { badge: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800',  dot: 'bg-amber-500',  label: 'Staging' },
+  development: { badge: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800',        dot: 'bg-blue-500',   label: 'Development' },
+  custom:      { badge: 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800', dot: 'bg-purple-500', label: 'Custom' },
+}
+
 const WEBHOOK_EVENTS = [
   'user.created',
   'user.login',
@@ -370,6 +386,17 @@ export default function ApplicationConfigPage() {
     providerEnabled: {},
     providerConfig: {},
   })
+  // Environments
+  const [environments, setEnvironments] = useState<AppEnvironment[]>([])
+  const [activeEnvId, setActiveEnvId] = useState<string | null>(null)
+  const [envsLoading, setEnvsLoading] = useState(false)
+  const [showNewEnvModal, setShowNewEnvModal] = useState(false)
+  const [newEnvForm, setNewEnvForm] = useState({ name: '', type: 'development', copyFrom: '' })
+  const [envCreating, setEnvCreating] = useState(false)
+  const [envMsg, setEnvMsg] = useState('')
+  const [envApiKeyVisible, setEnvApiKeyVisible] = useState<Record<string, boolean>>({})
+  const [envVarDraft, setEnvVarDraft] = useState<Record<string, { key: string; value: string }[]>>({})
+  const [envVarSaving, setEnvVarSaving] = useState<string | null>(null)
   // Email templates
   const [emailTemplates, setEmailTemplates] = useState<AppEmailTemplate[]>([])
   const [defaultEmailTemplates, setDefaultEmailTemplates] = useState<AppEmailTemplate[]>([])
@@ -408,11 +435,11 @@ export default function ApplicationConfigPage() {
 
   useEffect(() => { loadActivityLog() }, [loadActivityLog])
 
-  const filteredActivityLog = activityFilter === 'all' ? activityLog : activityLog.filter(l => l.type === activityFilter)
+  const filteredActivityLog = activityFilter === 'all' ? activityLog : activityLog.filter((l: any) => l.type === activityFilter)
 
   const circleChildrenMap = useMemo(() => {
     const map = new Map<string, AppCircle[]>()
-    circles.forEach((circle) => {
+    circles.forEach((circle: AppCircle) => {
       const key = circle.parentId || 'root'
       const bucket = map.get(key) || []
       bucket.push(circle)
@@ -439,7 +466,7 @@ export default function ApplicationConfigPage() {
   )
 
   const handleExportActivity = () => {
-    const csv = ['timestamp,type,action,user', ...filteredActivityLog.map(l => `"${l.timestamp}","${l.type}","${l.action.replace(/"/g, '""')}","${l.user}"`)].join('\n')
+    const csv = ['timestamp,type,action,user', ...filteredActivityLog.map((l: any) => `"${l.timestamp}","${l.type}","${l.action.replace(/"/g, '""')}","${l.user}"`)].join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -462,6 +489,25 @@ export default function ApplicationConfigPage() {
   useEffect(() => {
     loadCommConfig()
   }, [loadCommConfig])
+
+  const loadEnvironments = useCallback(async () => {
+    if (!appId) return
+    setEnvsLoading(true)
+    try {
+      const res = await fetch(`/api/v1/admin/applications/${appId}/environments`)
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data?.error || 'Failed')
+      const envs: AppEnvironment[] = data.environments || []
+      setEnvironments(envs)
+      setActiveEnvId(prev => prev ?? (envs.length > 0 ? envs[0].id : null))
+    } catch (e) {
+      console.error('Failed to load environments:', e)
+    } finally {
+      setEnvsLoading(false)
+    }
+  }, [appId])
+
+  useEffect(() => { loadEnvironments() }, [loadEnvironments])
 
   const loadCircles = useCallback(async () => {
     if (!appId) return
@@ -598,7 +644,7 @@ export default function ApplicationConfigPage() {
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data?.error || 'Failed to save billing mode')
-      setApplication(prev => prev ? { ...prev, circleBillingMode: mode } : prev)
+      setApplication((prev: Application | null) => prev ? { ...prev, circleBillingMode: mode } : prev)
     } catch (error: any) {
       setCircleMsg(error?.message || 'Failed to save billing mode')
       setTimeout(() => setCircleMsg(''), 3000)
@@ -608,7 +654,7 @@ export default function ApplicationConfigPage() {
   }
 
   const toggleCircleExpanded = (circleId: string) => {
-    setExpandedCircleIds(prev => prev.includes(circleId) ? prev.filter(id => id !== circleId) : [...prev, circleId])
+    setExpandedCircleIds((prev: string[]) => prev.includes(circleId) ? prev.filter((id: string) => id !== circleId) : [...prev, circleId])
   }
 
   const reparentCircle = async (circleId: string, parentId: string | null) => {
@@ -883,7 +929,7 @@ export default function ApplicationConfigPage() {
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data?.error || 'Failed to upload icon')
-      setApplication(prev => prev ? { ...prev, faviconUrl: data?.url || prev.faviconUrl } : prev)
+      setApplication((prev: Application | null) => prev ? { ...prev, faviconUrl: data?.url || prev.faviconUrl } : prev)
       setGeneralMsg('Icon uploaded')
       setTimeout(() => setGeneralMsg(''), 2000)
     } catch (error: any) {
@@ -930,7 +976,7 @@ export default function ApplicationConfigPage() {
       if (!res.ok || !data?.url) {
         throw new Error(data?.error || 'Logo upload failed')
       }
-      setApplication(prev => prev ? { ...prev, logoUrl: data.url } : prev)
+      setApplication((prev: Application | null) => prev ? { ...prev, logoUrl: data.url } : prev)
       setGeneralMsg('Logo uploaded. Click Save Changes to persist.')
       setTimeout(() => setGeneralMsg(''), 3000)
     } catch (error: any) {
@@ -966,13 +1012,13 @@ export default function ApplicationConfigPage() {
       return
     }
 
-    setApplication(prev => prev ? { ...prev, oauthRedirectUris: [...current, candidate] } : prev)
+    setApplication((prev: Application | null) => prev ? { ...prev, oauthRedirectUris: [...current, candidate] } : prev)
     setNewRedirectUri('')
   }
 
   const handleRemoveRedirectUri = (uri: string) => {
     if (!application) return
-    setApplication(prev => prev ? { ...prev, oauthRedirectUris: (prev.oauthRedirectUris || []).filter(item => item !== uri) } : prev)
+    setApplication((prev: Application | null) => prev ? { ...prev, oauthRedirectUris: (prev.oauthRedirectUris || []).filter((item: string) => item !== uri) } : prev)
   }
 
   const handleMoveRedirectUri = (uri: string, direction: 'up' | 'down') => {
@@ -986,7 +1032,7 @@ export default function ApplicationConfigPage() {
 
     const [item] = current.splice(index, 1)
     current.splice(targetIndex, 0, item)
-    setApplication(prev => prev ? { ...prev, oauthRedirectUris: current } : prev)
+    setApplication((prev: Application | null) => prev ? { ...prev, oauthRedirectUris: current } : prev)
   }
 
   const handleRedirectUriDragStart = (uri: string) => {
@@ -1017,7 +1063,7 @@ export default function ApplicationConfigPage() {
 
     const [item] = current.splice(sourceIndex, 1)
     current.splice(targetIndex, 0, item)
-    setApplication(prev => prev ? { ...prev, oauthRedirectUris: current } : prev)
+    setApplication((prev: Application | null) => prev ? { ...prev, oauthRedirectUris: current } : prev)
     setDragOverRedirectUri(null)
   }
 
@@ -1481,7 +1527,7 @@ export default function ApplicationConfigPage() {
       console.error('Failed to update auth method:', err)
       setGeneralMsg('Failed to update auth method')
       // Revert optimism
-      setAuthProviders(prev => prev.map(p => p.providerName === providerName ? { ...p, isEnabled: currentlyEnabled } : p))
+      setAuthProviders((prev: any[]) => prev.map((p: any) => p.providerName === providerName ? { ...p, isEnabled: currentlyEnabled } : p))
       setTimeout(() => setGeneralMsg(''), 3000)
     }
   }
@@ -1504,7 +1550,7 @@ export default function ApplicationConfigPage() {
       console.error('Failed to update comm channel:', err)
       setGeneralMsg('Failed to update communication channel')
       // Revert optimism
-      setCommConfig(prev => prev ? ({
+      setCommConfig((prev: any) => prev ? ({
         ...prev,
         channels: { ...prev.channels, [channelType]: currentlyEnabled }
       }) : prev)
@@ -1623,7 +1669,7 @@ export default function ApplicationConfigPage() {
 
   const appStatusConfig = getStatusConfig(application.status)
 
-  const filteredUsers = users.filter(u =>
+  const filteredUsers = users.filter((u: ApplicationUser) =>
     (u.name || '').toLowerCase().includes(userSearchQuery.toLowerCase()) ||
     (u.email || '').toLowerCase().includes(userSearchQuery.toLowerCase())
   )
@@ -1639,28 +1685,28 @@ export default function ApplicationConfigPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: 'banned' }),
         })
-        setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: 'banned' as const } : u))
+        setUsers((prev: ApplicationUser[]) => prev.map((u: ApplicationUser) => u.id === userId ? { ...u, status: 'banned' as const } : u))
       } else if (type === 'all') {
         await fetch(`/api/v1/admin/applications/${appId}/users/${userId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ isActive: false }),
         })
-        setUsers(prev => prev.map(u => u.id === userId ? { ...u, isActive: false, status: 'banned' as const } : u))
+        setUsers((prev: ApplicationUser[]) => prev.map((u: ApplicationUser) => u.id === userId ? { ...u, isActive: false, status: 'banned' as const } : u))
       } else if (type === 'unban-app') {
         await fetch(`/api/v1/admin/applications/${appId}/users/${userId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: 'active' }),
         })
-        setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: 'active' as const } : u))
+        setUsers((prev: ApplicationUser[]) => prev.map((u: ApplicationUser) => u.id === userId ? { ...u, status: 'active' as const } : u))
       } else if (type === 'unban-all') {
         await fetch(`/api/v1/admin/applications/${appId}/users/${userId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ isActive: true }),
         })
-        setUsers(prev => prev.map(u => u.id === userId ? { ...u, isActive: true, status: 'active' as const } : u))
+        setUsers((prev: ApplicationUser[]) => prev.map((u: ApplicationUser) => u.id === userId ? { ...u, isActive: true, status: 'active' as const } : u))
       }
       setBanModal(null)
     } catch (err) {
@@ -1670,13 +1716,13 @@ export default function ApplicationConfigPage() {
     }
   }
 
-  const circleUserOptions = users.filter((u) => {
+  const circleUserOptions = users.filter((u: ApplicationUser) => {
     const q = circleUserSearch.trim().toLowerCase()
     if (!q) return true
     return (u.name || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q)
   })
 
-  const circleBillingUserOptions = users.filter((u) => {
+  const circleBillingUserOptions = users.filter((u: ApplicationUser) => {
     const q = circleBillingUserSearch.trim().toLowerCase()
     if (!q) return true
     return (u.name || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q)
@@ -1692,6 +1738,7 @@ export default function ApplicationConfigPage() {
         { value: 'circles', icon: <GlobeIcon className="w-4 h-4" />, label: 'Circles' },
         { value: 'surveys', icon: <ClipboardListIcon className="w-4 h-4" />, label: 'Surveys' },
         { value: 'user-attributes', icon: <UsersIcon className="w-4 h-4" />, label: 'User Attributes' },
+        { value: 'environments', icon: <ServerIcon className="w-4 h-4" />, label: 'Environments' },
       ],
     },
     {
@@ -1726,7 +1773,7 @@ export default function ApplicationConfigPage() {
   ]
 
   const renderCircleRows = (items: AppCircle[], depth = 0): React.ReactNode[] =>
-    items.flatMap((circle) => {
+    items.flatMap((circle: AppCircle) => {
       const children = circleChildrenMap.get(circle.id) || []
       const isExpanded = expandedCircleIds.includes(circle.id)
       const expandable = children.length > 0
@@ -1738,8 +1785,8 @@ export default function ApplicationConfigPage() {
           className={`group grid grid-cols-[minmax(0,1fr)_110px_80px_80px_130px_120px] gap-2 items-center ${depthPaddingClass} pr-3 py-2.5 border-b border-gray-100 dark:border-zinc-800/80 hover:bg-gray-50/70 dark:hover:bg-zinc-800/40 ${draggingCircleId === circle.id ? 'opacity-40' : ''}`}
           draggable
           onDragStart={() => setDraggingCircleId(circle.id)}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
+          onDragOver={(e: any) => e.preventDefault()}
+          onDrop={(e: any) => {
             e.preventDefault()
             if (!draggingCircleId || draggingCircleId === circle.id) return
             void reparentCircle(draggingCircleId, circle.id)
@@ -1808,11 +1855,11 @@ export default function ApplicationConfigPage() {
         {/* Vertical Sidebar */}
         <aside className="w-56 shrink-0">
           <div className="sticky top-4 rounded-xl p-3 space-y-4">
-            {sidebarSections.map((section) => (
+            {sidebarSections.map((section: any) => (
               <div key={section.title}>
                 <h4 className="text-[10px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest px-3 mb-1.5">{section.title}</h4>
                 <div className="space-y-0.5">
-                  {section.items.map((item) => (
+                  {section.items.map((item: any) => (
                     <button
                       key={item.value}
                       onClick={() => setActiveTab(item.value)}
@@ -1926,7 +1973,7 @@ export default function ApplicationConfigPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50 dark:divide-zinc-800/50">
-                  {filteredUsers.map((user) => {
+                  {filteredUsers.map((user: ApplicationUser) => {
                     const isBannedGlobally = user.isActive === false
                     const isBannedApp = user.status === 'banned'
                     const isBannedAny = isBannedGlobally || isBannedApp
@@ -1939,7 +1986,7 @@ export default function ApplicationConfigPage() {
                         <td className="px-4 py-3">
                           <div className="flex items-center space-x-3">
                             <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 ${isBannedAny ? 'bg-gray-400 dark:bg-zinc-600' : 'bg-gradient-to-br from-blue-400 to-indigo-500'}`}>
-                              {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                              {user.name.split(' ').map((n: string) => n[0]).join('').toUpperCase()}
                             </div>
                             <div>
                               <p className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</p>
@@ -1969,7 +2016,7 @@ export default function ApplicationConfigPage() {
                           <span className="text-sm text-gray-500 dark:text-zinc-400">{new Date(user.lastActive).toLocaleString()}</span>
                         </td>
                         <td className="px-4 py-3 text-right">
-                          <div className="flex items-center justify-end gap-1" onClick={e => e.stopPropagation()}>
+                          <div className="flex items-center justify-end gap-1" onClick={(e: any) => e.stopPropagation()}>
                             <Button
                               variant="ghost"
                               size="sm"
@@ -2100,7 +2147,7 @@ export default function ApplicationConfigPage() {
               <p className="text-sm text-gray-500 dark:text-zinc-400">Enable methods and configure settings for this application.</p>
             </div>
             <div className="space-y-3">
-              {authProviders.map((provider) => {
+              {authProviders.map((provider: any) => {
                 const meta = PROVIDER_META[provider.providerName] || {
                   icon: <CogIcon className="w-5 h-5" />,
                   color: 'bg-gray-50 text-gray-500 dark:bg-zinc-800 dark:text-zinc-400',
@@ -2336,14 +2383,14 @@ export default function ApplicationConfigPage() {
                 <input
                   type="url"
                   value={application.faviconUrl || ''}
-                  onChange={e => setApplication(prev => prev ? { ...prev, faviconUrl: e.target.value } : prev)}
+                  onChange={e => setApplication((prev: Application | null) => prev ? { ...prev, faviconUrl: e.target.value } : prev)}
                   placeholder="https://your-app.com/favicon.ico"
                   className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
                 <div className="flex items-center gap-2">
                   <Button type="button" variant="outline" className="h-7 px-2.5 text-xs" onClick={() => faviconFileInputRef.current?.click()}>Upload Icon</Button>
                   {application.faviconUrl && (
-                    <button type="button" onClick={() => setApplication(prev => prev ? { ...prev, faviconUrl: '' } : prev)} className="text-xs text-red-500 hover:text-red-600">Remove</button>
+                    <button type="button" onClick={() => setApplication((prev: Application | null) => prev ? { ...prev, faviconUrl: '' } : prev)} className="text-xs text-red-500 hover:text-red-600">Remove</button>
                   )}
                   <input ref={faviconFileInputRef} type="file" accept="image/*" title="Upload favicon" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) handleFaviconUpload(f); e.currentTarget.value = '' }} />
                 </div>
@@ -2357,12 +2404,12 @@ export default function ApplicationConfigPage() {
                 <ColorPickerPopover
                   label="Primary Color"
                   value={toColorValue(appBranding?.primaryColor as any || '#3b82f6')}
-                  onChange={v => setAppBranding(prev => prev ? { ...prev, primaryColor: v } : prev)}
+                  onChange={(v: any) => setAppBranding((prev: any) => prev ? { ...prev, primaryColor: v } : prev)}
                 />
                 <ColorPickerPopover
                   label="Secondary Color"
                   value={toColorValue(appBranding?.secondaryColor as any || '#6366f1')}
-                  onChange={v => setAppBranding(prev => prev ? { ...prev, secondaryColor: v } : prev)}
+                  onChange={(v: any) => setAppBranding((prev: any) => prev ? { ...prev, secondaryColor: v } : prev)}
                 />
               </div>
             </div>
@@ -2375,7 +2422,7 @@ export default function ApplicationConfigPage() {
                   <select
                     title="Primary font"
                     value={appBranding?.primaryFont || 'Inter'}
-                    onChange={e => setAppBranding(prev => prev ? { ...prev, primaryFont: e.target.value } : prev)}
+                    onChange={e => setAppBranding((prev: any) => prev ? { ...prev, primaryFont: e.target.value } : prev)}
                     className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                   >
                     {['Inter', 'Roboto', 'Poppins', 'Nunito', 'Lato', 'Open Sans', 'Montserrat', 'DM Sans', 'Plus Jakarta Sans', 'Geist'].map(f => (
@@ -2388,7 +2435,7 @@ export default function ApplicationConfigPage() {
                   <select
                     title="Secondary font"
                     value={appBranding?.secondaryFont || 'Inter'}
-                    onChange={e => setAppBranding(prev => prev ? { ...prev, secondaryFont: e.target.value } : prev)}
+                    onChange={e => setAppBranding((prev: any) => prev ? { ...prev, secondaryFont: e.target.value } : prev)}
                     className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                   >
                     {['Inter', 'Roboto', 'Poppins', 'Nunito', 'Lato', 'Open Sans', 'Montserrat', 'DM Sans', 'Plus Jakarta Sans', 'Geist'].map(f => (
@@ -2427,23 +2474,23 @@ export default function ApplicationConfigPage() {
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">Meta Title</label>
                   <span className={`text-[10px] ${(application.metaTitle || '').length > 60 ? 'text-amber-500' : 'text-gray-400'}`}>{(application.metaTitle || '').length}/60</span>
                 </div>
-                <input type="text" value={application.metaTitle || ''} onChange={e => setApplication(prev => prev ? { ...prev, metaTitle: e.target.value } : prev)} placeholder="Your App — Tagline" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                <input type="text" value={application.metaTitle || ''} onChange={e => setApplication((prev: Application | null) => prev ? { ...prev, metaTitle: e.target.value } : prev)} placeholder="Your App — Tagline" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">Meta Description</label>
                   <span className={`text-[10px] ${(application.metaDescription || '').length > 160 ? 'text-amber-500' : 'text-gray-400'}`}>{(application.metaDescription || '').length}/160</span>
                 </div>
-                <textarea value={application.metaDescription || ''} onChange={e => setApplication(prev => prev ? { ...prev, metaDescription: e.target.value } : prev)} placeholder="A short description for search engines" rows={2} className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                <textarea value={application.metaDescription || ''} onChange={e => setApplication((prev: Application | null) => prev ? { ...prev, metaDescription: e.target.value } : prev)} placeholder="A short description for search engines" rows={2} className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">Canonical URL</label>
-                  <input type="url" value={application.appUrl || ''} onChange={e => setApplication(prev => prev ? { ...prev, appUrl: e.target.value } : prev)} placeholder="https://your-app.com" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                  <input type="url" value={application.appUrl || ''} onChange={e => setApplication((prev: Application | null) => prev ? { ...prev, appUrl: e.target.value } : prev)} placeholder="https://your-app.com" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
                 </div>
                 <div>
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">Keywords</label>
-                  <input type="text" value={(appBranding?.seo?.keywords || []).join(', ')} onChange={e => setAppBranding(prev => prev ? { ...prev, seo: { ...(prev.seo || {}), keywords: e.target.value.split(',').map((k: string) => k.trim()).filter(Boolean) } } as any : prev)} placeholder="saas, productivity, team" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                  <input type="text" value={(appBranding?.seo?.keywords || []).join(', ')} onChange={e => setAppBranding((prev: any) => prev ? { ...prev, seo: { ...(prev.seo || {}), keywords: e.target.value.split(',').map((k: string) => k.trim()).filter(Boolean) } } as any : prev)} placeholder="saas, productivity, team" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
                 </div>
               </div>
             </div>
@@ -2457,7 +2504,7 @@ export default function ApplicationConfigPage() {
             <div className="space-y-4">
               <div>
                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">OG Image URL</label>
-                <input type="url" value={application.ogImageUrl || ''} onChange={e => setApplication(prev => prev ? { ...prev, ogImageUrl: e.target.value } : prev)} placeholder="https://your-app.com/og-image.png" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                <input type="url" value={application.ogImageUrl || ''} onChange={e => setApplication((prev: Application | null) => prev ? { ...prev, ogImageUrl: e.target.value } : prev)} placeholder="https://your-app.com/og-image.png" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
                 <p className="mt-1 text-[10px] text-gray-400">Recommended: 1200×630px. Used by Twitter, Facebook, LinkedIn when sharing your link.</p>
                 {application.ogImageUrl && (
                   <img src={application.ogImageUrl} alt="OG preview" className="mt-2 rounded-lg border border-gray-200 dark:border-zinc-700 max-h-32 object-cover" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
@@ -2466,11 +2513,11 @@ export default function ApplicationConfigPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">Twitter / X Handle</label>
-                  <input type="text" value={appBranding?.seo?.twitterHandle || ''} onChange={e => setAppBranding(prev => prev ? { ...prev, seo: { ...(prev.seo || {}), twitterHandle: e.target.value } } as any : prev)} placeholder="@yourapp" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                  <input type="text" value={appBranding?.seo?.twitterHandle || ''} onChange={e => setAppBranding((prev: any) => prev ? { ...prev, seo: { ...(prev.seo || {}), twitterHandle: e.target.value } } as any : prev)} placeholder="@yourapp" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
                 </div>
                 <div>
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">Apple App Site ID</label>
-                  <input type="text" value={appBranding?.seo?.appleAppId || ''} onChange={e => setAppBranding(prev => prev ? { ...prev, seo: { ...(prev.seo || {}), appleAppId: e.target.value } } as any : prev)} placeholder="123456789" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                  <input type="text" value={appBranding?.seo?.appleAppId || ''} onChange={e => setAppBranding((prev: any) => prev ? { ...prev, seo: { ...(prev.seo || {}), appleAppId: e.target.value } } as any : prev)} placeholder="123456789" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
                 </div>
               </div>
             </div>
@@ -2484,15 +2531,15 @@ export default function ApplicationConfigPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">{application.platform === 'web' ? 'Google Analytics ID' : 'Firebase Analytics ID'}</label>
-                <input type="text" value={application.gaTrackingId || ''} onChange={e => setApplication(prev => prev ? { ...prev, gaTrackingId: e.target.value } : prev)} placeholder={application.platform === 'web' ? 'G-XXXXXXXXXX' : 'firebase-project-id'} className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                <input type="text" value={application.gaTrackingId || ''} onChange={e => setApplication((prev: Application | null) => prev ? { ...prev, gaTrackingId: e.target.value } : prev)} placeholder={application.platform === 'web' ? 'G-XXXXXXXXXX' : 'firebase-project-id'} className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
               </div>
               <div>
                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">Mixpanel Token</label>
-                <input type="text" value={appBranding?.analytics?.mixpanelToken || ''} onChange={e => setAppBranding(prev => prev ? { ...prev, analytics: { ...(prev.analytics || {}), mixpanelToken: e.target.value } } as any : prev)} placeholder="your-mixpanel-token" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                <input type="text" value={appBranding?.analytics?.mixpanelToken || ''} onChange={e => setAppBranding((prev: any) => prev ? { ...prev, analytics: { ...(prev.analytics || {}), mixpanelToken: e.target.value } } as any : prev)} placeholder="your-mixpanel-token" className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
               </div>
               <div>
                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-tight block mb-1">Sentry DSN</label>
-                <input type="text" value={appBranding?.analytics?.sentryDsn || ''} onChange={e => setAppBranding(prev => prev ? { ...prev, analytics: { ...(prev.analytics || {}), sentryDsn: e.target.value } } as any : prev)} placeholder="https://...@sentry.io/..." className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
+                <input type="text" value={appBranding?.analytics?.sentryDsn || ''} onChange={e => setAppBranding((prev: any) => prev ? { ...prev, analytics: { ...(prev.analytics || {}), sentryDsn: e.target.value } } as any : prev)} placeholder="https://...@sentry.io/..." className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20" />
               </div>
             </div>
           </div>
@@ -2583,9 +2630,296 @@ export default function ApplicationConfigPage() {
           </div>
         </TabsContent>
 
+        {/* ==================== TAB: Environments ==================== */}
+        <TabsContent value="environments" className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Environments</h3>
+              <p className="text-xs text-gray-500 dark:text-zinc-400 mt-0.5">Manage deployment environments and per-environment API keys</p>
+            </div>
+            <button
+              onClick={() => setShowNewEnvModal(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors"
+            >
+              <PlusIcon className="w-3.5 h-3.5" /> New Environment
+            </button>
+          </div>
+
+          {envsLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2Icon className="w-5 h-5 animate-spin text-blue-500" />
+            </div>
+          ) : environments.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-gray-200 dark:border-zinc-800 p-10 text-center">
+              <ServerIcon className="w-8 h-8 text-gray-300 dark:text-zinc-600 mx-auto mb-3" />
+              <p className="text-sm font-medium text-gray-500 dark:text-zinc-400">No environments yet</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-500 mt-1">Create your first environment to get an API key</p>
+              <button
+                onClick={() => setShowNewEnvModal(true)}
+                className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors"
+              >
+                <PlusIcon className="w-3.5 h-3.5" /> New Environment
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {/* Environment selector pills */}
+              <div className="flex flex-wrap gap-2">
+                {environments.map(env => {
+                  const style = ENV_TYPE_STYLES[env.type] || ENV_TYPE_STYLES.custom
+                  return (
+                    <button
+                      key={env.id}
+                      onClick={() => setActiveEnvId(env.id)}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-all ${
+                        activeEnvId === env.id
+                          ? style.badge + ' ring-2 ring-offset-1 ring-blue-400 dark:ring-offset-zinc-900'
+                          : 'bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-400 hover:border-gray-300 dark:hover:border-zinc-600'
+                      }`}
+                    >
+                      <span className={`w-2 h-2 rounded-full ${style.dot}`} />
+                      {env.name}
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Active environment detail */}
+              {(() => {
+                const env = environments.find(e => e.id === activeEnvId)
+                if (!env) return null
+                const style = ENV_TYPE_STYLES[env.type] || ENV_TYPE_STYLES.custom
+                const vars = envVarDraft[env.id] ?? env.variables
+                return (
+                  <div className="rounded-xl border border-gray-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 divide-y divide-gray-100 dark:divide-zinc-800">
+                    {/* Header */}
+                    <div className="p-4 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2.5 h-2.5 rounded-full ${style.dot}`} />
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">{env.name}</span>
+                        <span className={`px-2 py-0.5 rounded-full border text-[10px] font-medium ${style.badge}`}>{style.label}</span>
+                        <span className="text-[11px] text-gray-400 dark:text-zinc-500">Created {new Date(env.createdAt).toLocaleDateString()}</span>
+                      </div>
+                      <button
+                        onClick={async () => {
+                          if (!confirm(`Delete environment "${env.name}"? This cannot be undone.`)) return
+                          const res = await fetch(`/api/v1/admin/applications/${appId}/environments/${env.id}`, { method: 'DELETE' })
+                          if (res.ok) {
+                            const remaining = environments.filter(e => e.id !== env.id)
+                            setActiveEnvId(remaining[0]?.id ?? null)
+                            await loadEnvironments()
+                          }
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-400 hover:text-red-500 transition-colors"
+                        title="Delete environment"
+                      >
+                        <Trash2Icon className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    {/* API Key */}
+                    <div className="p-4 space-y-2">
+                      <p className="text-[11px] font-semibold text-gray-400 dark:text-zinc-500 uppercase tracking-widest">API Key</p>
+                      <div className="flex items-center gap-2">
+                        <code className="flex-1 font-mono text-xs bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-gray-700 dark:text-zinc-300 truncate">
+                          {envApiKeyVisible[env.id] ? env.apiKey : `${env.apiKey.slice(0, 10)}${'•'.repeat(24)}`}
+                        </code>
+                        <button
+                          onClick={() => setEnvApiKeyVisible(v => ({ ...v, [env.id]: !v[env.id] }))}
+                          className="p-2 rounded-lg border border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800 text-gray-500"
+                          title={envApiKeyVisible[env.id] ? 'Hide' : 'Show'}
+                        >
+                          <EyeIcon className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => { navigator.clipboard.writeText(env.apiKey); setCopiedId(`apikey-${env.id}`); setTimeout(() => setCopiedId(null), 1500) }}
+                          className="p-2 rounded-lg border border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800 text-gray-500"
+                          title="Copy API key"
+                        >
+                          {copiedId === `apikey-${env.id}` ? <CheckCircle2Icon className="w-4 h-4 text-green-500" /> : <CopyIcon className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Variables */}
+                    <div className="p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-[11px] font-semibold text-gray-400 dark:text-zinc-500 uppercase tracking-widest">Environment Variables</p>
+                        <button
+                          onClick={() => setEnvVarDraft(d => ({ ...d, [env.id]: [...(d[env.id] ?? env.variables), { key: '', value: '' }] }))}
+                          className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium"
+                        >
+                          <PlusIcon className="w-3 h-3" /> Add Variable
+                        </button>
+                      </div>
+                      {vars.length === 0 ? (
+                        <p className="text-xs text-gray-400 dark:text-zinc-500 italic">No variables defined</p>
+                      ) : (
+                        <div className="space-y-2">
+                          {vars.map((v: { key: string; value: string }, idx: number) => (
+                            <div key={idx} className="flex items-center gap-2">
+                              <input
+                                value={v.key}
+                                onChange={e => {
+                                  const next = [...vars]; next[idx] = { ...next[idx], key: e.target.value }
+                                  setEnvVarDraft(d => ({ ...d, [env.id]: next }))
+                                }}
+                                placeholder="KEY"
+                                className="w-36 font-mono text-xs px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              />
+                              <span className="text-gray-400">=</span>
+                              <input
+                                value={v.value}
+                                onChange={e => {
+                                  const next = [...vars]; next[idx] = { ...next[idx], value: e.target.value }
+                                  setEnvVarDraft(d => ({ ...d, [env.id]: next }))
+                                }}
+                                placeholder="value"
+                                className="flex-1 font-mono text-xs px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              />
+                              <button
+                                onClick={() => {
+                                  const next = vars.filter((_: any, i: number) => i !== idx)
+                                  setEnvVarDraft(d => ({ ...d, [env.id]: next }))
+                                }}
+                                className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                              >
+                                <XIcon className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {envVarDraft[env.id] !== undefined && (
+                        <div className="flex items-center gap-2 pt-1">
+                          <button
+                            disabled={envVarSaving === env.id}
+                            onClick={async () => {
+                              setEnvVarSaving(env.id)
+                              try {
+                                const res = await fetch(`/api/v1/admin/applications/${appId}/environments/${env.id}`, {
+                                  method: 'PUT',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ variables: envVarDraft[env.id] }),
+                                })
+                                if (res.ok) {
+                                  await loadEnvironments()
+                                  setEnvVarDraft(d => { const next = { ...d }; delete next[env.id]; return next })
+                                }
+                              } finally { setEnvVarSaving(null) }
+                            }}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-medium rounded-lg transition-colors"
+                          >
+                            {envVarSaving === env.id ? <Loader2Icon className="w-3.5 h-3.5 animate-spin" /> : <SaveIcon className="w-3.5 h-3.5" />}
+                            Save Variables
+                          </button>
+                          <button
+                            onClick={() => setEnvVarDraft(d => { const next = { ...d }; delete next[env.id]; return next })}
+                            className="text-xs text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200 font-medium"
+                          >
+                            Discard
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })()}
+            </div>
+          )}
+        </TabsContent>
+
         </Tabs>
         </main>
       </div>
+
+      {/* New Environment Modal */}
+      {showNewEnvModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">New Environment</h3>
+              <button onClick={() => { setShowNewEnvModal(false); setEnvMsg('') }} className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-400">
+                <XIcon className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-700 dark:text-zinc-300 mb-1">Name</label>
+                <input
+                  value={newEnvForm.name}
+                  onChange={e => setNewEnvForm(f => ({ ...f, name: e.target.value }))}
+                  placeholder="e.g. Production EU"
+                  className="w-full text-sm px-3 py-2 rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700 dark:text-zinc-300 mb-1">Type</label>
+                <select
+                  value={newEnvForm.type}
+                  onChange={e => setNewEnvForm(f => ({ ...f, type: e.target.value }))}
+                  className="w-full text-sm px-3 py-2 rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="development">Development</option>
+                  <option value="staging">Staging</option>
+                  <option value="production">Production</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+              {environments.length > 0 && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-zinc-300 mb-1">Copy variables from (optional)</label>
+                  <select
+                    value={newEnvForm.copyFrom}
+                    onChange={e => setNewEnvForm(f => ({ ...f, copyFrom: e.target.value }))}
+                    className="w-full text-sm px-3 py-2 rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">— None —</option>
+                    {environments.map(e => <option key={e.id} value={e.id}>{e.name}</option>)}
+                  </select>
+                </div>
+              )}
+            </div>
+            {envMsg && <p className="text-xs text-red-500">{envMsg}</p>}
+            <div className="flex items-center justify-end gap-2 pt-1">
+              <button
+                onClick={() => { setShowNewEnvModal(false); setEnvMsg(''); setNewEnvForm({ name: '', type: 'development', copyFrom: '' }) }}
+                className="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-zinc-400 hover:text-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800"
+              >
+                Cancel
+              </button>
+              <button
+                disabled={envCreating || !newEnvForm.name.trim()}
+                onClick={async () => {
+                  setEnvCreating(true)
+                  setEnvMsg('')
+                  try {
+                    const res = await fetch(`/api/v1/admin/applications/${appId}/environments`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ name: newEnvForm.name.trim(), type: newEnvForm.type, copyFrom: newEnvForm.copyFrom || undefined }),
+                    })
+                    const data = await res.json()
+                    if (!res.ok) throw new Error(data.error || 'Failed')
+                    setShowNewEnvModal(false)
+                    setNewEnvForm({ name: '', type: 'development', copyFrom: '' })
+                    await loadEnvironments()
+                    setActiveEnvId(data.environment.id)
+                  } catch (e: any) {
+                    setEnvMsg(e.message || 'Failed to create environment')
+                  } finally {
+                    setEnvCreating(false)
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-medium rounded-lg transition-colors"
+              >
+                {envCreating ? <Loader2Icon className="w-3.5 h-3.5 animate-spin" /> : <PlusIcon className="w-3.5 h-3.5" />}
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* User Detail Drawer */}
       {selectedUserId && (
@@ -2787,7 +3121,7 @@ export default function ApplicationConfigPage() {
                 <input
                   type="email"
                   value={addUserForm.email}
-                  onChange={e => setAddUserForm(p => ({ ...p, email: e.target.value }))}
+                  onChange={e => setAddUserForm((p: any) => ({ ...p, email: e.target.value }))}
                   placeholder="user@example.com"
                   className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
@@ -2797,7 +3131,7 @@ export default function ApplicationConfigPage() {
                 <input
                   type="text"
                   value={addUserForm.name}
-                  onChange={e => setAddUserForm(p => ({ ...p, name: e.target.value }))}
+                  onChange={e => setAddUserForm((p: any) => ({ ...p, name: e.target.value }))}
                   placeholder="John Doe"
                   className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
@@ -2808,7 +3142,7 @@ export default function ApplicationConfigPage() {
                   <select
                     title="User role"
                     value={addUserForm.role}
-                    onChange={e => setAddUserForm(p => ({ ...p, role: e.target.value }))}
+                    onChange={e => setAddUserForm((p: any) => ({ ...p, role: e.target.value }))}
                     className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                   >
                     <option>User</option>
@@ -2821,7 +3155,7 @@ export default function ApplicationConfigPage() {
                   <select
                     title="User plan"
                     value={addUserForm.plan}
-                    onChange={e => setAddUserForm(p => ({ ...p, plan: e.target.value }))}
+                    onChange={e => setAddUserForm((p: any) => ({ ...p, plan: e.target.value }))}
                     className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                   >
                     <option>Free</option>
@@ -3048,7 +3382,7 @@ export default function ApplicationConfigPage() {
         title="Social & Support Links"
         description="Configure and consume support/contact links in your app."
         sharedContent={[
-          { description: 'Retrieve and render all support links (email, docs, GitHub, GitLab, social, app stores):', code: `const links = await client.getSocialLinks();\n\n// Common keys\n// links.supportEmail\n// links.helpCenter\n// links.githubRepo\n// links.gitlabRepo\n// links.docsUrl\n// links.discord / links.whatsapp / links.line\n// links.facebook / links.instagram / links.twitter / links.linkedin\n\nconst visibleLinks = Object.entries(links).filter(([, v]) => Boolean(v));\n\nreturn visibleLinks.map(([key, url]) => ({\n  key,\n  url,\n  icon: getIconByLinkType(key),\n}));` },
+          { description: 'Retrieve and render all support links (email, docs, GitHub, GitLab, social, app stores):', code: `const links = await client.getSocialLinks();\n\n// Common keys\n// links.supportEmail\n// links.helpCenter\n// links.githubRepo\n// links.gitlabRepo\n// links.docsUrl\n// links.discord / links.whatsapp / links.line\n// links.facebook / links.instagram / links.twitter / links.linkedin\n\nconst visibleLinks = Object.entries(links).filter(([, v]: [string, any]) => Boolean(v));\n\nreturn visibleLinks.map(([key, url]: [string, any]) => ({\n  key,\n  url,\n  icon: getIconByLinkType(key),\n}));` },
         ]}
         apiEndpoints={`GET  /api/v1/applications/{appId}/branding\nPUT  /api/v1/admin/applications/{appId}/branding`}
       />

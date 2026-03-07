@@ -29,6 +29,8 @@ import {
     ComputerDesktopIcon,
     LockClosedIcon,
     LockOpenIcon,
+    FingerPrintIcon,
+    TagIcon,
 } from '@heroicons/react/24/outline'
 
 interface AdminUserDetailDrawerProps {
@@ -82,7 +84,7 @@ export const AdminUserDetailDrawer: React.FC<AdminUserDetailDrawerProps> = ({
     onUserUpdated 
 }) => {
     const [admin, setAdmin] = useState<AdminUser | null>(null)
-    const [activeTab, setActiveTab] = useState<'profile' | 'role' | 'activity'>('profile')
+    const [activeTab, setActiveTab] = useState<'profile' | 'role' | 'activity' | 'sso'>('profile')
     const [loading, setLoading] = useState(false)
     const [saving, setSaving] = useState(false)
     
@@ -328,6 +330,7 @@ export const AdminUserDetailDrawer: React.FC<AdminUserDetailDrawerProps> = ({
                     <div className="flex border-b border-gray-100 px-8 bg-white z-10 overflow-x-auto no-scrollbar">
                         <TabButton id="profile" icon={<UserIcon className="w-4 h-4" />} label="Profile" active={activeTab} onClick={setActiveTab} />
                         <TabButton id="role" icon={<ShieldCheckIcon className="w-4 h-4" />} label="Role & Permissions" active={activeTab} onClick={setActiveTab} />
+                        <TabButton id="sso" icon={<FingerPrintIcon className="w-4 h-4" />} label="SSO & Auth" active={activeTab} onClick={setActiveTab} />
                         <TabButton id="activity" icon={<ClockIcon className="w-4 h-4" />} label="Activity Logs" active={activeTab} onClick={setActiveTab} />
                     </div>
 
@@ -475,101 +478,45 @@ export const AdminUserDetailDrawer: React.FC<AdminUserDetailDrawerProps> = ({
                                     </div>
                                 </section>
 
-                                {/* SSO & Security Overview */}
+                                {/* Auth summary — brief, full details on SSO tab */}
                                 {admin.ssoInfo && (
                                     <section>
-                                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Authentication & SSO</h3>
-                                        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50">
-                                            {/* Auth methods */}
-                                            <div className="p-5">
-                                                <p className="text-xs font-semibold text-gray-500 mb-3">Auth Methods</p>
-                                                <div className="flex flex-wrap gap-2">
-                                                    {admin.ssoInfo.hasPassword && (
-                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
-                                                            <LockClosedIcon className="w-3.5 h-3.5" />
-                                                            Password
-                                                        </span>
-                                                    )}
-                                                    {admin.ssoInfo.ssoProviders.length === 0 && !admin.ssoInfo.hasPassword && (
-                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
-                                                            <LockOpenIcon className="w-3.5 h-3.5" />
-                                                            No auth method recorded
-                                                        </span>
-                                                    )}
-                                                    {admin.ssoInfo.ssoProviders.map(p => (
-                                                        <span key={p} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100 capitalize">
-                                                            <GlobeAltIcon className="w-3.5 h-3.5" />
-                                                            SSO · {p}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                                <div className="flex items-center gap-4 mt-3 text-xs text-gray-400">
-                                                    <span className="flex items-center gap-1">
-                                                        {admin.ssoInfo.isVerified
-                                                            ? <><CheckCircleIcon className="w-3.5 h-3.5 text-emerald-500" />Email verified</>
-                                                            : <><XCircleIcon className="w-3.5 h-3.5 text-gray-400" />Not verified</>
-                                                        }
+                                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Authentication Overview</h3>
+                                        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                                            <div className="flex flex-wrap gap-2 mb-3">
+                                                {admin.ssoInfo.hasPassword && (
+                                                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                                                        <LockClosedIcon className="w-3.5 h-3.5" />
+                                                        Password
                                                     </span>
-                                                    {admin.ssoInfo.linkedUserId && (
-                                                        <span className="font-mono text-gray-300">uid:{admin.ssoInfo.linkedUserId.slice(0, 8)}…</span>
-                                                    )}
-                                                </div>
+                                                )}
+                                                {admin.ssoInfo.ssoProviders.map(p => (
+                                                    <span key={p} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100 capitalize">
+                                                        <GlobeAltIcon className="w-3.5 h-3.5" />
+                                                        SSO · {p}
+                                                    </span>
+                                                ))}
+                                                {!admin.ssoInfo.hasPassword && admin.ssoInfo.ssoProviders.length === 0 && (
+                                                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+                                                        <LockOpenIcon className="w-3.5 h-3.5" />
+                                                        No auth method recorded
+                                                    </span>
+                                                )}
                                             </div>
-
-                                            {/* Recent login history */}
-                                            {admin.ssoInfo.loginHistory.length > 0 && (
-                                                <div className="p-5">
-                                                    <p className="text-xs font-semibold text-gray-500 mb-3">Recent Login History</p>
-                                                    <div className="space-y-2">
-                                                        {admin.ssoInfo.loginHistory.slice(0, 5).map(entry => (
-                                                            <div key={entry.id} className={`flex items-start gap-3 p-3 rounded-xl text-xs ${
-                                                                entry.success ? 'bg-gray-50' : 'bg-red-50'
-                                                            }`}>
-                                                                <div className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
-                                                                    entry.success ? 'bg-emerald-100' : 'bg-red-100'
-                                                                }`}>
-                                                                    {entry.success
-                                                                        ? <CheckCircleIcon className="w-3 h-3 text-emerald-600" />
-                                                                        : <XCircleIcon className="w-3 h-3 text-red-600" />
-                                                                    }
-                                                                </div>
-                                                                <div className="flex-1 min-w-0">
-                                                                    <div className="flex items-center gap-2 flex-wrap">
-                                                                        <span className="font-medium text-gray-700 capitalize">
-                                                                            {entry.socialProvider
-                                                                                ? `SSO · ${entry.socialProvider}`
-                                                                                : entry.loginMethod || 'password'
-                                                                            }
-                                                                        </span>
-                                                                        {entry.mfaRequired && (
-                                                                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
-                                                                                entry.mfaSuccess ? 'bg-purple-100 text-purple-700' : 'bg-red-100 text-red-700'
-                                                                            }`}>
-                                                                                MFA {entry.mfaSuccess ? '✓' : '✗'}
-                                                                            </span>
-                                                                        )}
-                                                                        {entry.deviceType && (
-                                                                            <span className="text-gray-400">
-                                                                                {entry.deviceType === 'mobile'
-                                                                                    ? <DevicePhoneMobileIcon className="w-3 h-3 inline" />
-                                                                                    : <ComputerDesktopIcon className="w-3 h-3 inline" />
-                                                                                }
-                                                                            </span>
-                                                                        )}
-                                                                    </div>
-                                                                    <div className="flex items-center gap-2 mt-0.5 text-gray-400 flex-wrap">
-                                                                        {entry.ipAddress && <span>{entry.ipAddress}</span>}
-                                                                        {(entry.city || entry.country) && (
-                                                                            <span>{[entry.city, entry.country].filter(Boolean).join(', ')}</span>
-                                                                        )}
-                                                                        <span>{formatTimeAgo(entry.createdAt)}</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
+                                            <div className="flex items-center gap-4 text-xs text-gray-400">
+                                                <span className="flex items-center gap-1">
+                                                    {admin.ssoInfo.isVerified
+                                                        ? <><CheckCircleIcon className="w-3.5 h-3.5 text-emerald-500" />Email verified</>
+                                                        : <><XCircleIcon className="w-3.5 h-3.5 text-gray-400" />Not verified</>
+                                                    }
+                                                </span>
+                                                <button
+                                                    onClick={() => setActiveTab('sso')}
+                                                    className="text-purple-500 hover:text-purple-700 font-medium"
+                                                >
+                                                    View full SSO details →
+                                                </button>
+                                            </div>
                                         </div>
                                     </section>
                                 )}
@@ -682,6 +629,131 @@ export const AdminUserDetailDrawer: React.FC<AdminUserDetailDrawerProps> = ({
                                             )
                                         })}
                                     </div>
+                                </section>
+                            </div>
+                        )}
+
+                        {activeTab === 'sso' && (
+                            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                {/* Auth Methods Overview */}
+                                <section>
+                                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Auth Methods</h3>
+                                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+                                        <div className="flex flex-wrap gap-2">
+                                            {admin.ssoInfo?.hasPassword && (
+                                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                                                    <LockClosedIcon className="w-3.5 h-3.5" />
+                                                    Password / Email
+                                                </span>
+                                            )}
+                                            {(admin.ssoInfo?.ssoProviders ?? []).map(p => (
+                                                <span key={p} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100 capitalize">
+                                                    <GlobeAltIcon className="w-3.5 h-3.5" />
+                                                    {p}
+                                                </span>
+                                            ))}
+                                            {!admin.ssoInfo?.hasPassword && (admin.ssoInfo?.ssoProviders ?? []).length === 0 && (
+                                                <span className="text-sm text-gray-400">No auth records found</span>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-4 text-xs text-gray-400 pt-2 border-t border-gray-50">
+                                            <span className="flex items-center gap-1">
+                                                {admin.ssoInfo?.isVerified
+                                                    ? <><CheckCircleIcon className="w-3.5 h-3.5 text-emerald-500" />Email verified</>
+                                                    : <><XCircleIcon className="w-3.5 h-3.5 text-gray-400" />Email not verified</>
+                                                }
+                                            </span>
+                                            {admin.ssoInfo?.linkedUserId && (
+                                                <span className="font-mono text-gray-300">uid:{admin.ssoInfo.linkedUserId.slice(0, 8)}…</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </section>
+
+                                {/* SSO Attributes from OAuth profile */}
+                                {admin.ssoInfo?.ssoAttributes && Object.keys(admin.ssoInfo.ssoAttributes).length > 0 && (
+                                    <section>
+                                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">SSO Profile Attributes</h3>
+                                        <div className="space-y-3">
+                                            {Object.entries(admin.ssoInfo.ssoAttributes).map(([provider, claims]) => (
+                                                <div key={provider} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                                                    <div className="px-5 py-3 border-b border-gray-50 flex items-center gap-2 bg-gray-50/50">
+                                                        <TagIcon className="w-4 h-4 text-gray-400" />
+                                                        <span className="text-xs font-bold text-gray-600 capitalize">{provider}</span>
+                                                    </div>
+                                                    <div className="p-5">
+                                                        {typeof claims === 'object' && claims !== null ? (
+                                                            <div className="space-y-2">
+                                                                {Object.entries(claims as Record<string, any>).map(([key, val]) => (
+                                                                    <div key={key} className="flex items-start gap-3 text-xs">
+                                                                        <span className="font-mono text-gray-400 shrink-0 w-32 truncate">{key}</span>
+                                                                        <span className="text-gray-700 break-all">
+                                                                            {typeof val === 'object' ? JSON.stringify(val) : String(val)}
+                                                                        </span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        ) : (
+                                                            <pre className="text-xs text-gray-600 font-mono">{String(claims)}</pre>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
+
+                                {/* Full Login History */}
+                                <section>
+                                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Login History</h3>
+                                    {(!admin.ssoInfo?.loginHistory || admin.ssoInfo.loginHistory.length === 0) ? (
+                                        <div className="text-center py-10 bg-white rounded-2xl border border-dashed border-gray-200">
+                                            <ClockIcon className="w-8 h-8 mx-auto mb-2 text-gray-200" />
+                                            <p className="text-sm text-gray-400">No login history</p>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-2">
+                                            {admin.ssoInfo.loginHistory.map(entry => (
+                                                <div key={entry.id} className={`flex items-start gap-3 p-3 rounded-xl text-xs ${
+                                                    entry.success ? 'bg-white border border-gray-100' : 'bg-red-50 border border-red-100'
+                                                }`}>
+                                                    <div className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${
+                                                        entry.success ? 'bg-emerald-100' : 'bg-red-100'
+                                                    }`}>
+                                                        {entry.success
+                                                            ? <CheckCircleIcon className="w-3.5 h-3.5 text-emerald-600" />
+                                                            : <XCircleIcon className="w-3.5 h-3.5 text-red-600" />
+                                                        }
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex items-center gap-2 flex-wrap">
+                                                            <span className="font-medium text-gray-700 capitalize">
+                                                                {entry.socialProvider ? `SSO · ${entry.socialProvider}` : entry.loginMethod || 'password'}
+                                                            </span>
+                                                            {entry.mfaRequired && (
+                                                                <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
+                                                                    entry.mfaSuccess ? 'bg-purple-100 text-purple-700' : 'bg-red-100 text-red-700'
+                                                                }`}>MFA {entry.mfaSuccess ? '✓' : '✗'}</span>
+                                                            )}
+                                                            {entry.deviceType && (
+                                                                <span className="text-gray-400">
+                                                                    {entry.deviceType === 'mobile'
+                                                                        ? <DevicePhoneMobileIcon className="w-3 h-3 inline" />
+                                                                        : <ComputerDesktopIcon className="w-3 h-3 inline" />
+                                                                    }
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex items-center gap-2 mt-0.5 text-gray-400 flex-wrap">
+                                                            {entry.ipAddress && <span>{entry.ipAddress}</span>}
+                                                            {(entry.city || entry.country) && <span>{[entry.city, entry.country].filter(Boolean).join(', ')}</span>}
+                                                            <span>{formatTimeAgo(entry.createdAt)}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </section>
                             </div>
                         )}

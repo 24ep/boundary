@@ -39,6 +39,7 @@ import {
   DropdownMenuGroup
 } from '../ui/dropdown-menu'
 import { FunnelIcon } from '@heroicons/react/24/outline'
+import { AdminUserDetailDrawer } from '../settings/AdminUserDetailDrawer'
 
 export function AdminConsoleUsers() {
   return (
@@ -62,6 +63,7 @@ function AdminConsoleUsersContent() {
   const [isAdminUserDrawerOpen, setIsAdminUserDrawerOpen] = useState(false)
   const [activeDrawerTab, setActiveDrawerTab] = useState<'general' | 'activity'>('general')
   const [selectedAdminUserId, setSelectedAdminUserId] = useState<string | null>(null)
+  const [editUserId, setEditUserId] = useState<string | null>(null)
   const searchParams = useSearchParams()
   const [formData, setFormData] = useState({
     firstName: '',
@@ -167,23 +169,7 @@ function AdminConsoleUsersContent() {
   }
 
   const handleEdit = (user: AdminUser) => {
-    setSelectedAdminUserId(user.id)
-    setFormData({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      phone: user.phone || '',
-      role: user.role,
-      status: user.status,
-      department: user.department || '',
-      permissions: user.permissions,
-      points: user.points || 0,
-      appPoints: user.appPoints || 0,
-      password: '',
-      avatarUrl: user.avatarUrl || ''
-    })
-    setIsAdminUserDrawerOpen(true)
-    setActiveDrawerTab('general')
+    setEditUserId(user.id)
   }
 
   const handleSave = async () => {
@@ -639,154 +625,106 @@ function AdminConsoleUsersContent() {
   )
 
   const renderRolesTab = () => (
-    <div className="space-y-6">
-      <Card variant="frosted">
-        <CardBody>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">Roles & Permissions</h3>
-              <p className="text-sm text-gray-500">Manage admin roles and their permissions</p>
-            </div>
-            <Button variant="primary" onClick={handleAddRole}>
-              <PlusIcon className="h-4 w-4 mr-2" aria-hidden="true" />
-              Add Role
-            </Button>
-          </div>
-        </CardBody>
-      </Card>
+    <div className="space-y-3">
+      <div className="flex justify-end">
+        <Button variant="primary" onClick={handleAddRole} className="h-8 px-3 text-xs">
+          <PlusIcon className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
+          New Role
+        </Button>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {roles.map((role) => (
-          <Card key={role.id} variant="frosted" hoverable>
-            <CardBody>
-              <div className="flex items-center justify-between mb-4 cursor-pointer" onClick={() => handleOpenRoleDrawer(role.id)}>
-                <div className="flex items-center gap-3">
-                  <div 
-                    className="w-3 h-3 rounded-full shadow-sm"
-                    style={{ backgroundColor: role.color }}
-                    aria-hidden="true"
-                  ></div>
-                  <h4 className="text-base font-semibold text-gray-900">{role.name}</h4>
+      {roles.length === 0 ? (
+        <div className="text-sm text-gray-400 text-center py-10">No roles defined yet.</div>
+      ) : (
+        <div className="rounded-xl border border-gray-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 divide-y divide-gray-100 dark:divide-zinc-800">
+          {roles.map((role) => (
+            <div key={role.id} className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
+              <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: role.color }} aria-hidden="true" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">{role.name}</span>
+                  {role.is_system && <Badge variant="info" size="sm">System</Badge>}
                 </div>
-                {role.is_system && (
-                  <Badge variant="info" size="sm">System</Badge>
+                {role.description && <p className="text-xs text-gray-500 dark:text-zinc-400 truncate mt-0.5">{role.description}</p>}
+              </div>
+              <div className="flex flex-wrap gap-1 max-w-xs hidden md:flex">
+                {(role.permissions || []).slice(0, 4).map((p) => (
+                  <span key={p} className="px-1.5 py-0.5 bg-gray-100 dark:bg-zinc-700 rounded text-[10px] text-gray-600 dark:text-zinc-300 font-mono">{p}</span>
+                ))}
+                {(role.permissions || []).length > 4 && (
+                  <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-zinc-700 rounded text-[10px] text-gray-500">+{role.permissions.length - 4}</span>
                 )}
               </div>
-              
-              <p className="text-sm text-gray-600 mb-4">{role.description}</p>
-              
-              <div className="mb-4">
-                <h5 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wider">Permissions:</h5>
-                <div className="flex flex-wrap gap-1.5">
-                  {(role.permissions || []).slice(0, 5).map((permission) => (
-                    <Badge key={permission} variant="default" size="sm">
-                      {permission}
-                    </Badge>
-                  ))}
-                  {(role.permissions || []).length > 5 && (
-                    <Badge variant="default" size="sm">+{role.permissions.length - 5} more</Badge>
-                  )}
-                  {(role.permissions || []).length === 0 && (
-                    <span className="text-xs text-gray-400">No permissions assigned</span>
-                  )}
-                </div>
-              </div>
-              
-              <div className="flex gap-2">
-                <Button variant="ghost" size="sm" onClick={() => handleOpenRoleDrawer(role.id)}>
-                  <PencilIcon className="h-4 w-4 mr-1" aria-hidden="true" />
-                  Edit
+              <div className="flex items-center gap-1 shrink-0">
+                <Button variant="ghost" size="sm" onClick={() => handleOpenRoleDrawer(role.id)} className="h-7 w-7 p-0">
+                  <PencilIcon className="h-3.5 w-3.5" aria-hidden="true" />
                 </Button>
                 {!role.is_system && (
-                  <Button variant="ghost" size="sm" onClick={async () => {
+                  <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={async () => {
                     if (confirm(`Delete role "${role.name}"?`)) {
                       try { await adminService.deleteRole(role.id); await loadData() }
                       catch { alert('Failed to delete role.') }
                     }
                   }}>
-                    <TrashIcon className="h-4 w-4 mr-1" aria-hidden="true" />
-                    Delete
+                    <TrashIcon className="h-3.5 w-3.5" aria-hidden="true" />
                   </Button>
                 )}
               </div>
-            </CardBody>
-          </Card>
-        ))}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 
   const renderGroupsTab = () => (
-    <div className="space-y-6">
-      <Card variant="frosted">
-        <CardBody>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-1">User Groups</h3>
-              <p className="text-sm text-gray-500">Organize admin users into groups with shared permissions</p>
-            </div>
-            <Button variant="primary" onClick={handleAddGroup}>
-              <PlusIcon className="h-4 w-4 mr-2" aria-hidden="true" />
-              Add Group
-            </Button>
-          </div>
-        </CardBody>
-      </Card>
+    <div className="space-y-3">
+      <div className="flex justify-end">
+        <Button variant="primary" onClick={handleAddGroup} className="h-8 px-3 text-xs">
+          <PlusIcon className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
+          New Group
+        </Button>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {userGroups.map((group) => (
-          <Card key={group.id} variant="frosted" hoverable>
-            <CardBody>
-              <div className="flex items-center justify-between mb-4 cursor-pointer" onClick={() => handleOpenGroupDrawer(group.id)}>
-                <div className="flex items-center gap-3">
-                  <div 
-                    className="w-3 h-3 rounded-full shadow-sm"
-                    style={{ backgroundColor: group.color }}
-                    aria-hidden="true"
-                  ></div>
-                  <h4 className="text-base font-semibold text-gray-900">{group.name}</h4>
+      {userGroups.length === 0 ? (
+        <div className="text-sm text-gray-400 text-center py-10">No groups defined yet.</div>
+      ) : (
+        <div className="rounded-xl border border-gray-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 divide-y divide-gray-100 dark:divide-zinc-800">
+          {userGroups.map((group) => (
+            <div key={group.id} className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
+              <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: group.color }} aria-hidden="true" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">{group.name}</span>
+                  <span className="text-[11px] text-gray-400 dark:text-zinc-500">{group.memberCount} member{group.memberCount !== 1 ? 's' : ''}</span>
                 </div>
-                <Badge variant="info" size="sm">{group.memberCount} members</Badge>
+                {group.description && <p className="text-xs text-gray-500 dark:text-zinc-400 truncate mt-0.5">{group.description}</p>}
               </div>
-              
-              <p className="text-sm text-gray-600 mb-4">{group.description}</p>
-              
-              <div className="mb-4">
-                <h5 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wider">Group Permissions:</h5>
-                <div className="flex flex-wrap gap-1.5">
-                  {(group.permissions || []).slice(0, 5).map((permission) => (
-                    <Badge key={permission} variant="default" size="sm">
-                      {permission}
-                    </Badge>
-                  ))}
-                  {(group.permissions || []).length > 5 && (
-                    <Badge variant="default" size="sm">+{group.permissions.length - 5} more</Badge>
-                  )}
-                  {(group.permissions || []).length === 0 && (
-                    <span className="text-xs text-gray-400">No permissions assigned</span>
-                  )}
-                </div>
+              <div className="flex flex-wrap gap-1 max-w-xs hidden md:flex">
+                {(group.permissions || []).slice(0, 4).map((p) => (
+                  <span key={p} className="px-1.5 py-0.5 bg-gray-100 dark:bg-zinc-700 rounded text-[10px] text-gray-600 dark:text-zinc-300 font-mono">{p}</span>
+                ))}
+                {(group.permissions || []).length > 4 && (
+                  <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-zinc-700 rounded text-[10px] text-gray-500">+{group.permissions.length - 4}</span>
+                )}
               </div>
-              
-              <div className="flex gap-2">
-                <Button variant="ghost" size="sm" onClick={() => handleOpenGroupDrawer(group.id)}>
-                  <PencilIcon className="h-4 w-4 mr-1" aria-hidden="true" />
-                  Edit
+              <div className="flex items-center gap-1 shrink-0">
+                <Button variant="ghost" size="sm" onClick={() => handleOpenGroupDrawer(group.id)} className="h-7 w-7 p-0">
+                  <PencilIcon className="h-3.5 w-3.5" aria-hidden="true" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={async () => {
+                <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={async () => {
                   if (confirm(`Delete group "${group.name}"?`)) {
                     try { await adminService.deleteUserGroup(group.id); await loadData() }
                     catch { alert('Failed to delete group.') }
                   }
                 }}>
-                  <TrashIcon className="h-4 w-4 mr-1" aria-hidden="true" />
-                  Delete
+                  <TrashIcon className="h-3.5 w-3.5" aria-hidden="true" />
                 </Button>
               </div>
-            </CardBody>
-          </Card>
-        ))}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 
@@ -868,6 +806,13 @@ function AdminConsoleUsersContent() {
       {activeTab === 'users' && renderUsersTab()}
       {activeTab === 'roles' && renderRolesTab()}
       {activeTab === 'groups' && renderGroupsTab()}
+
+      {/* ========== ADMIN USER DETAIL DRAWER (Edit) ========== */}
+      <AdminUserDetailDrawer
+        adminId={editUserId}
+        onClose={() => setEditUserId(null)}
+        onUserUpdated={loadData}
+      />
 
       {isAdminUserDrawerOpen && (
         <>
