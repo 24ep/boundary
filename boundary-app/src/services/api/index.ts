@@ -20,5 +20,6 @@ export * from './recentlyUsed';
 // export * from './locationData';
 export * from './widgets';
 export * from './circleTypes';
+export * from './identity';
 export { calendarApi } from '../calendar/CalendarService';
 export { galleryApi } from '../gallery/GalleryService';

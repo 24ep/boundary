@@ -43,6 +43,7 @@ import {
 } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { circleApi } from '../../services/api';
+import { appkit } from '../../services/api/appkit';
 import { ScreenBackground } from '../../components/ScreenBackground';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 
@@ -66,6 +67,7 @@ interface CircleData {
   logo?: string;
   coverPhoto?: string;
   inviteCode?: string;
+  pinCode?: string;
   inviteCodeExpiry?: string;
   settings?: CircleSettings;
   members?: any[];
@@ -155,7 +157,8 @@ const CircleSettingsScreen: React.FC<CircleSettingsScreenProps> = ({ navigation,
           story: primaryCircle.description || '',
           logo: '', 
           coverPhoto: '',
-          inviteCode: '', 
+          inviteCode: primaryCircle.inviteCode || '', 
+          pinCode: (primaryCircle as any).pinCode || '',
           inviteCodeExpiry: '',
           members: mockMembers,
           privacy: settings.privacy || 'private',
@@ -173,6 +176,18 @@ const CircleSettingsScreen: React.FC<CircleSettingsScreenProps> = ({ navigation,
           }
         });
         
+        // Fetch security codes via SDK
+        try {
+          const codes = await appkit.getCircleSecurityCodes(primaryCircle.id);
+          setCircleData(prev => ({
+            ...prev,
+            inviteCode: codes.circleCode,
+            pinCode: codes.pinCode
+          }));
+        } catch (codesError) {
+          console.warn('Failed to fetch security codes via SDK:', codesError);
+        }
+
         setModuleSettings({
             allowLocationSharing: settings.allowLocationSharing ?? true,
             allowChatMessages: settings.allowChatMessages ?? true,
@@ -270,20 +285,18 @@ const CircleSettingsScreen: React.FC<CircleSettingsScreenProps> = ({ navigation,
   const generateInviteCode = async () => {
     try {
       setSaving(true);
-      const code = Math.floor(100000 + Math.random() * 900000).toString();
-      const expiryDate = new Date();
-      expiryDate.setHours(expiryDate.getHours() + 24);
+      const codes = await appkit.generateCircleSecurityCodes(circleData.id);
       
       setCircleData(prev => ({
         ...prev,
-        inviteCode: code,
-        inviteCodeExpiry: expiryDate.toISOString(),
+        inviteCode: codes.circleCode,
+        pinCode: codes.pinCode,
       }));
       
-      Alert.alert('Success', 'Invite code generated successfully');
+      Alert.alert('Success', 'Security codes generated successfully');
     } catch (error) {
-      console.error('Error generating invite code:', error);
-      Alert.alert('Error', 'Failed to generate invite code');
+      console.error('Error generating security codes:', error);
+      Alert.alert('Error', 'Failed to generate security codes');
     } finally {
       setSaving(false);
     }
@@ -695,6 +708,12 @@ const CircleSettingsScreen: React.FC<CircleSettingsScreenProps> = ({ navigation,
               title="Invite Code"
               subtitle={circleData.inviteCode ? `Code: ${circleData.inviteCode}` : 'Generate invite code'}
               onPress={generateInviteCode}
+            />
+            <SettingItem
+              icon={Lock}
+              title="Circle PIN"
+              subtitle={circleData.pinCode ? `PIN: ${circleData.pinCode}` : 'No PIN set'}
+              showChevron={false}
             />
           </View>
           <View style={{ height: 40 }} />

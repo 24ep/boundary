@@ -24,6 +24,7 @@ import CircleDetailScreen from '../screens/circle/CircleDetailScreen';
 import NewsScreen from '../screens/main/NewsScreen';
 import NewsDetailScreen from '../screens/main/NewsDetailScreen';
 import SettingsScreen from '../screens/settings/SettingsScreen';
+import SetPinScreen from '../screens/settings/SetPinScreen';
 import SecondHandShopScreen from '../screens/main/SecondHandShopScreen';
 import StorageScreen from '../screens/storage/StorageScreen';
 import ChatListScreen from '../screens/chat/ChatListScreen';
@@ -76,6 +77,7 @@ const PersonalStackNavigator: React.FC = () => {
       <PersonalStack.Screen name="Devices" component={DevicesScreen} />
       <PersonalStack.Screen name="LoginHistory" component={LoginHistoryScreen} />
       <PersonalStack.Screen name="MFASetup" component={MFASetupScreen} />
+      <PersonalStack.Screen name="SetPin" component={SetPinScreen} />
       {/* Finance could go here */}
     </PersonalStack.Navigator>
   );

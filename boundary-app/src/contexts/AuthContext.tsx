@@ -5,6 +5,8 @@ import { apiClient } from '../services/api/apiClient';
 import { logger } from '../utils/logger';
 import { isDev } from '../utils/isDev';
 import axios from 'axios';
+import authService from '../services/auth/AuthService';
+import { User, SignupData } from '../services/auth/AuthService.types';
 
 // Conditional imports for optional dependencies
 let GoogleSignin: any = null;
@@ -52,32 +54,6 @@ const api = apiClient || {
   removeAuthToken: () => { delete fallbackApi.defaults.headers.common.Authorization; }
 };
 
-interface User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  avatar?: string;
-  phone?: string;
-  dateOfBirth?: Date;
-  userType: 'Circle' | 'children' | 'seniors' | 'workplace';
-  subscriptionTier: 'free' | 'premium' | 'elite';
-  circleIds: string[];
-  isOnboardingComplete: boolean;
-  preferences: {
-    notifications: boolean;
-    locationSharing: boolean;
-    popupSettings: {
-      enabled: boolean;
-      frequency: 'daily' | 'weekly' | 'monthly';
-      maxPerDay: number;
-      categories: string[];
-    };
-  };
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 // SSO Provider from backend
 interface SSOProvider {
   id: string;
@@ -114,19 +90,14 @@ interface AuthContextType {
   verifyEmail: (email: string, code: string) => Promise<void>;
   loginError: string | null;
   clearLoginError: () => void;
+  // Circles
+  circles: any[];
+  activeCircleId: string | null;
+  setActiveCircleId: (id: string | null) => void;
+  loadCircles: () => Promise<void>;
   // SSO Providers
   ssoProviders: SSOProvider[];
   loadSSOProviders: () => Promise<void>;
-}
-
-interface SignupData {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
-  dateOfBirth?: Date;
-  userType: 'Circle' | 'children' | 'seniors' | 'workplace';
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -200,30 +171,7 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-const parseUserDates = (userData: any): User => {
-  if (!userData) return userData;
-  
-  // Consolidate property mapping
-  const id = userData.id || userData._id;
-  const email = userData.email || userData.emailAddress;
-  
-  if (!id || !email) {
-    console.warn('[AUTH] parseUserDates - Missing id or email!', { id, email, keys: Object.keys(userData) });
-  }
 
-  return {
-    ...userData,
-    id,
-    email,
-    firstName: userData.firstName || userData.first_name || '',
-    lastName: userData.lastName || userData.last_name || '',
-    avatar: userData.avatar || userData.avatar_url,
-    isOnboardingComplete: !!(userData.isOnboardingComplete ?? userData.is_onboarding_complete),
-    dateOfBirth: userData.dateOfBirth ? new Date(userData.dateOfBirth) : undefined,
-    createdAt: userData.createdAt ? new Date(userData.createdAt) : new Date(),
-    updatedAt: userData.updatedAt ? new Date(userData.updatedAt) : new Date(),
-  };
-};
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   console.log('🔧 AuthProvider rendering...');
@@ -232,6 +180,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isOnboardingComplete, setIsOnboardingComplete] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(0);
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [circles, setCircles] = useState<any[]>([]);
+  const [activeCircleId, setActiveCircleId] = useState<string | null>(null);
   const [ssoProviders, setSsoProviders] = useState<SSOProvider[]>([]);
   const navigationRef = useRef<any>(null);
 
@@ -299,107 +249,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       console.log('[AUTH] Checking auth state...');
-
-      // Check for existing tokens first
-      const accessToken = await AsyncStorage.getItem('accessToken');
-      console.log('[AUTH] Existing token found:', !!accessToken);
-
-      // CRITICAL: If user is already set, don't clear it - just validate token
-      if (user && accessToken) {
-        console.log('[AUTH] User already set, skipping checkAuthState to prevent clearing');
-        setIsLoading(false);
-        return;
-      }
-
-      // Check if user has valid authentication
-      if (accessToken) {
-        // First, try to restore user from local storage (fast path)
-        const storedUser = await AsyncStorage.getItem('user');
-        if (storedUser) {
-          try {
-            const userData = parseUserDates(JSON.parse(storedUser));
-            console.log('[AUTH] Restored user from storage:', userData.email);
-            setUser(userData);
-            setIsOnboardingComplete(userData.isOnboardingComplete || false);
-
-            // Optionally validate token in background (non-blocking)
-            api.get('/auth/me').then((response: any) => {
-              const freshUserData = response?.user || response?.data?.user;
-              if (freshUserData) {
-                const parsedUser = parseUserDates(freshUserData);
-                setUser(parsedUser);
-                AsyncStorage.setItem('user', JSON.stringify(parsedUser));
-                console.log('[AUTH] User data refreshed from server');
-              }
-            }).catch(async (err: any) => {
-              console.log('[AUTH] Background refresh failed');
-              // If 401, it means our token is stale despite having user data
-              if (err?.response?.status === 401) {
-                console.log('[AUTH] Token invalid (401) during background check - attempting refresh');
-                try {
-                  // Attempt to refresh the token
-                  await refreshToken();
-                } catch (refreshErr) {
-                  console.log('[AUTH] Refresh failed during background check - session will be cleared by refreshToken');
-                }
-              } else {
-                console.log('[AUTH] Non-critical background error, using cached data');
-              }
-            });
-
-            return; // Session restored successfully
-          } catch (parseError) {
-            console.log('[AUTH] Failed to parse stored user, clearing...');
-            await AsyncStorage.removeItem('user');
-          }
+      
+      const currentUser = await authService.getCurrentUser();
+      
+      if (currentUser) {
+        setUser(currentUser as any);
+        setIsOnboardingComplete(currentUser.isOnboardingComplete || false);
+        
+        // Fetch circles
+        const userCircles = await authService.getCircles();
+        setCircles(userCircles);
+        if (userCircles.length > 0) {
+          const storedCircleId = await AsyncStorage.getItem('activeCircleId');
+          setActiveCircleId(storedCircleId || userCircles[0].id);
         }
-
-        // No stored user, try to fetch from API
-        try {
-          const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('Auth check timeout')), 3000)
-          );
-          const response = await Promise.race([
-            api.get('/auth/me'),
-            timeoutPromise
-          ]).catch(() => null);
-          const responseData = response as any;
-          if (responseData && (responseData.user || responseData.data?.user)) {
-            const userData = parseUserDates(responseData.user || responseData.data?.user);
-            setUser(userData);
-            setIsOnboardingComplete(userData.isOnboardingComplete || false);
-            await AsyncStorage.setItem('user', JSON.stringify(userData));
-            console.log('[AUTH] Valid token found - user authenticated and cached');
-          } else {
-            console.log('[AUTH] /auth/me not available or no user data');
-          }
-        } catch (error: any) {
-          // Token validation failed - but don't clear if it's just a 404
-          console.log('[AUTH] Token validation failed:', error?.response?.status || error?.message);
-
-          // Only clear tokens if it's an authentication error (401), not if endpoint doesn't exist (404)
-          if (error?.response?.status === 401) {
-            try {
-              await AsyncStorage.removeItem('accessToken');
-              await AsyncStorage.removeItem('refreshToken');
-              setUser(null);
-              console.log('[AUTH] 401 Unauthorized - cleared tokens and user');
-            } catch (clearError) {
-              console.error('Failed to clear tokens:', clearError);
-            }
-          } else {
-            console.log('[AUTH] Non-auth error (likely endpoint missing) - keeping tokens');
-          }
-        }
-      } else {
-        console.log('[AUTH] No token found - staying logged out');
       }
-
     } catch (error) {
-      console.error('Auth state check failed:', error);
-      console.log('❌ Auth state check failed - staying logged out');
+      console.error('[AUTH] Auth state check failed:', error);
     } finally {
-      console.log('[AUTH] checkAuthState completed - setting loading to false');
       setIsLoading(false);
     }
   };
@@ -407,75 +274,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     try {
       setIsLoading(true);
-      setLoginError(null); // Clear any previous error
+      setLoginError(null);
 
       console.log('[AUTH] Starting login for:', email);
-      const response = await api.post('/auth/login', {
-        email,
-        password,
-      });
+      const { user: userData } = await authService.login({ email, password });
 
-      // Handle both flat response (backend) and nested data (if wrapper changes)
-      const responseData = response as any;
-      const userData = responseData.user || responseData.data?.user;
-      const accessToken = responseData.accessToken || responseData.data?.accessToken;
-      const refreshToken = responseData.refreshToken || responseData.data?.refreshToken;
-
-      if (!userData || !accessToken) {
-        throw new Error('Invalid login response from server');
+      if (!userData) {
+        throw new Error('Invalid login response');
       }
 
-      setIsOnboardingComplete(userData.isOnboardingComplete ?? true);
+      setUser(userData as any);
+      setIsOnboardingComplete(userData.isOnboardingComplete || false);
 
-      // Store auth data
-      await AsyncStorage.multiSet([
-        ['accessToken', accessToken],
-        ['refreshToken', refreshToken],
-        ['user', JSON.stringify(userData)],
-      ]);
-
-      api.setAuthToken(accessToken);
-      setUser(userData);
-
-      console.log('[AUTH] User data and tokens stored in AsyncStorage');
+      // Fetch circles
+      const userCircles = await authService.getCircles();
+      setCircles(userCircles);
+      if (userCircles.length > 0) {
+        setActiveCircleId(userCircles[0].id);
+      }
 
       setIsLoading(false);
-
-      // Immediately force a re-render to ensure RootNavigator sees the change
-      setForceUpdate(prev => {
-        const newValue = prev + 1;
-        console.log('[AUTH] Force update (immediate):', newValue);
-        return newValue;
-      });
-
-      console.log('[AUTH] ✅✅✅ All states set - isAuthenticated should now be: true');
-      console.log('[AUTH] ✅✅✅ Loading set to false, navigation should switch to AppNavigator');
-
+      setForceUpdate(prev => prev + 1);
+      console.log('[AUTH] ✅ Login successful');
       logger.info('User logged in successfully:', userData?.email);
-
-      // RootNavigator will automatically handle navigation based on state changes
-      // No manual navigation reset needed - it causes errors when route doesn't exist yet
     } catch (error: any) {
-      console.log('🔧 Login error caught:', error);
-      console.log('🔧 Error type:', typeof error);
-
-      // CRITICAL: Set loading to false FIRST to ensure spinner stops immediately
       setIsLoading(false);
-
-      // Wrap error formatting in try-catch to prevent secondary errors
-      try {
-        console.log('🔧 Error response:', error?.response);
-        console.log('🔧 Error response data:', error?.response?.data);
-        console.log('🔧 Error message:', error?.message);
-      } catch (formatError) {
-        console.error('🔧 Error formatting login error:', formatError);
-      }
-      logger.error('Login failed:', error);
-
-      // Extract user-friendly error message
-      const errorMessage = error.message || error.error || 'Login failed. Please check your credentials.';
+      const errorMessage = error.message || 'Login failed. Please check your credentials.';
       setLoginError(errorMessage);
-
       throw error;
     }
   };
@@ -606,9 +431,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Set token in API headers
       api.setAuthToken(accessToken);
 
-      setUser(userData);
-      setIsOnboardingComplete(userData.isOnboardingComplete);
-
+      // Update state
+      await syncAuthState(userData);
       logger.info('SSO login successful:', provider);
     } catch (error) {
       logger.error('SSO login failed:', error);
@@ -731,150 +555,71 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const syncAuthState = async (userData: any) => {
+    setUser(userData as any);
+    setIsOnboardingComplete(userData.isOnboardingComplete || false);
+    
+    // Fetch circles
+    try {
+      const userCircles = await authService.getCircles();
+      setCircles(userCircles);
+      if (userCircles.length > 0) {
+        const storedCircleId = await AsyncStorage.getItem('activeCircleId');
+        setActiveCircleId(storedCircleId || userCircles[0].id);
+      }
+    } catch (e) {
+      console.warn('[AUTH] Failed to fetch circles during sync:', e);
+    }
+    
+    setForceUpdate(prev => prev + 1);
+  };
+
   const signup = async (userData: SignupData) => {
     try {
-      // setIsLoading(true); // Removed to prevent RootNavigator from unmounting AuthNavigator
+      setIsLoading(true);
+      setLoginError(null);
 
-      // Validate required fields (Allow either email or phone)
-      if ((!userData.email && !userData.phone) || !userData.password || !userData.firstName || !userData.lastName) {
-        throw new Error('An identifier (email or phone), password, first name, and last name are required');
-      }
-
-      // Transform data to match backend expectations
-      const backendData = {
-        ...userData,
-        email: userData.email || `${userData.phone}@boundary.local`, // Fallback for backend email requirement
-        password: userData.password,
+      // Map SignupData to RegisterData for AuthService
+      const registerData = {
         firstName: userData.firstName,
         lastName: userData.lastName,
+        email: userData.email,
+        password: userData.password,
         phone: userData.phone,
-        phoneNumber: userData.phone, // Backend sometimes expects phoneNumber
-        dateOfBirth: userData.dateOfBirth,
+        // userType and dateOfBirth can be added to profile after signup or if supported by register
       };
 
-      console.log('🔧 Signup data being sent:', JSON.stringify(backendData, null, 2));
-
-      try {
-        // API client returns response.data directly, not the full response object
-        const responseData = await api.post('/auth/register', backendData) as any;
-
-        console.log('🔧 Signup initiated:', responseData);
-
-        // Response should just be success message now
-        if (!responseData.success) {
-          throw new Error(responseData.message || 'Signup failed');
-        }
-
-        // New flow: Backend returns tokens for immediate login
-        const { user, accessToken } = responseData;
-
-        if (user && accessToken) {
-          console.log('🔧 Signup successful - Setting up immediate session');
-          await handleAuthResponse(responseData);
-          console.log('🔧 Immediate session set - RootNavigator should now switch');
-        } else {
-          console.warn('🔧 Signup successful but tokens not found - check backend response');
-        }
-
-      } catch (innerError: any) {
-        console.error('🔧 Inner signup error:', innerError);
-        throw innerError;
-      }
-    } catch (error: any) {
-      // Extremely defensive logging to find the exact crash point
-      console.log('🔧 [DEBUG] Signup catch block entered');
-      try {
-        console.error('🔧 Signup error summary:', {
-          type: typeof error,
-          message: error?.message,
-          code: error?.code,
-          hasResponse: !!error?.response,
-          hasDetails: !!error?.details
+      const { user: newUser } = await authService.register(registerData);
+      
+      // If backend requires additional profile data (like userType)
+      if (userData.userType || userData.dateOfBirth) {
+        await authService.updateProfile({
+          userType: userData.userType,
+          dateOfBirth: userData.dateOfBirth
         });
-      } catch (e) {
-        console.error('🔧 Failed to log error summary safely');
       }
 
-      // Extract helpful error message with total safety
-      let errorMessage = 'Failed to create account. Please try again.';
-
-      try {
-        if (error && typeof error === 'object') {
-          // Use a sequence of fallback attempts, each guarded
-          errorMessage = error.message || errorMessage;
-
-          // Try to get message from details (ApiClient format)
-          if (error.details) {
-            if (typeof error.details === 'string') {
-              errorMessage = error.details;
-            } else if (typeof error.details === 'object') {
-              errorMessage = error.details.message || error.details.error || errorMessage;
-            }
-          }
-
-          // Try to get message from response (Axios format)
-          const responseData = error.response?.data;
-          if (responseData) {
-            if (typeof responseData === 'string') {
-              errorMessage = responseData;
-            } else if (typeof responseData === 'object' && responseData !== null) {
-              errorMessage = responseData.message || responseData.error || errorMessage;
-            }
-          }
-        } else if (typeof error === 'string') {
-          errorMessage = error;
-        }
-      } catch (extractionError) {
-        console.error('🔧 Error during message extraction:', extractionError);
-      }
-
-      // Create a clean error object to throw
-      const enhancedError = new Error(String(errorMessage));
-      try {
-        (enhancedError as any).originalError = error;
-        (enhancedError as any).code = error?.code;
-      } catch (e) { }
-
-      // Log only the message string to avoids issues with complex objects in loggers
-      if (typeof logger !== 'undefined' && logger.error) {
-        try {
-          logger.error('Signup failed:', String(errorMessage));
-        } catch (e) {
-          console.error('Logger failed:', e);
-        }
-      } else {
-        console.error('Signup failed:', errorMessage);
-      }
-
-      throw enhancedError;
+      await syncAuthState(newUser);
+      logger.info('User signed up successfully');
+    } catch (error: any) {
+      setLoginError(error.message || 'Signup failed');
+      throw error;
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
   const logout = async () => {
     try {
-      // Call logout endpoint
-      await api.post('/auth/logout');
+      await authService.logout();
     } catch (error) {
-      if (logger && logger.error) {
-        logger.error('Logout API call failed:', error);
-      } else {
-        console.error('Logout API call failed:', error);
-      }
+      console.error('Logout failed:', error);
     } finally {
-      // Clear local data
-      await AsyncStorage.multiRemove(['accessToken', 'refreshToken']);
-      api.removeAuthToken();
-
       setUser(null);
       setIsOnboardingComplete(false);
-
-      if (logger && logger.info) {
-        logger.info('User logged out');
-      } else {
-        console.log('[AUTH] User logged out');
-      }
+      setCircles([]);
+      setActiveCircleId(null);
+      logger.info('User logged out');
     }
   };
 
@@ -913,28 +658,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const updateUser = async (updates: Partial<User>) => {
     try {
       console.log('[AUTH] Updating user profile...', updates);
-      const response = await api.put('/auth/profile', updates) as any;
-      
-      // Handle various response structures defensively
-      const userData = response.user || response.data?.user || (response.data && response.data.data?.user);
-      
-      if (!userData) {
-        console.warn('[AUTH] updateUser - No user data returned from profile update');
-        return;
+      const updatedUser = await authService.updateProfile(updates);
+      if (updatedUser) {
+        setUser(updatedUser as any);
+        setIsOnboardingComplete(updatedUser.isOnboardingComplete || false);
+        logger.info('User profile updated');
       }
-
-      const transformedUser = parseUserDates(userData);
-      
-      // Ensure we don't clear critical fields if missing from update response
-      // parseUserDates already handles mapping, so we just set state
-      console.log('[AUTH] User profile updated successfully:', transformedUser.email);
-      setUser(transformedUser);
-      setIsOnboardingComplete(transformedUser.isOnboardingComplete);
-      
-      await AsyncStorage.setItem('user', JSON.stringify(transformedUser));
-      
-      setForceUpdate(prev => prev + 1);
-      logger.info('User profile updated');
     } catch (error) {
       logger.error('Profile update failed:', error);
       throw error;
@@ -944,42 +673,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const completeOnboarding = async () => {
     try {
       console.log('[AUTH] Completing onboarding...');
-      const response = await api.post('/auth/onboarding/complete') as any;
-      
-      // Handle various response structures defensively
-      const userData = response.user || response.data?.user;
-      
-      if (!userData) {
-        console.error('[AUTH] completeOnboarding - CRITICAL: No user data returned!');
-        // Fallback: If we know it succeeded but user is missing, at least update state if we have current user
-        if (user) {
-          const updatedUser = { ...user, isOnboardingComplete: true };
-          setUser(updatedUser);
-          setIsOnboardingComplete(true);
-          await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
-          setForceUpdate(prev => prev + 1);
-        }
-        return;
+      // AppKit might not have a specific 'complete onboarding' but we can update profile
+      const updatedUser = await authService.updateProfile({ isOnboardingComplete: true });
+      if (updatedUser) {
+        setUser(updatedUser as any);
+        setIsOnboardingComplete(true);
+        logger.info('Onboarding completed');
       }
-
-      const transformedUser = parseUserDates(userData);
-      // Ensure onboarding is marked complete
-      transformedUser.isOnboardingComplete = true;
-
-      console.log('[AUTH] Onboarding completed successfully for:', transformedUser.email);
-      
-      // Update state atomically where possible
-      setUser(transformedUser);
-      setIsOnboardingComplete(true);
-      
-      await AsyncStorage.setItem('user', JSON.stringify(transformedUser));
-      
-      setForceUpdate(prev => prev + 1);
-      logger.info('Onboarding completed');
-
-      // Note: Removed manual navigation reset as RootNavigator now handles the state switch more gracefully.
-
-
     } catch (error) {
       logger.error('Onboarding completion failed:', error);
       throw error;
@@ -987,122 +687,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const checkUserExists = async (identifier: string): Promise<boolean> => {
-    try {
-      const isEmail = identifier.includes('@');
-      console.log('[AuthContext] checkUserExists called with:', identifier, 'isEmail:', isEmail);
-      const response = await api.post('/auth/check-user', {
-        email: isEmail ? identifier : undefined,
-        phone: !isEmail ? identifier : undefined,
-      }) as any;
-      console.log('[AuthContext] checkUserExists response:', JSON.stringify(response));
-      return response.exists;
-    } catch (error: any) {
-      const errorDetails = {
-        message: error.message,
-        code: error.code,
-        status: error.response?.status,
-        data: error.response?.data,
-      };
-      console.error('[AuthContext] checkUserExists failed:', errorDetails);
-      const msg = `Login Debug Error:\n${JSON.stringify(errorDetails, null, 2)}`;
-      if (Platform.OS === 'web') {
-        window.alert(msg);
-      } else {
-        // Alert.alert('Login Debug Error', msg);
-      }
-      throw error;
-    }
+    return authService.checkUserExists(identifier);
   };
 
   const requestOtp = async (identifier: string): Promise<void> => {
-    try {
-      // setIsLoading(true);
-      const isEmail = identifier.includes('@');
-      await api.post('/auth/otp/request', {
-        email: isEmail ? identifier : undefined,
-        phone: !isEmail ? identifier : undefined,
-      });
-    } catch (error: any) {
-      console.error('Request OTP failed:', error);
-      throw error;
-    } finally {
-      // setIsLoading(false);
-    }
-  };
-
-  // Helper to handle successful auth response
-  const handleAuthResponse = async (data: any) => {
-    console.log('[AUTH] handleAuthResponse - Raw data received:', {
-      hasUser: !!data.user,
-      hasDataUser: !!data.data?.user,
-      hasAccessToken: !!data.accessToken,
-      hasRefreshToken: !!data.refreshToken,
-      keys: Object.keys(data)
-    });
-
-    const userData = data.user || data.data?.user;
-    const accessToken = data.accessToken || data.data?.accessToken;
-    const refreshToken = data.refreshToken || data.data?.refreshToken;
-
-    if (!userData || !accessToken) {
-      console.error('[AUTH] handleAuthResponse - CRITICAL: Missing user or token!', { 
-        hasUser: !!userData, 
-        hasToken: !!accessToken 
-      });
-      return;
-    }
-
-    console.log('[AUTH] handleAuthResponse - User keys:', Object.keys(userData));
-
-    // Store tokens
-    await AsyncStorage.multiSet([
-      ['accessToken', accessToken],
-      ['refreshToken', refreshToken],
-    ]);
-
-    // Set token in API headers
-    api.setAuthToken(accessToken);
-
-    // Use parseUserDates for robust transformation
-    const transformedUser = parseUserDates(userData);
-    
-    console.log('[AUTH] handleAuthResponse - Setting user state:', transformedUser.email);
-    setUser(transformedUser);
-    setIsOnboardingComplete(transformedUser.isOnboardingComplete);
-    
-    await AsyncStorage.setItem('user', JSON.stringify(transformedUser));
-
-    setForceUpdate(prev => {
-      console.log('[AUTH] handleAuthResponse - forceUpdate from', prev, 'to', prev + 1);
-      return prev + 1;
-    });
+    return authService.requestOtp(identifier);
   };
 
   const loginWithOtp = async (identifier: string, otp: string): Promise<void> => {
     try {
       setIsLoading(true);
       setLoginError(null);
-
-      const isEmail = identifier.includes('@');
-      const response = await api.post('/auth/otp/login', {
-        email: isEmail ? identifier : undefined,
-        phone: !isEmail ? identifier : undefined,
-        otp
-      });
-
-      console.log('[AUTH] loginWithOtp success. Calling handleAuthResponse...');
-      await handleAuthResponse(response);
+      const { user: userData } = await authService.loginWithOtp(identifier, otp);
+      setUser(userData as any);
+      setIsOnboardingComplete(userData.isOnboardingComplete || false);
       logger.info('User logged in via OTP successfully');
-
-      // RootNavigator will automatically handle navigation based on state changes
-      // No manual navigation reset needed - it causes errors when route doesn't exist yet
-
     } catch (error: any) {
-      console.error('Login with OTP failed:', error);
-      setLoginError(error.message || 'Invalid OTP');
+      setLoginError(error.message || 'OTP login failed');
       throw error;
     } finally {
-      console.log('[AUTH] loginWithOtp finally - setting isLoading false');
       setIsLoading(false);
     }
   };
@@ -1110,12 +713,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const verifyEmail = async (email: string, code: string): Promise<void> => {
     try {
       setIsLoading(true);
-      const response = await api.post('/auth/verify-email', { email, code });
-      await handleAuthResponse(response);
-      logger.info('Email verified successfully');
-    } catch (error: any) {
-      console.error('Verify email failed:', error);
-      throw error;
+      const { user: userData } = await authService.verifyEmail(email, code);
+      setUser(userData as any);
+      setIsOnboardingComplete(userData.isOnboardingComplete || false);
     } finally {
       setIsLoading(false);
     }
@@ -1161,6 +761,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     verifyEmail,
     ssoProviders,
     loadSSOProviders,
+    circles,
+    activeCircleId,
+    setActiveCircleId,
+    loadCircles: async () => {
+      const userCircles = await authService.getCircles();
+      setCircles(userCircles);
+    }
   };
 
   // Simple auth state logging
@@ -1174,6 +781,4 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-
 

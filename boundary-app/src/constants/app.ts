@@ -2,7 +2,7 @@
 import { isDev } from '../utils/isDev';
 
 export const API_CONFIG = {
-  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:4000/api/v1',
+  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:3002/api/v1',
   TIMEOUT: 30000,
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000,
@@ -24,6 +24,14 @@ export const API_ENDPOINTS = {
     FACEBOOK: '/auth/facebook',
     APPLE: '/auth/apple',
     ME: '/auth/me',
+  },
+
+  // Circles (AppKit organizational units)
+  CIRCLES: {
+    LIST: '/circles',
+    JOIN: '/circles/join',
+    DETAILS: (id: string) => `/circles/${id}`,
+    MEMBERS: (id: string) => `/circles/${id}/members`,
   },
 
   // Users

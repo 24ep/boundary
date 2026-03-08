@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
+import { appkit } from '../services/api/appkit';
 
 const PIN_HASH_KEY = 'pin_hash';
 const PIN_ENABLED_KEY = 'pin_enabled';
@@ -51,10 +52,14 @@ export const PinProvider: React.FC<PinProviderProps> = ({ children }) => {
     const checkPinStatus = async () => {
         try {
             setIsLoading(true);
+            
+            // Check backend first if authenticated
+            const { hasPin: hasBackendPin } = await appkit.getPinStatus();
+            
             const pinEnabled = await AsyncStorage.getItem(PIN_ENABLED_KEY);
             const pinHash = await AsyncStorage.getItem(PIN_HASH_KEY);
 
-            const hasPinSetup = pinEnabled === 'true' && !!pinHash;
+            const hasPinSetup = hasBackendPin || (pinEnabled === 'true' && !!pinHash);
             setHasPin(hasPinSetup);
 
             if (hasPinSetup) {
@@ -63,6 +68,10 @@ export const PinProvider: React.FC<PinProviderProps> = ({ children }) => {
             }
         } catch (error) {
             console.error('Error checking PIN status:', error);
+            // Fallback to local storage if backend fails
+            const pinEnabled = await AsyncStorage.getItem(PIN_ENABLED_KEY);
+            const pinHash = await AsyncStorage.getItem(PIN_HASH_KEY);
+            setHasPin(pinEnabled === 'true' && !!pinHash);
         } finally {
             setIsLoading(false);
         }
@@ -95,6 +104,10 @@ export const PinProvider: React.FC<PinProviderProps> = ({ children }) => {
                 return false;
             }
 
+            // Set on backend
+            await appkit.setPin(pin);
+
+            // Also keep local hash for offline/speed fallback if desired
             const pinHash = await hashPin(pin);
             await AsyncStorage.setItem(PIN_HASH_KEY, pinHash);
             await AsyncStorage.setItem(PIN_ENABLED_KEY, 'true');
@@ -104,7 +117,7 @@ export const PinProvider: React.FC<PinProviderProps> = ({ children }) => {
             setIsPinSetupRequired(false);
             setIsPinLocked(false);
 
-            console.log('[PIN] PIN setup successful');
+            console.log('[PIN] PIN setup successful (Synced with backend)');
             return true;
         } catch (error) {
             console.error('Error setting up PIN:', error);
@@ -115,27 +128,41 @@ export const PinProvider: React.FC<PinProviderProps> = ({ children }) => {
     // Verify entered PIN
     const verifyPin = async (pin: string): Promise<boolean> => {
         try {
-            const storedHash = await AsyncStorage.getItem(PIN_HASH_KEY);
-            if (!storedHash) {
-                console.error('No PIN hash found');
-                return false;
-            }
-
-            const enteredHash = await hashPin(pin);
-            const isValid = enteredHash === storedHash;
+            // Verify on backend
+            const result = await appkit.verifyPin(pin);
+            const isValid = result.verified;
 
             if (isValid) {
                 setIsPinLocked(false);
                 await AsyncStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
-                console.log('[PIN] PIN verified successfully');
+                
+                // Refresh local hash while we're at it
+                const pinHash = await hashPin(pin);
+                await AsyncStorage.setItem(PIN_HASH_KEY, pinHash);
+                
+                console.log('[PIN] PIN verified successfully against backend');
             } else {
-                console.log('[PIN] Invalid PIN entered');
+                console.log('[PIN] Invalid PIN entered (Backend check)');
             }
 
             return isValid;
         } catch (error) {
-            console.error('Error verifying PIN:', error);
-            return false;
+            console.error('Error verifying PIN against backend:', error);
+            
+            // Fallback to local verification if network fails
+            const storedHash = await AsyncStorage.getItem(PIN_HASH_KEY);
+            if (!storedHash) return false;
+
+            const enteredHash = await hashPin(pin);
+            const isValidLocal = enteredHash === storedHash;
+
+            if (isValidLocal) {
+                setIsPinLocked(false);
+                await AsyncStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
+                console.log('[PIN] PIN verified successfully locally (Fallback)');
+            }
+            
+            return isValidLocal;
         }
     };
 

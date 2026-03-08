@@ -1,4 +1,5 @@
 import { api } from './index';
+import { appkit } from './appkit';
 
 export interface SafetyAlert {
   id: string;
@@ -69,14 +70,26 @@ export interface CreateEmergencyContactRequest {
 export const safetyApi = {
   // Create panic alert
   createPanicAlert: async (data: CreatePanicAlertRequest): Promise<{ success: boolean; alert: SafetyAlert }> => {
-    const response = await api.post('/safety/panic', data);
-    return response.data;
+    try {
+      const alert = await appkit.safety.createPanicAlert(data);
+      return { success: true, alert: alert as any };
+    } catch (error) {
+      console.error('SDK createPanicAlert error:', error);
+      const response = await api.post('/safety/panic', data);
+      return response.data;
+    }
   },
 
   // Create inactivity alert
   createInactivityAlert: async (data: CreateInactivityAlertRequest): Promise<{ success: boolean; alert: SafetyAlert }> => {
-    const response = await api.post('/safety/inactivity', data);
-    return response.data;
+    try {
+      const alert = await appkit.safety.createInactivityAlert(data);
+      return { success: true, alert: alert as any };
+    } catch (error) {
+      console.error('SDK createInactivityAlert error:', error);
+      const response = await api.post('/safety/inactivity', data);
+      return response.data;
+    }
   },
 
   // Get user's alerts
@@ -93,8 +106,14 @@ export const safetyApi = {
 
   // Get active alerts
   getActiveAlerts: async (): Promise<{ success: boolean; alerts: SafetyAlert[] }> => {
-    const response = await api.get('/safety/alerts/active');
-    return response.data;
+    try {
+      const alerts = await appkit.safety.getActiveAlerts();
+      return { success: true, alerts: alerts as any };
+    } catch (error) {
+      console.error('SDK getActiveAlerts error:', error);
+      const response = await api.get('/safety/alerts/active');
+      return response.data;
+    }
   },
 
   // Get alert by ID
@@ -105,26 +124,50 @@ export const safetyApi = {
 
   // Acknowledge alert
   acknowledgeAlert: async (alertId: string): Promise<{ success: boolean; alert: SafetyAlert }> => {
-    const response = await api.put(`/safety/alerts/${alertId}/acknowledge`);
-    return response.data;
+    try {
+      const alert = await appkit.safety.acknowledgeAlert(alertId);
+      return { success: true, alert: alert as any };
+    } catch (error) {
+      console.error('SDK acknowledgeAlert error:', error);
+      const response = await api.put(`/safety/alerts/${alertId}/acknowledge`);
+      return response.data;
+    }
   },
 
   // Resolve alert
   resolveAlert: async (alertId: string): Promise<{ success: boolean; alert: SafetyAlert }> => {
-    const response = await api.put(`/safety/alerts/${alertId}/resolve`);
-    return response.data;
+    try {
+      const alert = await appkit.safety.resolveAlert(alertId);
+      return { success: true, alert: alert as any };
+    } catch (error) {
+      console.error('SDK resolveAlert error:', error);
+      const response = await api.put(`/safety/alerts/${alertId}/resolve`);
+      return response.data;
+    }
   },
 
   // Get emergency contacts
   getEmergencyContacts: async (): Promise<{ success: boolean; emergencyContacts: EmergencyContact[] }> => {
-    const response = await api.get('/safety/emergency-contacts');
-    return response.data;
+    try {
+      const contacts = await appkit.safety.getEmergencyContacts();
+      return { success: true, emergencyContacts: contacts as any };
+    } catch (error) {
+      console.error('SDK getEmergencyContacts error:', error);
+      const response = await api.get('/safety/emergency-contacts');
+      return response.data;
+    }
   },
 
   // Create emergency contact
   createEmergencyContact: async (data: CreateEmergencyContactRequest): Promise<{ success: boolean; contact: EmergencyContact }> => {
-    const response = await api.post('/safety/emergency-contacts', data);
-    return response.data;
+    try {
+      const contact = await appkit.safety.createEmergencyContact(data);
+      return { success: true, contact: contact as any };
+    } catch (error) {
+      console.error('SDK createEmergencyContact error:', error);
+      const response = await api.post('/safety/emergency-contacts', data);
+      return response.data;
+    }
   },
 
   // Update emergency contact
@@ -135,8 +178,14 @@ export const safetyApi = {
 
   // Delete emergency contact
   deleteEmergencyContact: async (contactId: string): Promise<{ success: boolean; message: string }> => {
-    const response = await api.delete(`/safety/emergency-contacts/${contactId}`);
-    return response.data;
+    try {
+      await appkit.safety.deleteEmergencyContact(contactId);
+      return { success: true, message: 'Contact deleted' };
+    } catch (error) {
+      console.error('SDK deleteEmergencyContact error:', error);
+      const response = await api.delete(`/safety/emergency-contacts/${contactId}`);
+      return response.data;
+    }
   },
 
   // Get safety statistics

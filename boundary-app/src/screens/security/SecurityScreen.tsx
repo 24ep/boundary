@@ -188,6 +188,13 @@ export const SecurityScreen: React.FC = () => {
                         badgeColor={security?.mfaEnabled ? '#10B981' : '#EF4444'}
                         isWarning={!security?.mfaEnabled}
                     />
+
+                    <SecurityItem
+                        icon="numeric-6-box-outline"
+                        title="App Security PIN"
+                        subtitle="Secure your app with a 6-digit PIN"
+                        onPress={() => navigation.navigate('SetPin')}
+                    />
                 </View>
 
                 {/* Sessions & Devices Section */}

@@ -4,6 +4,7 @@
  */
 
 import { api } from './index';
+import { appkit } from './appkit';
 
 // =====================================================
 // INTERFACES
@@ -109,16 +110,28 @@ export interface SecuritySettings {
 export const identityApi = {
   // Get all sessions for current user
   getSessions: async (includeExpired = false): Promise<{ sessions: UserSession[]; total: number }> => {
-    const response = await api.get(`/identity/sessions`, {
-      params: { includeExpired }
-    });
-    return response.data;
+    try {
+      const sessions = await appkit.identity.getSessions();
+      return { sessions: sessions as any, total: sessions.length };
+    } catch (error) {
+      console.error('SDK getSessions error:', error);
+      const response = await api.get(`/identity/sessions`, {
+        params: { includeExpired }
+      });
+      return response.data;
+    }
   },
 
   // Revoke a specific session
   revokeSession: async (sessionId: string): Promise<{ success: boolean; message: string }> => {
-    const response = await api.post(`/identity/sessions/${sessionId}/revoke`);
-    return response.data;
+    try {
+      await appkit.identity.revokeSession(sessionId);
+      return { success: true, message: 'Session revoked' };
+    } catch (error) {
+      console.error('SDK revokeSession error:', error);
+      const response = await api.post(`/identity/sessions/${sessionId}/revoke`);
+      return response.data;
+    }
   },
 
   // Revoke all sessions except current
@@ -133,14 +146,26 @@ export const identityApi = {
 
   // Get all devices for current user
   getDevices: async (): Promise<{ devices: UserDevice[]; total: number }> => {
-    const response = await api.get('/identity/devices');
-    return response.data;
+    try {
+      const devices = await appkit.identity.getDevices();
+      return { devices: devices as any, total: devices.length };
+    } catch (error) {
+      console.error('SDK getDevices error:', error);
+      const response = await api.get('/identity/devices');
+      return response.data;
+    }
   },
 
   // Trust a device
   trustDevice: async (deviceId: string): Promise<{ success: boolean; message: string }> => {
-    const response = await api.post(`/identity/devices/${deviceId}/trust`);
-    return response.data;
+    try {
+      await appkit.identity.trustDevice(deviceId);
+      return { success: true, message: 'Device trusted' };
+    } catch (error) {
+      console.error('SDK trustDevice error:', error);
+      const response = await api.post(`/identity/devices/${deviceId}/trust`);
+      return response.data;
+    }
   },
 
   // Block a device
@@ -151,8 +176,14 @@ export const identityApi = {
 
   // Remove a device
   removeDevice: async (deviceId: string): Promise<{ success: boolean; message: string }> => {
-    const response = await api.delete(`/identity/devices/${deviceId}`);
-    return response.data;
+    try {
+      await appkit.identity.removeDevice(deviceId);
+      return { success: true, message: 'Device removed' };
+    } catch (error) {
+      console.error('SDK removeDevice error:', error);
+      const response = await api.delete(`/identity/devices/${deviceId}`);
+      return response.data;
+    }
   },
 
   // =====================================================
@@ -161,8 +192,14 @@ export const identityApi = {
 
   // Get MFA settings
   getMFASettings: async (): Promise<{ mfaSettings: UserMFA[]; backupCodesRemaining?: number }> => {
-    const response = await api.get('/identity/mfa');
-    return response.data;
+    try {
+      const mfaSettings = await appkit.identity.getMFASettings();
+      return { mfaSettings: mfaSettings as any };
+    } catch (error) {
+      console.error('SDK getMFASettings error:', error);
+      const response = await api.get('/identity/mfa');
+      return response.data;
+    }
   },
 
   // Setup MFA (initiate)
@@ -179,8 +216,14 @@ export const identityApi = {
 
   // Disable MFA
   disableMFA: async (mfaType: string, password: string): Promise<{ success: boolean; message: string }> => {
-    const response = await api.post('/identity/mfa/disable', { mfaType, password });
-    return response.data;
+    try {
+      await appkit.identity.disableMFA(mfaType);
+      return { success: true, message: 'MFA disabled' };
+    } catch (error) {
+      console.error('SDK disableMFA error:', error);
+      const response = await api.post('/identity/mfa/disable', { mfaType, password });
+      return response.data;
+    }
   },
 
   // Get new backup codes
@@ -232,6 +275,46 @@ export const identityApi = {
   requestDataExport: async (): Promise<{ success: boolean; message: string; estimatedTime?: string }> => {
     const response = await api.post('/identity/account/export-data');
     return response.data;
+  },
+
+  // =====================================================
+  // PIN MANAGEMENT
+  // =====================================================
+
+  // Check if user has a PIN set
+  getPinStatus: async (): Promise<{ hasPin: boolean }> => {
+    try {
+      const result = await appkit.getPinStatus();
+      return result;
+    } catch (error) {
+      console.error('SDK getPinStatus error:', error);
+      const response = await api.get('/identity/pin');
+      return response.data;
+    }
+  },
+  
+  // Set or update user PIN
+  setPin: async (pin: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      const result = await appkit.setPin(pin);
+      return result;
+    } catch (error) {
+      console.error('SDK setPin error:', error);
+      const response = await api.post('/identity/pin', { pin });
+      return response.data;
+    }
+  },
+  
+  // Verify user PIN
+  verifyPin: async (pin: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      const result = await appkit.verifyPin(pin);
+      return result;
+    } catch (error) {
+      console.error('SDK verifyPin error:', error);
+      const response = await api.post('/identity/pin/verify', { pin });
+      return response.data;
+    }
   },
 };
 

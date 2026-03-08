@@ -1,4 +1,4 @@
-import type { Circle, CircleMember } from './types';
+import type { Circle, CircleMember, CreateCircleRequest, UpdateCircleRequest, CircleType } from './types';
 import { HttpClient } from './http';
 
 export class GroupsModule {
@@ -42,5 +42,53 @@ export class GroupsModule {
       `/api/v1/circles/${circleId}/members/${userId}`,
       { role },
     );
+  }
+
+  /** Join a circle using an invite code and optional PIN */
+  async joinCircle(inviteCode: string, pinCode?: string): Promise<{ success: boolean; circle: Circle }> {
+    return this.http.post<{ success: boolean; circle: Circle }>('/api/v1/circles/join', {
+      inviteCode,
+      pinCode,
+    });
+  }
+
+  /** Get security codes (PIN and invite code) for a circle */
+  async getSecurityCodes(circleId: string): Promise<{ pinCode: string; circleCode: string }> {
+    return this.http.get<{ pinCode: string; circleCode: string }>(
+      `/api/v1/circles/${circleId}/pincode`,
+    );
+  }
+
+  /** Generate new security codes (PIN and invite code) for a circle */
+  async generateSecurityCodes(circleId: string): Promise<{ pinCode: string; circleCode: string }> {
+    return this.http.post<{ pinCode: string; circleCode: string }>(
+      `/api/v1/circles/${circleId}/pincode`,
+      {},
+    );
+  }
+
+  /** Create a new circle */
+  async createCircle(data: CreateCircleRequest): Promise<Circle> {
+    return this.http.post<Circle>('/api/v1/circles', data);
+  }
+
+  /** Update a circle's details */
+  async updateCircle(circleId: string, data: UpdateCircleRequest): Promise<Circle> {
+    return this.http.put<Circle>(`/api/v1/circles/${circleId}`, data);
+  }
+
+  /** Delete a circle */
+  async deleteCircle(circleId: string): Promise<void> {
+    await this.http.delete(`/api/v1/circles/${circleId}`);
+  }
+
+  /** Leave a circle */
+  async leaveCircle(circleId: string): Promise<void> {
+    await this.http.post(`/api/v1/circles/${circleId}/leave`, {});
+  }
+
+  /** Get available circle types/categories */
+  async getCircleTypes(): Promise<{ success: boolean; data: CircleType[] }> {
+    return this.http.get<{ success: boolean; data: CircleType[] }>('/api/v1/circle-types');
   }
 }

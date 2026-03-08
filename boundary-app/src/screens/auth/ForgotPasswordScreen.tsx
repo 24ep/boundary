@@ -14,8 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
-import { FONT_STYLES } from '../../utils/fontUtils';
-import { api } from '../../services/api';
+import AuthService from '../../services/auth/AuthService';
 
 const ForgotPasswordScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -40,7 +39,7 @@ const ForgotPasswordScreen: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      await api.post('/auth/forgot-password', { email });
+      await AuthService.forgotPassword(email);
       setEmailSent(true);
     } catch (error: any) {
       // Even if there's an error, show success to prevent email enumeration

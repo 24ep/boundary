@@ -3,18 +3,25 @@ import type {
   AppKitEvent,
   AppKitEventHandler,
   AppKitUser,
+  CreateCircleRequest,
+  UpdateCircleRequest,
+  CircleType,
+  RegisterRequest,
+  AuthResponse,
   LoginOptions,
   LogoutOptions,
   AuthUrlOptions,
   CallbackResult,
   TokenSet,
-  MFAType,
-  MFAEnrollResponse,
-  MFAVerifyOptions,
-  MFAStatus,
-  CMSContent,
-  TranslationMap,
   Circle,
+  LoginRequest,
+  CheckUserRequest,
+  CheckUserResponse,
+  OtpRequest,
+  VerifyOtpRequest,
+  VerifyEmailRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
 } from './types';
 import { createStorage, TokenStorage } from './storage';
 import { HttpClient } from './http';
@@ -24,6 +31,8 @@ import { MFAModule } from './mfa';
 import { CMSModule } from './cms';
 import { LocalizationModule } from './localization';
 import { GroupsModule } from './groups';
+import { SafetyModule } from './safety';
+import { BrandingModule } from './branding';
 import { WebhooksModule } from './webhooks';
 import { CommunicationModule } from './communication';
 import { SurveysModule } from './surveys';
@@ -32,11 +41,12 @@ import { BillingModule } from './billing';
 
 export class AppKit {
   private authModule: AuthModule;
-  private identityModule: IdentityModule;
   private listeners = new Map<string, Set<AppKitEventHandler>>();
   private tokenStorage: TokenStorage;
   private http: HttpClient;
 
+  /** Identity sub-module */
+  public readonly identity: IdentityModule;
   /** MFA sub-module */
   public readonly mfa: MFAModule;
   /** CMS sub-module */
@@ -45,6 +55,10 @@ export class AppKit {
   public readonly localization: LocalizationModule;
   /** Groups / Circles sub-module */
   public readonly groups: GroupsModule;
+  /** Safety sub-module */
+  public readonly safety: SafetyModule;
+  /** Branding sub-module */
+  public readonly branding: BrandingModule;
   /** Webhooks sub-module */
   public readonly webhooks: WebhooksModule;
   /** Communication sub-module */
@@ -56,24 +70,26 @@ export class AppKit {
   /** Billing & Subscriptions sub-module */
   public readonly billing: BillingModule;
 
-  constructor(private config: AppKitConfig) {
-    const storageAdapter = createStorage(config.storage || 'localStorage');
+  constructor(private appConfig: AppKitConfig) {
+    const storageAdapter = createStorage(appConfig.storage || 'localStorage');
     this.tokenStorage = new TokenStorage(storageAdapter);
 
     this.http = new HttpClient(
-      config.domain,
+      appConfig.domain,
       () => this.tokenStorage.getTokens()?.accessToken ?? null,
-      config.fetch,
+      appConfig.fetch,
     );
 
     const emit = (event: string, payload?: unknown) => this.emit(event as AppKitEvent, payload);
 
-    this.authModule = new AuthModule(config, this.tokenStorage, this.http, emit);
-    this.identityModule = new IdentityModule(this.http);
+    this.authModule = new AuthModule(appConfig, this.tokenStorage, this.http, emit);
+    this.identity = new IdentityModule(this.http);
     this.mfa = new MFAModule(this.http);
     this.cms = new CMSModule(this.http);
     this.localization = new LocalizationModule(this.http);
     this.groups = new GroupsModule(this.http);
+    this.safety = new SafetyModule(this.http);
+    this.branding = new BrandingModule(this.http);
     this.webhooks = new WebhooksModule(this.http);
     this.communication = new CommunicationModule(this.http);
     this.surveys = new SurveysModule(this.http);
@@ -98,9 +114,14 @@ export class AppKit {
     return this.authModule.buildAuthUrl(options);
   }
 
-  /** Handle the OAuth callback after redirect */
-  async handleCallback(callbackUrl?: string): Promise<CallbackResult> {
+  /** Handle callback from OAuth provider */
+  async handleCallback(callbackUrl?: string) {
     return this.authModule.handleCallback(callbackUrl);
+  }
+
+  /** Sign up / Register a new user */
+  async signup(data: RegisterRequest): Promise<AuthResponse> {
+    return this.authModule.register(data);
   }
 
   /** Refresh the access token */
@@ -123,26 +144,81 @@ export class AppKit {
     return this.authModule.getTokens();
   }
 
+  /** Direct login with credentials (email/password) */
+  async loginWithCredentials(data: LoginRequest): Promise<AuthResponse> {
+    return this.authModule.loginWithCredentials(data);
+  }
+
+  /** Check if a user exists by email or phone */
+  async checkUserExists(data: CheckUserRequest): Promise<CheckUserResponse> {
+    return this.authModule.checkUserExists(data);
+  }
+
+  /** Request an OTP code */
+  async requestOtp(data: OtpRequest): Promise<{ success: boolean; message?: string }> {
+    return this.authModule.requestOtp(data);
+  }
+
+  /** Login with an OTP code */
+  async loginWithOtp(data: VerifyOtpRequest): Promise<AuthResponse> {
+    return this.authModule.loginWithOtp(data);
+  }
+
+  /** Verify email with a code */
+  async verifyEmail(data: VerifyEmailRequest): Promise<AuthResponse> {
+    return this.authModule.verifyEmail(data);
+  }
+
+  /** Request password reset email */
+  async forgotPassword(data: ForgotPasswordRequest): Promise<{ success: boolean; message?: string }> {
+    return this.authModule.forgotPassword(data);
+  }
+
+  /** Reset password using a token */
+  async resetPassword(data: ResetPasswordRequest): Promise<{ success: boolean; message?: string }> {
+    return this.authModule.resetPassword(data);
+  }
+
+  /** Complete user onboarding */
+  async completeOnboarding(data: any): Promise<AuthResponse> {
+    return this.authModule.completeOnboarding(data);
+  }
+
   // ─── Identity shortcuts ────────────────────────────────────────
 
   /** Get the current user's profile */
   async getUser(): Promise<AppKitUser> {
-    return this.identityModule.getUser();
+    return this.identity.getUser();
   }
 
   /** Update the current user's profile */
   async updateProfile(data: Partial<Pick<AppKitUser, 'firstName' | 'lastName' | 'phone' | 'avatar'>>): Promise<AppKitUser> {
-    return this.identityModule.updateProfile(data);
+    return this.identity.updateProfile(data);
   }
 
   /** Get custom attributes for the current user */
   async getAttributes(): Promise<Record<string, unknown>> {
-    return this.identityModule.getAttributes();
+    return this.identity.getAttributes();
   }
 
   /** Update custom attributes for the current user */
   async updateAttributes(attributes: Record<string, unknown>): Promise<Record<string, unknown>> {
-    return this.identityModule.updateAttributes(attributes);
+    return this.identity.updateAttributes(attributes);
+  }
+
+  /** Check if the current user has a PIN set */
+  async getPinStatus(): Promise<{ hasPin: boolean }> {
+    return this.identity.getPinStatus();
+  }
+
+  /** Set or update the current user's PIN */
+  async setPin(pin: string): Promise<{ success: boolean; message: string }> {
+    return this.identity.setPin(pin);
+  }
+
+  /** Verify the current user's PIN */
+  async verifyPin(pin: string): Promise<{ success: boolean; verified: boolean; message: string }> {
+    return this.identity.verifyPin(pin);
   }
 
   // ─── Groups shortcuts ──────────────────────────────────────────
@@ -150,6 +226,46 @@ export class AppKit {
   /** Get circles the current user belongs to */
   async getUserCircles(): Promise<Circle[]> {
     return this.groups.getUserCircles();
+  }
+
+  /** Join a circle using an invite code and optional PIN */
+  async joinCircle(inviteCode: string, pinCode?: string): Promise<{ success: boolean; circle: Circle }> {
+    return this.groups.joinCircle(inviteCode, pinCode);
+  }
+
+  /** Get circle security codes */
+  async getCircleSecurityCodes(circleId: string) {
+    return this.groups.getSecurityCodes(circleId);
+  }
+
+  /** Generate new security codes (PIN and invite code) for a circle */
+  async generateCircleSecurityCodes(circleId: string): Promise<{ pinCode: string; circleCode: string }> {
+    return this.groups.generateSecurityCodes(circleId);
+  }
+
+  /** Create a new circle */
+  async createCircle(data: CreateCircleRequest): Promise<Circle> {
+    return this.groups.createCircle(data);
+  }
+
+  /** Update a circle's details */
+  async updateCircle(circleId: string, data: UpdateCircleRequest): Promise<Circle> {
+    return this.groups.updateCircle(circleId, data);
+  }
+
+  /** Delete a circle */
+  async deleteCircle(circleId: string): Promise<void> {
+    return this.groups.deleteCircle(circleId);
+  }
+
+  /** Leave a circle */
+  async leaveCircle(circleId: string): Promise<void> {
+    return this.groups.leaveCircle(circleId);
+  }
+
+  /** Get available circle types/categories */
+  async getCircleTypes(): Promise<{ success: boolean; data: CircleType[] }> {
+    return this.groups.getCircleTypes();
   }
 
   // ─── Event system ──────────────────────────────────────────────

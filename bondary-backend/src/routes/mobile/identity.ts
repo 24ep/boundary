@@ -671,4 +671,91 @@ router.post('/account/export-data', async (req: Request, res: Response) => {
     }
 });
 
+// =====================================================
+// PIN MANAGEMENT
+// =====================================================
+
+/**
+ * GET /identity/pin
+ * Check if the current user has a PIN set
+ */
+router.get('/pin', async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).user?.id;
+        
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { pinCode: true }
+        });
+
+        res.json({ hasPin: !!user?.pinCode });
+    } catch (error: any) {
+        console.error('Error checking PIN status:', error);
+        res.status(500).json({ error: 'Failed to check PIN status' });
+    }
+});
+
+/**
+ * POST /identity/pin
+ * Set or update the user's PIN
+ */
+router.post('/pin', async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).user?.id;
+        const { pin } = req.body;
+
+        if (!pin || pin.length !== 6 || !/^\d+$/.test(pin)) {
+            return res.status(400).json({ error: 'PIN must be a 6-digit number' });
+        }
+
+        // Hash the PIN before storing
+        const hashedPin = await bcrypt.hash(pin, 10);
+
+        await prisma.user.update({
+            where: { id: userId },
+            data: { pinCode: hashedPin }
+        });
+
+        res.json({ success: true, message: 'PIN set successfully' });
+    } catch (error: any) {
+        console.error('Error setting PIN:', error);
+        res.status(500).json({ error: 'Failed to set PIN' });
+    }
+});
+
+/**
+ * POST /identity/pin/verify
+ * Verify the user's PIN
+ */
+router.post('/pin/verify', async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).user?.id;
+        const { pin } = req.body;
+
+        if (!pin) {
+            return res.status(400).json({ error: 'PIN is required' });
+        }
+
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { pinCode: true }
+        });
+
+        if (!user || !user.pinCode) {
+            return res.status(400).json({ error: 'No PIN set for this user' });
+        }
+
+        const isValid = await bcrypt.compare(pin, user.pinCode);
+
+        if (isValid) {
+            res.json({ success: true, message: 'PIN verified' });
+        } else {
+            res.status(401).json({ success: false, error: 'Invalid PIN' });
+        }
+    } catch (error: any) {
+        console.error('Error verifying PIN:', error);
+        res.status(500).json({ error: 'Failed to verify PIN' });
+    }
+});
+
 export default router;

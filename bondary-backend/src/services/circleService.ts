@@ -19,7 +19,8 @@ export class CircleService {
         name,
         description,
         type,
-        inviteCode: Math.random().toString(36).substring(2, 10).toUpperCase(),
+        invite_code: Math.random().toString(36).substring(2, 10).toUpperCase(),
+        pin_code: Math.floor(100000 + Math.random() * 900000).toString(),
         ...other
       }
     });

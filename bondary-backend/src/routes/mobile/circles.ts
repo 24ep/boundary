@@ -89,10 +89,17 @@ router.post('/join', [
     const { inviteCode } = req.body;
     const userId = req.user.id;
 
-    // Find circle by invite code in Unified Entities
-    const result = await entityService.queryEntities('circle', {
+    // Find circle by invite code or pin code in Unified Entities
+    let result = await entityService.queryEntities('circle', {
         filters: { invite_code: inviteCode.toUpperCase() }
     } as any);
+
+    // If not found by invite code, try by pin code
+    if (result.entities.length === 0) {
+      result = await entityService.queryEntities('circle', {
+          filters: { pin_code: inviteCode }
+      } as any);
+    }
 
     if (result.entities.length === 0) {
       res.status(404).json({

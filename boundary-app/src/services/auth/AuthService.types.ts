@@ -4,19 +4,24 @@ export interface User {
   firstName: string;
   lastName: string;
   phoneNumber?: string;
+  phone?: string;
   avatar?: string;
-  dateOfBirth?: string;
+  dateOfBirth?: Date;
   gender?: string;
   preferences?: any;
   emergencyContacts?: any[];
-  createdAt: string;
-  lastActiveAt: string;
+  createdAt: Date;
+  updatedAt: Date;
+  lastActiveAt?: string;
+  userType?: 'Circle' | 'children' | 'seniors' | 'workplace';
+  subscriptionTier?: 'free' | 'premium' | 'elite';
+  circleIds?: string[];
   isOnboardingComplete?: boolean;
 }
 
 export interface AuthTokens {
   accessToken: string;
-  refreshToken: string;
+  refreshToken?: string;
   expiresIn?: number;
 }
 
@@ -31,10 +36,12 @@ export interface LoginData {
   otp?: string;
 }
 
-export interface RegisterData {
+export interface SignupData {
   firstName: string;
   lastName: string;
   email: string;
   password?: string;
   phone?: string;
+  dateOfBirth?: Date;
+  userType?: 'Circle' | 'children' | 'seniors' | 'workplace';
 }

@@ -1,4 +1,5 @@
-import { apiClient } from '../api/apiClient';
+import appkit from '../api/appkit';
+import { AppKitUser } from 'alphayard-appkit';
 
 export interface UserProfile {
   id: string;
@@ -24,18 +25,40 @@ class UserService {
 
   async getProfile(): Promise<{ data: UserProfile }> {
     try {
-        const response = await apiClient.get('/auth/me');
-        // Map backend response to UserProfile if needed
-        // Assuming /auth/me returns the user object structure we need or close to it
-        return { data: response.data?.user || response.data };
+        const appKitUser = await appkit.getUser();
+        return { data: this.mapAppKitUser(appKitUser) };
     } catch (error) {
         console.error('Error fetching profile:', error);
         throw error;
     }
   }
 
-  async updateProfile(data: Partial<UserProfile>): Promise<void> {
-    await apiClient.put('/users/profile', data);
+  async updateProfile(data: Partial<UserProfile>): Promise<UserProfile> {
+    try {
+      const appKitUser = await appkit.updateProfile({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phoneNumber,
+        avatar: data.avatar,
+        attributes: data.bio ? { bio: data.bio } : undefined
+      });
+      return this.mapAppKitUser(appKitUser);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw error;
+    }
+  }
+
+  private mapAppKitUser(user: AppKitUser): UserProfile {
+    return {
+      id: user.id,
+      firstName: user.firstName || '',
+      lastName: user.lastName || '',
+      email: user.email,
+      phoneNumber: user.phone,
+      avatar: user.avatar,
+      bio: (user.attributes?.bio as string) || ''
+    };
   }
 }
 

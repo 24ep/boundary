@@ -17,6 +17,34 @@ export interface AppKitConfig {
   fetch?: typeof globalThis.fetch;
 }
 
+export interface MobileBranding {
+  mobileAppName?: string;
+  logoUrl?: string;
+  iconUrl?: string;
+  analytics?: Record<string, unknown>;
+  legal?: Record<string, unknown>;
+  screens?: any[];
+  categories?: any[];
+  flows?: any[];
+}
+
+export interface RegisterRequest {
+  email: string;
+  password?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  [key: string]: unknown;
+}
+
+export interface AuthResponse {
+  success: boolean;
+  message?: string;
+  user?: AppKitUser;
+  accessToken?: string;
+  refreshToken?: string;
+}
+
 // ─── Auth ────────────────────────────────────────────────────────
 
 export interface AuthUrlOptions {
@@ -98,6 +126,12 @@ export interface AppKitUser {
 }
 
 // ─── MFA ─────────────────────────────────────────────────────────
+export interface UserMFA {
+  id: string;
+  mfaType: 'totp' | 'sms' | 'email';
+  isEnabled: boolean;
+  isVerified?: boolean;
+}
 
 export type MFAType = 'totp' | 'sms' | 'email';
 
@@ -121,6 +155,46 @@ export interface MFAStatus {
   methods: MFAType[];
 }
 
+export interface UserSession {
+  id: string;
+  deviceType?: string;
+  deviceName?: string;
+  ipAddress?: string;
+  lastActivityAt: string;
+  isActive: boolean;
+}
+
+export interface UserDevice {
+  id: string;
+  deviceName?: string;
+  deviceType: string;
+  isTrusted: boolean;
+  lastSeenAt: string;
+}
+
+// ─── Safety ─────────────────────────────────────────────────────
+
+export interface SafetyAlert {
+  id: string;
+  userId: string;
+  circleId: string;
+  alertType: string;
+  status: string;
+  priority: string;
+  locationLatitude?: number;
+  locationLongitude?: number;
+  locationAddress?: string;
+  createdAt: string;
+}
+
+export interface EmergencyContact {
+  id: string;
+  name: string;
+  phoneNumber: string;
+  relationship: string;
+  isPrimary: boolean;
+}
+
 // ─── Groups / Circles ────────────────────────────────────────────
 
 export interface Circle {
@@ -132,11 +206,32 @@ export interface Circle {
   createdAt?: string;
 }
 
+export interface CircleType {
+  id: string;
+  name: string;
+  code: string;
+  icon?: string;
+  sort_order?: number;
+}
+
 export interface CircleMember {
   userId: string;
   role: string;
   joinedAt: string;
   user?: AppKitUser;
+}
+
+export interface CreateCircleRequest {
+  name: string;
+  description?: string;
+  type?: string;
+  settings?: Record<string, unknown>;
+}
+
+export interface UpdateCircleRequest {
+  name?: string;
+  description?: string;
+  settings?: Record<string, unknown>;
 }
 
 // ─── CMS ─────────────────────────────────────────────────────────
@@ -179,4 +274,47 @@ export class AppKitError extends Error {
     super(message);
     this.name = 'AppKitError';
   }
+}
+
+// ─── Extended Auth Types ─────────────────────────────────────────
+
+export interface LoginRequest {
+  email?: string;
+  phone?: string;
+  password?: string;
+  [key: string]: unknown;
+}
+
+export interface OtpRequest {
+  email?: string;
+  phone?: string;
+}
+
+export interface VerifyOtpRequest {
+  email?: string;
+  phone?: string;
+  otp: string;
+}
+
+export interface VerifyEmailRequest {
+  email: string;
+  code: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  password: string;
+  token: string;
+}
+
+export interface CheckUserRequest {
+  email?: string;
+  phone?: string;
+}
+
+export interface CheckUserResponse {
+  exists: boolean;
 }

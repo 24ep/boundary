@@ -14,6 +14,7 @@ export type {
   CallbackResult,
   PKCEChallenge,
   AppKitUser,
+  MobileBranding,
   MFAType,
   MFAEnrollResponse,
   MFAVerifyOptions,
@@ -24,6 +25,14 @@ export type {
   TranslationMap,
   AppKitEvent,
   AppKitEventHandler,
+  LoginRequest,
+  CheckUserRequest,
+  CheckUserResponse,
+  OtpRequest,
+  VerifyOtpRequest,
+  VerifyEmailRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
 } from './types';
 
 // Sub-modules (for advanced usage)

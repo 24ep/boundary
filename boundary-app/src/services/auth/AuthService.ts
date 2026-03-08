@@ -1,12 +1,10 @@
-import { API_CONFIG } from '../../constants/app';
 export * from './AuthService.types';
-import { User, AuthResponse, AuthTokens, LoginData, RegisterData } from './AuthService.types';
+import { User, AuthTokens, AuthResponse, LoginData, SignupData } from './AuthService.types';
+import appkit from '../api/appkit';
+import { AppKitUser } from 'alphayard-appkit';
 
 class AuthService {
   private static instance: AuthService;
-  private currentUser: User | null = null;
-  private accessToken: string | null = null;
-  private refreshTokenStr: string | null = null;
 
   private constructor() {}
 
@@ -20,62 +18,47 @@ class AuthService {
   // Login
   async login(data: LoginData): Promise<AuthResponse> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      const response = await appkit.loginWithCredentials({
+        email: data.email,
+        password: data.password
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Login failed');
+      if (!response.user) {
+        throw new Error(response.message || 'Login failed');
       }
 
-      const user = this.mapUser(result.user);
-      const tokens = {
-        accessToken: result.accessToken,
-        refreshToken: result.refreshToken,
-        expiresIn: 3600 * 24 // Default assumption if not provided
+      const user = this.mapAppKitUser(response.user);
+      const tokens: AuthTokens = {
+        accessToken: response.accessToken || '',
+        refreshToken: response.refreshToken || '',
+        expiresIn: 3600 * 24
       };
 
-      this.setSession(user, tokens);
       return { user, tokens };
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
       throw error;
     }
   }
 
   // Register
-  async register(data: RegisterData): Promise<AuthResponse> {
+  async register(data: SignupData): Promise<AuthResponse> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await appkit.signup(data as any);
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Registration failed');
+      if (!response.user) {
+        throw new Error(response.message || 'Registration failed');
       }
 
-      const user = this.mapUser(result.user);
+      const user = this.mapAppKitUser(response.user);
       const tokens = {
-        accessToken: result.accessToken,
-        refreshToken: result.refreshToken,
+        accessToken: response.accessToken || '',
+        refreshToken: response.refreshToken || '',
         expiresIn: 3600 * 24
       };
 
-      this.setSession(user, tokens);
       return { user, tokens };
-    } catch (error) {
+    } catch (error: any) {
       console.error('Registration error:', error);
       throw error;
     }
@@ -84,87 +67,46 @@ class AuthService {
   // Logout
   async logout(): Promise<void> {
     try {
-      if (this.accessToken) {
-        await fetch(`${API_CONFIG.BASE_URL}/auth/logout`, {
-          method: 'POST',
-          headers: this.getHeaders(),
-          body: JSON.stringify({ refreshToken: this.refreshTokenStr })
-        });
-      }
+      await appkit.logout();
     } catch (error) {
       console.error('Logout error:', error);
-    } finally {
-      this.clearSession();
     }
   }
 
   // Get current user
   async getCurrentUser(): Promise<User | null> {
     try {
-      if (!this.accessToken) {
-        return this.currentUser;
+      if (!appkit.isAuthenticated()) {
+        return null;
       }
 
-      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/me`, {
-        method: 'GET',
-        headers: this.getHeaders(),
-      });
-
-      if (!response.ok) {
-        // If 401, try refresh? Or just return null
-        if (response.status === 401) {
-           // Attempt refresh if implemented, otherwise clear
-           this.clearSession();
-           return null;
-        }
-        return this.currentUser; // Return cached if API fails? Or null.
-      }
-
-      const result = await response.json();
-      const user = this.mapUser(result.user); // Backend wrapper { success: true, user: {} }
+      const appKitUser = await appkit.getUser();
+      const user = this.mapAppKitUser(appKitUser);
       
-      this.currentUser = user;
       return user;
     } catch (error) {
+       // If unauthorized, appkit might throw. We handle it as null user.
       console.error('Get current user error:', error);
-      return this.currentUser;
+      return null;
     }
   }
 
   // Check if authenticated
   async isAuthenticated(): Promise<boolean> {
-    return !!this.accessToken && !!this.currentUser;
+    return appkit.isAuthenticated();
   }
 
   // Refresh token
   async refreshToken(): Promise<AuthTokens | null> {
     try {
-      if (!this.refreshTokenStr) return null;
+      const tokenSet = await appkit.refreshToken();
+      if (!tokenSet) return null;
 
-      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/refresh`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ refreshToken: this.refreshTokenStr }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        return null;
-      }
-
-      const tokens = {
-        accessToken: result.accessToken,
-        refreshToken: result.refreshToken,
+      return {
+        accessToken: tokenSet.accessToken,
+        refreshToken: tokenSet.refreshToken || '',
         expiresIn: 3600 * 24
       };
-
-      this.accessToken = tokens.accessToken;
-      this.refreshTokenStr = tokens.refreshToken;
-
-      return tokens;
     } catch (error) {
       console.error('Token refresh error:', error);
       return null;
@@ -174,15 +116,9 @@ class AuthService {
   // Forgot Password
   async forgotPassword(email: string): Promise<void> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/auth/forgot-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to request password reset');
+      const response = await appkit.forgotPassword({ email });
+      if (!response.success) {
+        throw new Error(response.message || 'Failed to request password reset');
       }
     } catch (error) {
       console.error('Forgot password error:', error);
@@ -192,20 +128,13 @@ class AuthService {
 
   // Reset Password
   async resetPassword(newPassword: string, token?: string): Promise<void> {
-    // Note: Token usually comes from deep link. 
     if (!token) throw new Error('Reset token required');
     
     try {
-       const response = await fetch(`${API_CONFIG.BASE_URL}/auth/reset-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: newPassword, token })
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to reset password');
-      }
+       const response = await appkit.resetPassword({ password: newPassword, token });
+       if (!response.success) {
+         throw new Error(response.message || 'Failed to reset password');
+       }
     } catch (error) {
        console.error('Reset password error:', error);
        throw error;
@@ -214,30 +143,23 @@ class AuthService {
 
   // Social Login (Stub)
   async socialLogin(provider: 'google' | 'facebook' | 'apple'): Promise<AuthResponse> {
-    // For now, mockup or throw not implemented
     console.warn('Social login not fully implemented in API client', provider);
-    
-    // Mock for demo if needed
     throw new Error('Social login requires native SDK integration');
   }
 
   // Update Profile
   async updateProfile(updates: Partial<User>): Promise<User> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/users/profile`, {
-        method: 'PUT',
-        headers: this.getHeaders(),
-        body: JSON.stringify(updates)
-      });
+      // Map local User updates to AppKitUser update interface
+      const appKitUpdates = {
+        firstName: updates.firstName,
+        lastName: updates.lastName,
+        phone: updates.phoneNumber || updates.phone,
+        avatar: updates.avatar,
+      };
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Update failed');
-      }
-
-      const user = this.mapUser(result.user);
-      this.currentUser = user;
+      const appKitUser = await appkit.updateProfile(appKitUpdates);
+      const user = this.mapAppKitUser(appKitUser);
       return user;
     } catch (error) {
       console.error('Update profile error:', error);
@@ -245,65 +167,137 @@ class AuthService {
     }
   }
   
-  // Delete Account
-  async deleteAccount(): Promise<void> {
-     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}/users/account`, { // Assuming endpoint
-        method: 'DELETE',
-        headers: this.getHeaders(),
-      });
-
-      if (!response.ok) {
-         // handle error
-      }
-      this.clearSession();
+  // Get Circles (AppKit organizational units)
+  async getCircles(): Promise<any[]> {
+    try {
+      return await appkit.getUserCircles();
     } catch (error) {
-      console.error('Delete account error:', error);
+      console.error('Get circles error:', error);
+      return [];
+    }
+  }
+
+  // Join Circle
+  async joinCircle(inviteCode: string, pinCode?: string): Promise<any> {
+    try {
+      const response = await appkit.joinCircle(inviteCode, pinCode);
+      if (!response.success) {
+        throw new Error('Failed to join circle');
+      }
+      return response.circle;
+    } catch (error) {
+      console.error('Join circle error:', error);
       throw error;
     }
   }
 
-  updateCurrentUser(user: User): void {
-    this.currentUser = user;
+  // Check if user exists
+  async checkUserExists(identifier: string): Promise<boolean> {
+    try {
+      const isEmail = identifier.includes('@');
+      const response = await appkit.checkUserExists({
+        email: isEmail ? identifier : undefined,
+        phone: !isEmail ? identifier : undefined,
+      });
+      return !!response.exists;
+    } catch (error) {
+      console.error('Check user exists error:', error);
+      return false;
+    }
   }
 
-  // Helpers
-  private setSession(user: User, tokens: AuthTokens) {
-    this.currentUser = user;
-    this.accessToken = tokens.accessToken;
-    this.refreshTokenStr = tokens.refreshToken;
-    // In a real app, persist to SecureStore here
+  // Request OTP
+  async requestOtp(identifier: string): Promise<void> {
+    try {
+      const isEmail = identifier.includes('@');
+      const response = await appkit.requestOtp({
+        email: isEmail ? identifier : undefined,
+        phone: !isEmail ? identifier : undefined,
+      });
+      if (!response.success) {
+        throw new Error(response.message || 'Failed to request OTP');
+      }
+    } catch (error) {
+      console.error('Request OTP error:', error);
+      throw error;
+    }
   }
 
-  private clearSession() {
-    this.currentUser = null;
-    this.accessToken = null;
-    this.refreshTokenStr = null;
-    // Clear SecureStore
+  // Login with OTP
+  async loginWithOtp(identifier: string, otp: string): Promise<AuthResponse> {
+    try {
+      const isEmail = identifier.includes('@');
+      const response = await appkit.loginWithOtp({
+        email: isEmail ? identifier : undefined,
+        phone: !isEmail ? identifier : undefined,
+        otp,
+      });
+
+      if (!response.user) {
+        throw new Error(response.message || 'OTP login failed');
+      }
+
+      const user = this.mapAppKitUser(response.user);
+      const tokens: AuthTokens = {
+        accessToken: response.accessToken || '',
+        refreshToken: response.refreshToken || '',
+        expiresIn: 3600 * 24,
+      };
+
+      return { user, tokens };
+    } catch (error) {
+      console.error('OTP login error:', error);
+      throw error;
+    }
   }
 
-  private getHeaders() {
+  // Verify Email
+  async verifyEmail(email: string, code: string): Promise<AuthResponse> {
+    try {
+      const response = await appkit.verifyEmail({ email, code });
+
+      if (!response.user) {
+        throw new Error(response.message || 'Email verification failed');
+      }
+
+      const user = this.mapAppKitUser(response.user);
+      const tokens: AuthTokens = {
+        accessToken: response.accessToken || '',
+        refreshToken: response.refreshToken || '',
+        expiresIn: 3600 * 24,
+      };
+
+      return { user, tokens };
+    } catch (error) {
+      console.error('Verify email error:', error);
+      throw error;
+    }
+  }
+
+  updateCurrentUser(_user: User): void {
+    // No longer needed as state is managed in SDK
+  }
+
+  /**
+   * Maps an AppKitUser from the SDK to the mobile app's User interface.
+   */
+  private mapAppKitUser(appKitUser: AppKitUser): User {
     return {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this.accessToken}`
-    };
-  }
-
-  private mapUser(apiUser: any): User {
-    // Map backend response user to Mobile User interface
-    return {
-      id: apiUser.id,
-      email: apiUser.email,
-      firstName: apiUser.firstName,
-      lastName: apiUser.lastName,
-      phoneNumber: apiUser.phone, // Backend 'phone' -> Mobile 'phoneNumber'
-      avatar: apiUser.avatar || apiUser.profilePicture, // Map avatar
-      dateOfBirth: apiUser.dateOfBirth,
-      gender: apiUser.gender,
-      preferences: apiUser.preferences,
-      emergencyContacts: apiUser.emergencyContacts || [],
-      createdAt: apiUser.createdAt,
-      lastActiveAt: apiUser.updatedAt || new Date().toISOString()
+      id: appKitUser.id,
+      email: appKitUser.email,
+      firstName: appKitUser.firstName || appKitUser.name?.split(' ')[0] || '',
+      lastName: appKitUser.lastName || appKitUser.name?.split(' ').slice(1).join(' ') || '',
+      phoneNumber: appKitUser.phone,
+      phone: appKitUser.phone,
+      avatar: appKitUser.avatar,
+      // Default mappings for fields not yet in AppKitUser
+      dateOfBirth: undefined,
+      gender: undefined,
+      preferences: appKitUser.attributes?.preferences || {},
+      emergencyContacts: (appKitUser.attributes?.emergencyContacts as any[]) || [],
+      createdAt: appKitUser.createdAt ? new Date(appKitUser.createdAt) : new Date(),
+      updatedAt: appKitUser.updatedAt ? new Date(appKitUser.updatedAt) : new Date(),
+      lastActiveAt: appKitUser.updatedAt || new Date().toISOString()
     };
   }
 }

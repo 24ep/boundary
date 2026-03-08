@@ -33,6 +33,7 @@ export type CircleMinAggregateOutputType = {
   avatarUrl: string | null
   coverUrl: string | null
   inviteCode: string | null
+  pinCode: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -47,6 +48,7 @@ export type CircleMaxAggregateOutputType = {
   avatarUrl: string | null
   coverUrl: string | null
   inviteCode: string | null
+  pinCode: string | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -61,6 +63,7 @@ export type CircleCountAggregateOutputType = {
   avatarUrl: number
   coverUrl: number
   inviteCode: number
+  pinCode: number
   settings: number
   isActive: number
   createdAt: number
@@ -78,6 +81,7 @@ export type CircleMinAggregateInputType = {
   avatarUrl?: true
   coverUrl?: true
   inviteCode?: true
+  pinCode?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -92,6 +96,7 @@ export type CircleMaxAggregateInputType = {
   avatarUrl?: true
   coverUrl?: true
   inviteCode?: true
+  pinCode?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -106,6 +111,7 @@ export type CircleCountAggregateInputType = {
   avatarUrl?: true
   coverUrl?: true
   inviteCode?: true
+  pinCode?: true
   settings?: true
   isActive?: true
   createdAt?: true
@@ -194,6 +200,7 @@ export type CircleGroupByOutputType = {
   avatarUrl: string | null
   coverUrl: string | null
   inviteCode: string | null
+  pinCode: string | null
   settings: runtime.JsonValue
   isActive: boolean
   createdAt: Date
@@ -230,6 +237,7 @@ export type CircleWhereInput = {
   avatarUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
   coverUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
   inviteCode?: Prisma.StringNullableFilter<"Circle"> | string | null
+  pinCode?: Prisma.StringNullableFilter<"Circle"> | string | null
   settings?: Prisma.JsonFilter<"Circle">
   isActive?: Prisma.BoolFilter<"Circle"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Circle"> | Date | string
@@ -257,6 +265,7 @@ export type CircleOrderByWithRelationInput = {
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   inviteCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  pinCode?: Prisma.SortOrderInput | Prisma.SortOrder
   settings?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -287,6 +296,7 @@ export type CircleWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Circle"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
   coverUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
+  pinCode?: Prisma.StringNullableFilter<"Circle"> | string | null
   settings?: Prisma.JsonFilter<"Circle">
   isActive?: Prisma.BoolFilter<"Circle"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Circle"> | Date | string
@@ -314,6 +324,7 @@ export type CircleOrderByWithAggregationInput = {
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   inviteCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  pinCode?: Prisma.SortOrderInput | Prisma.SortOrder
   settings?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -335,6 +346,7 @@ export type CircleScalarWhereWithAggregatesInput = {
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"Circle"> | string | null
   coverUrl?: Prisma.StringNullableWithAggregatesFilter<"Circle"> | string | null
   inviteCode?: Prisma.StringNullableWithAggregatesFilter<"Circle"> | string | null
+  pinCode?: Prisma.StringNullableWithAggregatesFilter<"Circle"> | string | null
   settings?: Prisma.JsonWithAggregatesFilter<"Circle">
   isActive?: Prisma.BoolWithAggregatesFilter<"Circle"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Circle"> | Date | string
@@ -348,6 +360,7 @@ export type CircleCreateInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -375,6 +388,7 @@ export type CircleUncheckedCreateInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -398,6 +412,7 @@ export type CircleUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -425,6 +440,7 @@ export type CircleUncheckedUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -450,6 +466,7 @@ export type CircleCreateManyInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -463,6 +480,7 @@ export type CircleUpdateManyMutationInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -478,6 +496,7 @@ export type CircleUncheckedUpdateManyInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -503,6 +522,7 @@ export type CircleCountOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
+  pinCode?: Prisma.SortOrder
   settings?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -518,6 +538,7 @@ export type CircleMaxOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
+  pinCode?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -532,6 +553,7 @@ export type CircleMinOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
+  pinCode?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -794,6 +816,7 @@ export type CircleCreateWithoutOwnerInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -819,6 +842,7 @@ export type CircleUncheckedCreateWithoutOwnerInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -873,6 +897,7 @@ export type CircleScalarWhereInput = {
   avatarUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
   coverUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
   inviteCode?: Prisma.StringNullableFilter<"Circle"> | string | null
+  pinCode?: Prisma.StringNullableFilter<"Circle"> | string | null
   settings?: Prisma.JsonFilter<"Circle">
   isActive?: Prisma.BoolFilter<"Circle"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Circle"> | Date | string
@@ -886,6 +911,7 @@ export type CircleCreateWithoutCircleTypeInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -911,6 +937,7 @@ export type CircleUncheckedCreateWithoutCircleTypeInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -960,6 +987,7 @@ export type CircleCreateWithoutMembersInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -986,6 +1014,7 @@ export type CircleUncheckedCreateWithoutMembersInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1024,6 +1053,7 @@ export type CircleUpdateWithoutMembersInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1050,6 +1080,7 @@ export type CircleUncheckedUpdateWithoutMembersInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1072,6 +1103,7 @@ export type CircleCreateWithoutInvitationsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1098,6 +1130,7 @@ export type CircleUncheckedCreateWithoutInvitationsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1136,6 +1169,7 @@ export type CircleUpdateWithoutInvitationsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1162,6 +1196,7 @@ export type CircleUncheckedUpdateWithoutInvitationsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1184,6 +1219,7 @@ export type CircleCreateWithoutSafetyIncidentsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1210,6 +1246,7 @@ export type CircleUncheckedCreateWithoutSafetyIncidentsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1248,6 +1285,7 @@ export type CircleUpdateWithoutSafetyIncidentsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1274,6 +1312,7 @@ export type CircleUncheckedUpdateWithoutSafetyIncidentsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1296,6 +1335,7 @@ export type CircleCreateWithoutSocialPostsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1322,6 +1362,7 @@ export type CircleUncheckedCreateWithoutSocialPostsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1360,6 +1401,7 @@ export type CircleUpdateWithoutSocialPostsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1386,6 +1428,7 @@ export type CircleUncheckedUpdateWithoutSocialPostsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1408,6 +1451,7 @@ export type CircleCreateWithoutChatRoomsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1434,6 +1478,7 @@ export type CircleUncheckedCreateWithoutChatRoomsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1472,6 +1517,7 @@ export type CircleUpdateWithoutChatRoomsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1498,6 +1544,7 @@ export type CircleUncheckedUpdateWithoutChatRoomsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1520,6 +1567,7 @@ export type CircleCreateWithoutGeofencesInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1546,6 +1594,7 @@ export type CircleUncheckedCreateWithoutGeofencesInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1584,6 +1633,7 @@ export type CircleUpdateWithoutGeofencesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1610,6 +1660,7 @@ export type CircleUncheckedUpdateWithoutGeofencesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1632,6 +1683,7 @@ export type CircleCreateWithoutLocationSharesInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1658,6 +1710,7 @@ export type CircleUncheckedCreateWithoutLocationSharesInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1696,6 +1749,7 @@ export type CircleUpdateWithoutLocationSharesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1722,6 +1776,7 @@ export type CircleUncheckedUpdateWithoutLocationSharesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1744,6 +1799,7 @@ export type CircleCreateWithoutNotesInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1770,6 +1826,7 @@ export type CircleUncheckedCreateWithoutNotesInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1808,6 +1865,7 @@ export type CircleUpdateWithoutNotesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1834,6 +1892,7 @@ export type CircleUncheckedUpdateWithoutNotesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1856,6 +1915,7 @@ export type CircleCreateWithoutTodosInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1882,6 +1942,7 @@ export type CircleUncheckedCreateWithoutTodosInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1920,6 +1981,7 @@ export type CircleUpdateWithoutTodosInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1946,6 +2008,7 @@ export type CircleUncheckedUpdateWithoutTodosInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1968,6 +2031,7 @@ export type CircleCreateWithoutFileTagsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -1994,6 +2058,7 @@ export type CircleUncheckedCreateWithoutFileTagsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -2032,6 +2097,7 @@ export type CircleUpdateWithoutFileTagsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2058,6 +2124,7 @@ export type CircleUncheckedUpdateWithoutFileTagsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2081,6 +2148,7 @@ export type CircleCreateManyOwnerInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -2094,6 +2162,7 @@ export type CircleUpdateWithoutOwnerInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2119,6 +2188,7 @@ export type CircleUncheckedUpdateWithoutOwnerInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2143,6 +2213,7 @@ export type CircleUncheckedUpdateManyWithoutOwnerInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2157,6 +2228,7 @@ export type CircleCreateManyCircleTypeInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
@@ -2170,6 +2242,7 @@ export type CircleUpdateWithoutCircleTypeInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2195,6 +2268,7 @@ export type CircleUncheckedUpdateWithoutCircleTypeInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2219,6 +2293,7 @@ export type CircleUncheckedUpdateManyWithoutCircleTypeInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2346,6 +2421,7 @@ export type CircleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   avatarUrl?: boolean
   coverUrl?: boolean
   inviteCode?: boolean
+  pinCode?: boolean
   settings?: boolean
   isActive?: boolean
   createdAt?: boolean
@@ -2374,6 +2450,7 @@ export type CircleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   avatarUrl?: boolean
   coverUrl?: boolean
   inviteCode?: boolean
+  pinCode?: boolean
   settings?: boolean
   isActive?: boolean
   createdAt?: boolean
@@ -2391,6 +2468,7 @@ export type CircleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   avatarUrl?: boolean
   coverUrl?: boolean
   inviteCode?: boolean
+  pinCode?: boolean
   settings?: boolean
   isActive?: boolean
   createdAt?: boolean
@@ -2408,13 +2486,14 @@ export type CircleSelectScalar = {
   avatarUrl?: boolean
   coverUrl?: boolean
   inviteCode?: boolean
+  pinCode?: boolean
   settings?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CircleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "circleTypeId" | "name" | "description" | "avatarUrl" | "coverUrl" | "inviteCode" | "settings" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["circle"]>
+export type CircleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "circleTypeId" | "name" | "description" | "avatarUrl" | "coverUrl" | "inviteCode" | "pinCode" | "settings" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["circle"]>
 export type CircleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   circleType?: boolean | Prisma.Circle$circleTypeArgs<ExtArgs>
@@ -2464,6 +2543,7 @@ export type $CirclePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     avatarUrl: string | null
     coverUrl: string | null
     inviteCode: string | null
+    pinCode: string | null
     settings: runtime.JsonValue
     isActive: boolean
     createdAt: Date
@@ -2911,6 +2991,7 @@ export interface CircleFieldRefs {
   readonly avatarUrl: Prisma.FieldRef<"Circle", 'String'>
   readonly coverUrl: Prisma.FieldRef<"Circle", 'String'>
   readonly inviteCode: Prisma.FieldRef<"Circle", 'String'>
+  readonly pinCode: Prisma.FieldRef<"Circle", 'String'>
   readonly settings: Prisma.FieldRef<"Circle", 'Json'>
   readonly isActive: Prisma.FieldRef<"Circle", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Circle", 'DateTime'>

@@ -6,6 +6,16 @@ import type {
   LoginOptions,
   LogoutOptions,
   CallbackResult,
+  RegisterRequest,
+  AuthResponse,
+  LoginRequest,
+  OtpRequest,
+  VerifyOtpRequest,
+  VerifyEmailRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
+  CheckUserRequest,
+  CheckUserResponse,
 } from './types';
 import { AppKitError } from './types';
 import { generatePKCEChallenge, generateRandomString } from './pkce';
@@ -185,6 +195,107 @@ export class AuthModule {
       if (tokens?.idToken) params.set('id_token_hint', tokens.idToken);
       window.location.href = `${this.config.domain}/oauth/logout?${params.toString()}`;
     }
+  }
+
+  /** Register a new user */
+  async register(data: RegisterRequest): Promise<AuthResponse> {
+    const response = await this.http.post<AuthResponse>('/api/v1/auth/register', data);
+    
+    // If backend returns tokens, save them
+    if (response.accessToken && response.user) {
+      const tokens = {
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        expiresAt: Date.now() + 3600 * 1000 * 24, // Default 24h for mobile if not specified
+      };
+      this.tokenStorage.setTokens(tokens);
+      this.emit('login', tokens);
+    }
+    
+    return response;
+  }
+
+  /** Direct login with credentials (email/password) */
+  async loginWithCredentials(data: LoginRequest): Promise<AuthResponse> {
+    const response = await this.http.post<AuthResponse>('/api/v1/auth/login', data);
+    
+    if (response.accessToken) {
+      const tokens = {
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        expiresAt: Date.now() + 3600 * 1000 * 24,
+      };
+      this.tokenStorage.setTokens(tokens);
+      this.emit('login', tokens);
+    }
+    
+    return response;
+  }
+
+  /** Check if a user exists by email or phone */
+  async checkUserExists(data: CheckUserRequest): Promise<CheckUserResponse> {
+    return this.http.post<CheckUserResponse>('/api/v1/auth/check-user', data);
+  }
+
+  /** Request an OTP code */
+  async requestOtp(data: OtpRequest): Promise<{ success: boolean; message?: string }> {
+    return this.http.post<{ success: boolean; message?: string }>('/api/v1/auth/otp/request', data);
+  }
+
+  /** Login with an OTP code */
+  async loginWithOtp(data: VerifyOtpRequest): Promise<AuthResponse> {
+    const response = await this.http.post<AuthResponse>('/api/v1/auth/otp/login', data);
+    
+    if (response.accessToken) {
+      const tokens = {
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        expiresAt: Date.now() + 3600 * 1000 * 24,
+      };
+      this.tokenStorage.setTokens(tokens);
+      this.emit('login', tokens);
+    }
+    
+    return response;
+  }
+
+  /** Verify email with a code */
+  async verifyEmail(data: VerifyEmailRequest): Promise<AuthResponse> {
+    const response = await this.http.post<AuthResponse>('/api/v1/auth/verify-email', data);
+    
+    if (response.accessToken) {
+      const tokens = {
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        expiresAt: Date.now() + 3600 * 1000 * 24,
+      };
+      this.tokenStorage.setTokens(tokens);
+      this.emit('login', tokens);
+    }
+    
+    return response;
+  }
+
+  /** Request password reset email */
+  async forgotPassword(data: ForgotPasswordRequest): Promise<{ success: boolean; message?: string }> {
+    return this.http.post<{ success: boolean; message?: string }>('/api/v1/auth/forgot-password', data);
+  }
+
+  /** Reset password using a token */
+  async resetPassword(data: ResetPasswordRequest): Promise<{ success: boolean; message?: string }> {
+    return this.http.post<{ success: boolean; message?: string }>('/api/v1/auth/reset-password', data);
+  }
+
+  /** Complete user onboarding */
+  async completeOnboarding(data: any): Promise<AuthResponse> {
+    const response = await this.http.post<AuthResponse>('/api/v1/auth/onboarding/complete', data);
+    
+    if (response.user) {
+      // Refresh local user state if needed
+      this.emit('user_updated', response.user);
+    }
+    
+    return response;
   }
 
   /** Get the current access token, refreshing if expired */

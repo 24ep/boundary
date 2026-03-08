@@ -1,4 +1,4 @@
-import { api } from './index';
+import { appkit } from './appkit';
 
 export interface CircleType {
   id: string;
@@ -16,53 +16,7 @@ export interface Circle {
   createdBy: string;
   circleTypeId?: string;
   circleType?: CircleType;
-  settings: {
-    allowLocationSharing: boolean;
-    allowChatMessages: boolean;
-    allowFileSharing: boolean;
-    allowCalendarEvents: boolean;
-    allowTaskAssignment: boolean;
-    allowSafetyAlerts: boolean;
-    allowGeofenceAlerts: boolean;
-    allowInactivityAlerts: boolean;
-    allowPanicAlerts: boolean;
-    allowEmergencyContacts: boolean;
-    allowCircleInvites: boolean;
-    allowMemberRemoval: boolean;
-    allowAdminPromotion: boolean;
-    allowSettingsChange: boolean;
-    allowBillingManagement: boolean;
-    allowSubscriptionUpgrade: boolean;
-    allowSubscriptionDowngrade: boolean;
-    allowSubscriptionCancel: boolean;
-    allowDataExport: boolean;
-    allowDataDeletion: boolean;
-    allowPrivacySettings: boolean;
-    allowNotificationSettings: boolean;
-    allowLocationHistory: boolean;
-    allowChatHistory: boolean;
-    allowFileHistory: boolean;
-    allowCalendarHistory: boolean;
-    allowTaskHistory: boolean;
-    allowSafetyHistory: boolean;
-    allowGeofenceHistory: boolean;
-    allowInactivityHistory: boolean;
-    allowPanicHistory: boolean;
-    allowEmergencyHistory: boolean;
-    allowCircleHistory: boolean;
-    allowMemberHistory: boolean;
-    allowAdminHistory: boolean;
-    allowSettingsHistory: boolean;
-    allowBillingHistory: boolean;
-    allowSubscriptionHistory: boolean;
-    allowDataHistory: boolean;
-    allowPrivacyHistory: boolean;
-    allowNotificationHistory: boolean;
-    allowCircleExpenses: boolean;
-    allowCircleShopping: boolean;
-    allowCircleHealth: boolean;
-    allowCircleEntertainment: boolean;
-  };
+  settings: any;
   createdAt: string;
   updatedAt: string;
   members?: CircleMember[];
@@ -103,13 +57,13 @@ export interface CreateCircleRequest {
   description?: string;
   circleTypeId?: string;
   type?: string;
-  settings?: Partial<Circle['settings']>;
+  settings?: any;
 }
 
 export interface UpdateCircleRequest {
   name?: string;
   description?: string;
-  settings?: Partial<Circle['settings']>;
+  settings?: any;
 }
 
 export interface InviteMemberRequest {
@@ -120,207 +74,77 @@ export interface InviteMemberRequest {
 export const circleApi = {
   // Create circle
   createCircle: async (data: CreateCircleRequest): Promise<{ success: boolean; circle: Circle }> => {
-    const response = await api.post('/circles', data);
-    return response as any;
+    const circle = await appkit.createCircle(data as any);
+    return { success: true, circle: circle as any };
   },
 
   // Get user's circles
   getCircles: async (): Promise<{ success: boolean; circles: Circle[] }> => {
-    const response = await api.get('/circles');
-    return response as any;
+    const circles = await appkit.getUserCircles();
+    return { success: true, circles: circles as any[] };
   },
 
   // Get circle by ID
   getCircle: async (circleId: string): Promise<{ success: boolean; circle: Circle }> => {
-    const response = await api.get(`/circles/${circleId}`);
-    return response as any;
+    const circle = await (appkit as any).groups.getCircle(circleId);
+    return { success: true, circle: circle as any };
   },
 
   // Update circle
   updateCircle: async (circleId: string, data: UpdateCircleRequest): Promise<{ success: boolean; circle: Circle }> => {
-    const response = await api.put(`/circles/${circleId}`, data);
-    return response as any;
+    const circle = await appkit.updateCircle(circleId, data as any);
+    return { success: true, circle: circle as any };
   },
 
   // Delete circle
   deleteCircle: async (circleId: string): Promise<{ success: boolean; message: string }> => {
-    const response = await api.delete(`/circles/${circleId}`);
-    return response as any;
+    await appkit.deleteCircle(circleId);
+    return { success: true, message: 'Circle deleted' };
   },
 
   // Get circle members
   getCircleMembers: async (circleId: string): Promise<{ success: boolean; members: CircleMember[] }> => {
-    const response = await api.get(`/circles/${circleId}/members`);
-    return response as any;
+    const members = await (appkit as any).groups.getMembers(circleId);
+    return { success: true, members: members as any[] };
   },
 
   // Add circle member
   addCircleMember: async (circleId: string, data: InviteMemberRequest): Promise<{ success: boolean; invitation: CircleInvitation }> => {
-    const response = await api.post(`/circles/${circleId}/members`, data);
-    return response as any;
+    const invitation = await (appkit as any).groups.addMember(circleId, data.email, data.role);
+    return { success: true, invitation: invitation as any };
   },
 
   // Remove circle member
   removeCircleMember: async (circleId: string, userId: string): Promise<{ success: boolean; message: string }> => {
-    const response = await api.delete(`/circles/${circleId}/members/${userId}`);
-    return response as any;
+    await (appkit as any).groups.removeMember(circleId, userId);
+    return { success: true, message: 'Member removed' };
   },
 
   // Update circle member role
   updateCircleMemberRole: async (circleId: string, userId: string, role: 'admin' | 'member'): Promise<{ success: boolean; member: CircleMember }> => {
-    const response = await api.put(`/circles/${circleId}/members/${userId}`, { role });
-    return response as any;
-  },
-
-  // Get circle invitations (for a specific circle)
-  getCircleInvitations: async (circleId: string): Promise<{ success: boolean; invitations: CircleInvitation[] }> => {
-    const response = await api.get(`/circles/${circleId}/invitations`);
-    return response as any;
-  },
-
-  // Get pending invitations for current user
-  getPendingInvitations: async (): Promise<{ invitations: Array<{
-    id: string;
-    circleId: string;
-    email: string;
-    message?: string;
-    status: string;
-    createdAt: string;
-    expiresAt: string;
-    circle: { id: string; name: string; description?: string } | null;
-    invitedBy: string;
-  }> }> => {
-    const response = await api.get('/circles/invitations/pending');
-    return response as any;
-  },
-
-  // Invite member to circle
-  inviteMember: async (circleId: string, email: string, message?: string): Promise<{ message: string; invitation: any }> => {
-    const response = await api.post(`/circles/${circleId}/invite`, { email, message });
-    return response as any;
-  },
-
-  // Accept circle invitation
-  acceptCircleInvitation: async (invitationId: string): Promise<{ message: string; circle?: any; alreadyMember?: boolean }> => {
-    const response = await api.post(`/circles/invitations/${invitationId}/accept`);
-    return response as any;
-  },
-
-  // Decline circle invitation
-  declineCircleInvitation: async (invitationId: string): Promise<{ message: string }> => {
-    const response = await api.post(`/circles/invitations/${invitationId}/decline`);
-    return response as any;
-  },
-
-  // Leave circle
-  leaveCircle: async (circleId: string): Promise<{ success: boolean; message: string }> => {
-    const response = await api.post(`/circles/${circleId}/leave`);
-    return response as any;
+    const member = await (appkit as any).groups.updateMemberRole(circleId, userId, role);
+    return { success: true, member: member as any };
   },
 
   // Join circle by invitation code
   joinCircleByCode: async (invitationCode: string): Promise<{ success: boolean; circle: Circle }> => {
-    const response = await api.post('/circles/join', { invitationCode });
-    return response as any;
+    const result = await appkit.joinCircle(invitationCode);
+    return { success: result.success, circle: result.circle as any };
   },
 
-  // Get circle events
-  getEvents: async (circleId: string): Promise<{ success: boolean; events: any[] }> => {
-    const response = await api.get(`/circles/${circleId}/events`);
-    return response as any;
+  // Leave circle
+  leaveCircle: async (circleId: string): Promise<{ success: boolean; message: string }> => {
+    await appkit.leaveCircle(circleId);
+    return { success: true, message: 'Left circle successfully' };
   },
 
-  // Shopping List APIs (use /shopping; legacy /circles/shopping-list returns 410)
-  getShoppingList: async (): Promise<{ items: Array<{
-    id: string;
-    item: string;
-    quantity: string;
-    category: string;
-    completed: boolean;
-    list?: string;
-    createdBy?: string;
-    createdAt: string;
-    updatedAt: string;
-  }> }> => {
-    try {
-      const response = await api.get('/shopping');
-      const raw = (response as any)?.data;
-      const entities: any[] = raw?.data ?? raw?.entities ?? [];
-      const items = entities.map((e: any) => {
-        const att = e.attributes ?? e.data ?? {};
-        return {
-          id: e.id,
-          item: att.item ?? '',
-          quantity: att.quantity ?? '',
-          category: att.category ?? '',
-          completed: !!(att.completed),
-          list: att.list,
-          createdBy: e.ownerId,
-          createdAt: e.created_at ?? e.createdAt ?? new Date().toISOString(),
-          updatedAt: e.updated_at ?? e.updatedAt ?? new Date().toISOString(),
-        };
-      });
-      return { items };
-    } catch (_e) {
-      return { items: [] };
-    }
-  },
-
-  createShoppingItem: async (data: {
-    item: string;
-    quantity?: string;
-    category?: string;
-    list?: string;
-  }): Promise<{ item: any }> => {
-    const response = await api.post('/shopping', data);
-    const raw = (response as any)?.data;
-    const item = raw?.data ?? raw;
-    return { item: item ?? null };
-  },
-
-  updateShoppingItem: async (itemId: string, data: {
-    item?: string;
-    quantity?: string;
-    category?: string;
-    completed?: boolean;
-    list?: string;
-  }): Promise<{ item: any }> => {
-    const response = await api.put(`/shopping/${itemId}`, data);
-    const raw = (response as any)?.data;
-    const item = raw?.data ?? raw;
-    return { item: item ?? null };
-  },
-
-  deleteShoppingItem: async (itemId: string): Promise<{ success: boolean; message: string }> => {
-    await api.delete(`/shopping/${itemId}`);
-    return { success: true, message: 'Item deleted' };
-  },
-
+  // Get circle types
   getCircleTypes: async (): Promise<{ success: boolean; data: CircleType[] }> => {
-    try {
-        const response = await api.get('/circle-types');
-        return response as any;
-    } catch (error) {
-        console.warn('Failed to fetch circle types, using fallback:', error);
-        // Fallback data
-        return {
-            success: true,
-            data: [
-                { id: '1', name: 'Circle', code: 'circle', sort_order: 1, icon: 'home-heart' },
-                { id: '2', name: 'Sharehouse', code: 'sharehouse', sort_order: 2, icon: 'home-group' },
-                { id: '3', name: 'Team', code: 'team', sort_order: 3, icon: 'briefcase-outline' },
-                { id: '4', name: 'Friendship', code: 'friend', sort_order: 4, icon: 'account-multiple-outline' },
-                { id: '5', name: 'Club', code: 'club', sort_order: 5, icon: 'cards-club' },
-                { id: '6', name: 'Other', code: 'other', sort_order: 6, icon: 'dots-horizontal' }
-            ]
-        };
-    }
+    const result = await appkit.getCircleTypes();
+    return result as any;
   },
 };
 
-// Backward compatibility (optional but helpful during transition)
 export const CircleApi = circleApi;
-// export const circleApi = circleApi;
 export const createCircle = circleApi.createCircle;
 export const getFamilies = circleApi.getCircles;
-

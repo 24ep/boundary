@@ -1,135 +1,194 @@
-import apiClient from './apiClient'
+import apiClient from './apiClient';
+import { api } from './index';
+import { appkit } from './appkit';
+import { MobileBranding as SDKMobileBranding } from 'alphayard-appkit';
 
 export interface MobileBranding {
-  mobileAppName?: string
-  logoUrl?: string
-  iconUrl?: string
-  analytics?: {
-    sentryDsn?: string
-    mixpanelToken?: string
-    googleAnalyticsId?: string
-    enableDebugLogs?: boolean
-  }
-  legal?: {
-    privacyPolicyUrl?: string
-    termsOfServiceUrl?: string
-    cookiePolicyUrl?: string
-    dataDeletionUrl?: string
-    dataRequestEmail?: string
-  }
-  screens?: ScreenConfig[]
-  categories?: CategoryConfig[]
-  flows?: FlowsConfig
+  mobileAppName?: string;
+  mobileAppDescription?: string;
+  mobileAppLogo?: string;
+  mobileAppPrimaryColor?: string;
+  mobileAppSecondaryColor?: string;
+  mobileAppAccentColor?: string;
+  mobileAppBackgroundColor?: string;
+  mobileAppTextColor?: string;
+  mobileAppFontFamily?: string;
+  mobileAppFontSize?: number;
+  mobileAppFontWeight?: string;
+  mobileAppBorderRadius?: number;
+  mobileAppShadowColor?: string;
+  mobileAppShadowOffset?: { width: number; height: number };
+  mobileAppShadowOpacity?: number;
+  mobileAppShadowRadius?: number;
+  mobileAppElevation?: number;
+  mobileAppGradientColors?: string[];
+  mobileAppGradientStart?: { x: number; y: number };
+  mobileAppGradientEnd?: { x: number; y: number };
+  mobileAppIsDarkMode?: boolean;
 }
 
-export interface AuthFlowConfig {
-  requireEmailVerification: boolean
-  allowSocialLogin: boolean
-  termsAcceptedOn: 'signup' | 'login' | 'both'
-  passwordPolicy: 'standard' | 'strong' | 'custom'
+export interface AppFlowConfig {
+  id: string;
+  name: string;
+  steps: AppFlowStep[];
+  isDefault?: boolean;
 }
 
-export interface SurveySlide {
-  id: string
-  question: string
-  options: string[]
-  type: 'single_choice' | 'multiple_choice' | 'text'
-  icon?: string
+export interface AppFlowStep {
+  id: string;
+  type: 'screen' | 'action' | 'condition';
+  target: string;
+  params?: Record<string, any>;
 }
 
 export interface SurveyConfig {
-  enabled: boolean
-  trigger: 'on_startup' | 'after_onboarding' | 'after_first_action'
-  slides: SurveySlide[]
+  id: string;
+  title: string;
+  description?: string;
+  questions: SurveyQuestion[];
+  isMandatory?: boolean;
+  frequency?: 'once' | 'daily' | 'weekly' | 'monthly';
 }
 
-export interface FlowsConfig {
-  onboarding?: any
-  survey?: SurveyConfig
-  login?: AuthFlowConfig
-  signup?: AuthFlowConfig
+export interface SurveyQuestion {
+  id: string;
+  text: string;
+  type: 'text' | 'choice' | 'rating' | 'boolean';
+  options?: string[];
+  isRequired?: boolean;
 }
 
-export interface ScreenConfig {
-  id: string
-  name: string
-  background: string | ColorValue
-  resizeMode: 'cover' | 'contain' | 'stretch' | 'center'
-  description?: string
+export interface LegalDocument {
+  id: string;
+  title: string;
+  content: string;
+  version: string;
+  type: 'terms' | 'privacy' | 'eula' | 'cookies';
+  updatedAt: string;
 }
 
-
-export interface MobileComponentConfig {
-    componentName: string;
-    filePath: string;
-    usageExample?: string;
+export interface AnalyticsConfig {
+  enabled: boolean;
+  providers: string[];
+  debugMode?: boolean;
+  samplingRate?: number;
 }
 
-export interface ComponentStyle {
-  backgroundColor: ColorValue
-  textColor: ColorValue
-  borderRadius: number
-  borderColor: ColorValue
-  shadowLevel: 'none' | 'sm' | 'md' | 'lg' | 'custom'
-  shadowOffsetY?: number
-  borderWidth?: number
-  borderTopWidth?: number
-  borderRightWidth?: number
-  borderBottomWidth?: number
-  borderLeftWidth?: number
-  opacity?: number
-  padding?: number
-  clickAnimation?: 'none' | 'scale' | 'opacity' | 'pulse'
+export interface SupportConfig {
+  email?: string;
+  phone?: string;
+  whatsapp?: string;
+  website?: string;
+  helpCenterUrl?: string;
 }
 
-export interface ComponentConfig {
-  id: string
-  name: string
-  styles: ComponentStyle
-  mobileConfig?: MobileComponentConfig
-  config?: any
+export interface FeatureFlag {
+  id: string;
+  name: string;
+  isEnabled: boolean;
+  description?: string;
 }
 
-export interface CategoryConfig {
-  id: string
-  name: string
-  description?: string
-  icon: string
-  components: ComponentConfig[]
+export interface AppConfig {
+  branding: MobileBranding;
+  flows: AppFlowConfig[];
+  surveys: SurveyConfig[];
+  legal: LegalDocument[];
+  analytics: AnalyticsConfig;
+  support: SupportConfig;
+  features: FeatureFlag[];
 }
 
-export interface ColorValue {
-  mode: 'solid' | 'gradient' | 'image' | 'video'
-  solid?: string
-  gradient?: {
-    type: 'linear' | 'radial'
-    angle?: number
-    stops: {
-      id: string
-      color: string
-      position: number
-    }[]
+export interface BrandingResponse {
+  branding: MobileBranding;
+}
+
+export interface AppUpdateInfo {
+  version: string;
+  buildNumber: number;
+  isMandatory: boolean;
+  releaseNotes?: string;
+  downloadUrl?: string;
+}
+
+export interface AppOnboardingConfig {
+  screens: OnboardingScreen[];
+  enabled: boolean;
+}
+
+export interface OnboardingScreen {
+  id: string;
+  title: string;
+  description: string;
+  image?: string;
+  video?: string;
+}
+
+export const brandingApi = {
+  // Get mobile branding configuration
+  getMobileBranding: async (): Promise<MobileBranding> => {
+    try {
+      const branding = await appkit.branding.getMobileBranding();
+      return branding as MobileBranding;
+    } catch (error) {
+      console.error('SDK getMobileBranding error:', error);
+      const response = await api.get('/mobile/branding');
+      return response.data.branding || {};
+    }
+  },
+
+  // Update mobile branding (admin)
+  updateMobileBranding: async (branding: Partial<MobileBranding>): Promise<MobileBranding> => {
+    try {
+      const result = await appkit.branding.updateMobileBranding(branding as any);
+      return result as MobileBranding;
+    } catch (error) {
+      console.error('SDK updateMobileBranding error:', error);
+      const response = await api.post('/mobile/branding', { branding });
+      return response.data.branding;
+    }
+  },
+
+  // Get app flows
+  getAppFlows: async (): Promise<AppFlowConfig[]> => {
+    const response = await api.get('/mobile/flows');
+    return response.data.flows || [];
+  },
+
+  // Get surveys
+  getSurveys: async (): Promise<SurveyConfig[]> => {
+    const response = await api.get('/mobile/surveys');
+    return response.data.surveys || [];
+  },
+
+  // Get legal documents
+  getLegalDocuments: async (): Promise<LegalDocument[]> => {
+    const response = await api.get('/mobile/legal');
+    return response.data.documents || [];
+  },
+
+  // Get support info
+  getSupportConfig: async (): Promise<SupportConfig> => {
+    const response = await api.get('/mobile/support');
+    return response.data.support || {};
+  },
+
+  // Check for app updates
+  checkUpdates: async (version: string, platform: string): Promise<AppUpdateInfo | null> => {
+    const response = await api.get('/mobile/updates/check', { params: { version, platform } });
+    return response.data.update || null;
+  },
+
+  // Get onboarding configuration
+  getOnboarding: async (): Promise<AppOnboardingConfig> => {
+    const response = await api.get('/mobile/onboarding');
+    return response.data.onboarding || { screens: [], enabled: false };
   }
-  image?: string
-  video?: string
-}
+};
 
+// Also keep fetchMobileBranding for backward compatibility if used elsewhere
 export async function fetchMobileBranding(): Promise<MobileBranding> {
-  try {
-    const res = await (apiClient.get<any>(`/mobile/branding`) as any)
-    return res?.branding || {}
-  } catch (error: any) {
-    // Handle 404 gracefully - endpoint may not exist yet
-    if (error?.code === 'NOT_FOUND' || error?.response?.status === 404) {
-      // Endpoint doesn't exist yet - return empty object silently
-      return {}
-    }
-    // Only log unexpected errors
-    if (error?.code !== 'UNAUTHORIZED' && error?.response?.status !== 401) {
-      console.error('Error fetching mobile branding:', error)
-    }
-    return {}
-  }
+  return brandingApi.getMobileBranding();
 }
 
-
+export default brandingApi;
