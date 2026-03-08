@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     const circle = await prisma.circle.findFirst({
       where: {
         OR: [
-          { inviteCode: inviteCode },
+          { circleCode: inviteCode },
           { pinCode: inviteCode } // Supporting both as "inviteCode" in the request for flexibility
         ]
       }
@@ -65,9 +65,9 @@ export async function POST(request: NextRequest) {
     // Check if membership already exists
     const existingMember = await prisma.circleMember.findUnique({
       where: {
-        userId_circleId: {
-          userId,
-          circleId: circle.id
+        circleId_userId: {
+          circleId: circle.id,
+          userId
         }
       }
     });

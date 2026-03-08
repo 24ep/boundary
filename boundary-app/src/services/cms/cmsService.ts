@@ -1,8 +1,8 @@
-import axios, { AxiosInstance } from 'axios';
+import { appkit } from '../api/appkit';
 
 /**
  * CMS Service for Strapi Integration
- * Handles all content management operations
+ * Handles all content management operations using the AppKit SDK transport.
  */
 
 export interface CMSPage {
@@ -76,20 +76,16 @@ export interface CMSMenuItem {
 }
 
 class CMSService {
-  private client: AxiosInstance;
   private baseURL: string;
 
   constructor() {
     // Get CMS URL from config or environment
     this.baseURL = process.env.EXPO_PUBLIC_CMS_URL || 'http://localhost:1337';
-    
-    this.client = axios.create({
-      baseURL: this.baseURL,
-      timeout: 15000,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+  }
+
+  private async call<T = any>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', path: string, data?: any): Promise<T> {
+    const url = path.startsWith('http') ? path : `${this.baseURL}${path}`;
+    return appkit.call<T>(method as any, url, data);
   }
 
   /**
@@ -97,17 +93,11 @@ class CMSService {
    */
   async getPages(locale?: string): Promise<CMSPage[]> {
     try {
-      const params: any = {
-        'publicationState': 'live',
-        'pagination[limit]': 100,
-      };
-      
-      if (locale) {
-        params.locale = locale;
-      }
+      let path = '/api/pages?publicationState=live&pagination[limit]=100';
+      if (locale) path += `&locale=${locale}`;
 
-      const response = await this.client.get('/api/pages', { params });
-      return response.data.data || [];
+      const response = await this.call('GET', path);
+      return response.data || [];
     } catch (error: any) {
       console.error('Error fetching pages:', error);
       throw new Error(`Failed to fetch pages: ${error.message}`);
@@ -119,17 +109,11 @@ class CMSService {
    */
   async getPageBySlug(slug: string, locale?: string): Promise<CMSPage | null> {
     try {
-      const params: any = {
-        'filters[slug][$eq]': slug,
-        'publicationState': 'live',
-      };
-      
-      if (locale) {
-        params.locale = locale;
-      }
+      let path = `/api/pages?filters[slug][$eq]=${slug}&publicationState=live`;
+      if (locale) path += `&locale=${locale}`;
 
-      const response = await this.client.get('/api/pages', { params });
-      const pages = response.data.data || [];
+      const response = await this.call('GET', path);
+      const pages = response.data || [];
       return pages.length > 0 ? pages[0] : null;
     } catch (error: any) {
       console.error('Error fetching page:', error);
@@ -147,26 +131,20 @@ class CMSService {
     locale?: string;
   }): Promise<{ data: CMSArticle[]; meta: any }> {
     try {
-      const queryParams: any = {
-        'publicationState': 'live',
-        'pagination[page]': params?.page || 1,
-        'pagination[pageSize]': params?.pageSize || 10,
-        'sort': 'publishedAt:desc',
-        'populate': '*',
-      };
+      let path = `/api/articles?publicationState=live&pagination[page]=${params?.page || 1}&pagination[pageSize]=${params?.pageSize || 10}&sort=publishedAt:desc&populate=*`;
 
       if (params?.category) {
-        queryParams['filters[category][slug][$eq]'] = params.category;
+        path += `&filters[category][slug][$eq]=${params.category}`;
       }
 
       if (params?.locale) {
-        queryParams.locale = params.locale;
+        path += `&locale=${params.locale}`;
       }
 
-      const response = await this.client.get('/api/articles', { params: queryParams });
+      const response = await this.call('GET', path);
       return {
-        data: response.data.data || [],
-        meta: response.data.meta || {},
+        data: response.data || [],
+        meta: response.meta || {},
       };
     } catch (error: any) {
       console.error('Error fetching articles:', error);
@@ -179,18 +157,11 @@ class CMSService {
    */
   async getArticleBySlug(slug: string, locale?: string): Promise<CMSArticle | null> {
     try {
-      const params: any = {
-        'filters[slug][$eq]': slug,
-        'publicationState': 'live',
-        'populate': '*',
-      };
+      let path = `/api/articles?filters[slug][$eq]=${slug}&publicationState=live&populate=*`;
+      if (locale) path += `&locale=${locale}`;
 
-      if (locale) {
-        params.locale = locale;
-      }
-
-      const response = await this.client.get('/api/articles', { params });
-      const articles = response.data.data || [];
+      const response = await this.call('GET', path);
+      const articles = response.data || [];
       return articles.length > 0 ? articles[0] : null;
     } catch (error: any) {
       console.error('Error fetching article:', error);
@@ -203,13 +174,11 @@ class CMSService {
    */
   async getCategories(locale?: string): Promise<CMSCategory[]> {
     try {
-      const params: any = {};
-      if (locale) {
-        params.locale = locale;
-      }
+      let path = '/api/categories';
+      if (locale) path += `?locale=${locale}`;
 
-      const response = await this.client.get('/api/categories', { params });
-      return response.data.data || [];
+      const response = await this.call('GET', path);
+      return response.data || [];
     } catch (error: any) {
       console.error('Error fetching categories:', error);
       throw new Error(`Failed to fetch categories: ${error.message}`);
@@ -221,17 +190,11 @@ class CMSService {
    */
   async getMenu(slug: string, locale?: string): Promise<CMSMenu | null> {
     try {
-      const params: any = {
-        'filters[slug][$eq]': slug,
-        'populate': 'deep',
-      };
+      let path = `/api/menus?filters[slug][$eq]=${slug}&populate=deep`;
+      if (locale) path += `&locale=${locale}`;
 
-      if (locale) {
-        params.locale = locale;
-      }
-
-      const response = await this.client.get('/api/menus', { params });
-      const menus = response.data.data || [];
+      const response = await this.call('GET', path);
+      const menus = response.data || [];
       return menus.length > 0 ? menus[0] : null;
     } catch (error: any) {
       console.error('Error fetching menu:', error);
@@ -244,8 +207,8 @@ class CMSService {
    */
   async getMedia(id: number): Promise<CMSMedia | null> {
     try {
-      const response = await this.client.get(`/api/upload/files/${id}`);
-      return response.data || null;
+      const response = await this.call('GET', `/api/upload/files/${id}`);
+      return response || null;
     } catch (error: any) {
       console.error('Error fetching media:', error);
       return null;
@@ -266,19 +229,15 @@ class CMSService {
    */
   async search(query: string, contentType?: 'articles' | 'pages', locale?: string): Promise<any[]> {
     try {
-      const params: any = {
-        'publicationState': 'live',
-        'filters[$or][0][title][$containsi]': query,
-        'filters[$or][1][content][$containsi]': query,
-      };
+      const endpoint = contentType === 'pages' ? '/api/pages' : '/api/articles';
+      let path = `${endpoint}?publicationState=live&filters[$or][0][title][$containsi]=${encodeURIComponent(query)}&filters[$or][1][content][$containsi]=${encodeURIComponent(query)}`;
 
       if (locale) {
-        params.locale = locale;
+        path += `&locale=${locale}`;
       }
 
-      const endpoint = contentType === 'pages' ? '/api/pages' : '/api/articles';
-      const response = await this.client.get(endpoint, { params });
-      return response.data.data || [];
+      const response = await this.call('GET', path);
+      return response.data || [];
     } catch (error: any) {
       console.error('Error searching content:', error);
       throw new Error(`Failed to search content: ${error.message}`);

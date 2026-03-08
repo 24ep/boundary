@@ -91,4 +91,12 @@ export class GroupsModule {
   async getCircleTypes(): Promise<{ success: boolean; data: CircleType[] }> {
     return this.http.get<{ success: boolean; data: CircleType[] }>('/api/v1/circle-types');
   }
+
+  /** Invite a member to a circle by email */
+  async inviteMember(circleId: string, email: string, message?: string): Promise<void> {
+    await this.http.post(`/api/v1/circles/${circleId}/invites`, {
+      email,
+      message,
+    });
+  }
 }

@@ -244,19 +244,30 @@ export class AuthModule {
 
   /** Login with an OTP code */
   async loginWithOtp(data: VerifyOtpRequest): Promise<AuthResponse> {
-    const response = await this.http.post<AuthResponse>('/api/v1/auth/otp/login', data);
-    
-    if (response.accessToken) {
-      const tokens = {
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
-        expiresAt: Date.now() + 3600 * 1000 * 24,
-      };
-      this.tokenStorage.setTokens(tokens);
-      this.emit('login', tokens);
+    const res = await this.http.post<AuthResponse>('/api/v1/identity/otp/login', data);
+    if (res.success && res.accessToken) {
+      this.tokenStorage.setTokens({
+        accessToken: res.accessToken,
+        refreshToken: res.refreshToken,
+        expiresAt: Date.now() + 3600 * 1000 // 1 hour default if not provided
+      });
+      this.emit('login', res.user);
     }
-    
-    return response;
+    return res;
+  }
+
+  /** Verify social login data and return tokens */
+  async verifySocialLogin(provider: string, data: any): Promise<AuthResponse> {
+    const res = await this.http.post<AuthResponse>(`/api/v1/identity/social/${provider}/verify`, data);
+    if (res.success && res.accessToken) {
+      this.tokenStorage.setTokens({
+        accessToken: res.accessToken,
+        refreshToken: res.refreshToken,
+        expiresAt: Date.now() + 3600 * 1000
+      });
+      this.emit('login', res.user);
+    }
+    return res;
   }
 
   /** Verify email with a code */

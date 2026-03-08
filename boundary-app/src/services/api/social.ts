@@ -34,28 +34,24 @@ export const socialApi = {
     if (filters?.following) params.append('following', 'true');
 
     const response = await api.get(`/social/posts?${params.toString()}`);
-    // apiClient.get already unwraps axios response.data, so response is { success, data: posts }
     return { success: response.success, posts: response.data || [] };
   },
 
   // Get post by ID
   getPostById: async (postId: string): Promise<{ success: boolean; post: SocialPost }> => {
     const response = await api.get(`/social/posts/${postId}`);
-    // apiClient.get already unwraps axios response.data
     return { success: response.success, post: response.data };
   },
 
   // Create social post
   createPost: async (postData: CreateSocialPostRequest): Promise<{ success: boolean; post: SocialPost }> => {
     const response = await api.post('/social/posts', postData);
-    // apiClient.post already unwraps axios response.data
     return { success: response.success, post: response.data };
   },
 
   // Update social post
   updatePost: async (postId: string, postData: UpdateSocialPostRequest): Promise<{ success: boolean; post: SocialPost }> => {
     const response = await api.put(`/social/posts/${postId}`, postData);
-    // apiClient.put already unwraps axios response.data
     return { success: response.success, post: response.data };
   },
 
@@ -66,7 +62,7 @@ export const socialApi = {
   },
 
   // Interact with post (deprecated - use specific methods)
-  interactWithPost: async (interaction: SocialPostInteraction): Promise<{ success: boolean; message: string }> => {
+  interactWithPost: async (_interaction: SocialPostInteraction): Promise<{ success: boolean; message: string }> => {
     // Legacy support or remove
     return { success: false, message: 'Use specific methods' };
   },

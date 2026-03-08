@@ -2,8 +2,7 @@
  * Database Service - Refactored to use AppKit SDK
  */
 import appkit from '../api/appkit';
-import { Circle as SDKCircle, AppKitUser } from 'alphayard-appkit';
-import { apiClient } from '../api/apiClient';
+import { Circle as SDKCircle } from 'alphayard-appkit';
 
 export interface Circle {
   id: string;
@@ -63,7 +62,7 @@ class DatabaseService {
     try {
       // Note: AppKit might have a getCircle method or we use getUserCircles and find
       const circles = await appkit.getUserCircles();
-      const circle = circles.find(c => c.id === circleId);
+      const circle = circles.find((c: SDKCircle) => c.id === circleId);
       return circle ? this.mapSDKCircle(circle) : null;
     } catch (error) {
       console.error('Get Circle error:', error);

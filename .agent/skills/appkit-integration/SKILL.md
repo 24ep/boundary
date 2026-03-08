@@ -5,77 +5,74 @@ description: Instructions and patterns for integrating AppKit (Identity, Auth, C
 
 # AppKit Integration Skill
 
-This skill provides comprehensive instructions for integrating AppKit into web and mobile applications. AppKit is an identity gateway and application toolkit that abstracts OIDC complexities.
+## Core Architecture
+The application is 100% driven by the `alphayard-appkit` SDK. All API transport, authentication, and state management for core features are consolidated within this unified SDK.
 
-## Overview
+### Universal SDK Pattern
+For features not yet having a dedicated module in the SDK (e.g., Chat, Shopping), use the universal `call()` method. This ensures all requests benefit from:
+- **Unified Base URL**: Managed centrally by the SDK.
+- **Automatic Auth**: Tokens are handled internally; no need to manually append headers.
+- **401 Interceptor**: Automatic token refresh and request retry logic is built-in.
+- **Type Safety**: Generic support for request/response types.
 
-AppKit (formerly AlphaYard) provides:
-- **Identity Gateway:** OAuth 2.0 / OIDC authentication.
-- **CMS:** Dynamic content delivery and management.
-- **Communication:** Unified API for Email, SMS, and Push.
-- **Circles:** Organizational grouping and data isolation.
-
-## Core Patterns
-
-### 1. Installation & Initialization
-
-Install the official SDK:
-```bash
-npm install appkit-sdk
-```
-
-Initialize the client with credentials from environment variables:
 ```typescript
-import { AppKit } from 'appkit-sdk';
+import { appkit } from '../api/appkit';
 
-const client = new AppKit({
-  clientId: process.env.NEXT_PUBLIC_APPKIT_CLIENT_ID,
-  domain: process.env.NEXT_PUBLIC_APPKIT_DOMAIN
-});
+// Generic call example
+const data = await appkit.call<MyResponseType>('GET', '/api/custom-feature');
 ```
 
-### 2. Authentication Flow
+## Available Modules
 
-Trigger the standard login flow (Authorization Code with PKCE):
-```typescript
-// Triggers redirect to AppKit login page
-await client.login({
-  redirect_uri: 'https://your-app.com/callback',
-  scope: 'openid profile email'
-});
-```
+### `appkit.auth`
+Handles login, register, OTP, MFA, and session management.
+- `login(credentials)`
+- `loginWithOtp(identifier, otp)`
+- `logout()`
+- `refreshToken()`
 
-Retrieve user information after authentication:
-```typescript
-const user = await client.getUser();
-console.log(user.name, user.email);
-```
+### `appkit.identity`
+Manages user profiles, security settings, and device management.
+- `getProfile()`
+- `updateProfile(updates)`
+- `getSecuritySettings()`
+- `revokeSession(sessionId)`
 
-### 3. CMS & Content Delivery
+### `appkit.groups`
+Manages Circles, memberships, and organizational structures.
+- `getCircles()`
+- `getCircleMembers(circleId)`
+- `getCircleTypes()`
 
-Fetch and render dynamic content from the Content Studio:
-```typescript
-const content = await client.cms.getContent('target-slug');
-// 'content' contains title, description, and structured data
-```
+### `appkit.safety`
+Handles emergency alerts and safety status.
+- `getAlerts()`
+- `triggerAlert(type, location)`
+- `updateEmergencyContacts(contacts)`
 
-### 4. Communication API
+### `appkit.legal`
+Manages legal documents and user acceptances.
+- `getPublishedDocuments()`
+- `acceptDocument(documentId)`
+- `getPendingAcceptances()`
 
-Send transactional messages across multiple channels:
-```typescript
-await client.communication.sendEmail({
-  to: 'user@example.com',
-  template: 'welcome',
-  data: { firstName: 'John' }
-});
-```
+### `appkit.branding`
+Dynamic app configuration, themes, and assets.
+- `getAppConfig()`
+- `getTheme()`
+- `getAssetsByType(type)`
 
-## Implementation Guidelines
+### `appkit.cms`
+Strapi-based content management integration.
+- `getContent(slug)`
+- `listContent(params)`
+- `call(method, path, data)` // Direct Strapi access
 
-- **Security:** Never expose `ALPHAYARD_CLIENT_SECRET` (or `APPKIT_CLIENT_SECRET`) in the browser. Use public client configurations for SPAs and mobile.
-- **Redirects:** Ensure `redirect_uri` is white-listed in the AppKit Admin Console.
-- **Token Management:** The SDK handles token rotation and persistence automatically. Use `client.getToken()` if access tokens are needed for direct API calls.
-- **Branding:** Use the standardized AppKit UI components for a consistent experience.
+## Best Practices
+1. **Never use axios/fetch direct**: Always use `appkit.call()` or a dedicated module.
+2. **Standardized Imports**: Always import from `alphayard-appkit` npm package.
+3. **No Local Token Management**: Do not use `AsyncStorage` for tokens; the SDK handles `accessToken` and `refreshToken` securely.
+4. **Unified Error Handling**: The SDK throws standard errors that can be caught globally.
 
 ## Reference Files
 - Data Source: [docs.tsx](file:///e:/GitCloneProject/boundary/appkit/src/app/dev-hub/data/docs.tsx)

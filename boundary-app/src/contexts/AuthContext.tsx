@@ -4,7 +4,6 @@ import { Platform } from 'react-native';
 import { apiClient } from '../services/api/apiClient';
 import { logger } from '../utils/logger';
 import { isDev } from '../utils/isDev';
-import axios from 'axios';
 import authService from '../services/auth/AuthService';
 import { User, SignupData } from '../services/auth/AuthService.types';
 
@@ -38,21 +37,8 @@ appleAuth = null;
 
 
 
-// Create a fallback axios instance in case apiClient fails to load
-const fallbackApi = axios.create({
-  baseURL: 'http://localhost:4000/api/v1',
-  timeout: 30000,
-  headers: { 'Content-Type': 'application/json' }
-});
-
-// Use apiClient if available, otherwise use fallback
-const api = apiClient || {
-  post: (url: string, data: any) => fallbackApi.post(url, data).then(r => r.data),
-  get: (url: string) => fallbackApi.get(url).then(r => r.data),
-  put: (url: string, data: any) => fallbackApi.put(url, data).then(r => r.data),
-  setAuthToken: (token: string) => { fallbackApi.defaults.headers.common.Authorization = `Bearer ${token}`; },
-  removeAuthToken: () => { delete fallbackApi.defaults.headers.common.Authorization; }
-};
+// Use apiClient directly
+const api = apiClient;
 
 // SSO Provider from backend
 interface SSOProvider {
@@ -221,14 +207,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const loadSSOProviders = async () => {
     try {
       console.log('[AUTH] Loading SSO providers...');
-      const response = await api.get('/auth/sso/providers') as any;
-      if (response?.success && response?.providers) {
-        console.log('[AUTH] Loaded SSO providers:', response.providers.length);
-        setSsoProviders(response.providers);
-      }
+      const providers = await authService.loadSSOProviders();
+      setSsoProviders(providers || []);
     } catch (error) {
       console.warn('[AUTH] Failed to load SSO providers:', error);
-      // Don't throw - SSO providers are optional
       setSsoProviders([]);
     }
   };
@@ -414,22 +396,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           throw new Error(`SSO provider '${provider}' is not yet implemented on this platform`);
       }
 
-      // Send SSO data to backend
-      const response = await api.post('/auth/sso', {
-        provider: normalizedProvider,
-        ...ssoData,
-      });
-
-      const { user: userData, accessToken, refreshToken } = response.data;
-
-      // Store tokens
-      await AsyncStorage.multiSet([
-        ['accessToken', accessToken],
-        ['refreshToken', refreshToken],
-      ]);
-
-      // Set token in API headers
-      api.setAuthToken(accessToken);
+      // Send SSO data to backend via AuthService
+      const { user: userData } = await authService.socialLogin(normalizedProvider as any, ssoData);
 
       // Update state
       await syncAuthState(userData);
@@ -625,27 +593,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const refreshToken = async () => {
     try {
-      const refreshToken = await AsyncStorage.getItem('refreshToken');
-
-      if (!refreshToken) {
-        throw new Error('No refresh token available');
-      }
-
-      const response = await api.post('/auth/refresh', {
-        refreshToken,
-      });
-
-      const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
-
-      // Update stored tokens
-      await AsyncStorage.multiSet([
-        ['accessToken', newAccessToken],
-        ['refreshToken', newRefreshToken],
-      ]);
-
-      // Update API headers
-      api.setAuthToken(newAccessToken);
-
+      await authService.refreshToken();
       logger.info('Token refreshed successfully');
     } catch (error) {
       logger.error('Token refresh failed:', error);

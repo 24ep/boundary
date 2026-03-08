@@ -1,9 +1,13 @@
 import { AppKitError } from './types';
 
 export class HttpClient {
+  private isRefreshing = false;
+  private refreshPromise: Promise<string | null> | null = null;
+
   constructor(
     private baseUrl: string,
     private getAccessToken: () => string | null,
+    private onUnauthorized?: () => Promise<string | null>,
     private fetchFn: typeof globalThis.fetch = globalThis.fetch.bind(globalThis),
   ) {}
 
@@ -40,6 +44,7 @@ export class HttpClient {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams(params).toString(),
     });
+
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new AppKitError(
@@ -51,11 +56,20 @@ export class HttpClient {
     return res.json();
   }
 
-  private async request<T>(method: string, path: string, body?: unknown): Promise<T> {
+  private async request<T>(method: string, path: string, body?: unknown, isRetry = false): Promise<T> {
     const init: RequestInit = { method, headers: this.headers };
     if (body !== undefined) init.body = JSON.stringify(body);
 
     const res = await this.fetchFn(`${this.baseUrl}${path}`, init);
+
+    if (res.status === 401 && !isRetry && this.onUnauthorized) {
+      // Handle unauthorized error with a single refresh attempt
+      const newToken = await this.handleRefresh();
+      if (newToken) {
+        return this.request<T>(method, path, body, true);
+      }
+    }
+
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new AppKitError(
@@ -68,5 +82,29 @@ export class HttpClient {
     const text = await res.text();
     if (!text) return {} as T;
     return JSON.parse(text);
+  }
+
+  private async handleRefresh(): Promise<string | null> {
+    if (this.isRefreshing) {
+      return this.refreshPromise;
+    }
+
+    this.isRefreshing = true;
+    this.refreshPromise = (async () => {
+      try {
+        if (this.onUnauthorized) {
+          return await this.onUnauthorized();
+        }
+        return null;
+      } finally {
+        this.isRefreshing = false;
+        this.refreshPromise = null;
+      }
+    })();
+
+    return this.refreshPromise;
+  }
+  getBaseUrl(): string {
+    return this.baseUrl;
   }
 }

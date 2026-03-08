@@ -41,7 +41,6 @@ import {
   Image as ImageIcon,
   Info,
 } from 'lucide-react-native';
-import * as ImagePicker from 'expo-image-picker';
 import { circleApi } from '../../services/api';
 import { appkit } from '../../services/api/appkit';
 import { ScreenBackground } from '../../components/ScreenBackground';
@@ -56,7 +55,7 @@ const TABS = [
 ];
 
 interface CircleSettingsScreenProps {
-  navigation: any;
+  navigation?: any;
   route?: { params?: { initialTab?: string } };
 }
 
@@ -135,7 +134,8 @@ const CircleSettingsScreen: React.FC<CircleSettingsScreenProps> = ({ navigation,
       }, 150);
       return () => clearTimeout(timer);
     }
-  }, []);
+    return undefined;
+  }, [activeTabIndex]);
 
   const loadCircleData = async () => {
     try {
@@ -157,7 +157,7 @@ const CircleSettingsScreen: React.FC<CircleSettingsScreenProps> = ({ navigation,
           story: primaryCircle.description || '',
           logo: '', 
           coverPhoto: '',
-          inviteCode: primaryCircle.inviteCode || '', 
+          inviteCode: (primaryCircle as any).inviteCode || '', 
           pinCode: (primaryCircle as any).pinCode || '',
           inviteCodeExpiry: '',
           members: mockMembers,
@@ -242,44 +242,15 @@ const CircleSettingsScreen: React.FC<CircleSettingsScreenProps> = ({ navigation,
     }
   };
 
-  const handleCoverPhotoUpload = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [16, 9],
-        quality: 0.8,
-      });
-
-      if (!result.canceled && result.assets[0]) {
-        const imageUri = result.assets[0].uri;
-        setCircleData(prev => ({ ...prev, coverPhoto: imageUri }));
-        Alert.alert('Success', 'Cover photo updated successfully');
-      }
-    } catch (error) {
-      console.error('Error uploading cover photo:', error);
-      Alert.alert('Error', 'Failed to upload cover photo');
-    }
-  };
-
-  const handleLogoUpload = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.8,
-      });
-
-      if (!result.canceled && result.assets[0]) {
-        const imageUri = result.assets[0].uri;
-        setCircleData(prev => ({ ...prev, logo: imageUri }));
-        Alert.alert('Success', 'Circle logo updated successfully');
-      }
-    } catch (error) {
-      console.error('Error uploading logo:', error);
-      Alert.alert('Error', 'Failed to upload circle logo');
-    }
+  const formatExpiryTime = (expiryDate: string) => {
+    if (!expiryDate) return '';
+    const date = new Date(expiryDate);
+    const now = new Date();
+    const diffHours = Math.ceil((date.getTime() - now.getTime()) / (1000 * 60 * 60));
+    
+    if (diffHours <= 0) return 'Expired';
+    if (diffHours < 24) return `Expires in ${diffHours} hours`;
+    return `Expires on ${date.toLocaleDateString()}`;
   };
 
   const generateInviteCode = async () => {
@@ -339,17 +310,6 @@ const CircleSettingsScreen: React.FC<CircleSettingsScreenProps> = ({ navigation,
     } finally {
       setSaving(false);
     }
-  };
-
-  const formatExpiryTime = (expiryDate: string) => {
-    if (!expiryDate) return '';
-    const date = new Date(expiryDate);
-    const now = new Date();
-    const diffHours = Math.ceil((date.getTime() - now.getTime()) / (1000 * 60 * 60));
-    
-    if (diffHours <= 0) return 'Expired';
-    if (diffHours < 24) return `Expires in ${diffHours} hours`;
-    return `Expires on ${date.toLocaleDateString()}`;
   };
 
   const handleToggleModule = (key: keyof CircleSettings) => {
@@ -494,7 +454,7 @@ const CircleSettingsScreen: React.FC<CircleSettingsScreenProps> = ({ navigation,
     </View>
   );
 
-  const activeTab = TABS[activeTabIndex]?.key ?? 'info';
+
 
   const handleTabPress = (index: number) => {
     setActiveTabIndex(index);

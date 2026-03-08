@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 import { config } from '../../config/environment';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { appkit } from '../api/appkit';
 
 export interface SocketEvents {
   // Connection events (custom server events)
@@ -51,11 +51,11 @@ class SocketService {
 
   async connect(): Promise<void> {
     try {
-      // Use the same token key as the main API client
-      const token = await AsyncStorage.getItem('accessToken');
+      // Use the AppKit SDK to get the current access token
+      const token = await appkit.auth.getAccessToken();
 
       if (!token) {
-        console.log('No authentication token found, skipping socket connection');
+        console.log('No authentication token found via AppKit, skipping socket connection');
         return;
       }
 
@@ -96,13 +96,12 @@ class SocketService {
             console.error('Socket connection error:', error.message);
           }
 
-          // Handle authentication errors
+          // Handle authentication errors via SDK
           if (error.message.includes('jwt expired') ||
             error.message.includes('Authentication error') ||
             error.message.includes('invalid signature')) {
-            console.log('Socket authentication failed - clearing token');
-            await AsyncStorage.removeItem('accessToken');
-            await AsyncStorage.removeItem('authToken');
+            console.log('Socket authentication failed - logging out via AppKit');
+            await appkit.auth.logout();
             this.disconnect();
           }
 
@@ -250,14 +249,14 @@ class SocketService {
 
   on<K extends keyof SocketEvents>(event: K, callback: SocketEvents[K]): void {
     if (this.socket) {
-      this.socket.on(event, callback);
+      this.socket.on(event, callback as any);
     }
   }
 
   off<K extends keyof SocketEvents>(event: K, callback?: SocketEvents[K]): void {
     if (this.socket) {
       if (callback) {
-        this.socket.off(event, callback);
+        this.socket.off(event, callback as any);
       } else {
         this.socket.removeAllListeners(event);
       }
@@ -317,8 +316,8 @@ class SocketService {
   }
 
   // Reconnect with new token
-  async reconnectWithNewToken(token: string): Promise<void> {
-    await AsyncStorage.setItem('authToken', token);
+  async reconnectWithNewToken(_token: string): Promise<void> {
+    // The SDK handles tokens now, so we just trigger a reconnect
     this.disconnect();
     await this.connect();
   }

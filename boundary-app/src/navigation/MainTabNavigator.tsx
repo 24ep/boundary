@@ -168,20 +168,21 @@ const resolveColor = (colorValue: any, defaultColor: string) => {
 // Main Tab Navigator
 const MainTabNavigatorInner: React.FC = () => {
   const { t: translate } = useLanguage();
-  const { categories } = useBranding();
   
   // Safe fallback if t is undefined for any reason (though it shouldn't be if Provider is up)
   const t = (key: TranslationKey) => (typeof translate === 'function' ? translate(key) : key);
 
   // Extract config
   const tabConfig = React.useMemo(() => {
+      const branding = useBranding() as any;
+      const categories = branding.categories;
       if (!categories) return null;
       for (const cat of categories) {
-          const comp = cat.components.find(c => c.id === 'main-tab-bar');
+          const comp = cat.components?.find((c: any) => c.id === 'main-tab-bar');
           if (comp) return comp;
       }
       return null;
-  }, [categories]);
+  }, [useBranding()]);
 
   const styles = tabConfig?.styles;
   const config = tabConfig?.config || {};

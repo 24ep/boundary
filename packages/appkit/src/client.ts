@@ -22,6 +22,15 @@ import type {
   VerifyEmailRequest,
   ForgotPasswordRequest,
   ResetPasswordRequest,
+  CircleStatusUpdate,
+  CircleLocationUpdate,
+  CircleStatusFilters,
+  
+  // Legal & Compliance
+  LegalDocument,
+  LegalSection,
+  UserAcceptance,
+  DeveloperDoc,
 } from './types';
 import { createStorage, TokenStorage } from './storage';
 import { HttpClient } from './http';
@@ -38,9 +47,12 @@ import { CommunicationModule } from './communication';
 import { SurveysModule } from './surveys';
 import { LegalModule } from './legal';
 import { BillingModule } from './billing';
+import { CircleStatusModule } from './circleStatus';
+import { StorageModule } from './storageModule';
 
 export class AppKit {
-  private authModule: AuthModule;
+  /** Auth sub-module */
+  public readonly auth: AuthModule;
   private listeners = new Map<string, Set<AppKitEventHandler>>();
   private tokenStorage: TokenStorage;
   private http: HttpClient;
@@ -69,6 +81,10 @@ export class AppKit {
   public readonly legal: LegalModule;
   /** Billing & Subscriptions sub-module */
   public readonly billing: BillingModule;
+  /** Circle Status sub-module */
+  public readonly circleStatus: CircleStatusModule;
+  /** Storage sub-module */
+  public readonly storage: StorageModule;
 
   constructor(private appConfig: AppKitConfig) {
     const storageAdapter = createStorage(appConfig.storage || 'localStorage');
@@ -77,12 +93,20 @@ export class AppKit {
     this.http = new HttpClient(
       appConfig.domain,
       () => this.tokenStorage.getTokens()?.accessToken ?? null,
+      async () => {
+        try {
+          const tokens = await this.refreshToken();
+          return tokens.accessToken;
+        } catch {
+          return null;
+        }
+      },
       appConfig.fetch,
     );
 
     const emit = (event: string, payload?: unknown) => this.emit(event as AppKitEvent, payload);
 
-    this.authModule = new AuthModule(appConfig, this.tokenStorage, this.http, emit);
+    this.auth = new AuthModule(appConfig, this.tokenStorage, this.http, emit);
     this.identity = new IdentityModule(this.http);
     this.mfa = new MFAModule(this.http);
     this.cms = new CMSModule(this.http);
@@ -95,93 +119,135 @@ export class AppKit {
     this.surveys = new SurveysModule(this.http);
     this.legal = new LegalModule(this.http);
     this.billing = new BillingModule(this.http);
+    this.circleStatus = new CircleStatusModule(this.http);
+    this.storage = new StorageModule(this.http);
+  }
+
+  /**
+   * Universal call method for app-specific features not yet in the SDK.
+   * This uses the SDK's internal transport with automatic 401 refresh.
+   */
+  async call<T = any>(
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+    path: string,
+    data?: any,
+  ): Promise<T> {
+    switch (method.toUpperCase()) {
+      case 'GET':
+        return this.http.get<T>(path);
+      case 'POST':
+        return this.http.post<T>(path, data);
+      case 'PUT':
+        return this.http.put<T>(path, data);
+      case 'PATCH':
+        return this.http.patch<T>(path, data);
+      case 'DELETE':
+        return this.http.delete<T>(path);
+      default:
+        throw new Error(`Unsupported method: ${method}`);
+    }
   }
 
   // ─── Auth shortcuts ────────────────────────────────────────────
 
   /** Redirect the browser to the AppKit login page */
   async login(options?: LoginOptions): Promise<void> {
-    return this.authModule.login(options);
+    return this.auth.login(options);
   }
 
   /** Log out — clear local tokens and optionally revoke server-side */
   async logout(options?: LogoutOptions): Promise<void> {
-    return this.authModule.logout(options);
+    return this.auth.logout(options);
   }
 
   /** Build an OAuth authorization URL (useful for custom UI) */
   async buildAuthUrl(options?: AuthUrlOptions): Promise<string> {
-    return this.authModule.buildAuthUrl(options);
+    return this.auth.buildAuthUrl(options);
   }
 
   /** Handle callback from OAuth provider */
   async handleCallback(callbackUrl?: string) {
-    return this.authModule.handleCallback(callbackUrl);
+    return this.auth.handleCallback(callbackUrl);
   }
 
   /** Sign up / Register a new user */
   async signup(data: RegisterRequest): Promise<AuthResponse> {
-    return this.authModule.register(data);
+    return this.auth.register(data);
   }
 
   /** Refresh the access token */
   async refreshToken(): Promise<TokenSet> {
-    return this.authModule.refreshToken();
+    return this.auth.refreshToken();
   }
 
   /** Get the current access token (auto-refreshes if expired) */
   async getAccessToken(): Promise<string | null> {
-    return this.authModule.getAccessToken();
+    return this.auth.getAccessToken();
   }
 
   /** Check if the user is authenticated */
   isAuthenticated(): boolean {
-    return this.authModule.isAuthenticated();
+    return this.auth.isAuthenticated();
   }
 
   /** Get the raw token set */
   getTokens(): TokenSet | null {
-    return this.authModule.getTokens();
+    return this.auth.getTokens();
   }
 
   /** Direct login with credentials (email/password) */
   async loginWithCredentials(data: LoginRequest): Promise<AuthResponse> {
-    return this.authModule.loginWithCredentials(data);
+    return this.auth.loginWithCredentials(data);
   }
 
   /** Check if a user exists by email or phone */
   async checkUserExists(data: CheckUserRequest): Promise<CheckUserResponse> {
-    return this.authModule.checkUserExists(data);
+    return this.auth.checkUserExists(data);
   }
 
   /** Request an OTP code */
   async requestOtp(data: OtpRequest): Promise<{ success: boolean; message?: string }> {
-    return this.authModule.requestOtp(data);
+    return this.auth.requestOtp(data);
   }
 
   /** Login with an OTP code */
   async loginWithOtp(data: VerifyOtpRequest): Promise<AuthResponse> {
-    return this.authModule.loginWithOtp(data);
+    return this.auth.loginWithOtp(data);
   }
 
   /** Verify email with a code */
   async verifyEmail(data: VerifyEmailRequest): Promise<AuthResponse> {
-    return this.authModule.verifyEmail(data);
+    return this.auth.verifyEmail(data);
   }
 
   /** Request password reset email */
   async forgotPassword(data: ForgotPasswordRequest): Promise<{ success: boolean; message?: string }> {
-    return this.authModule.forgotPassword(data);
+    return this.auth.forgotPassword(data);
   }
 
   /** Reset password using a token */
   async resetPassword(data: ResetPasswordRequest): Promise<{ success: boolean; message?: string }> {
-    return this.authModule.resetPassword(data);
+    return this.auth.resetPassword(data);
   }
 
   /** Complete user onboarding */
   async completeOnboarding(data: any): Promise<AuthResponse> {
-    return this.authModule.completeOnboarding(data);
+    return this.auth.completeOnboarding(data);
+  }
+
+  /** Login with a social provider (OAuth2) */
+  async loginWithSocial(provider: string, options?: LoginOptions): Promise<void> {
+    return this.auth.login({ ...options, extraParams: { ...options?.extraParams, provider } });
+  }
+
+  /** Verify social login data and return tokens (Mobile choice) */
+  async verifySocialLogin(provider: string, data: any): Promise<AuthResponse> {
+    return this.auth.verifySocialLogin(provider, data);
+  }
+
+  /** Get available social login providers */
+  async getSSOProviders() {
+    return this.branding.getSSOProviders();
   }
 
   // ─── Identity shortcuts ────────────────────────────────────────
@@ -268,6 +334,23 @@ export class AppKit {
     return this.groups.getCircleTypes();
   }
 
+  // ─── Circle Status shortcuts ───────────────────────────────────
+
+  /** Get circle members status */
+  async getCircleMembersStatus(circleId: string) {
+    return this.circleStatus.getCircleMembers(circleId);
+  }
+
+  /** Update current member's status/health/location */
+  async updateMemberCircleStatus(update: CircleStatusUpdate) {
+    return this.circleStatus.updateMemberStatus(update);
+  }
+
+  /** Update current member's location precisely */
+  async updateMemberLocation(update: CircleLocationUpdate) {
+    return this.circleStatus.updateMemberLocation(update);
+  }
+
   // ─── Event system ──────────────────────────────────────────────
 
   /** Subscribe to SDK events */
@@ -290,7 +373,7 @@ export class AppKit {
 
   /** Clean up timers and listeners */
   destroy(): void {
-    this.authModule.destroy();
+    this.auth.destroy();
     this.listeners.clear();
   }
 

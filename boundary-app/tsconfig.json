@@ -13,6 +13,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
+      "alphayard-appkit": ["../packages/appkit/src/index"],
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@screens/*": ["src/screens/*"],

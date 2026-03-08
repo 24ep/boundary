@@ -5,6 +5,7 @@ export type { CircleStatusFilters, CircleStatusUpdate, CircleLocationUpdate };
 import { storageApi } from '../api/storage';
 import { SocialPost, CreateSocialPostRequest, UpdateSocialPostRequest, SocialPostInteraction } from '../../types/home';
 import { unwrapEntity } from '../collectionService';
+import { appkit } from '../api/appkit';
 export type { SocialPost, CreateSocialPostRequest, UpdateSocialPostRequest, SocialPostInteraction };
 
 export interface SocialPostFilters {
@@ -80,16 +81,13 @@ class SocialService {
             });
 
             if (uploadResult.success && uploadResult.file) {
-              // Use proxy URL instead of direct MinIO URL to bypass CORS issues
+              // Use SDK's StorageModule to get the correct proxy URL
+              // This avoids hardcoding /api/v1 or detecting base URLs manually
               const fileId = (uploadResult.file as any).id;
-              const baseUrl = (typeof window !== 'undefined' && window.location)
-                ? `${window.location.protocol}//${window.location.hostname}:4000`
-                : 'http://localhost:4000';
-              const proxyUrl = fileId
-                ? `${baseUrl}/api/v1/storage/proxy/${fileId}`
-                : (uploadResult.file as any).url || uploadResult.file.filePath;
+              const proxyUrl = appkit.storage.getFileUrl(fileId || (uploadResult.file as any).url || uploadResult.file.filePath);
+              
               mediaUrls.push(proxyUrl);
-              console.log('Media uploaded successfully, using proxy URL:', proxyUrl);
+              console.log('Media uploaded successfully, using SDK proxy URL:', proxyUrl);
             }
           } catch (uploadError) {
             console.error('Failed to upload media:', uploadError);
@@ -108,8 +106,8 @@ class SocialService {
       const apiPayload = {
         ...postData,
         media_urls: mediaUrls,
-        // Backend expects 'type' field
-        type: postData.media ? postData.media.type : 'text'
+        // Backend expects 'type' field, cast to literal for type safety
+        type: (postData.media ? postData.media.type : 'text') as 'image' | 'video' | 'text'
       };
 
       const response = await socialApi.createPost(apiPayload);
@@ -252,7 +250,7 @@ class SocialService {
   async getPostComments(postId: string): Promise<any[]> {
     try {
       const response = await socialApi.getPostComments(postId);
-      const raw = response.comments || response.data || [];
+      const raw = response.comments || [];
       const list = Array.isArray(raw) ? raw : [];
       return list.map((c: any) => this.mapBackendCommentToFrontend(c));
     } catch (error) {

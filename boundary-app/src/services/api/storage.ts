@@ -70,15 +70,11 @@ export const storageApi = {
     if (data.isPublic !== undefined) formData.append('isPublic', data.isPublic.toString());
 
     const response = await api.post('/storage/upload', formData, {
-      transformRequest: (data, headers) => {
-        // React Native requires manual Content-Type, Web requires automatic (to include boundary)
-        // Axios usually handles this, but let's be explicit or just let it be.
-        // Returning data lets axios handle the serialization (which is identity for FormData)
+      transformRequest: (data: any, _headers: any) => {
+        // FormData is passed through to the SDK's universal transport
         return data;
       },
-      // Do NOT set Content-Type manually for FormData on web, or it loses the boundary
     });
-    // api.post already unwraps response.data, so response IS the backend data
     return response as unknown as { success: boolean; file: File };
   },
 

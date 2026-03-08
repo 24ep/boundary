@@ -1,5 +1,6 @@
-import axios, { AxiosInstance } from 'axios';
+import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { appkit } from './api/appkit';
 import { config } from '../config/environment';
 
 /**
@@ -54,21 +55,17 @@ export interface AssetInfo {
 }
 
 class AppConfigService {
-  private client: AxiosInstance;
   private baseURL: string;
   private cachedConfig: AppConfiguration | null = null;
   private cacheTimestamp: number = 0;
 
   constructor() {
     this.baseURL = config.apiUrl.replace(/\/api\/v1$/, '');
+  }
 
-    this.client = axios.create({
-      baseURL: `${this.baseURL}/api/app-config`,
-      timeout: 15000,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+  private async call<T = any>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', path: string, data?: any): Promise<T> {
+    const url = path.startsWith('http') ? path : `${this.baseURL}/api/app-config${path}`;
+    return appkit.call<T>(method as any, url, data);
   }
 
   /**
@@ -93,18 +90,14 @@ class AppConfigService {
 
       // Fetch from API
       const platform = this.getPlatform();
-      const response = await this.client.get('/config', {
-        params: { platform }
-      });
-
-      const config: AppConfiguration = response.data;
+      const configData = await this.call<AppConfiguration>('GET', `/config?platform=${platform}`);
 
       // Save to cache
-      await this.saveToCache(config);
-      this.cachedConfig = config;
+      await this.saveToCache(configData);
+      this.cachedConfig = configData;
       this.cacheTimestamp = Date.now();
 
-      return config;
+      return configData;
     } catch (error: any) {
       console.error('Error fetching app config:', error);
 
@@ -123,8 +116,8 @@ class AppConfigService {
    */
   async getScreenConfig(screenKey: string): Promise<ScreenConfig> {
     try {
-      const response = await this.client.get(`/screens/${screenKey}`);
-      return response.data.screen;
+      const res = await this.call('GET', `/screens/${screenKey}`);
+      return res.screen;
     } catch (error: any) {
       console.error(`Error fetching screen config for ${screenKey}:`, error);
 
@@ -174,8 +167,8 @@ class AppConfigService {
    */
   async getAsset(assetKey: string): Promise<AssetInfo> {
     try {
-      const response = await this.client.get(`/assets/${assetKey}`);
-      return response.data.asset;
+      const res = await this.call('GET', `/assets/${assetKey}`);
+      return res.asset;
     } catch (error: any) {
       console.error(`Error fetching asset ${assetKey}:`, error);
       throw new Error(`Failed to fetch asset: ${error.message}`);
@@ -188,10 +181,8 @@ class AppConfigService {
   async getAssetsByType(assetType: string): Promise<AssetInfo[]> {
     try {
       const platform = this.getPlatform();
-      const response = await this.client.get(`/assets/type/${assetType}`, {
-        params: { platform }
-      });
-      return response.data.assets;
+      const res = await this.call('GET', `/assets/type/${assetType}?platform=${platform}`);
+      return res.assets || [];
     } catch (error: any) {
       console.error(`Error fetching assets of type ${assetType}:`, error);
       return [];
@@ -211,10 +202,8 @@ class AppConfigService {
   async getAssetsByCategory(category: string): Promise<AssetInfo[]> {
     try {
       const platform = this.getPlatform();
-      const response = await this.client.get(`/assets/category/${category}`, {
-        params: { platform }
-      });
-      return response.data.assets;
+      const res = await this.call('GET', `/assets/category/${category}?platform=${platform}`);
+      return res.assets || [];
     } catch (error: any) {
       console.error(`Error fetching assets for category ${category}:`, error);
       return [];
@@ -248,10 +237,8 @@ class AppConfigService {
   async getFeatureFlags(): Promise<Record<string, boolean>> {
     try {
       const platform = this.getPlatform();
-      const response = await this.client.get('/features', {
-        params: { platform }
-      });
-      return response.data.features;
+      const res = await this.call('GET', `/features?platform=${platform}`);
+      return res.features || {};
     } catch (error: any) {
       console.error('Error fetching feature flags:', error);
       return {};
@@ -352,13 +339,7 @@ class AppConfigService {
   }
 
   private getPlatform(): string {
-    // Detect platform
-    // @ts-ignore
-    if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
-      // @ts-ignore
-      return Platform.OS === 'ios' ? 'ios' : 'android';
-    }
-    return 'web';
+    return Platform.OS === 'ios' ? 'ios' : 'android';
   }
 }
 

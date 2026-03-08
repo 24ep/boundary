@@ -141,10 +141,38 @@ class AuthService {
     }
   }
 
-  // Social Login (Stub)
-  async socialLogin(provider: 'google' | 'facebook' | 'apple'): Promise<AuthResponse> {
-    console.warn('Social login not fully implemented in API client', provider);
-    throw new Error('Social login requires native SDK integration');
+  // Load available SSO providers
+  async loadSSOProviders(): Promise<any[]> {
+    try {
+      const response = await appkit.branding.getSSOProviders();
+      return response || [];
+    } catch (error) {
+      console.error('Load SSO providers error:', error);
+      return [];
+    }
+  }
+
+  // Social Login
+  async socialLogin(provider: string, ssoData: any): Promise<AuthResponse> {
+    try {
+      const response = await appkit.verifySocialLogin(provider, ssoData);
+      
+      if (!response.user) {
+        throw new Error(response.message || 'Social login failed');
+      }
+
+      const user = this.mapAppKitUser(response.user);
+      const tokens: AuthTokens = {
+        accessToken: response.accessToken || '',
+        refreshToken: response.refreshToken || '',
+        expiresIn: 3600 * 24,
+      };
+
+      return { user, tokens };
+    } catch (error) {
+      console.error('Social login error:', error);
+      throw error;
+    }
   }
 
   // Update Profile
