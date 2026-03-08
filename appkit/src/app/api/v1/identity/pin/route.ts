@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { pinCode: true }
+      select: { pinCode: true } as any
     });
 
     return NextResponse.json({ hasPin: !!user?.pinCode });
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     const hashedPin = await bcrypt.hash(pin, 10);
     await prisma.user.update({
       where: { id: userId },
-      data: { pinCode: hashedPin }
+      data: { pinCode: hashedPin } as any
     });
 
     return NextResponse.json({ message: 'PIN updated successfully' });
