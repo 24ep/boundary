@@ -168,11 +168,6 @@ export type SubscriptionPlan = Prisma.SubscriptionPlanModel
  */
 export type Subscription = Prisma.SubscriptionModel
 /**
- * Model CoinTransaction
- * 
- */
-export type CoinTransaction = Prisma.CoinTransactionModel
-/**
  * Model SystemConfig
  * 
  */
@@ -377,3 +372,48 @@ export type FileShare = Prisma.FileShareModel
  * 
  */
 export type FileRecentAccess = Prisma.FileRecentAccessModel
+/**
+ * Model CircleOwner
+ * 
+ */
+export type CircleOwner = Prisma.CircleOwnerModel
+/**
+ * Model CircleBillingAssignment
+ * 
+ */
+export type CircleBillingAssignment = Prisma.CircleBillingAssignmentModel
+/**
+ * Model SupportTicket
+ * 
+ */
+export type SupportTicket = Prisma.SupportTicketModel
+/**
+ * Model TicketComment
+ * 
+ */
+export type TicketComment = Prisma.TicketCommentModel
+/**
+ * Model UserComment
+ * 
+ */
+export type UserComment = Prisma.UserCommentModel
+/**
+ * Model UserReminder
+ * 
+ */
+export type UserReminder = Prisma.UserReminderModel
+/**
+ * Model CoinTransaction
+ * 
+ */
+export type CoinTransaction = Prisma.CoinTransactionModel
+/**
+ * Model UnifiedEntity
+ * 
+ */
+export type UnifiedEntity = Prisma.UnifiedEntityModel
+/**
+ * Model EntityType
+ * 
+ */
+export type EntityType = Prisma.EntityTypeModel

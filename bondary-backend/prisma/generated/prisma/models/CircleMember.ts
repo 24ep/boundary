@@ -32,6 +32,8 @@ export type CircleMemberMinAggregateOutputType = {
   nickname: string | null
   joinedAt: Date | null
   invitedBy: string | null
+  isInherited: boolean | null
+  sourceCircleId: string | null
 }
 
 export type CircleMemberMaxAggregateOutputType = {
@@ -42,6 +44,8 @@ export type CircleMemberMaxAggregateOutputType = {
   nickname: string | null
   joinedAt: Date | null
   invitedBy: string | null
+  isInherited: boolean | null
+  sourceCircleId: string | null
 }
 
 export type CircleMemberCountAggregateOutputType = {
@@ -52,6 +56,8 @@ export type CircleMemberCountAggregateOutputType = {
   nickname: number
   joinedAt: number
   invitedBy: number
+  isInherited: number
+  sourceCircleId: number
   settings: number
   _all: number
 }
@@ -65,6 +71,8 @@ export type CircleMemberMinAggregateInputType = {
   nickname?: true
   joinedAt?: true
   invitedBy?: true
+  isInherited?: true
+  sourceCircleId?: true
 }
 
 export type CircleMemberMaxAggregateInputType = {
@@ -75,6 +83,8 @@ export type CircleMemberMaxAggregateInputType = {
   nickname?: true
   joinedAt?: true
   invitedBy?: true
+  isInherited?: true
+  sourceCircleId?: true
 }
 
 export type CircleMemberCountAggregateInputType = {
@@ -85,6 +95,8 @@ export type CircleMemberCountAggregateInputType = {
   nickname?: true
   joinedAt?: true
   invitedBy?: true
+  isInherited?: true
+  sourceCircleId?: true
   settings?: true
   _all?: true
 }
@@ -169,6 +181,8 @@ export type CircleMemberGroupByOutputType = {
   nickname: string | null
   joinedAt: Date
   invitedBy: string | null
+  isInherited: boolean
+  sourceCircleId: string | null
   settings: runtime.JsonValue
   _count: CircleMemberCountAggregateOutputType | null
   _min: CircleMemberMinAggregateOutputType | null
@@ -201,10 +215,13 @@ export type CircleMemberWhereInput = {
   nickname?: Prisma.StringNullableFilter<"CircleMember"> | string | null
   joinedAt?: Prisma.DateTimeFilter<"CircleMember"> | Date | string
   invitedBy?: Prisma.UuidNullableFilter<"CircleMember"> | string | null
+  isInherited?: Prisma.BoolFilter<"CircleMember"> | boolean
+  sourceCircleId?: Prisma.UuidNullableFilter<"CircleMember"> | string | null
   settings?: Prisma.JsonFilter<"CircleMember">
   circle?: Prisma.XOR<Prisma.CircleScalarRelationFilter, Prisma.CircleWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   inviter?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  sourceCircle?: Prisma.XOR<Prisma.CircleNullableScalarRelationFilter, Prisma.CircleWhereInput> | null
 }
 
 export type CircleMemberOrderByWithRelationInput = {
@@ -215,10 +232,13 @@ export type CircleMemberOrderByWithRelationInput = {
   nickname?: Prisma.SortOrderInput | Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   invitedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  isInherited?: Prisma.SortOrder
+  sourceCircleId?: Prisma.SortOrderInput | Prisma.SortOrder
   settings?: Prisma.SortOrder
   circle?: Prisma.CircleOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
   inviter?: Prisma.UserOrderByWithRelationInput
+  sourceCircle?: Prisma.CircleOrderByWithRelationInput
 }
 
 export type CircleMemberWhereUniqueInput = Prisma.AtLeast<{
@@ -233,10 +253,13 @@ export type CircleMemberWhereUniqueInput = Prisma.AtLeast<{
   nickname?: Prisma.StringNullableFilter<"CircleMember"> | string | null
   joinedAt?: Prisma.DateTimeFilter<"CircleMember"> | Date | string
   invitedBy?: Prisma.UuidNullableFilter<"CircleMember"> | string | null
+  isInherited?: Prisma.BoolFilter<"CircleMember"> | boolean
+  sourceCircleId?: Prisma.UuidNullableFilter<"CircleMember"> | string | null
   settings?: Prisma.JsonFilter<"CircleMember">
   circle?: Prisma.XOR<Prisma.CircleScalarRelationFilter, Prisma.CircleWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   inviter?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  sourceCircle?: Prisma.XOR<Prisma.CircleNullableScalarRelationFilter, Prisma.CircleWhereInput> | null
 }, "id" | "circleId_userId">
 
 export type CircleMemberOrderByWithAggregationInput = {
@@ -247,6 +270,8 @@ export type CircleMemberOrderByWithAggregationInput = {
   nickname?: Prisma.SortOrderInput | Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   invitedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  isInherited?: Prisma.SortOrder
+  sourceCircleId?: Prisma.SortOrderInput | Prisma.SortOrder
   settings?: Prisma.SortOrder
   _count?: Prisma.CircleMemberCountOrderByAggregateInput
   _max?: Prisma.CircleMemberMaxOrderByAggregateInput
@@ -264,6 +289,8 @@ export type CircleMemberScalarWhereWithAggregatesInput = {
   nickname?: Prisma.StringNullableWithAggregatesFilter<"CircleMember"> | string | null
   joinedAt?: Prisma.DateTimeWithAggregatesFilter<"CircleMember"> | Date | string
   invitedBy?: Prisma.UuidNullableWithAggregatesFilter<"CircleMember"> | string | null
+  isInherited?: Prisma.BoolWithAggregatesFilter<"CircleMember"> | boolean
+  sourceCircleId?: Prisma.UuidNullableWithAggregatesFilter<"CircleMember"> | string | null
   settings?: Prisma.JsonWithAggregatesFilter<"CircleMember">
 }
 
@@ -272,10 +299,12 @@ export type CircleMemberCreateInput = {
   role?: string
   nickname?: string | null
   joinedAt?: Date | string
+  isInherited?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   circle: Prisma.CircleCreateNestedOneWithoutMembersInput
   user: Prisma.UserCreateNestedOneWithoutCircleMembershipsInput
   inviter?: Prisma.UserCreateNestedOneWithoutCircleInvitationsInput
+  sourceCircle?: Prisma.CircleCreateNestedOneWithoutSourcedMembershipsInput
 }
 
 export type CircleMemberUncheckedCreateInput = {
@@ -286,6 +315,8 @@ export type CircleMemberUncheckedCreateInput = {
   nickname?: string | null
   joinedAt?: Date | string
   invitedBy?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -294,10 +325,12 @@ export type CircleMemberUpdateInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   circle?: Prisma.CircleUpdateOneRequiredWithoutMembersNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCircleMembershipsNestedInput
   inviter?: Prisma.UserUpdateOneWithoutCircleInvitationsNestedInput
+  sourceCircle?: Prisma.CircleUpdateOneWithoutSourcedMembershipsNestedInput
 }
 
 export type CircleMemberUncheckedUpdateInput = {
@@ -308,6 +341,8 @@ export type CircleMemberUncheckedUpdateInput = {
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -319,6 +354,8 @@ export type CircleMemberCreateManyInput = {
   nickname?: string | null
   joinedAt?: Date | string
   invitedBy?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -327,6 +364,7 @@ export type CircleMemberUpdateManyMutationInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -338,6 +376,8 @@ export type CircleMemberUncheckedUpdateManyInput = {
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -364,6 +404,8 @@ export type CircleMemberCountOrderByAggregateInput = {
   nickname?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   invitedBy?: Prisma.SortOrder
+  isInherited?: Prisma.SortOrder
+  sourceCircleId?: Prisma.SortOrder
   settings?: Prisma.SortOrder
 }
 
@@ -375,6 +417,8 @@ export type CircleMemberMaxOrderByAggregateInput = {
   nickname?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   invitedBy?: Prisma.SortOrder
+  isInherited?: Prisma.SortOrder
+  sourceCircleId?: Prisma.SortOrder
 }
 
 export type CircleMemberMinOrderByAggregateInput = {
@@ -385,6 +429,8 @@ export type CircleMemberMinOrderByAggregateInput = {
   nickname?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   invitedBy?: Prisma.SortOrder
+  isInherited?: Prisma.SortOrder
+  sourceCircleId?: Prisma.SortOrder
 }
 
 export type CircleMemberCreateNestedManyWithoutUserInput = {
@@ -478,10 +524,24 @@ export type CircleMemberCreateNestedManyWithoutCircleInput = {
   connect?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
 }
 
+export type CircleMemberCreateNestedManyWithoutSourceCircleInput = {
+  create?: Prisma.XOR<Prisma.CircleMemberCreateWithoutSourceCircleInput, Prisma.CircleMemberUncheckedCreateWithoutSourceCircleInput> | Prisma.CircleMemberCreateWithoutSourceCircleInput[] | Prisma.CircleMemberUncheckedCreateWithoutSourceCircleInput[]
+  connectOrCreate?: Prisma.CircleMemberCreateOrConnectWithoutSourceCircleInput | Prisma.CircleMemberCreateOrConnectWithoutSourceCircleInput[]
+  createMany?: Prisma.CircleMemberCreateManySourceCircleInputEnvelope
+  connect?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
+}
+
 export type CircleMemberUncheckedCreateNestedManyWithoutCircleInput = {
   create?: Prisma.XOR<Prisma.CircleMemberCreateWithoutCircleInput, Prisma.CircleMemberUncheckedCreateWithoutCircleInput> | Prisma.CircleMemberCreateWithoutCircleInput[] | Prisma.CircleMemberUncheckedCreateWithoutCircleInput[]
   connectOrCreate?: Prisma.CircleMemberCreateOrConnectWithoutCircleInput | Prisma.CircleMemberCreateOrConnectWithoutCircleInput[]
   createMany?: Prisma.CircleMemberCreateManyCircleInputEnvelope
+  connect?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
+}
+
+export type CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput = {
+  create?: Prisma.XOR<Prisma.CircleMemberCreateWithoutSourceCircleInput, Prisma.CircleMemberUncheckedCreateWithoutSourceCircleInput> | Prisma.CircleMemberCreateWithoutSourceCircleInput[] | Prisma.CircleMemberUncheckedCreateWithoutSourceCircleInput[]
+  connectOrCreate?: Prisma.CircleMemberCreateOrConnectWithoutSourceCircleInput | Prisma.CircleMemberCreateOrConnectWithoutSourceCircleInput[]
+  createMany?: Prisma.CircleMemberCreateManySourceCircleInputEnvelope
   connect?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
 }
 
@@ -499,6 +559,20 @@ export type CircleMemberUpdateManyWithoutCircleNestedInput = {
   deleteMany?: Prisma.CircleMemberScalarWhereInput | Prisma.CircleMemberScalarWhereInput[]
 }
 
+export type CircleMemberUpdateManyWithoutSourceCircleNestedInput = {
+  create?: Prisma.XOR<Prisma.CircleMemberCreateWithoutSourceCircleInput, Prisma.CircleMemberUncheckedCreateWithoutSourceCircleInput> | Prisma.CircleMemberCreateWithoutSourceCircleInput[] | Prisma.CircleMemberUncheckedCreateWithoutSourceCircleInput[]
+  connectOrCreate?: Prisma.CircleMemberCreateOrConnectWithoutSourceCircleInput | Prisma.CircleMemberCreateOrConnectWithoutSourceCircleInput[]
+  upsert?: Prisma.CircleMemberUpsertWithWhereUniqueWithoutSourceCircleInput | Prisma.CircleMemberUpsertWithWhereUniqueWithoutSourceCircleInput[]
+  createMany?: Prisma.CircleMemberCreateManySourceCircleInputEnvelope
+  set?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
+  disconnect?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
+  delete?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
+  connect?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
+  update?: Prisma.CircleMemberUpdateWithWhereUniqueWithoutSourceCircleInput | Prisma.CircleMemberUpdateWithWhereUniqueWithoutSourceCircleInput[]
+  updateMany?: Prisma.CircleMemberUpdateManyWithWhereWithoutSourceCircleInput | Prisma.CircleMemberUpdateManyWithWhereWithoutSourceCircleInput[]
+  deleteMany?: Prisma.CircleMemberScalarWhereInput | Prisma.CircleMemberScalarWhereInput[]
+}
+
 export type CircleMemberUncheckedUpdateManyWithoutCircleNestedInput = {
   create?: Prisma.XOR<Prisma.CircleMemberCreateWithoutCircleInput, Prisma.CircleMemberUncheckedCreateWithoutCircleInput> | Prisma.CircleMemberCreateWithoutCircleInput[] | Prisma.CircleMemberUncheckedCreateWithoutCircleInput[]
   connectOrCreate?: Prisma.CircleMemberCreateOrConnectWithoutCircleInput | Prisma.CircleMemberCreateOrConnectWithoutCircleInput[]
@@ -513,14 +587,30 @@ export type CircleMemberUncheckedUpdateManyWithoutCircleNestedInput = {
   deleteMany?: Prisma.CircleMemberScalarWhereInput | Prisma.CircleMemberScalarWhereInput[]
 }
 
+export type CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput = {
+  create?: Prisma.XOR<Prisma.CircleMemberCreateWithoutSourceCircleInput, Prisma.CircleMemberUncheckedCreateWithoutSourceCircleInput> | Prisma.CircleMemberCreateWithoutSourceCircleInput[] | Prisma.CircleMemberUncheckedCreateWithoutSourceCircleInput[]
+  connectOrCreate?: Prisma.CircleMemberCreateOrConnectWithoutSourceCircleInput | Prisma.CircleMemberCreateOrConnectWithoutSourceCircleInput[]
+  upsert?: Prisma.CircleMemberUpsertWithWhereUniqueWithoutSourceCircleInput | Prisma.CircleMemberUpsertWithWhereUniqueWithoutSourceCircleInput[]
+  createMany?: Prisma.CircleMemberCreateManySourceCircleInputEnvelope
+  set?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
+  disconnect?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
+  delete?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
+  connect?: Prisma.CircleMemberWhereUniqueInput | Prisma.CircleMemberWhereUniqueInput[]
+  update?: Prisma.CircleMemberUpdateWithWhereUniqueWithoutSourceCircleInput | Prisma.CircleMemberUpdateWithWhereUniqueWithoutSourceCircleInput[]
+  updateMany?: Prisma.CircleMemberUpdateManyWithWhereWithoutSourceCircleInput | Prisma.CircleMemberUpdateManyWithWhereWithoutSourceCircleInput[]
+  deleteMany?: Prisma.CircleMemberScalarWhereInput | Prisma.CircleMemberScalarWhereInput[]
+}
+
 export type CircleMemberCreateWithoutUserInput = {
   id?: string
   role?: string
   nickname?: string | null
   joinedAt?: Date | string
+  isInherited?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   circle: Prisma.CircleCreateNestedOneWithoutMembersInput
   inviter?: Prisma.UserCreateNestedOneWithoutCircleInvitationsInput
+  sourceCircle?: Prisma.CircleCreateNestedOneWithoutSourcedMembershipsInput
 }
 
 export type CircleMemberUncheckedCreateWithoutUserInput = {
@@ -530,6 +620,8 @@ export type CircleMemberUncheckedCreateWithoutUserInput = {
   nickname?: string | null
   joinedAt?: Date | string
   invitedBy?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -548,9 +640,11 @@ export type CircleMemberCreateWithoutInviterInput = {
   role?: string
   nickname?: string | null
   joinedAt?: Date | string
+  isInherited?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   circle: Prisma.CircleCreateNestedOneWithoutMembersInput
   user: Prisma.UserCreateNestedOneWithoutCircleMembershipsInput
+  sourceCircle?: Prisma.CircleCreateNestedOneWithoutSourcedMembershipsInput
 }
 
 export type CircleMemberUncheckedCreateWithoutInviterInput = {
@@ -560,6 +654,8 @@ export type CircleMemberUncheckedCreateWithoutInviterInput = {
   role?: string
   nickname?: string | null
   joinedAt?: Date | string
+  isInherited?: boolean
+  sourceCircleId?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -600,6 +696,8 @@ export type CircleMemberScalarWhereInput = {
   nickname?: Prisma.StringNullableFilter<"CircleMember"> | string | null
   joinedAt?: Prisma.DateTimeFilter<"CircleMember"> | Date | string
   invitedBy?: Prisma.UuidNullableFilter<"CircleMember"> | string | null
+  isInherited?: Prisma.BoolFilter<"CircleMember"> | boolean
+  sourceCircleId?: Prisma.UuidNullableFilter<"CircleMember"> | string | null
   settings?: Prisma.JsonFilter<"CircleMember">
 }
 
@@ -624,9 +722,11 @@ export type CircleMemberCreateWithoutCircleInput = {
   role?: string
   nickname?: string | null
   joinedAt?: Date | string
+  isInherited?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   user: Prisma.UserCreateNestedOneWithoutCircleMembershipsInput
   inviter?: Prisma.UserCreateNestedOneWithoutCircleInvitationsInput
+  sourceCircle?: Prisma.CircleCreateNestedOneWithoutSourcedMembershipsInput
 }
 
 export type CircleMemberUncheckedCreateWithoutCircleInput = {
@@ -636,6 +736,8 @@ export type CircleMemberUncheckedCreateWithoutCircleInput = {
   nickname?: string | null
   joinedAt?: Date | string
   invitedBy?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -646,6 +748,40 @@ export type CircleMemberCreateOrConnectWithoutCircleInput = {
 
 export type CircleMemberCreateManyCircleInputEnvelope = {
   data: Prisma.CircleMemberCreateManyCircleInput | Prisma.CircleMemberCreateManyCircleInput[]
+  skipDuplicates?: boolean
+}
+
+export type CircleMemberCreateWithoutSourceCircleInput = {
+  id?: string
+  role?: string
+  nickname?: string | null
+  joinedAt?: Date | string
+  isInherited?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  circle: Prisma.CircleCreateNestedOneWithoutMembersInput
+  user: Prisma.UserCreateNestedOneWithoutCircleMembershipsInput
+  inviter?: Prisma.UserCreateNestedOneWithoutCircleInvitationsInput
+}
+
+export type CircleMemberUncheckedCreateWithoutSourceCircleInput = {
+  id?: string
+  circleId: string
+  userId: string
+  role?: string
+  nickname?: string | null
+  joinedAt?: Date | string
+  invitedBy?: string | null
+  isInherited?: boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+}
+
+export type CircleMemberCreateOrConnectWithoutSourceCircleInput = {
+  where: Prisma.CircleMemberWhereUniqueInput
+  create: Prisma.XOR<Prisma.CircleMemberCreateWithoutSourceCircleInput, Prisma.CircleMemberUncheckedCreateWithoutSourceCircleInput>
+}
+
+export type CircleMemberCreateManySourceCircleInputEnvelope = {
+  data: Prisma.CircleMemberCreateManySourceCircleInput | Prisma.CircleMemberCreateManySourceCircleInput[]
   skipDuplicates?: boolean
 }
 
@@ -665,6 +801,22 @@ export type CircleMemberUpdateManyWithWhereWithoutCircleInput = {
   data: Prisma.XOR<Prisma.CircleMemberUpdateManyMutationInput, Prisma.CircleMemberUncheckedUpdateManyWithoutCircleInput>
 }
 
+export type CircleMemberUpsertWithWhereUniqueWithoutSourceCircleInput = {
+  where: Prisma.CircleMemberWhereUniqueInput
+  update: Prisma.XOR<Prisma.CircleMemberUpdateWithoutSourceCircleInput, Prisma.CircleMemberUncheckedUpdateWithoutSourceCircleInput>
+  create: Prisma.XOR<Prisma.CircleMemberCreateWithoutSourceCircleInput, Prisma.CircleMemberUncheckedCreateWithoutSourceCircleInput>
+}
+
+export type CircleMemberUpdateWithWhereUniqueWithoutSourceCircleInput = {
+  where: Prisma.CircleMemberWhereUniqueInput
+  data: Prisma.XOR<Prisma.CircleMemberUpdateWithoutSourceCircleInput, Prisma.CircleMemberUncheckedUpdateWithoutSourceCircleInput>
+}
+
+export type CircleMemberUpdateManyWithWhereWithoutSourceCircleInput = {
+  where: Prisma.CircleMemberScalarWhereInput
+  data: Prisma.XOR<Prisma.CircleMemberUpdateManyMutationInput, Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleInput>
+}
+
 export type CircleMemberCreateManyUserInput = {
   id?: string
   circleId: string
@@ -672,6 +824,8 @@ export type CircleMemberCreateManyUserInput = {
   nickname?: string | null
   joinedAt?: Date | string
   invitedBy?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -682,6 +836,8 @@ export type CircleMemberCreateManyInviterInput = {
   role?: string
   nickname?: string | null
   joinedAt?: Date | string
+  isInherited?: boolean
+  sourceCircleId?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -690,9 +846,11 @@ export type CircleMemberUpdateWithoutUserInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   circle?: Prisma.CircleUpdateOneRequiredWithoutMembersNestedInput
   inviter?: Prisma.UserUpdateOneWithoutCircleInvitationsNestedInput
+  sourceCircle?: Prisma.CircleUpdateOneWithoutSourcedMembershipsNestedInput
 }
 
 export type CircleMemberUncheckedUpdateWithoutUserInput = {
@@ -702,6 +860,8 @@ export type CircleMemberUncheckedUpdateWithoutUserInput = {
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -712,6 +872,8 @@ export type CircleMemberUncheckedUpdateManyWithoutUserInput = {
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -720,9 +882,11 @@ export type CircleMemberUpdateWithoutInviterInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   circle?: Prisma.CircleUpdateOneRequiredWithoutMembersNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCircleMembershipsNestedInput
+  sourceCircle?: Prisma.CircleUpdateOneWithoutSourcedMembershipsNestedInput
 }
 
 export type CircleMemberUncheckedUpdateWithoutInviterInput = {
@@ -732,6 +896,8 @@ export type CircleMemberUncheckedUpdateWithoutInviterInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -742,6 +908,8 @@ export type CircleMemberUncheckedUpdateManyWithoutInviterInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -752,6 +920,20 @@ export type CircleMemberCreateManyCircleInput = {
   nickname?: string | null
   joinedAt?: Date | string
   invitedBy?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+}
+
+export type CircleMemberCreateManySourceCircleInput = {
+  id?: string
+  circleId: string
+  userId: string
+  role?: string
+  nickname?: string | null
+  joinedAt?: Date | string
+  invitedBy?: string | null
+  isInherited?: boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -760,9 +942,11 @@ export type CircleMemberUpdateWithoutCircleInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   user?: Prisma.UserUpdateOneRequiredWithoutCircleMembershipsNestedInput
   inviter?: Prisma.UserUpdateOneWithoutCircleInvitationsNestedInput
+  sourceCircle?: Prisma.CircleUpdateOneWithoutSourcedMembershipsNestedInput
 }
 
 export type CircleMemberUncheckedUpdateWithoutCircleInput = {
@@ -772,6 +956,8 @@ export type CircleMemberUncheckedUpdateWithoutCircleInput = {
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -782,6 +968,44 @@ export type CircleMemberUncheckedUpdateManyWithoutCircleInput = {
   nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+}
+
+export type CircleMemberUpdateWithoutSourceCircleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  circle?: Prisma.CircleUpdateOneRequiredWithoutMembersNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCircleMembershipsNestedInput
+  inviter?: Prisma.UserUpdateOneWithoutCircleInvitationsNestedInput
+}
+
+export type CircleMemberUncheckedUpdateWithoutSourceCircleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  circleId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+}
+
+export type CircleMemberUncheckedUpdateManyWithoutSourceCircleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  circleId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  nickname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
@@ -795,10 +1019,13 @@ export type CircleMemberSelect<ExtArgs extends runtime.Types.Extensions.Internal
   nickname?: boolean
   joinedAt?: boolean
   invitedBy?: boolean
+  isInherited?: boolean
+  sourceCircleId?: boolean
   settings?: boolean
   circle?: boolean | Prisma.CircleDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   inviter?: boolean | Prisma.CircleMember$inviterArgs<ExtArgs>
+  sourceCircle?: boolean | Prisma.CircleMember$sourceCircleArgs<ExtArgs>
 }, ExtArgs["result"]["circleMember"]>
 
 export type CircleMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -809,10 +1036,13 @@ export type CircleMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   nickname?: boolean
   joinedAt?: boolean
   invitedBy?: boolean
+  isInherited?: boolean
+  sourceCircleId?: boolean
   settings?: boolean
   circle?: boolean | Prisma.CircleDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   inviter?: boolean | Prisma.CircleMember$inviterArgs<ExtArgs>
+  sourceCircle?: boolean | Prisma.CircleMember$sourceCircleArgs<ExtArgs>
 }, ExtArgs["result"]["circleMember"]>
 
 export type CircleMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -823,10 +1053,13 @@ export type CircleMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   nickname?: boolean
   joinedAt?: boolean
   invitedBy?: boolean
+  isInherited?: boolean
+  sourceCircleId?: boolean
   settings?: boolean
   circle?: boolean | Prisma.CircleDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   inviter?: boolean | Prisma.CircleMember$inviterArgs<ExtArgs>
+  sourceCircle?: boolean | Prisma.CircleMember$sourceCircleArgs<ExtArgs>
 }, ExtArgs["result"]["circleMember"]>
 
 export type CircleMemberSelectScalar = {
@@ -837,24 +1070,29 @@ export type CircleMemberSelectScalar = {
   nickname?: boolean
   joinedAt?: boolean
   invitedBy?: boolean
+  isInherited?: boolean
+  sourceCircleId?: boolean
   settings?: boolean
 }
 
-export type CircleMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "circleId" | "userId" | "role" | "nickname" | "joinedAt" | "invitedBy" | "settings", ExtArgs["result"]["circleMember"]>
+export type CircleMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "circleId" | "userId" | "role" | "nickname" | "joinedAt" | "invitedBy" | "isInherited" | "sourceCircleId" | "settings", ExtArgs["result"]["circleMember"]>
 export type CircleMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   circle?: boolean | Prisma.CircleDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   inviter?: boolean | Prisma.CircleMember$inviterArgs<ExtArgs>
+  sourceCircle?: boolean | Prisma.CircleMember$sourceCircleArgs<ExtArgs>
 }
 export type CircleMemberIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   circle?: boolean | Prisma.CircleDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   inviter?: boolean | Prisma.CircleMember$inviterArgs<ExtArgs>
+  sourceCircle?: boolean | Prisma.CircleMember$sourceCircleArgs<ExtArgs>
 }
 export type CircleMemberIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   circle?: boolean | Prisma.CircleDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   inviter?: boolean | Prisma.CircleMember$inviterArgs<ExtArgs>
+  sourceCircle?: boolean | Prisma.CircleMember$sourceCircleArgs<ExtArgs>
 }
 
 export type $CircleMemberPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -863,6 +1101,7 @@ export type $CircleMemberPayload<ExtArgs extends runtime.Types.Extensions.Intern
     circle: Prisma.$CirclePayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
     inviter: Prisma.$UserPayload<ExtArgs> | null
+    sourceCircle: Prisma.$CirclePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -872,6 +1111,8 @@ export type $CircleMemberPayload<ExtArgs extends runtime.Types.Extensions.Intern
     nickname: string | null
     joinedAt: Date
     invitedBy: string | null
+    isInherited: boolean
+    sourceCircleId: string | null
     settings: runtime.JsonValue
   }, ExtArgs["result"]["circleMember"]>
   composites: {}
@@ -1270,6 +1511,7 @@ export interface Prisma__CircleMemberClient<T, Null = never, ExtArgs extends run
   circle<T extends Prisma.CircleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CircleDefaultArgs<ExtArgs>>): Prisma.Prisma__CircleClient<runtime.Types.Result.GetResult<Prisma.$CirclePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   inviter<T extends Prisma.CircleMember$inviterArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CircleMember$inviterArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  sourceCircle<T extends Prisma.CircleMember$sourceCircleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CircleMember$sourceCircleArgs<ExtArgs>>): Prisma.Prisma__CircleClient<runtime.Types.Result.GetResult<Prisma.$CirclePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1306,6 +1548,8 @@ export interface CircleMemberFieldRefs {
   readonly nickname: Prisma.FieldRef<"CircleMember", 'String'>
   readonly joinedAt: Prisma.FieldRef<"CircleMember", 'DateTime'>
   readonly invitedBy: Prisma.FieldRef<"CircleMember", 'String'>
+  readonly isInherited: Prisma.FieldRef<"CircleMember", 'Boolean'>
+  readonly sourceCircleId: Prisma.FieldRef<"CircleMember", 'String'>
   readonly settings: Prisma.FieldRef<"CircleMember", 'Json'>
 }
     
@@ -1719,6 +1963,25 @@ export type CircleMember$inviterArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * CircleMember.sourceCircle
+ */
+export type CircleMember$sourceCircleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Circle
+   */
+  select?: Prisma.CircleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Circle
+   */
+  omit?: Prisma.CircleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CircleInclude<ExtArgs> | null
+  where?: Prisma.CircleWhereInput
 }
 
 /**

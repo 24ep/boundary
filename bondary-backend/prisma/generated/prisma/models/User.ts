@@ -29,12 +29,14 @@ export type AggregateUser = {
 export type UserAvgAggregateOutputType = {
   followersCount: number | null
   followingCount: number | null
+  points: number | null
   coins: number | null
 }
 
 export type UserSumAggregateOutputType = {
   followersCount: number | null
   followingCount: number | null
+  points: number | null
   coins: number | null
 }
 
@@ -56,6 +58,7 @@ export type UserMinAggregateOutputType = {
   followingCount: number | null
   userType: string | null
   isOnboardingComplete: boolean | null
+  points: number | null
   coins: number | null
   isActive: boolean | null
   isVerified: boolean | null
@@ -83,6 +86,7 @@ export type UserMaxAggregateOutputType = {
   followingCount: number | null
   userType: string | null
   isOnboardingComplete: boolean | null
+  points: number | null
   coins: number | null
   isActive: boolean | null
   isVerified: boolean | null
@@ -111,6 +115,7 @@ export type UserCountAggregateOutputType = {
   userType: number
   circleIds: number
   isOnboardingComplete: number
+  points: number
   coins: number
   preferences: number
   isActive: number
@@ -126,12 +131,14 @@ export type UserCountAggregateOutputType = {
 export type UserAvgAggregateInputType = {
   followersCount?: true
   followingCount?: true
+  points?: true
   coins?: true
 }
 
 export type UserSumAggregateInputType = {
   followersCount?: true
   followingCount?: true
+  points?: true
   coins?: true
 }
 
@@ -153,6 +160,7 @@ export type UserMinAggregateInputType = {
   followingCount?: true
   userType?: true
   isOnboardingComplete?: true
+  points?: true
   coins?: true
   isActive?: true
   isVerified?: true
@@ -180,6 +188,7 @@ export type UserMaxAggregateInputType = {
   followingCount?: true
   userType?: true
   isOnboardingComplete?: true
+  points?: true
   coins?: true
   isActive?: true
   isVerified?: true
@@ -208,6 +217,7 @@ export type UserCountAggregateInputType = {
   userType?: true
   circleIds?: true
   isOnboardingComplete?: true
+  points?: true
   coins?: true
   preferences?: true
   isActive?: true
@@ -324,6 +334,7 @@ export type UserGroupByOutputType = {
   userType: string
   circleIds: string[]
   isOnboardingComplete: boolean | null
+  points: number
   coins: number
   preferences: runtime.JsonValue
   isActive: boolean
@@ -376,6 +387,7 @@ export type UserWhereInput = {
   userType?: Prisma.StringFilter<"User"> | string
   circleIds?: Prisma.StringNullableListFilter<"User">
   isOnboardingComplete?: Prisma.BoolNullableFilter<"User"> | boolean | null
+  points?: Prisma.IntFilter<"User"> | number
   coins?: Prisma.IntFilter<"User"> | number
   preferences?: Prisma.JsonFilter<"User">
   isActive?: Prisma.BoolFilter<"User"> | boolean
@@ -398,6 +410,12 @@ export type UserWhereInput = {
   subscriptions?: Prisma.SubscriptionListRelationFilter
   userMFA?: Prisma.UserMFAListRelationFilter
   userGroupMembers?: Prisma.UserGroupMemberListRelationFilter
+  supportTickets?: Prisma.SupportTicketListRelationFilter
+  unifiedEntities?: Prisma.UnifiedEntityListRelationFilter
+  circleOwnerships?: Prisma.CircleOwnerListRelationFilter
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentListRelationFilter
+  userComments?: Prisma.UserCommentListRelationFilter
+  userReminders?: Prisma.UserReminderListRelationFilter
   ownedCircles?: Prisma.CircleListRelationFilter
   circleMemberships?: Prisma.CircleMemberListRelationFilter
   circleInvitations?: Prisma.CircleMemberListRelationFilter
@@ -454,6 +472,7 @@ export type UserOrderByWithRelationInput = {
   userType?: Prisma.SortOrder
   circleIds?: Prisma.SortOrder
   isOnboardingComplete?: Prisma.SortOrderInput | Prisma.SortOrder
+  points?: Prisma.SortOrder
   coins?: Prisma.SortOrder
   preferences?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -476,6 +495,12 @@ export type UserOrderByWithRelationInput = {
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
   userMFA?: Prisma.UserMFAOrderByRelationAggregateInput
   userGroupMembers?: Prisma.UserGroupMemberOrderByRelationAggregateInput
+  supportTickets?: Prisma.SupportTicketOrderByRelationAggregateInput
+  unifiedEntities?: Prisma.UnifiedEntityOrderByRelationAggregateInput
+  circleOwnerships?: Prisma.CircleOwnerOrderByRelationAggregateInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentOrderByRelationAggregateInput
+  userComments?: Prisma.UserCommentOrderByRelationAggregateInput
+  userReminders?: Prisma.UserReminderOrderByRelationAggregateInput
   ownedCircles?: Prisma.CircleOrderByRelationAggregateInput
   circleMemberships?: Prisma.CircleMemberOrderByRelationAggregateInput
   circleInvitations?: Prisma.CircleMemberOrderByRelationAggregateInput
@@ -535,6 +560,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   userType?: Prisma.StringFilter<"User"> | string
   circleIds?: Prisma.StringNullableListFilter<"User">
   isOnboardingComplete?: Prisma.BoolNullableFilter<"User"> | boolean | null
+  points?: Prisma.IntFilter<"User"> | number
   coins?: Prisma.IntFilter<"User"> | number
   preferences?: Prisma.JsonFilter<"User">
   isActive?: Prisma.BoolFilter<"User"> | boolean
@@ -557,6 +583,12 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   subscriptions?: Prisma.SubscriptionListRelationFilter
   userMFA?: Prisma.UserMFAListRelationFilter
   userGroupMembers?: Prisma.UserGroupMemberListRelationFilter
+  supportTickets?: Prisma.SupportTicketListRelationFilter
+  unifiedEntities?: Prisma.UnifiedEntityListRelationFilter
+  circleOwnerships?: Prisma.CircleOwnerListRelationFilter
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentListRelationFilter
+  userComments?: Prisma.UserCommentListRelationFilter
+  userReminders?: Prisma.UserReminderListRelationFilter
   ownedCircles?: Prisma.CircleListRelationFilter
   circleMemberships?: Prisma.CircleMemberListRelationFilter
   circleInvitations?: Prisma.CircleMemberListRelationFilter
@@ -613,6 +645,7 @@ export type UserOrderByWithAggregationInput = {
   userType?: Prisma.SortOrder
   circleIds?: Prisma.SortOrder
   isOnboardingComplete?: Prisma.SortOrderInput | Prisma.SortOrder
+  points?: Prisma.SortOrder
   coins?: Prisma.SortOrder
   preferences?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -650,6 +683,7 @@ export type UserScalarWhereWithAggregatesInput = {
   userType?: Prisma.StringWithAggregatesFilter<"User"> | string
   circleIds?: Prisma.StringNullableListFilter<"User">
   isOnboardingComplete?: Prisma.BoolNullableWithAggregatesFilter<"User"> | boolean | null
+  points?: Prisma.IntWithAggregatesFilter<"User"> | number
   coins?: Prisma.IntWithAggregatesFilter<"User"> | number
   preferences?: Prisma.JsonWithAggregatesFilter<"User">
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
@@ -679,6 +713,7 @@ export type UserCreateInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -701,6 +736,12 @@ export type UserCreateInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -757,6 +798,7 @@ export type UserUncheckedCreateInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -779,6 +821,12 @@ export type UserUncheckedCreateInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -835,6 +883,7 @@ export type UserUpdateInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -857,6 +906,12 @@ export type UserUpdateInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -913,6 +968,7 @@ export type UserUncheckedUpdateInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -935,6 +991,12 @@ export type UserUncheckedUpdateInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -991,6 +1053,7 @@ export type UserCreateManyInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -1020,6 +1083,7 @@ export type UserUpdateManyMutationInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1049,6 +1113,7 @@ export type UserUncheckedUpdateManyInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1086,6 +1151,7 @@ export type UserCountOrderByAggregateInput = {
   userType?: Prisma.SortOrder
   circleIds?: Prisma.SortOrder
   isOnboardingComplete?: Prisma.SortOrder
+  points?: Prisma.SortOrder
   coins?: Prisma.SortOrder
   preferences?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -1099,6 +1165,7 @@ export type UserCountOrderByAggregateInput = {
 export type UserAvgOrderByAggregateInput = {
   followersCount?: Prisma.SortOrder
   followingCount?: Prisma.SortOrder
+  points?: Prisma.SortOrder
   coins?: Prisma.SortOrder
 }
 
@@ -1120,6 +1187,7 @@ export type UserMaxOrderByAggregateInput = {
   followingCount?: Prisma.SortOrder
   userType?: Prisma.SortOrder
   isOnboardingComplete?: Prisma.SortOrder
+  points?: Prisma.SortOrder
   coins?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -1147,6 +1215,7 @@ export type UserMinOrderByAggregateInput = {
   followingCount?: Prisma.SortOrder
   userType?: Prisma.SortOrder
   isOnboardingComplete?: Prisma.SortOrder
+  points?: Prisma.SortOrder
   coins?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -1159,6 +1228,7 @@ export type UserMinOrderByAggregateInput = {
 export type UserSumOrderByAggregateInput = {
   followersCount?: Prisma.SortOrder
   followingCount?: Prisma.SortOrder
+  points?: Prisma.SortOrder
   coins?: Prisma.SortOrder
 }
 
@@ -1391,20 +1461,6 @@ export type UserUpdateOneRequiredWithoutSubscriptionsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutSubscriptionsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.UserUpdateWithoutSubscriptionsInput>, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
-}
-
-export type UserCreateNestedOneWithoutCoinTransactionsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCoinTransactionsInput, Prisma.UserUncheckedCreateWithoutCoinTransactionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCoinTransactionsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutCoinTransactionsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCoinTransactionsInput, Prisma.UserUncheckedCreateWithoutCoinTransactionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCoinTransactionsInput
-  upsert?: Prisma.UserUpsertWithoutCoinTransactionsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCoinTransactionsInput, Prisma.UserUpdateWithoutCoinTransactionsInput>, Prisma.UserUncheckedUpdateWithoutCoinTransactionsInput>
 }
 
 export type UserCreateNestedOneWithoutOwnedCirclesInput = {
@@ -1895,6 +1951,108 @@ export type UserUpdateOneRequiredWithoutFileRecentAccessesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFileRecentAccessesInput, Prisma.UserUpdateWithoutFileRecentAccessesInput>, Prisma.UserUncheckedUpdateWithoutFileRecentAccessesInput>
 }
 
+export type UserCreateNestedOneWithoutCircleOwnershipsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCircleOwnershipsInput, Prisma.UserUncheckedCreateWithoutCircleOwnershipsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCircleOwnershipsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCircleOwnershipsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCircleOwnershipsInput, Prisma.UserUncheckedCreateWithoutCircleOwnershipsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCircleOwnershipsInput
+  upsert?: Prisma.UserUpsertWithoutCircleOwnershipsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCircleOwnershipsInput, Prisma.UserUpdateWithoutCircleOwnershipsInput>, Prisma.UserUncheckedUpdateWithoutCircleOwnershipsInput>
+}
+
+export type UserCreateNestedOneWithoutCircleBillingAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCircleBillingAssignmentsInput, Prisma.UserUncheckedCreateWithoutCircleBillingAssignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCircleBillingAssignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCircleBillingAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCircleBillingAssignmentsInput, Prisma.UserUncheckedCreateWithoutCircleBillingAssignmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCircleBillingAssignmentsInput
+  upsert?: Prisma.UserUpsertWithoutCircleBillingAssignmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCircleBillingAssignmentsInput, Prisma.UserUpdateWithoutCircleBillingAssignmentsInput>, Prisma.UserUncheckedUpdateWithoutCircleBillingAssignmentsInput>
+}
+
+export type UserCreateNestedOneWithoutSupportTicketsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupportTicketsInput, Prisma.UserUncheckedCreateWithoutSupportTicketsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupportTicketsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutSupportTicketsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupportTicketsInput, Prisma.UserUncheckedCreateWithoutSupportTicketsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupportTicketsInput
+  upsert?: Prisma.UserUpsertWithoutSupportTicketsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSupportTicketsInput, Prisma.UserUpdateWithoutSupportTicketsInput>, Prisma.UserUncheckedUpdateWithoutSupportTicketsInput>
+}
+
+export type UserCreateNestedOneWithoutUserCommentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserCommentsInput, Prisma.UserUncheckedCreateWithoutUserCommentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserCommentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutUserCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserCommentsInput, Prisma.UserUncheckedCreateWithoutUserCommentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserCommentsInput
+  upsert?: Prisma.UserUpsertWithoutUserCommentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserCommentsInput, Prisma.UserUpdateWithoutUserCommentsInput>, Prisma.UserUncheckedUpdateWithoutUserCommentsInput>
+}
+
+export type UserCreateNestedOneWithoutUserRemindersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserRemindersInput, Prisma.UserUncheckedCreateWithoutUserRemindersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserRemindersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutUserRemindersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserRemindersInput, Prisma.UserUncheckedCreateWithoutUserRemindersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserRemindersInput
+  upsert?: Prisma.UserUpsertWithoutUserRemindersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserRemindersInput, Prisma.UserUpdateWithoutUserRemindersInput>, Prisma.UserUncheckedUpdateWithoutUserRemindersInput>
+}
+
+export type UserCreateNestedOneWithoutCoinTransactionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCoinTransactionsInput, Prisma.UserUncheckedCreateWithoutCoinTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCoinTransactionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCoinTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCoinTransactionsInput, Prisma.UserUncheckedCreateWithoutCoinTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCoinTransactionsInput
+  upsert?: Prisma.UserUpsertWithoutCoinTransactionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCoinTransactionsInput, Prisma.UserUpdateWithoutCoinTransactionsInput>, Prisma.UserUncheckedUpdateWithoutCoinTransactionsInput>
+}
+
+export type UserCreateNestedOneWithoutUnifiedEntitiesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUnifiedEntitiesInput, Prisma.UserUncheckedCreateWithoutUnifiedEntitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUnifiedEntitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutUnifiedEntitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUnifiedEntitiesInput, Prisma.UserUncheckedCreateWithoutUnifiedEntitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUnifiedEntitiesInput
+  upsert?: Prisma.UserUpsertWithoutUnifiedEntitiesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUnifiedEntitiesInput, Prisma.UserUpdateWithoutUnifiedEntitiesInput>, Prisma.UserUncheckedUpdateWithoutUnifiedEntitiesInput>
+}
+
 export type UserCreateWithoutUserApplicationsInput = {
   id?: string
   email: string
@@ -1914,6 +2072,7 @@ export type UserCreateWithoutUserApplicationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -1935,6 +2094,12 @@ export type UserCreateWithoutUserApplicationsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -1991,6 +2156,7 @@ export type UserUncheckedCreateWithoutUserApplicationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -2012,6 +2178,12 @@ export type UserUncheckedCreateWithoutUserApplicationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -2084,6 +2256,7 @@ export type UserUpdateWithoutUserApplicationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2105,6 +2278,12 @@ export type UserUpdateWithoutUserApplicationsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -2161,6 +2340,7 @@ export type UserUncheckedUpdateWithoutUserApplicationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2182,6 +2362,12 @@ export type UserUncheckedUpdateWithoutUserApplicationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -2238,6 +2424,7 @@ export type UserCreateWithoutUserSessionsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -2259,6 +2446,12 @@ export type UserCreateWithoutUserSessionsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -2315,6 +2508,7 @@ export type UserUncheckedCreateWithoutUserSessionsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -2336,6 +2530,12 @@ export type UserUncheckedCreateWithoutUserSessionsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -2408,6 +2608,7 @@ export type UserUpdateWithoutUserSessionsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2429,6 +2630,12 @@ export type UserUpdateWithoutUserSessionsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -2485,6 +2692,7 @@ export type UserUncheckedUpdateWithoutUserSessionsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2506,6 +2714,12 @@ export type UserUncheckedUpdateWithoutUserSessionsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -2562,6 +2776,7 @@ export type UserCreateWithoutUserDevicesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -2583,6 +2798,12 @@ export type UserCreateWithoutUserDevicesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -2639,6 +2860,7 @@ export type UserUncheckedCreateWithoutUserDevicesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -2660,6 +2882,12 @@ export type UserUncheckedCreateWithoutUserDevicesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -2732,6 +2960,7 @@ export type UserUpdateWithoutUserDevicesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2753,6 +2982,12 @@ export type UserUpdateWithoutUserDevicesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -2809,6 +3044,7 @@ export type UserUncheckedUpdateWithoutUserDevicesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2830,6 +3066,12 @@ export type UserUncheckedUpdateWithoutUserDevicesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -2886,6 +3128,7 @@ export type UserCreateWithoutUserMFAInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -2907,6 +3150,12 @@ export type UserCreateWithoutUserMFAInput = {
   userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -2963,6 +3212,7 @@ export type UserUncheckedCreateWithoutUserMFAInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -2984,6 +3234,12 @@ export type UserUncheckedCreateWithoutUserMFAInput = {
   userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -3056,6 +3312,7 @@ export type UserUpdateWithoutUserMFAInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3077,6 +3334,12 @@ export type UserUpdateWithoutUserMFAInput = {
   userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -3133,6 +3396,7 @@ export type UserUncheckedUpdateWithoutUserMFAInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3154,6 +3418,12 @@ export type UserUncheckedUpdateWithoutUserMFAInput = {
   userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -3210,6 +3480,7 @@ export type UserCreateWithoutUserGroupMembersInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -3231,6 +3502,12 @@ export type UserCreateWithoutUserGroupMembersInput = {
   userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -3287,6 +3564,7 @@ export type UserUncheckedCreateWithoutUserGroupMembersInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -3308,6 +3586,12 @@ export type UserUncheckedCreateWithoutUserGroupMembersInput = {
   userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -3380,6 +3664,7 @@ export type UserUpdateWithoutUserGroupMembersInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3401,6 +3686,12 @@ export type UserUpdateWithoutUserGroupMembersInput = {
   userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -3457,6 +3748,7 @@ export type UserUncheckedUpdateWithoutUserGroupMembersInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3478,6 +3770,12 @@ export type UserUncheckedUpdateWithoutUserGroupMembersInput = {
   userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -3534,6 +3832,7 @@ export type UserCreateWithoutLoginHistoryInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -3555,6 +3854,12 @@ export type UserCreateWithoutLoginHistoryInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -3611,6 +3916,7 @@ export type UserUncheckedCreateWithoutLoginHistoryInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -3632,6 +3938,12 @@ export type UserUncheckedCreateWithoutLoginHistoryInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -3704,6 +4016,7 @@ export type UserUpdateWithoutLoginHistoryInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3725,6 +4038,12 @@ export type UserUpdateWithoutLoginHistoryInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -3781,6 +4100,7 @@ export type UserUncheckedUpdateWithoutLoginHistoryInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3802,6 +4122,12 @@ export type UserUncheckedUpdateWithoutLoginHistoryInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -3858,6 +4184,7 @@ export type UserCreateWithoutUserSettingsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -3879,6 +4206,12 @@ export type UserCreateWithoutUserSettingsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -3935,6 +4268,7 @@ export type UserUncheckedCreateWithoutUserSettingsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -3956,6 +4290,12 @@ export type UserUncheckedCreateWithoutUserSettingsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -4028,6 +4368,7 @@ export type UserUpdateWithoutUserSettingsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4049,6 +4390,12 @@ export type UserUpdateWithoutUserSettingsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -4105,6 +4452,7 @@ export type UserUncheckedUpdateWithoutUserSettingsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4126,6 +4474,12 @@ export type UserUncheckedUpdateWithoutUserSettingsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -4182,6 +4536,7 @@ export type UserCreateWithoutFilesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -4203,6 +4558,12 @@ export type UserCreateWithoutFilesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -4259,6 +4620,7 @@ export type UserUncheckedCreateWithoutFilesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -4280,6 +4642,12 @@ export type UserUncheckedCreateWithoutFilesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -4352,6 +4720,7 @@ export type UserUpdateWithoutFilesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4373,6 +4742,12 @@ export type UserUpdateWithoutFilesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -4429,6 +4804,7 @@ export type UserUncheckedUpdateWithoutFilesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4450,6 +4826,12 @@ export type UserUncheckedUpdateWithoutFilesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -4506,6 +4888,7 @@ export type UserCreateWithoutFileFoldersInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -4527,6 +4910,12 @@ export type UserCreateWithoutFileFoldersInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -4583,6 +4972,7 @@ export type UserUncheckedCreateWithoutFileFoldersInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -4604,6 +4994,12 @@ export type UserUncheckedCreateWithoutFileFoldersInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -4676,6 +5072,7 @@ export type UserUpdateWithoutFileFoldersInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4697,6 +5094,12 @@ export type UserUpdateWithoutFileFoldersInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -4753,6 +5156,7 @@ export type UserUncheckedUpdateWithoutFileFoldersInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4774,6 +5178,12 @@ export type UserUncheckedUpdateWithoutFileFoldersInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -4830,6 +5240,7 @@ export type UserCreateWithoutGalleryItemsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -4851,6 +5262,12 @@ export type UserCreateWithoutGalleryItemsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -4907,6 +5324,7 @@ export type UserUncheckedCreateWithoutGalleryItemsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -4928,6 +5346,12 @@ export type UserUncheckedCreateWithoutGalleryItemsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -5000,6 +5424,7 @@ export type UserUpdateWithoutGalleryItemsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5021,6 +5446,12 @@ export type UserUpdateWithoutGalleryItemsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -5077,6 +5508,7 @@ export type UserUncheckedUpdateWithoutGalleryItemsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5098,6 +5530,12 @@ export type UserUncheckedUpdateWithoutGalleryItemsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -5154,6 +5592,7 @@ export type UserCreateWithoutGalleryAlbumsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -5175,6 +5614,12 @@ export type UserCreateWithoutGalleryAlbumsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -5231,6 +5676,7 @@ export type UserUncheckedCreateWithoutGalleryAlbumsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -5252,6 +5698,12 @@ export type UserUncheckedCreateWithoutGalleryAlbumsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -5324,6 +5776,7 @@ export type UserUpdateWithoutGalleryAlbumsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5345,6 +5798,12 @@ export type UserUpdateWithoutGalleryAlbumsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -5401,6 +5860,7 @@ export type UserUncheckedUpdateWithoutGalleryAlbumsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5422,6 +5882,12 @@ export type UserUncheckedUpdateWithoutGalleryAlbumsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -5478,6 +5944,7 @@ export type UserCreateWithoutNotificationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -5499,6 +5966,12 @@ export type UserCreateWithoutNotificationsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -5555,6 +6028,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -5576,6 +6050,12 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -5648,6 +6128,7 @@ export type UserUpdateWithoutNotificationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5669,6 +6150,12 @@ export type UserUpdateWithoutNotificationsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -5725,6 +6212,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5746,6 +6234,12 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -5802,6 +6296,7 @@ export type UserCreateWithoutUserPushTokensInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -5823,6 +6318,12 @@ export type UserCreateWithoutUserPushTokensInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -5879,6 +6380,7 @@ export type UserUncheckedCreateWithoutUserPushTokensInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -5900,6 +6402,12 @@ export type UserUncheckedCreateWithoutUserPushTokensInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -5972,6 +6480,7 @@ export type UserUpdateWithoutUserPushTokensInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5993,6 +6502,12 @@ export type UserUpdateWithoutUserPushTokensInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -6049,6 +6564,7 @@ export type UserUncheckedUpdateWithoutUserPushTokensInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6070,6 +6586,12 @@ export type UserUncheckedUpdateWithoutUserPushTokensInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -6126,6 +6648,7 @@ export type UserCreateWithoutSubscriptionsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -6147,6 +6670,12 @@ export type UserCreateWithoutSubscriptionsInput = {
   userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -6203,6 +6732,7 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -6224,6 +6754,12 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -6296,6 +6832,7 @@ export type UserUpdateWithoutSubscriptionsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6317,6 +6854,12 @@ export type UserUpdateWithoutSubscriptionsInput = {
   userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -6373,6 +6916,7 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6394,6 +6938,12 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -6431,330 +6981,6 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateWithoutCoinTransactionsInput = {
-  id?: string
-  email: string
-  passwordHash?: string | null
-  pinCode?: string | null
-  firstName: string
-  lastName: string
-  phoneNumber?: string | null
-  avatarUrl?: string | null
-  dateOfBirth?: Date | string | null
-  gender?: string | null
-  bio?: string | null
-  username?: string | null
-  displayName?: string | null
-  followersCount?: number
-  followingCount?: number
-  userType?: string
-  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
-  isOnboardingComplete?: boolean | null
-  coins?: number
-  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  isActive?: boolean
-  isVerified?: boolean
-  verifiedAt?: Date | string | null
-  lastLoginAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutUserInput
-  userSessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
-  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
-  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
-  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutUserInput
-  files?: Prisma.FileCreateNestedManyWithoutUserInput
-  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutUserInput
-  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutUserInput
-  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
-  userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
-  userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
-  ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
-  circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
-  circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
-  emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
-  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutUserInput
-  resolvedIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutResolverInput
-  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutAuthorInput
-  socialComments?: Prisma.SocialCommentCreateNestedManyWithoutAuthorInput
-  socialReactions?: Prisma.SocialReactionCreateNestedManyWithoutUserInput
-  socialStories?: Prisma.SocialStoryCreateNestedManyWithoutAuthorInput
-  storyViews?: Prisma.SocialStoryViewCreateNestedManyWithoutViewerInput
-  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
-  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
-  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
-  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
-  chatRoomsCreated?: Prisma.ChatRoomCreateNestedManyWithoutCreatorInput
-  chatParticipations?: Prisma.ChatParticipantCreateNestedManyWithoutUserInput
-  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutSenderInput
-  chatReadReceipts?: Prisma.ChatReadReceiptCreateNestedManyWithoutUserInput
-  chatReactions?: Prisma.ChatReactionCreateNestedManyWithoutUserInput
-  userLocations?: Prisma.UserLocationCreateNestedManyWithoutUserInput
-  geofences?: Prisma.GeofenceCreateNestedManyWithoutUserInput
-  locationShares?: Prisma.LocationShareCreateNestedManyWithoutUserInput
-  sharedLocations?: Prisma.LocationShareCreateNestedManyWithoutSharedWithUserInput
-  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
-  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
-  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
-  sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
-  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
-  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
-  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
-  fileTags?: Prisma.FileTagCreateNestedManyWithoutUserInput
-  fileShares?: Prisma.FileShareCreateNestedManyWithoutSharedByUserInput
-  fileRecentAccesses?: Prisma.FileRecentAccessCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutCoinTransactionsInput = {
-  id?: string
-  email: string
-  passwordHash?: string | null
-  pinCode?: string | null
-  firstName: string
-  lastName: string
-  phoneNumber?: string | null
-  avatarUrl?: string | null
-  dateOfBirth?: Date | string | null
-  gender?: string | null
-  bio?: string | null
-  username?: string | null
-  displayName?: string | null
-  followersCount?: number
-  followingCount?: number
-  userType?: string
-  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
-  isOnboardingComplete?: boolean | null
-  coins?: number
-  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  isActive?: boolean
-  isVerified?: boolean
-  verifiedAt?: Date | string | null
-  lastLoginAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutUserInput
-  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
-  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
-  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
-  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutUserInput
-  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
-  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutUserInput
-  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutUserInput
-  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
-  userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
-  userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
-  ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
-  circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
-  circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
-  emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
-  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutUserInput
-  resolvedIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutResolverInput
-  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutAuthorInput
-  socialComments?: Prisma.SocialCommentUncheckedCreateNestedManyWithoutAuthorInput
-  socialReactions?: Prisma.SocialReactionUncheckedCreateNestedManyWithoutUserInput
-  socialStories?: Prisma.SocialStoryUncheckedCreateNestedManyWithoutAuthorInput
-  storyViews?: Prisma.SocialStoryViewUncheckedCreateNestedManyWithoutViewerInput
-  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
-  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
-  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
-  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
-  chatRoomsCreated?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCreatorInput
-  chatParticipations?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutUserInput
-  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutSenderInput
-  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedCreateNestedManyWithoutUserInput
-  chatReactions?: Prisma.ChatReactionUncheckedCreateNestedManyWithoutUserInput
-  userLocations?: Prisma.UserLocationUncheckedCreateNestedManyWithoutUserInput
-  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutUserInput
-  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutUserInput
-  sharedLocations?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithUserInput
-  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
-  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
-  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
-  sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
-  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
-  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
-  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
-  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutUserInput
-  fileShares?: Prisma.FileShareUncheckedCreateNestedManyWithoutSharedByUserInput
-  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutCoinTransactionsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCoinTransactionsInput, Prisma.UserUncheckedCreateWithoutCoinTransactionsInput>
-}
-
-export type UserUpsertWithoutCoinTransactionsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCoinTransactionsInput, Prisma.UserUncheckedUpdateWithoutCoinTransactionsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCoinTransactionsInput, Prisma.UserUncheckedCreateWithoutCoinTransactionsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutCoinTransactionsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCoinTransactionsInput, Prisma.UserUncheckedUpdateWithoutCoinTransactionsInput>
-}
-
-export type UserUpdateWithoutCoinTransactionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
-  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
-  userType?: Prisma.StringFieldUpdateOperationsInput | string
-  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
-  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  coins?: Prisma.IntFieldUpdateOperationsInput | number
-  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userApplications?: Prisma.UserApplicationUpdateManyWithoutUserNestedInput
-  userSessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
-  userDevices?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
-  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
-  userSettings?: Prisma.UserSettingsUpdateManyWithoutUserNestedInput
-  files?: Prisma.FileUpdateManyWithoutUserNestedInput
-  fileFolders?: Prisma.FileFolderUpdateManyWithoutUserNestedInput
-  galleryItems?: Prisma.GalleryItemUpdateManyWithoutUserNestedInput
-  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
-  userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
-  userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
-  ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
-  circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
-  circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
-  emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
-  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutUserNestedInput
-  resolvedIncidents?: Prisma.SafetyIncidentUpdateManyWithoutResolverNestedInput
-  socialPosts?: Prisma.SocialPostUpdateManyWithoutAuthorNestedInput
-  socialComments?: Prisma.SocialCommentUpdateManyWithoutAuthorNestedInput
-  socialReactions?: Prisma.SocialReactionUpdateManyWithoutUserNestedInput
-  socialStories?: Prisma.SocialStoryUpdateManyWithoutAuthorNestedInput
-  storyViews?: Prisma.SocialStoryViewUpdateManyWithoutViewerNestedInput
-  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
-  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
-  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
-  chatRoomsCreated?: Prisma.ChatRoomUpdateManyWithoutCreatorNestedInput
-  chatParticipations?: Prisma.ChatParticipantUpdateManyWithoutUserNestedInput
-  chatMessages?: Prisma.ChatMessageUpdateManyWithoutSenderNestedInput
-  chatReadReceipts?: Prisma.ChatReadReceiptUpdateManyWithoutUserNestedInput
-  chatReactions?: Prisma.ChatReactionUpdateManyWithoutUserNestedInput
-  userLocations?: Prisma.UserLocationUpdateManyWithoutUserNestedInput
-  geofences?: Prisma.GeofenceUpdateManyWithoutUserNestedInput
-  locationShares?: Prisma.LocationShareUpdateManyWithoutUserNestedInput
-  sharedLocations?: Prisma.LocationShareUpdateManyWithoutSharedWithUserNestedInput
-  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
-  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
-  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
-  sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
-  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
-  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
-  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
-  fileTags?: Prisma.FileTagUpdateManyWithoutUserNestedInput
-  fileShares?: Prisma.FileShareUpdateManyWithoutSharedByUserNestedInput
-  fileRecentAccesses?: Prisma.FileRecentAccessUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutCoinTransactionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
-  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
-  userType?: Prisma.StringFieldUpdateOperationsInput | string
-  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
-  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  coins?: Prisma.IntFieldUpdateOperationsInput | number
-  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutUserNestedInput
-  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
-  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
-  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
-  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutUserNestedInput
-  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
-  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutUserNestedInput
-  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutUserNestedInput
-  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
-  userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
-  ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
-  circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
-  circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
-  emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
-  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutUserNestedInput
-  resolvedIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutResolverNestedInput
-  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutAuthorNestedInput
-  socialComments?: Prisma.SocialCommentUncheckedUpdateManyWithoutAuthorNestedInput
-  socialReactions?: Prisma.SocialReactionUncheckedUpdateManyWithoutUserNestedInput
-  socialStories?: Prisma.SocialStoryUncheckedUpdateManyWithoutAuthorNestedInput
-  storyViews?: Prisma.SocialStoryViewUncheckedUpdateManyWithoutViewerNestedInput
-  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
-  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
-  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
-  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
-  chatRoomsCreated?: Prisma.ChatRoomUncheckedUpdateManyWithoutCreatorNestedInput
-  chatParticipations?: Prisma.ChatParticipantUncheckedUpdateManyWithoutUserNestedInput
-  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutSenderNestedInput
-  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedUpdateManyWithoutUserNestedInput
-  chatReactions?: Prisma.ChatReactionUncheckedUpdateManyWithoutUserNestedInput
-  userLocations?: Prisma.UserLocationUncheckedUpdateManyWithoutUserNestedInput
-  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutUserNestedInput
-  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutUserNestedInput
-  sharedLocations?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithUserNestedInput
-  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
-  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
-  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
-  sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
-  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
-  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
-  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
-  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutUserNestedInput
-  fileShares?: Prisma.FileShareUncheckedUpdateManyWithoutSharedByUserNestedInput
-  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedUpdateManyWithoutUserNestedInput
-}
-
 export type UserCreateWithoutOwnedCirclesInput = {
   id?: string
   email: string
@@ -6774,6 +7000,7 @@ export type UserCreateWithoutOwnedCirclesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -6796,6 +7023,12 @@ export type UserCreateWithoutOwnedCirclesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
   emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
@@ -6851,6 +7084,7 @@ export type UserUncheckedCreateWithoutOwnedCirclesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -6873,6 +7107,12 @@ export type UserUncheckedCreateWithoutOwnedCirclesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
   emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
@@ -6944,6 +7184,7 @@ export type UserUpdateWithoutOwnedCirclesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6966,6 +7207,12 @@ export type UserUpdateWithoutOwnedCirclesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
   emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
@@ -7021,6 +7268,7 @@ export type UserUncheckedUpdateWithoutOwnedCirclesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7043,6 +7291,12 @@ export type UserUncheckedUpdateWithoutOwnedCirclesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
   emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
@@ -7098,6 +7352,7 @@ export type UserCreateWithoutCircleMembershipsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -7120,6 +7375,12 @@ export type UserCreateWithoutCircleMembershipsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
   emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
@@ -7175,6 +7436,7 @@ export type UserUncheckedCreateWithoutCircleMembershipsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -7197,6 +7459,12 @@ export type UserUncheckedCreateWithoutCircleMembershipsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
   emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
@@ -7257,6 +7525,7 @@ export type UserCreateWithoutCircleInvitationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -7279,6 +7548,12 @@ export type UserCreateWithoutCircleInvitationsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
@@ -7334,6 +7609,7 @@ export type UserUncheckedCreateWithoutCircleInvitationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -7356,6 +7632,12 @@ export type UserUncheckedCreateWithoutCircleInvitationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
@@ -7427,6 +7709,7 @@ export type UserUpdateWithoutCircleMembershipsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7449,6 +7732,12 @@ export type UserUpdateWithoutCircleMembershipsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
   emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
@@ -7504,6 +7793,7 @@ export type UserUncheckedUpdateWithoutCircleMembershipsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7526,6 +7816,12 @@ export type UserUncheckedUpdateWithoutCircleMembershipsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
   emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
@@ -7592,6 +7888,7 @@ export type UserUpdateWithoutCircleInvitationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7614,6 +7911,12 @@ export type UserUpdateWithoutCircleInvitationsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
@@ -7669,6 +7972,7 @@ export type UserUncheckedUpdateWithoutCircleInvitationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7691,6 +7995,12 @@ export type UserUncheckedUpdateWithoutCircleInvitationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
@@ -7746,6 +8056,7 @@ export type UserCreateWithoutSentCircleInvitationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -7768,6 +8079,12 @@ export type UserCreateWithoutSentCircleInvitationsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -7823,6 +8140,7 @@ export type UserUncheckedCreateWithoutSentCircleInvitationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -7845,6 +8163,12 @@ export type UserUncheckedCreateWithoutSentCircleInvitationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -7916,6 +8240,7 @@ export type UserUpdateWithoutSentCircleInvitationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7938,6 +8263,12 @@ export type UserUpdateWithoutSentCircleInvitationsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -7993,6 +8324,7 @@ export type UserUncheckedUpdateWithoutSentCircleInvitationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8015,6 +8347,12 @@ export type UserUncheckedUpdateWithoutSentCircleInvitationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -8070,6 +8408,7 @@ export type UserCreateWithoutEmergencyContactsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -8092,6 +8431,12 @@ export type UserCreateWithoutEmergencyContactsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -8147,6 +8492,7 @@ export type UserUncheckedCreateWithoutEmergencyContactsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -8169,6 +8515,12 @@ export type UserUncheckedCreateWithoutEmergencyContactsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -8240,6 +8592,7 @@ export type UserUpdateWithoutEmergencyContactsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8262,6 +8615,12 @@ export type UserUpdateWithoutEmergencyContactsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -8317,6 +8676,7 @@ export type UserUncheckedUpdateWithoutEmergencyContactsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8339,6 +8699,12 @@ export type UserUncheckedUpdateWithoutEmergencyContactsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -8394,6 +8760,7 @@ export type UserCreateWithoutSafetyIncidentsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -8416,6 +8783,12 @@ export type UserCreateWithoutSafetyIncidentsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -8471,6 +8844,7 @@ export type UserUncheckedCreateWithoutSafetyIncidentsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -8493,6 +8867,12 @@ export type UserUncheckedCreateWithoutSafetyIncidentsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -8553,6 +8933,7 @@ export type UserCreateWithoutResolvedIncidentsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -8575,6 +8956,12 @@ export type UserCreateWithoutResolvedIncidentsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -8630,6 +9017,7 @@ export type UserUncheckedCreateWithoutResolvedIncidentsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -8652,6 +9040,12 @@ export type UserUncheckedCreateWithoutResolvedIncidentsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -8723,6 +9117,7 @@ export type UserUpdateWithoutSafetyIncidentsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8745,6 +9140,12 @@ export type UserUpdateWithoutSafetyIncidentsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -8800,6 +9201,7 @@ export type UserUncheckedUpdateWithoutSafetyIncidentsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8822,6 +9224,12 @@ export type UserUncheckedUpdateWithoutSafetyIncidentsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -8888,6 +9296,7 @@ export type UserUpdateWithoutResolvedIncidentsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8910,6 +9319,12 @@ export type UserUpdateWithoutResolvedIncidentsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -8965,6 +9380,7 @@ export type UserUncheckedUpdateWithoutResolvedIncidentsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8987,6 +9403,12 @@ export type UserUncheckedUpdateWithoutResolvedIncidentsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -9042,6 +9464,7 @@ export type UserCreateWithoutSocialPostsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -9064,6 +9487,12 @@ export type UserCreateWithoutSocialPostsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -9119,6 +9548,7 @@ export type UserUncheckedCreateWithoutSocialPostsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -9141,6 +9571,12 @@ export type UserUncheckedCreateWithoutSocialPostsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -9212,6 +9648,7 @@ export type UserUpdateWithoutSocialPostsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9234,6 +9671,12 @@ export type UserUpdateWithoutSocialPostsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -9289,6 +9732,7 @@ export type UserUncheckedUpdateWithoutSocialPostsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9311,6 +9755,12 @@ export type UserUncheckedUpdateWithoutSocialPostsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -9366,6 +9816,7 @@ export type UserCreateWithoutSocialCommentsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -9388,6 +9839,12 @@ export type UserCreateWithoutSocialCommentsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -9443,6 +9900,7 @@ export type UserUncheckedCreateWithoutSocialCommentsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -9465,6 +9923,12 @@ export type UserUncheckedCreateWithoutSocialCommentsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -9536,6 +10000,7 @@ export type UserUpdateWithoutSocialCommentsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9558,6 +10023,12 @@ export type UserUpdateWithoutSocialCommentsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -9613,6 +10084,7 @@ export type UserUncheckedUpdateWithoutSocialCommentsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9635,6 +10107,12 @@ export type UserUncheckedUpdateWithoutSocialCommentsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -9690,6 +10168,7 @@ export type UserCreateWithoutSocialReactionsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -9712,6 +10191,12 @@ export type UserCreateWithoutSocialReactionsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -9767,6 +10252,7 @@ export type UserUncheckedCreateWithoutSocialReactionsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -9789,6 +10275,12 @@ export type UserUncheckedCreateWithoutSocialReactionsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -9860,6 +10352,7 @@ export type UserUpdateWithoutSocialReactionsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9882,6 +10375,12 @@ export type UserUpdateWithoutSocialReactionsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -9937,6 +10436,7 @@ export type UserUncheckedUpdateWithoutSocialReactionsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9959,6 +10459,12 @@ export type UserUncheckedUpdateWithoutSocialReactionsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -10014,6 +10520,7 @@ export type UserCreateWithoutSocialStoriesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -10036,6 +10543,12 @@ export type UserCreateWithoutSocialStoriesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -10091,6 +10604,7 @@ export type UserUncheckedCreateWithoutSocialStoriesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -10113,6 +10627,12 @@ export type UserUncheckedCreateWithoutSocialStoriesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -10184,6 +10704,7 @@ export type UserUpdateWithoutSocialStoriesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10206,6 +10727,12 @@ export type UserUpdateWithoutSocialStoriesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -10261,6 +10788,7 @@ export type UserUncheckedUpdateWithoutSocialStoriesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10283,6 +10811,12 @@ export type UserUncheckedUpdateWithoutSocialStoriesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -10338,6 +10872,7 @@ export type UserCreateWithoutStoryViewsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -10360,6 +10895,12 @@ export type UserCreateWithoutStoryViewsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -10415,6 +10956,7 @@ export type UserUncheckedCreateWithoutStoryViewsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -10437,6 +10979,12 @@ export type UserUncheckedCreateWithoutStoryViewsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -10508,6 +11056,7 @@ export type UserUpdateWithoutStoryViewsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10530,6 +11079,12 @@ export type UserUpdateWithoutStoryViewsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -10585,6 +11140,7 @@ export type UserUncheckedUpdateWithoutStoryViewsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10607,6 +11163,12 @@ export type UserUncheckedUpdateWithoutStoryViewsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -10662,6 +11224,7 @@ export type UserCreateWithoutFollowingInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -10684,6 +11247,12 @@ export type UserCreateWithoutFollowingInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -10739,6 +11308,7 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -10761,6 +11331,12 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -10821,6 +11397,7 @@ export type UserCreateWithoutFollowersInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -10843,6 +11420,12 @@ export type UserCreateWithoutFollowersInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -10898,6 +11481,7 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -10920,6 +11504,12 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -10991,6 +11581,7 @@ export type UserUpdateWithoutFollowingInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11013,6 +11604,12 @@ export type UserUpdateWithoutFollowingInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -11068,6 +11665,7 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11090,6 +11688,12 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -11156,6 +11760,7 @@ export type UserUpdateWithoutFollowersInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11178,6 +11783,12 @@ export type UserUpdateWithoutFollowersInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -11233,6 +11844,7 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11255,6 +11867,12 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -11310,6 +11928,7 @@ export type UserCreateWithoutSentFriendRequestsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -11332,6 +11951,12 @@ export type UserCreateWithoutSentFriendRequestsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -11387,6 +12012,7 @@ export type UserUncheckedCreateWithoutSentFriendRequestsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -11409,6 +12035,12 @@ export type UserUncheckedCreateWithoutSentFriendRequestsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -11469,6 +12101,7 @@ export type UserCreateWithoutReceivedFriendRequestsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -11491,6 +12124,12 @@ export type UserCreateWithoutReceivedFriendRequestsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -11546,6 +12185,7 @@ export type UserUncheckedCreateWithoutReceivedFriendRequestsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -11568,6 +12208,12 @@ export type UserUncheckedCreateWithoutReceivedFriendRequestsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -11639,6 +12285,7 @@ export type UserUpdateWithoutSentFriendRequestsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11661,6 +12308,12 @@ export type UserUpdateWithoutSentFriendRequestsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -11716,6 +12369,7 @@ export type UserUncheckedUpdateWithoutSentFriendRequestsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11738,6 +12392,12 @@ export type UserUncheckedUpdateWithoutSentFriendRequestsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -11804,6 +12464,7 @@ export type UserUpdateWithoutReceivedFriendRequestsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11826,6 +12487,12 @@ export type UserUpdateWithoutReceivedFriendRequestsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -11881,6 +12548,7 @@ export type UserUncheckedUpdateWithoutReceivedFriendRequestsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11903,6 +12571,12 @@ export type UserUncheckedUpdateWithoutReceivedFriendRequestsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -11958,6 +12632,7 @@ export type UserCreateWithoutChatRoomsCreatedInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -11980,6 +12655,12 @@ export type UserCreateWithoutChatRoomsCreatedInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -12035,6 +12716,7 @@ export type UserUncheckedCreateWithoutChatRoomsCreatedInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -12057,6 +12739,12 @@ export type UserUncheckedCreateWithoutChatRoomsCreatedInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -12128,6 +12816,7 @@ export type UserUpdateWithoutChatRoomsCreatedInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12150,6 +12839,12 @@ export type UserUpdateWithoutChatRoomsCreatedInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -12205,6 +12900,7 @@ export type UserUncheckedUpdateWithoutChatRoomsCreatedInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12227,6 +12923,12 @@ export type UserUncheckedUpdateWithoutChatRoomsCreatedInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -12282,6 +12984,7 @@ export type UserCreateWithoutChatParticipationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -12304,6 +13007,12 @@ export type UserCreateWithoutChatParticipationsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -12359,6 +13068,7 @@ export type UserUncheckedCreateWithoutChatParticipationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -12381,6 +13091,12 @@ export type UserUncheckedCreateWithoutChatParticipationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -12452,6 +13168,7 @@ export type UserUpdateWithoutChatParticipationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12474,6 +13191,12 @@ export type UserUpdateWithoutChatParticipationsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -12529,6 +13252,7 @@ export type UserUncheckedUpdateWithoutChatParticipationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12551,6 +13275,12 @@ export type UserUncheckedUpdateWithoutChatParticipationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -12606,6 +13336,7 @@ export type UserCreateWithoutChatMessagesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -12628,6 +13359,12 @@ export type UserCreateWithoutChatMessagesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -12683,6 +13420,7 @@ export type UserUncheckedCreateWithoutChatMessagesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -12705,6 +13443,12 @@ export type UserUncheckedCreateWithoutChatMessagesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -12776,6 +13520,7 @@ export type UserUpdateWithoutChatMessagesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12798,6 +13543,12 @@ export type UserUpdateWithoutChatMessagesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -12853,6 +13604,7 @@ export type UserUncheckedUpdateWithoutChatMessagesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12875,6 +13627,12 @@ export type UserUncheckedUpdateWithoutChatMessagesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -12930,6 +13688,7 @@ export type UserCreateWithoutChatReadReceiptsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -12952,6 +13711,12 @@ export type UserCreateWithoutChatReadReceiptsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -13007,6 +13772,7 @@ export type UserUncheckedCreateWithoutChatReadReceiptsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -13029,6 +13795,12 @@ export type UserUncheckedCreateWithoutChatReadReceiptsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -13100,6 +13872,7 @@ export type UserUpdateWithoutChatReadReceiptsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13122,6 +13895,12 @@ export type UserUpdateWithoutChatReadReceiptsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -13177,6 +13956,7 @@ export type UserUncheckedUpdateWithoutChatReadReceiptsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13199,6 +13979,12 @@ export type UserUncheckedUpdateWithoutChatReadReceiptsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -13254,6 +14040,7 @@ export type UserCreateWithoutChatReactionsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -13276,6 +14063,12 @@ export type UserCreateWithoutChatReactionsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -13331,6 +14124,7 @@ export type UserUncheckedCreateWithoutChatReactionsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -13353,6 +14147,12 @@ export type UserUncheckedCreateWithoutChatReactionsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -13424,6 +14224,7 @@ export type UserUpdateWithoutChatReactionsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13446,6 +14247,12 @@ export type UserUpdateWithoutChatReactionsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -13501,6 +14308,7 @@ export type UserUncheckedUpdateWithoutChatReactionsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13523,6 +14331,12 @@ export type UserUncheckedUpdateWithoutChatReactionsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -13578,6 +14392,7 @@ export type UserCreateWithoutUserLocationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -13600,6 +14415,12 @@ export type UserCreateWithoutUserLocationsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -13655,6 +14476,7 @@ export type UserUncheckedCreateWithoutUserLocationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -13677,6 +14499,12 @@ export type UserUncheckedCreateWithoutUserLocationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -13748,6 +14576,7 @@ export type UserUpdateWithoutUserLocationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13770,6 +14599,12 @@ export type UserUpdateWithoutUserLocationsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -13825,6 +14660,7 @@ export type UserUncheckedUpdateWithoutUserLocationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13847,6 +14683,12 @@ export type UserUncheckedUpdateWithoutUserLocationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -13902,6 +14744,7 @@ export type UserCreateWithoutGeofencesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -13924,6 +14767,12 @@ export type UserCreateWithoutGeofencesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -13979,6 +14828,7 @@ export type UserUncheckedCreateWithoutGeofencesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -14001,6 +14851,12 @@ export type UserUncheckedCreateWithoutGeofencesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -14072,6 +14928,7 @@ export type UserUpdateWithoutGeofencesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14094,6 +14951,12 @@ export type UserUpdateWithoutGeofencesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -14149,6 +15012,7 @@ export type UserUncheckedUpdateWithoutGeofencesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14171,6 +15035,12 @@ export type UserUncheckedUpdateWithoutGeofencesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -14226,6 +15096,7 @@ export type UserCreateWithoutLocationSharesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -14248,6 +15119,12 @@ export type UserCreateWithoutLocationSharesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -14303,6 +15180,7 @@ export type UserUncheckedCreateWithoutLocationSharesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -14325,6 +15203,12 @@ export type UserUncheckedCreateWithoutLocationSharesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -14385,6 +15269,7 @@ export type UserCreateWithoutSharedLocationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -14407,6 +15292,12 @@ export type UserCreateWithoutSharedLocationsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -14462,6 +15353,7 @@ export type UserUncheckedCreateWithoutSharedLocationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -14484,6 +15376,12 @@ export type UserUncheckedCreateWithoutSharedLocationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -14555,6 +15453,7 @@ export type UserUpdateWithoutLocationSharesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14577,6 +15476,12 @@ export type UserUpdateWithoutLocationSharesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -14632,6 +15537,7 @@ export type UserUncheckedUpdateWithoutLocationSharesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14654,6 +15560,12 @@ export type UserUncheckedUpdateWithoutLocationSharesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -14720,6 +15632,7 @@ export type UserUpdateWithoutSharedLocationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14742,6 +15655,12 @@ export type UserUpdateWithoutSharedLocationsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -14797,6 +15716,7 @@ export type UserUncheckedUpdateWithoutSharedLocationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14819,6 +15739,12 @@ export type UserUncheckedUpdateWithoutSharedLocationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -14874,6 +15800,7 @@ export type UserCreateWithoutNotesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -14896,6 +15823,12 @@ export type UserCreateWithoutNotesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -14951,6 +15884,7 @@ export type UserUncheckedCreateWithoutNotesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -14973,6 +15907,12 @@ export type UserUncheckedCreateWithoutNotesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -15044,6 +15984,7 @@ export type UserUpdateWithoutNotesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15066,6 +16007,12 @@ export type UserUpdateWithoutNotesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -15121,6 +16068,7 @@ export type UserUncheckedUpdateWithoutNotesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15143,6 +16091,12 @@ export type UserUncheckedUpdateWithoutNotesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -15198,6 +16152,7 @@ export type UserCreateWithoutTodosInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -15220,6 +16175,12 @@ export type UserCreateWithoutTodosInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -15275,6 +16236,7 @@ export type UserUncheckedCreateWithoutTodosInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -15297,6 +16259,12 @@ export type UserUncheckedCreateWithoutTodosInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -15357,6 +16325,7 @@ export type UserCreateWithoutAssignedTodosInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -15379,6 +16348,12 @@ export type UserCreateWithoutAssignedTodosInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -15434,6 +16409,7 @@ export type UserUncheckedCreateWithoutAssignedTodosInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -15456,6 +16432,12 @@ export type UserUncheckedCreateWithoutAssignedTodosInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -15527,6 +16509,7 @@ export type UserUpdateWithoutTodosInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15549,6 +16532,12 @@ export type UserUpdateWithoutTodosInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -15604,6 +16593,7 @@ export type UserUncheckedUpdateWithoutTodosInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15626,6 +16616,12 @@ export type UserUncheckedUpdateWithoutTodosInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -15692,6 +16688,7 @@ export type UserUpdateWithoutAssignedTodosInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15714,6 +16711,12 @@ export type UserUpdateWithoutAssignedTodosInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -15769,6 +16772,7 @@ export type UserUncheckedUpdateWithoutAssignedTodosInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15791,6 +16795,12 @@ export type UserUncheckedUpdateWithoutAssignedTodosInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -15846,6 +16856,7 @@ export type UserCreateWithoutSocialReportsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -15868,6 +16879,12 @@ export type UserCreateWithoutSocialReportsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -15923,6 +16940,7 @@ export type UserUncheckedCreateWithoutSocialReportsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -15945,6 +16963,12 @@ export type UserUncheckedCreateWithoutSocialReportsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -16016,6 +17040,7 @@ export type UserUpdateWithoutSocialReportsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -16038,6 +17063,12 @@ export type UserUpdateWithoutSocialReportsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -16093,6 +17124,7 @@ export type UserUncheckedUpdateWithoutSocialReportsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -16115,6 +17147,12 @@ export type UserUncheckedUpdateWithoutSocialReportsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -16170,6 +17208,7 @@ export type UserCreateWithoutSocialActivitiesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -16192,6 +17231,12 @@ export type UserCreateWithoutSocialActivitiesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -16247,6 +17292,7 @@ export type UserUncheckedCreateWithoutSocialActivitiesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -16269,6 +17315,12 @@ export type UserUncheckedCreateWithoutSocialActivitiesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -16340,6 +17392,7 @@ export type UserUpdateWithoutSocialActivitiesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -16362,6 +17415,12 @@ export type UserUpdateWithoutSocialActivitiesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -16417,6 +17476,7 @@ export type UserUncheckedUpdateWithoutSocialActivitiesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -16439,6 +17499,12 @@ export type UserUncheckedUpdateWithoutSocialActivitiesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -16494,6 +17560,7 @@ export type UserCreateWithoutEntityRelationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -16516,6 +17583,12 @@ export type UserCreateWithoutEntityRelationsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -16571,6 +17644,7 @@ export type UserUncheckedCreateWithoutEntityRelationsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -16593,6 +17667,12 @@ export type UserUncheckedCreateWithoutEntityRelationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -16664,6 +17744,7 @@ export type UserUpdateWithoutEntityRelationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -16686,6 +17767,12 @@ export type UserUpdateWithoutEntityRelationsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -16741,6 +17828,7 @@ export type UserUncheckedUpdateWithoutEntityRelationsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -16763,6 +17851,12 @@ export type UserUncheckedUpdateWithoutEntityRelationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -16818,6 +17912,7 @@ export type UserCreateWithoutFileTagsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -16840,6 +17935,12 @@ export type UserCreateWithoutFileTagsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -16895,6 +17996,7 @@ export type UserUncheckedCreateWithoutFileTagsInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -16917,6 +18019,12 @@ export type UserUncheckedCreateWithoutFileTagsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -16988,6 +18096,7 @@ export type UserUpdateWithoutFileTagsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17010,6 +18119,12 @@ export type UserUpdateWithoutFileTagsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -17065,6 +18180,7 @@ export type UserUncheckedUpdateWithoutFileTagsInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17087,6 +18203,12 @@ export type UserUncheckedUpdateWithoutFileTagsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -17142,6 +18264,7 @@ export type UserCreateWithoutFileSharesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -17164,6 +18287,12 @@ export type UserCreateWithoutFileSharesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -17219,6 +18348,7 @@ export type UserUncheckedCreateWithoutFileSharesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -17241,6 +18371,12 @@ export type UserUncheckedCreateWithoutFileSharesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -17312,6 +18448,7 @@ export type UserUpdateWithoutFileSharesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17334,6 +18471,12 @@ export type UserUpdateWithoutFileSharesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -17389,6 +18532,7 @@ export type UserUncheckedUpdateWithoutFileSharesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17411,6 +18555,12 @@ export type UserUncheckedUpdateWithoutFileSharesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -17466,6 +18616,7 @@ export type UserCreateWithoutFileRecentAccessesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -17488,6 +18639,12 @@ export type UserCreateWithoutFileRecentAccessesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
@@ -17543,6 +18700,7 @@ export type UserUncheckedCreateWithoutFileRecentAccessesInput = {
   userType?: string
   circleIds?: Prisma.UserCreatecircleIdsInput | string[]
   isOnboardingComplete?: boolean | null
+  points?: number
   coins?: number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -17565,6 +18723,12 @@ export type UserUncheckedCreateWithoutFileRecentAccessesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
   ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
   circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
   circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
@@ -17636,6 +18800,7 @@ export type UserUpdateWithoutFileRecentAccessesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17658,6 +18823,12 @@ export type UserUpdateWithoutFileRecentAccessesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
@@ -17713,6 +18884,7 @@ export type UserUncheckedUpdateWithoutFileRecentAccessesInput = {
   userType?: Prisma.StringFieldUpdateOperationsInput | string
   circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
   isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
   coins?: Prisma.IntFieldUpdateOperationsInput | number
   preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17735,6 +18907,12 @@ export type UserUncheckedUpdateWithoutFileRecentAccessesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
   userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
   ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
   circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
   circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
@@ -17771,6 +18949,2470 @@ export type UserUncheckedUpdateWithoutFileRecentAccessesInput = {
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
+export type UserCreateWithoutCircleOwnershipsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutUserInput
+  files?: Prisma.FileCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCircleOwnershipsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutUserInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentUncheckedCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionUncheckedCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryUncheckedCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewUncheckedCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionUncheckedCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationUncheckedCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareUncheckedCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCircleOwnershipsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCircleOwnershipsInput, Prisma.UserUncheckedCreateWithoutCircleOwnershipsInput>
+}
+
+export type UserUpsertWithoutCircleOwnershipsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCircleOwnershipsInput, Prisma.UserUncheckedUpdateWithoutCircleOwnershipsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCircleOwnershipsInput, Prisma.UserUncheckedCreateWithoutCircleOwnershipsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCircleOwnershipsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCircleOwnershipsInput, Prisma.UserUncheckedUpdateWithoutCircleOwnershipsInput>
+}
+
+export type UserUpdateWithoutCircleOwnershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCircleOwnershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUncheckedUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUncheckedUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUncheckedUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUncheckedUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUncheckedUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUncheckedUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCircleBillingAssignmentsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutUserInput
+  files?: Prisma.FileCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCircleBillingAssignmentsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutUserInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentUncheckedCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionUncheckedCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryUncheckedCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewUncheckedCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionUncheckedCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationUncheckedCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareUncheckedCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCircleBillingAssignmentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCircleBillingAssignmentsInput, Prisma.UserUncheckedCreateWithoutCircleBillingAssignmentsInput>
+}
+
+export type UserUpsertWithoutCircleBillingAssignmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCircleBillingAssignmentsInput, Prisma.UserUncheckedUpdateWithoutCircleBillingAssignmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCircleBillingAssignmentsInput, Prisma.UserUncheckedCreateWithoutCircleBillingAssignmentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCircleBillingAssignmentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCircleBillingAssignmentsInput, Prisma.UserUncheckedUpdateWithoutCircleBillingAssignmentsInput>
+}
+
+export type UserUpdateWithoutCircleBillingAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCircleBillingAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUncheckedUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUncheckedUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUncheckedUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUncheckedUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUncheckedUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUncheckedUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSupportTicketsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutUserInput
+  files?: Prisma.FileCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSupportTicketsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutUserInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentUncheckedCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionUncheckedCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryUncheckedCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewUncheckedCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionUncheckedCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationUncheckedCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareUncheckedCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSupportTicketsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupportTicketsInput, Prisma.UserUncheckedCreateWithoutSupportTicketsInput>
+}
+
+export type UserUpsertWithoutSupportTicketsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSupportTicketsInput, Prisma.UserUncheckedUpdateWithoutSupportTicketsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupportTicketsInput, Prisma.UserUncheckedCreateWithoutSupportTicketsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSupportTicketsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSupportTicketsInput, Prisma.UserUncheckedUpdateWithoutSupportTicketsInput>
+}
+
+export type UserUpdateWithoutSupportTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSupportTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUncheckedUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUncheckedUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUncheckedUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUncheckedUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUncheckedUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUncheckedUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutUserCommentsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutUserInput
+  files?: Prisma.FileCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutUserCommentsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutUserInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentUncheckedCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionUncheckedCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryUncheckedCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewUncheckedCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionUncheckedCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationUncheckedCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareUncheckedCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutUserCommentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserCommentsInput, Prisma.UserUncheckedCreateWithoutUserCommentsInput>
+}
+
+export type UserUpsertWithoutUserCommentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUserCommentsInput, Prisma.UserUncheckedUpdateWithoutUserCommentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserCommentsInput, Prisma.UserUncheckedCreateWithoutUserCommentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUserCommentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUserCommentsInput, Prisma.UserUncheckedUpdateWithoutUserCommentsInput>
+}
+
+export type UserUpdateWithoutUserCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUserCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUncheckedUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUncheckedUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUncheckedUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUncheckedUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUncheckedUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUncheckedUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutUserRemindersInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutUserInput
+  files?: Prisma.FileCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutUserRemindersInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutUserInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentUncheckedCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionUncheckedCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryUncheckedCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewUncheckedCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionUncheckedCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationUncheckedCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareUncheckedCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutUserRemindersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserRemindersInput, Prisma.UserUncheckedCreateWithoutUserRemindersInput>
+}
+
+export type UserUpsertWithoutUserRemindersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUserRemindersInput, Prisma.UserUncheckedUpdateWithoutUserRemindersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserRemindersInput, Prisma.UserUncheckedCreateWithoutUserRemindersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUserRemindersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUserRemindersInput, Prisma.UserUncheckedUpdateWithoutUserRemindersInput>
+}
+
+export type UserUpdateWithoutUserRemindersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUserRemindersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUncheckedUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUncheckedUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUncheckedUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUncheckedUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUncheckedUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUncheckedUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCoinTransactionsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutUserInput
+  files?: Prisma.FileCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCoinTransactionsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutUserInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutOwnerInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentUncheckedCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionUncheckedCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryUncheckedCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewUncheckedCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionUncheckedCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationUncheckedCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareUncheckedCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCoinTransactionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCoinTransactionsInput, Prisma.UserUncheckedCreateWithoutCoinTransactionsInput>
+}
+
+export type UserUpsertWithoutCoinTransactionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCoinTransactionsInput, Prisma.UserUncheckedUpdateWithoutCoinTransactionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCoinTransactionsInput, Prisma.UserUncheckedCreateWithoutCoinTransactionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCoinTransactionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCoinTransactionsInput, Prisma.UserUncheckedUpdateWithoutCoinTransactionsInput>
+}
+
+export type UserUpdateWithoutCoinTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCoinTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutOwnerNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUncheckedUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUncheckedUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUncheckedUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUncheckedUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUncheckedUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUncheckedUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutUnifiedEntitiesInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutUserInput
+  files?: Prisma.FileCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFACreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutReporterInput
+  circleOwnerships?: Prisma.CircleOwnerCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutUnifiedEntitiesInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  pinCode?: string | null
+  firstName: string
+  lastName: string
+  phoneNumber?: string | null
+  avatarUrl?: string | null
+  dateOfBirth?: Date | string | null
+  gender?: string | null
+  bio?: string | null
+  username?: string | null
+  displayName?: string | null
+  followersCount?: number
+  followingCount?: number
+  userType?: string
+  circleIds?: Prisma.UserCreatecircleIdsInput | string[]
+  isOnboardingComplete?: boolean | null
+  points?: number
+  coins?: number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  isVerified?: boolean
+  verifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutUserInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutUserInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutUserInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutUserInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutUserInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutUserInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userMFA?: Prisma.UserMFAUncheckedCreateNestedManyWithoutUserInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedCreateNestedManyWithoutUserInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutReporterInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutUserInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutUserInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutUserInput
+  ownedCircles?: Prisma.CircleUncheckedCreateNestedManyWithoutOwnerInput
+  circleMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutUserInput
+  circleInvitations?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutInviterInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedCreateNestedManyWithoutUserInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutUserInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutResolverInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutAuthorInput
+  socialComments?: Prisma.SocialCommentUncheckedCreateNestedManyWithoutAuthorInput
+  socialReactions?: Prisma.SocialReactionUncheckedCreateNestedManyWithoutUserInput
+  socialStories?: Prisma.SocialStoryUncheckedCreateNestedManyWithoutAuthorInput
+  storyViews?: Prisma.SocialStoryViewUncheckedCreateNestedManyWithoutViewerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCreatorInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutSenderInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedCreateNestedManyWithoutUserInput
+  chatReactions?: Prisma.ChatReactionUncheckedCreateNestedManyWithoutUserInput
+  userLocations?: Prisma.UserLocationUncheckedCreateNestedManyWithoutUserInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutUserInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutUserInput
+  sharedLocations?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutUserInput
+  assignedTodos?: Prisma.TodoUncheckedCreateNestedManyWithoutAssigneeInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutInviterInput
+  socialReports?: Prisma.SocialReportUncheckedCreateNestedManyWithoutReporterInput
+  socialActivities?: Prisma.SocialActivityUncheckedCreateNestedManyWithoutUserInput
+  entityRelations?: Prisma.EntityRelationUncheckedCreateNestedManyWithoutOwnerInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutUserInput
+  fileShares?: Prisma.FileShareUncheckedCreateNestedManyWithoutSharedByUserInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutUnifiedEntitiesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUnifiedEntitiesInput, Prisma.UserUncheckedCreateWithoutUnifiedEntitiesInput>
+}
+
+export type UserUpsertWithoutUnifiedEntitiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUnifiedEntitiesInput, Prisma.UserUncheckedUpdateWithoutUnifiedEntitiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUnifiedEntitiesInput, Prisma.UserUncheckedCreateWithoutUnifiedEntitiesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUnifiedEntitiesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUnifiedEntitiesInput, Prisma.UserUncheckedUpdateWithoutUnifiedEntitiesInput>
+}
+
+export type UserUpdateWithoutUnifiedEntitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutReporterNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUnifiedEntitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  userType?: Prisma.StringFieldUpdateOperationsInput | string
+  circleIds?: Prisma.UserUpdatecircleIdsInput | string[]
+  isOnboardingComplete?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  preferences?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutUserNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutUserNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutUserNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutUserNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutUserNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userMFA?: Prisma.UserMFAUncheckedUpdateManyWithoutUserNestedInput
+  userGroupMembers?: Prisma.UserGroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutReporterNestedInput
+  circleOwnerships?: Prisma.CircleOwnerUncheckedUpdateManyWithoutUserNestedInput
+  circleBillingAssignments?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutUserNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutUserNestedInput
+  ownedCircles?: Prisma.CircleUncheckedUpdateManyWithoutOwnerNestedInput
+  circleMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutUserNestedInput
+  circleInvitations?: Prisma.CircleMemberUncheckedUpdateManyWithoutInviterNestedInput
+  emergencyContacts?: Prisma.EmergencyContactUncheckedUpdateManyWithoutUserNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutUserNestedInput
+  resolvedIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutResolverNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutAuthorNestedInput
+  socialComments?: Prisma.SocialCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  socialReactions?: Prisma.SocialReactionUncheckedUpdateManyWithoutUserNestedInput
+  socialStories?: Prisma.SocialStoryUncheckedUpdateManyWithoutAuthorNestedInput
+  storyViews?: Prisma.SocialStoryViewUncheckedUpdateManyWithoutViewerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  chatRoomsCreated?: Prisma.ChatRoomUncheckedUpdateManyWithoutCreatorNestedInput
+  chatParticipations?: Prisma.ChatParticipantUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutSenderNestedInput
+  chatReadReceipts?: Prisma.ChatReadReceiptUncheckedUpdateManyWithoutUserNestedInput
+  chatReactions?: Prisma.ChatReactionUncheckedUpdateManyWithoutUserNestedInput
+  userLocations?: Prisma.UserLocationUncheckedUpdateManyWithoutUserNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutUserNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutUserNestedInput
+  sharedLocations?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutUserNestedInput
+  assignedTodos?: Prisma.TodoUncheckedUpdateManyWithoutAssigneeNestedInput
+  sentCircleInvitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutInviterNestedInput
+  socialReports?: Prisma.SocialReportUncheckedUpdateManyWithoutReporterNestedInput
+  socialActivities?: Prisma.SocialActivityUncheckedUpdateManyWithoutUserNestedInput
+  entityRelations?: Prisma.EntityRelationUncheckedUpdateManyWithoutOwnerNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutUserNestedInput
+  fileShares?: Prisma.FileShareUncheckedUpdateManyWithoutSharedByUserNestedInput
+  fileRecentAccesses?: Prisma.FileRecentAccessUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+}
+
 
 /**
  * Count Type UserCountOutputType
@@ -17791,6 +21433,12 @@ export type UserCountOutputType = {
   subscriptions: number
   userMFA: number
   userGroupMembers: number
+  supportTickets: number
+  unifiedEntities: number
+  circleOwnerships: number
+  circleBillingAssignments: number
+  userComments: number
+  userReminders: number
   ownedCircles: number
   circleMemberships: number
   circleInvitations: number
@@ -17843,6 +21491,12 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   subscriptions?: boolean | UserCountOutputTypeCountSubscriptionsArgs
   userMFA?: boolean | UserCountOutputTypeCountUserMFAArgs
   userGroupMembers?: boolean | UserCountOutputTypeCountUserGroupMembersArgs
+  supportTickets?: boolean | UserCountOutputTypeCountSupportTicketsArgs
+  unifiedEntities?: boolean | UserCountOutputTypeCountUnifiedEntitiesArgs
+  circleOwnerships?: boolean | UserCountOutputTypeCountCircleOwnershipsArgs
+  circleBillingAssignments?: boolean | UserCountOutputTypeCountCircleBillingAssignmentsArgs
+  userComments?: boolean | UserCountOutputTypeCountUserCommentsArgs
+  userReminders?: boolean | UserCountOutputTypeCountUserRemindersArgs
   ownedCircles?: boolean | UserCountOutputTypeCountOwnedCirclesArgs
   circleMemberships?: boolean | UserCountOutputTypeCountCircleMembershipsArgs
   circleInvitations?: boolean | UserCountOutputTypeCountCircleInvitationsArgs
@@ -17986,6 +21640,48 @@ export type UserCountOutputTypeCountUserMFAArgs<ExtArgs extends runtime.Types.Ex
  */
 export type UserCountOutputTypeCountUserGroupMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserGroupMemberWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSupportTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportTicketWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountUnifiedEntitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UnifiedEntityWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCircleOwnershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CircleOwnerWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCircleBillingAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CircleBillingAssignmentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountUserCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserCommentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountUserRemindersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserReminderWhereInput
 }
 
 /**
@@ -18253,6 +21949,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   userType?: boolean
   circleIds?: boolean
   isOnboardingComplete?: boolean
+  points?: boolean
   coins?: boolean
   preferences?: boolean
   isActive?: boolean
@@ -18275,6 +21972,12 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   userMFA?: boolean | Prisma.User$userMFAArgs<ExtArgs>
   userGroupMembers?: boolean | Prisma.User$userGroupMembersArgs<ExtArgs>
+  supportTickets?: boolean | Prisma.User$supportTicketsArgs<ExtArgs>
+  unifiedEntities?: boolean | Prisma.User$unifiedEntitiesArgs<ExtArgs>
+  circleOwnerships?: boolean | Prisma.User$circleOwnershipsArgs<ExtArgs>
+  circleBillingAssignments?: boolean | Prisma.User$circleBillingAssignmentsArgs<ExtArgs>
+  userComments?: boolean | Prisma.User$userCommentsArgs<ExtArgs>
+  userReminders?: boolean | Prisma.User$userRemindersArgs<ExtArgs>
   ownedCircles?: boolean | Prisma.User$ownedCirclesArgs<ExtArgs>
   circleMemberships?: boolean | Prisma.User$circleMembershipsArgs<ExtArgs>
   circleInvitations?: boolean | Prisma.User$circleInvitationsArgs<ExtArgs>
@@ -18332,6 +22035,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   userType?: boolean
   circleIds?: boolean
   isOnboardingComplete?: boolean
+  points?: boolean
   coins?: boolean
   preferences?: boolean
   isActive?: boolean
@@ -18361,6 +22065,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   userType?: boolean
   circleIds?: boolean
   isOnboardingComplete?: boolean
+  points?: boolean
   coins?: boolean
   preferences?: boolean
   isActive?: boolean
@@ -18390,6 +22095,7 @@ export type UserSelectScalar = {
   userType?: boolean
   circleIds?: boolean
   isOnboardingComplete?: boolean
+  points?: boolean
   coins?: boolean
   preferences?: boolean
   isActive?: boolean
@@ -18400,7 +22106,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "pinCode" | "firstName" | "lastName" | "phoneNumber" | "avatarUrl" | "dateOfBirth" | "gender" | "bio" | "username" | "displayName" | "followersCount" | "followingCount" | "userType" | "circleIds" | "isOnboardingComplete" | "coins" | "preferences" | "isActive" | "isVerified" | "verifiedAt" | "lastLoginAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "pinCode" | "firstName" | "lastName" | "phoneNumber" | "avatarUrl" | "dateOfBirth" | "gender" | "bio" | "username" | "displayName" | "followersCount" | "followingCount" | "userType" | "circleIds" | "isOnboardingComplete" | "points" | "coins" | "preferences" | "isActive" | "isVerified" | "verifiedAt" | "lastLoginAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   userApplications?: boolean | Prisma.User$userApplicationsArgs<ExtArgs>
   userSessions?: boolean | Prisma.User$userSessionsArgs<ExtArgs>
@@ -18416,6 +22122,12 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   userMFA?: boolean | Prisma.User$userMFAArgs<ExtArgs>
   userGroupMembers?: boolean | Prisma.User$userGroupMembersArgs<ExtArgs>
+  supportTickets?: boolean | Prisma.User$supportTicketsArgs<ExtArgs>
+  unifiedEntities?: boolean | Prisma.User$unifiedEntitiesArgs<ExtArgs>
+  circleOwnerships?: boolean | Prisma.User$circleOwnershipsArgs<ExtArgs>
+  circleBillingAssignments?: boolean | Prisma.User$circleBillingAssignmentsArgs<ExtArgs>
+  userComments?: boolean | Prisma.User$userCommentsArgs<ExtArgs>
+  userReminders?: boolean | Prisma.User$userRemindersArgs<ExtArgs>
   ownedCircles?: boolean | Prisma.User$ownedCirclesArgs<ExtArgs>
   circleMemberships?: boolean | Prisma.User$circleMembershipsArgs<ExtArgs>
   circleInvitations?: boolean | Prisma.User$circleInvitationsArgs<ExtArgs>
@@ -18473,6 +22185,12 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
     userMFA: Prisma.$UserMFAPayload<ExtArgs>[]
     userGroupMembers: Prisma.$UserGroupMemberPayload<ExtArgs>[]
+    supportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
+    unifiedEntities: Prisma.$UnifiedEntityPayload<ExtArgs>[]
+    circleOwnerships: Prisma.$CircleOwnerPayload<ExtArgs>[]
+    circleBillingAssignments: Prisma.$CircleBillingAssignmentPayload<ExtArgs>[]
+    userComments: Prisma.$UserCommentPayload<ExtArgs>[]
+    userReminders: Prisma.$UserReminderPayload<ExtArgs>[]
     ownedCircles: Prisma.$CirclePayload<ExtArgs>[]
     circleMemberships: Prisma.$CircleMemberPayload<ExtArgs>[]
     circleInvitations: Prisma.$CircleMemberPayload<ExtArgs>[]
@@ -18528,6 +22246,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     userType: string
     circleIds: string[]
     isOnboardingComplete: boolean | null
+    points: number
     coins: number
     preferences: runtime.JsonValue
     isActive: boolean
@@ -18944,6 +22663,12 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   subscriptions<T extends Prisma.User$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userMFA<T extends Prisma.User$userMFAArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userMFAArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserMFAPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userGroupMembers<T extends Prisma.User$userGroupMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userGroupMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserGroupMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supportTickets<T extends Prisma.User$supportTicketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  unifiedEntities<T extends Prisma.User$unifiedEntitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$unifiedEntitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UnifiedEntityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  circleOwnerships<T extends Prisma.User$circleOwnershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$circleOwnershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CircleOwnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  circleBillingAssignments<T extends Prisma.User$circleBillingAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$circleBillingAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CircleBillingAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userComments<T extends Prisma.User$userCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userReminders<T extends Prisma.User$userRemindersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userRemindersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ownedCircles<T extends Prisma.User$ownedCirclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedCirclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CirclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   circleMemberships<T extends Prisma.User$circleMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$circleMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CircleMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   circleInvitations<T extends Prisma.User$circleInvitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$circleInvitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CircleMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -19026,6 +22751,7 @@ export interface UserFieldRefs {
   readonly userType: Prisma.FieldRef<"User", 'String'>
   readonly circleIds: Prisma.FieldRef<"User", 'String[]'>
   readonly isOnboardingComplete: Prisma.FieldRef<"User", 'Boolean'>
+  readonly points: Prisma.FieldRef<"User", 'Int'>
   readonly coins: Prisma.FieldRef<"User", 'Int'>
   readonly preferences: Prisma.FieldRef<"User", 'Json'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
@@ -19755,6 +23481,150 @@ export type User$userGroupMembersArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.UserGroupMemberScalarFieldEnum | Prisma.UserGroupMemberScalarFieldEnum[]
+}
+
+/**
+ * User.supportTickets
+ */
+export type User$supportTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportTicket
+   */
+  select?: Prisma.SupportTicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportTicket
+   */
+  omit?: Prisma.SupportTicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportTicketInclude<ExtArgs> | null
+  where?: Prisma.SupportTicketWhereInput
+  orderBy?: Prisma.SupportTicketOrderByWithRelationInput | Prisma.SupportTicketOrderByWithRelationInput[]
+  cursor?: Prisma.SupportTicketWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportTicketScalarFieldEnum | Prisma.SupportTicketScalarFieldEnum[]
+}
+
+/**
+ * User.unifiedEntities
+ */
+export type User$unifiedEntitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UnifiedEntity
+   */
+  select?: Prisma.UnifiedEntitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UnifiedEntity
+   */
+  omit?: Prisma.UnifiedEntityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UnifiedEntityInclude<ExtArgs> | null
+  where?: Prisma.UnifiedEntityWhereInput
+  orderBy?: Prisma.UnifiedEntityOrderByWithRelationInput | Prisma.UnifiedEntityOrderByWithRelationInput[]
+  cursor?: Prisma.UnifiedEntityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UnifiedEntityScalarFieldEnum | Prisma.UnifiedEntityScalarFieldEnum[]
+}
+
+/**
+ * User.circleOwnerships
+ */
+export type User$circleOwnershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CircleOwner
+   */
+  select?: Prisma.CircleOwnerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CircleOwner
+   */
+  omit?: Prisma.CircleOwnerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CircleOwnerInclude<ExtArgs> | null
+  where?: Prisma.CircleOwnerWhereInput
+  orderBy?: Prisma.CircleOwnerOrderByWithRelationInput | Prisma.CircleOwnerOrderByWithRelationInput[]
+  cursor?: Prisma.CircleOwnerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CircleOwnerScalarFieldEnum | Prisma.CircleOwnerScalarFieldEnum[]
+}
+
+/**
+ * User.circleBillingAssignments
+ */
+export type User$circleBillingAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CircleBillingAssignment
+   */
+  select?: Prisma.CircleBillingAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CircleBillingAssignment
+   */
+  omit?: Prisma.CircleBillingAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CircleBillingAssignmentInclude<ExtArgs> | null
+  where?: Prisma.CircleBillingAssignmentWhereInput
+  orderBy?: Prisma.CircleBillingAssignmentOrderByWithRelationInput | Prisma.CircleBillingAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.CircleBillingAssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CircleBillingAssignmentScalarFieldEnum | Prisma.CircleBillingAssignmentScalarFieldEnum[]
+}
+
+/**
+ * User.userComments
+ */
+export type User$userCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserComment
+   */
+  select?: Prisma.UserCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserComment
+   */
+  omit?: Prisma.UserCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserCommentInclude<ExtArgs> | null
+  where?: Prisma.UserCommentWhereInput
+  orderBy?: Prisma.UserCommentOrderByWithRelationInput | Prisma.UserCommentOrderByWithRelationInput[]
+  cursor?: Prisma.UserCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserCommentScalarFieldEnum | Prisma.UserCommentScalarFieldEnum[]
+}
+
+/**
+ * User.userReminders
+ */
+export type User$userRemindersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserReminder
+   */
+  select?: Prisma.UserReminderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserReminder
+   */
+  omit?: Prisma.UserReminderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserReminderInclude<ExtArgs> | null
+  where?: Prisma.UserReminderWhereInput
+  orderBy?: Prisma.UserReminderOrderByWithRelationInput | Prisma.UserReminderOrderByWithRelationInput[]
+  cursor?: Prisma.UserReminderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserReminderScalarFieldEnum | Prisma.UserReminderScalarFieldEnum[]
 }
 
 /**

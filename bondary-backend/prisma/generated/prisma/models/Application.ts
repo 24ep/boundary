@@ -235,6 +235,12 @@ export type ApplicationWhereInput = {
   oauthProviders?: Prisma.OAuthProviderListRelationFilter
   securityPolicies?: Prisma.SecurityPolicyListRelationFilter
   userGroups?: Prisma.UserGroupListRelationFilter
+  unifiedEntities?: Prisma.UnifiedEntityListRelationFilter
+  entityTypes?: Prisma.EntityTypeListRelationFilter
+  supportTickets?: Prisma.SupportTicketListRelationFilter
+  userComments?: Prisma.UserCommentListRelationFilter
+  userReminders?: Prisma.UserReminderListRelationFilter
+  circles?: Prisma.CircleListRelationFilter
 }
 
 export type ApplicationOrderByWithRelationInput = {
@@ -269,6 +275,12 @@ export type ApplicationOrderByWithRelationInput = {
   oauthProviders?: Prisma.OAuthProviderOrderByRelationAggregateInput
   securityPolicies?: Prisma.SecurityPolicyOrderByRelationAggregateInput
   userGroups?: Prisma.UserGroupOrderByRelationAggregateInput
+  unifiedEntities?: Prisma.UnifiedEntityOrderByRelationAggregateInput
+  entityTypes?: Prisma.EntityTypeOrderByRelationAggregateInput
+  supportTickets?: Prisma.SupportTicketOrderByRelationAggregateInput
+  userComments?: Prisma.UserCommentOrderByRelationAggregateInput
+  userReminders?: Prisma.UserReminderOrderByRelationAggregateInput
+  circles?: Prisma.CircleOrderByRelationAggregateInput
 }
 
 export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
@@ -306,6 +318,12 @@ export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
   oauthProviders?: Prisma.OAuthProviderListRelationFilter
   securityPolicies?: Prisma.SecurityPolicyListRelationFilter
   userGroups?: Prisma.UserGroupListRelationFilter
+  unifiedEntities?: Prisma.UnifiedEntityListRelationFilter
+  entityTypes?: Prisma.EntityTypeListRelationFilter
+  supportTickets?: Prisma.SupportTicketListRelationFilter
+  userComments?: Prisma.UserCommentListRelationFilter
+  userReminders?: Prisma.UserReminderListRelationFilter
+  circles?: Prisma.CircleListRelationFilter
 }, "id" | "slug">
 
 export type ApplicationOrderByWithAggregationInput = {
@@ -372,6 +390,12 @@ export type ApplicationCreateInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateInput = {
@@ -406,6 +430,12 @@ export type ApplicationUncheckedCreateInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUpdateInput = {
@@ -440,6 +470,12 @@ export type ApplicationUpdateInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateInput = {
@@ -474,6 +510,12 @@ export type ApplicationUncheckedUpdateInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateManyInput = {
@@ -906,6 +948,98 @@ export type ApplicationUpdateOneWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ApplicationUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.ApplicationUpdateWithoutAuditLogsInput>, Prisma.ApplicationUncheckedUpdateWithoutAuditLogsInput>
 }
 
+export type ApplicationCreateNestedOneWithoutCirclesInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutCirclesInput, Prisma.ApplicationUncheckedCreateWithoutCirclesInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutCirclesInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+}
+
+export type ApplicationUpdateOneWithoutCirclesNestedInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutCirclesInput, Prisma.ApplicationUncheckedCreateWithoutCirclesInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutCirclesInput
+  upsert?: Prisma.ApplicationUpsertWithoutCirclesInput
+  disconnect?: Prisma.ApplicationWhereInput | boolean
+  delete?: Prisma.ApplicationWhereInput | boolean
+  connect?: Prisma.ApplicationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ApplicationUpdateToOneWithWhereWithoutCirclesInput, Prisma.ApplicationUpdateWithoutCirclesInput>, Prisma.ApplicationUncheckedUpdateWithoutCirclesInput>
+}
+
+export type ApplicationCreateNestedOneWithoutSupportTicketsInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutSupportTicketsInput, Prisma.ApplicationUncheckedCreateWithoutSupportTicketsInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutSupportTicketsInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+}
+
+export type ApplicationUpdateOneWithoutSupportTicketsNestedInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutSupportTicketsInput, Prisma.ApplicationUncheckedCreateWithoutSupportTicketsInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutSupportTicketsInput
+  upsert?: Prisma.ApplicationUpsertWithoutSupportTicketsInput
+  disconnect?: Prisma.ApplicationWhereInput | boolean
+  delete?: Prisma.ApplicationWhereInput | boolean
+  connect?: Prisma.ApplicationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ApplicationUpdateToOneWithWhereWithoutSupportTicketsInput, Prisma.ApplicationUpdateWithoutSupportTicketsInput>, Prisma.ApplicationUncheckedUpdateWithoutSupportTicketsInput>
+}
+
+export type ApplicationCreateNestedOneWithoutUserCommentsInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutUserCommentsInput, Prisma.ApplicationUncheckedCreateWithoutUserCommentsInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutUserCommentsInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+}
+
+export type ApplicationUpdateOneRequiredWithoutUserCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutUserCommentsInput, Prisma.ApplicationUncheckedCreateWithoutUserCommentsInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutUserCommentsInput
+  upsert?: Prisma.ApplicationUpsertWithoutUserCommentsInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ApplicationUpdateToOneWithWhereWithoutUserCommentsInput, Prisma.ApplicationUpdateWithoutUserCommentsInput>, Prisma.ApplicationUncheckedUpdateWithoutUserCommentsInput>
+}
+
+export type ApplicationCreateNestedOneWithoutUserRemindersInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutUserRemindersInput, Prisma.ApplicationUncheckedCreateWithoutUserRemindersInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutUserRemindersInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+}
+
+export type ApplicationUpdateOneRequiredWithoutUserRemindersNestedInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutUserRemindersInput, Prisma.ApplicationUncheckedCreateWithoutUserRemindersInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutUserRemindersInput
+  upsert?: Prisma.ApplicationUpsertWithoutUserRemindersInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ApplicationUpdateToOneWithWhereWithoutUserRemindersInput, Prisma.ApplicationUpdateWithoutUserRemindersInput>, Prisma.ApplicationUncheckedUpdateWithoutUserRemindersInput>
+}
+
+export type ApplicationCreateNestedOneWithoutUnifiedEntitiesInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutUnifiedEntitiesInput, Prisma.ApplicationUncheckedCreateWithoutUnifiedEntitiesInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutUnifiedEntitiesInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+}
+
+export type ApplicationUpdateOneWithoutUnifiedEntitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutUnifiedEntitiesInput, Prisma.ApplicationUncheckedCreateWithoutUnifiedEntitiesInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutUnifiedEntitiesInput
+  upsert?: Prisma.ApplicationUpsertWithoutUnifiedEntitiesInput
+  disconnect?: Prisma.ApplicationWhereInput | boolean
+  delete?: Prisma.ApplicationWhereInput | boolean
+  connect?: Prisma.ApplicationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ApplicationUpdateToOneWithWhereWithoutUnifiedEntitiesInput, Prisma.ApplicationUpdateWithoutUnifiedEntitiesInput>, Prisma.ApplicationUncheckedUpdateWithoutUnifiedEntitiesInput>
+}
+
+export type ApplicationCreateNestedOneWithoutEntityTypesInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutEntityTypesInput, Prisma.ApplicationUncheckedCreateWithoutEntityTypesInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutEntityTypesInput
+  connect?: Prisma.ApplicationWhereUniqueInput
+}
+
+export type ApplicationUpdateOneWithoutEntityTypesNestedInput = {
+  create?: Prisma.XOR<Prisma.ApplicationCreateWithoutEntityTypesInput, Prisma.ApplicationUncheckedCreateWithoutEntityTypesInput>
+  connectOrCreate?: Prisma.ApplicationCreateOrConnectWithoutEntityTypesInput
+  upsert?: Prisma.ApplicationUpsertWithoutEntityTypesInput
+  disconnect?: Prisma.ApplicationWhereInput | boolean
+  delete?: Prisma.ApplicationWhereInput | boolean
+  connect?: Prisma.ApplicationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ApplicationUpdateToOneWithWhereWithoutEntityTypesInput, Prisma.ApplicationUpdateWithoutEntityTypesInput>, Prisma.ApplicationUncheckedUpdateWithoutEntityTypesInput>
+}
+
 export type ApplicationCreateWithoutUserApplicationsInput = {
   id?: string
   name: string
@@ -937,6 +1071,12 @@ export type ApplicationCreateWithoutUserApplicationsInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutUserApplicationsInput = {
@@ -970,6 +1110,12 @@ export type ApplicationUncheckedCreateWithoutUserApplicationsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutUserApplicationsInput = {
@@ -1019,6 +1165,12 @@ export type ApplicationUpdateWithoutUserApplicationsInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutUserApplicationsInput = {
@@ -1052,6 +1204,12 @@ export type ApplicationUncheckedUpdateWithoutUserApplicationsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutUserSessionsInput = {
@@ -1085,6 +1243,12 @@ export type ApplicationCreateWithoutUserSessionsInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutUserSessionsInput = {
@@ -1118,6 +1282,12 @@ export type ApplicationUncheckedCreateWithoutUserSessionsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutUserSessionsInput = {
@@ -1167,6 +1337,12 @@ export type ApplicationUpdateWithoutUserSessionsInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutUserSessionsInput = {
@@ -1200,6 +1376,12 @@ export type ApplicationUncheckedUpdateWithoutUserSessionsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutUserDevicesInput = {
@@ -1233,6 +1415,12 @@ export type ApplicationCreateWithoutUserDevicesInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutUserDevicesInput = {
@@ -1266,6 +1454,12 @@ export type ApplicationUncheckedCreateWithoutUserDevicesInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutUserDevicesInput = {
@@ -1315,6 +1509,12 @@ export type ApplicationUpdateWithoutUserDevicesInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutUserDevicesInput = {
@@ -1348,6 +1548,12 @@ export type ApplicationUncheckedUpdateWithoutUserDevicesInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutSecurityPoliciesInput = {
@@ -1381,6 +1587,12 @@ export type ApplicationCreateWithoutSecurityPoliciesInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutApplicationInput
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutSecurityPoliciesInput = {
@@ -1414,6 +1626,12 @@ export type ApplicationUncheckedCreateWithoutSecurityPoliciesInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutApplicationInput
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutSecurityPoliciesInput = {
@@ -1463,6 +1681,12 @@ export type ApplicationUpdateWithoutSecurityPoliciesInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutApplicationNestedInput
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutSecurityPoliciesInput = {
@@ -1496,6 +1720,12 @@ export type ApplicationUncheckedUpdateWithoutSecurityPoliciesInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutApplicationNestedInput
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutUserGroupsInput = {
@@ -1529,6 +1759,12 @@ export type ApplicationCreateWithoutUserGroupsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutApplicationInput
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutUserGroupsInput = {
@@ -1562,6 +1798,12 @@ export type ApplicationUncheckedCreateWithoutUserGroupsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutApplicationInput
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutUserGroupsInput = {
@@ -1611,6 +1853,12 @@ export type ApplicationUpdateWithoutUserGroupsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutApplicationNestedInput
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutUserGroupsInput = {
@@ -1644,6 +1892,12 @@ export type ApplicationUncheckedUpdateWithoutUserGroupsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutApplicationNestedInput
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutOauthProvidersInput = {
@@ -1677,6 +1931,12 @@ export type ApplicationCreateWithoutOauthProvidersInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutOauthProvidersInput = {
@@ -1710,6 +1970,12 @@ export type ApplicationUncheckedCreateWithoutOauthProvidersInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutOauthProvidersInput = {
@@ -1759,6 +2025,12 @@ export type ApplicationUpdateWithoutOauthProvidersInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutOauthProvidersInput = {
@@ -1792,6 +2064,12 @@ export type ApplicationUncheckedUpdateWithoutOauthProvidersInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutLoginHistoryInput = {
@@ -1825,6 +2103,12 @@ export type ApplicationCreateWithoutLoginHistoryInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutLoginHistoryInput = {
@@ -1858,6 +2142,12 @@ export type ApplicationUncheckedCreateWithoutLoginHistoryInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutLoginHistoryInput = {
@@ -1907,6 +2197,12 @@ export type ApplicationUpdateWithoutLoginHistoryInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutLoginHistoryInput = {
@@ -1940,6 +2236,12 @@ export type ApplicationUncheckedUpdateWithoutLoginHistoryInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutUserSettingsInput = {
@@ -1973,6 +2275,12 @@ export type ApplicationCreateWithoutUserSettingsInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutUserSettingsInput = {
@@ -2006,6 +2314,12 @@ export type ApplicationUncheckedCreateWithoutUserSettingsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutUserSettingsInput = {
@@ -2055,6 +2369,12 @@ export type ApplicationUpdateWithoutUserSettingsInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutUserSettingsInput = {
@@ -2088,6 +2408,12 @@ export type ApplicationUncheckedUpdateWithoutUserSettingsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutFilesInput = {
@@ -2121,6 +2447,12 @@ export type ApplicationCreateWithoutFilesInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutFilesInput = {
@@ -2154,6 +2486,12 @@ export type ApplicationUncheckedCreateWithoutFilesInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutFilesInput = {
@@ -2203,6 +2541,12 @@ export type ApplicationUpdateWithoutFilesInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutFilesInput = {
@@ -2236,6 +2580,12 @@ export type ApplicationUncheckedUpdateWithoutFilesInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutFileFoldersInput = {
@@ -2269,6 +2619,12 @@ export type ApplicationCreateWithoutFileFoldersInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutFileFoldersInput = {
@@ -2302,6 +2658,12 @@ export type ApplicationUncheckedCreateWithoutFileFoldersInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutFileFoldersInput = {
@@ -2351,6 +2713,12 @@ export type ApplicationUpdateWithoutFileFoldersInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutFileFoldersInput = {
@@ -2384,6 +2752,12 @@ export type ApplicationUncheckedUpdateWithoutFileFoldersInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutGalleryItemsInput = {
@@ -2417,6 +2791,12 @@ export type ApplicationCreateWithoutGalleryItemsInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutGalleryItemsInput = {
@@ -2450,6 +2830,12 @@ export type ApplicationUncheckedCreateWithoutGalleryItemsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutGalleryItemsInput = {
@@ -2499,6 +2885,12 @@ export type ApplicationUpdateWithoutGalleryItemsInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutGalleryItemsInput = {
@@ -2532,6 +2924,12 @@ export type ApplicationUncheckedUpdateWithoutGalleryItemsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutGalleryAlbumsInput = {
@@ -2565,6 +2963,12 @@ export type ApplicationCreateWithoutGalleryAlbumsInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutGalleryAlbumsInput = {
@@ -2598,6 +3002,12 @@ export type ApplicationUncheckedCreateWithoutGalleryAlbumsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutGalleryAlbumsInput = {
@@ -2647,6 +3057,12 @@ export type ApplicationUpdateWithoutGalleryAlbumsInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutGalleryAlbumsInput = {
@@ -2680,6 +3096,12 @@ export type ApplicationUncheckedUpdateWithoutGalleryAlbumsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutNotificationsInput = {
@@ -2713,6 +3135,12 @@ export type ApplicationCreateWithoutNotificationsInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutNotificationsInput = {
@@ -2746,6 +3174,12 @@ export type ApplicationUncheckedCreateWithoutNotificationsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutNotificationsInput = {
@@ -2795,6 +3229,12 @@ export type ApplicationUpdateWithoutNotificationsInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutNotificationsInput = {
@@ -2828,6 +3268,12 @@ export type ApplicationUncheckedUpdateWithoutNotificationsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutUserPushTokensInput = {
@@ -2861,6 +3307,12 @@ export type ApplicationCreateWithoutUserPushTokensInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutUserPushTokensInput = {
@@ -2894,6 +3346,12 @@ export type ApplicationUncheckedCreateWithoutUserPushTokensInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutUserPushTokensInput = {
@@ -2943,6 +3401,12 @@ export type ApplicationUpdateWithoutUserPushTokensInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutUserPushTokensInput = {
@@ -2976,6 +3440,12 @@ export type ApplicationUncheckedUpdateWithoutUserPushTokensInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutEmailTemplatesInput = {
@@ -3009,6 +3479,12 @@ export type ApplicationCreateWithoutEmailTemplatesInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutEmailTemplatesInput = {
@@ -3042,6 +3518,12 @@ export type ApplicationUncheckedCreateWithoutEmailTemplatesInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutEmailTemplatesInput = {
@@ -3091,6 +3573,12 @@ export type ApplicationUpdateWithoutEmailTemplatesInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutEmailTemplatesInput = {
@@ -3124,6 +3612,12 @@ export type ApplicationUncheckedUpdateWithoutEmailTemplatesInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutSubscriptionPlansInput = {
@@ -3157,6 +3651,12 @@ export type ApplicationCreateWithoutSubscriptionPlansInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutSubscriptionPlansInput = {
@@ -3190,6 +3690,12 @@ export type ApplicationUncheckedCreateWithoutSubscriptionPlansInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutSubscriptionPlansInput = {
@@ -3239,6 +3745,12 @@ export type ApplicationUpdateWithoutSubscriptionPlansInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutSubscriptionPlansInput = {
@@ -3272,6 +3784,12 @@ export type ApplicationUncheckedUpdateWithoutSubscriptionPlansInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutSubscriptionsInput = {
@@ -3305,6 +3823,12 @@ export type ApplicationCreateWithoutSubscriptionsInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutSubscriptionsInput = {
@@ -3338,6 +3862,12 @@ export type ApplicationUncheckedCreateWithoutSubscriptionsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutSubscriptionsInput = {
@@ -3387,6 +3917,12 @@ export type ApplicationUpdateWithoutSubscriptionsInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutSubscriptionsInput = {
@@ -3420,6 +3956,12 @@ export type ApplicationUncheckedUpdateWithoutSubscriptionsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutAppSettingsInput = {
@@ -3453,6 +3995,12 @@ export type ApplicationCreateWithoutAppSettingsInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutAppSettingsInput = {
@@ -3486,6 +4034,12 @@ export type ApplicationUncheckedCreateWithoutAppSettingsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutAppSettingsInput = {
@@ -3535,6 +4089,12 @@ export type ApplicationUpdateWithoutAppSettingsInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutAppSettingsInput = {
@@ -3568,6 +4128,12 @@ export type ApplicationUncheckedUpdateWithoutAppSettingsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutAdminUserApplicationsInput = {
@@ -3601,6 +4167,12 @@ export type ApplicationCreateWithoutAdminUserApplicationsInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutAdminUserApplicationsInput = {
@@ -3634,6 +4206,12 @@ export type ApplicationUncheckedCreateWithoutAdminUserApplicationsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutAdminUserApplicationsInput = {
@@ -3683,6 +4261,12 @@ export type ApplicationUpdateWithoutAdminUserApplicationsInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutAdminUserApplicationsInput = {
@@ -3716,6 +4300,12 @@ export type ApplicationUncheckedUpdateWithoutAdminUserApplicationsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutAdminActivityLogsInput = {
@@ -3749,6 +4339,12 @@ export type ApplicationCreateWithoutAdminActivityLogsInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutAdminActivityLogsInput = {
@@ -3782,6 +4378,12 @@ export type ApplicationUncheckedCreateWithoutAdminActivityLogsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutAdminActivityLogsInput = {
@@ -3831,6 +4433,12 @@ export type ApplicationUpdateWithoutAdminActivityLogsInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutAdminActivityLogsInput = {
@@ -3864,6 +4472,12 @@ export type ApplicationUncheckedUpdateWithoutAdminActivityLogsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationCreateWithoutAuditLogsInput = {
@@ -3897,6 +4511,12 @@ export type ApplicationCreateWithoutAuditLogsInput = {
   oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationUncheckedCreateWithoutAuditLogsInput = {
@@ -3930,6 +4550,12 @@ export type ApplicationUncheckedCreateWithoutAuditLogsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
   userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
 }
 
 export type ApplicationCreateOrConnectWithoutAuditLogsInput = {
@@ -3979,6 +4605,12 @@ export type ApplicationUpdateWithoutAuditLogsInput = {
   oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
 }
 
 export type ApplicationUncheckedUpdateWithoutAuditLogsInput = {
@@ -4012,6 +4644,1044 @@ export type ApplicationUncheckedUpdateWithoutAuditLogsInput = {
   oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
   securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
   userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationCreateWithoutCirclesInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationUncheckedCreateWithoutCirclesInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingUncheckedCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationCreateOrConnectWithoutCirclesInput = {
+  where: Prisma.ApplicationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutCirclesInput, Prisma.ApplicationUncheckedCreateWithoutCirclesInput>
+}
+
+export type ApplicationUpsertWithoutCirclesInput = {
+  update: Prisma.XOR<Prisma.ApplicationUpdateWithoutCirclesInput, Prisma.ApplicationUncheckedUpdateWithoutCirclesInput>
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutCirclesInput, Prisma.ApplicationUncheckedCreateWithoutCirclesInput>
+  where?: Prisma.ApplicationWhereInput
+}
+
+export type ApplicationUpdateToOneWithWhereWithoutCirclesInput = {
+  where?: Prisma.ApplicationWhereInput
+  data: Prisma.XOR<Prisma.ApplicationUpdateWithoutCirclesInput, Prisma.ApplicationUncheckedUpdateWithoutCirclesInput>
+}
+
+export type ApplicationUpdateWithoutCirclesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationUncheckedUpdateWithoutCirclesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUncheckedUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationCreateWithoutSupportTicketsInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationUncheckedCreateWithoutSupportTicketsInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingUncheckedCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationCreateOrConnectWithoutSupportTicketsInput = {
+  where: Prisma.ApplicationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutSupportTicketsInput, Prisma.ApplicationUncheckedCreateWithoutSupportTicketsInput>
+}
+
+export type ApplicationUpsertWithoutSupportTicketsInput = {
+  update: Prisma.XOR<Prisma.ApplicationUpdateWithoutSupportTicketsInput, Prisma.ApplicationUncheckedUpdateWithoutSupportTicketsInput>
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutSupportTicketsInput, Prisma.ApplicationUncheckedCreateWithoutSupportTicketsInput>
+  where?: Prisma.ApplicationWhereInput
+}
+
+export type ApplicationUpdateToOneWithWhereWithoutSupportTicketsInput = {
+  where?: Prisma.ApplicationWhereInput
+  data: Prisma.XOR<Prisma.ApplicationUpdateWithoutSupportTicketsInput, Prisma.ApplicationUncheckedUpdateWithoutSupportTicketsInput>
+}
+
+export type ApplicationUpdateWithoutSupportTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationUncheckedUpdateWithoutSupportTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUncheckedUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationCreateWithoutUserCommentsInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationUncheckedCreateWithoutUserCommentsInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingUncheckedCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationCreateOrConnectWithoutUserCommentsInput = {
+  where: Prisma.ApplicationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutUserCommentsInput, Prisma.ApplicationUncheckedCreateWithoutUserCommentsInput>
+}
+
+export type ApplicationUpsertWithoutUserCommentsInput = {
+  update: Prisma.XOR<Prisma.ApplicationUpdateWithoutUserCommentsInput, Prisma.ApplicationUncheckedUpdateWithoutUserCommentsInput>
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutUserCommentsInput, Prisma.ApplicationUncheckedCreateWithoutUserCommentsInput>
+  where?: Prisma.ApplicationWhereInput
+}
+
+export type ApplicationUpdateToOneWithWhereWithoutUserCommentsInput = {
+  where?: Prisma.ApplicationWhereInput
+  data: Prisma.XOR<Prisma.ApplicationUpdateWithoutUserCommentsInput, Prisma.ApplicationUncheckedUpdateWithoutUserCommentsInput>
+}
+
+export type ApplicationUpdateWithoutUserCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationUncheckedUpdateWithoutUserCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUncheckedUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationCreateWithoutUserRemindersInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationUncheckedCreateWithoutUserRemindersInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingUncheckedCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationCreateOrConnectWithoutUserRemindersInput = {
+  where: Prisma.ApplicationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutUserRemindersInput, Prisma.ApplicationUncheckedCreateWithoutUserRemindersInput>
+}
+
+export type ApplicationUpsertWithoutUserRemindersInput = {
+  update: Prisma.XOR<Prisma.ApplicationUpdateWithoutUserRemindersInput, Prisma.ApplicationUncheckedUpdateWithoutUserRemindersInput>
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutUserRemindersInput, Prisma.ApplicationUncheckedCreateWithoutUserRemindersInput>
+  where?: Prisma.ApplicationWhereInput
+}
+
+export type ApplicationUpdateToOneWithWhereWithoutUserRemindersInput = {
+  where?: Prisma.ApplicationWhereInput
+  data: Prisma.XOR<Prisma.ApplicationUpdateWithoutUserRemindersInput, Prisma.ApplicationUncheckedUpdateWithoutUserRemindersInput>
+}
+
+export type ApplicationUpdateWithoutUserRemindersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationUncheckedUpdateWithoutUserRemindersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUncheckedUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationCreateWithoutUnifiedEntitiesInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationUncheckedCreateWithoutUnifiedEntitiesInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingUncheckedCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  entityTypes?: Prisma.EntityTypeUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationCreateOrConnectWithoutUnifiedEntitiesInput = {
+  where: Prisma.ApplicationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutUnifiedEntitiesInput, Prisma.ApplicationUncheckedCreateWithoutUnifiedEntitiesInput>
+}
+
+export type ApplicationUpsertWithoutUnifiedEntitiesInput = {
+  update: Prisma.XOR<Prisma.ApplicationUpdateWithoutUnifiedEntitiesInput, Prisma.ApplicationUncheckedUpdateWithoutUnifiedEntitiesInput>
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutUnifiedEntitiesInput, Prisma.ApplicationUncheckedCreateWithoutUnifiedEntitiesInput>
+  where?: Prisma.ApplicationWhereInput
+}
+
+export type ApplicationUpdateToOneWithWhereWithoutUnifiedEntitiesInput = {
+  where?: Prisma.ApplicationWhereInput
+  data: Prisma.XOR<Prisma.ApplicationUpdateWithoutUnifiedEntitiesInput, Prisma.ApplicationUncheckedUpdateWithoutUnifiedEntitiesInput>
+}
+
+export type ApplicationUpdateWithoutUnifiedEntitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationUncheckedUpdateWithoutUnifiedEntitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUncheckedUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  entityTypes?: Prisma.EntityTypeUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationCreateWithoutEntityTypesInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationUncheckedCreateWithoutEntityTypesInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  logoUrl?: string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userApplications?: Prisma.UserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutApplicationInput
+  userSessions?: Prisma.UserSessionUncheckedCreateNestedManyWithoutApplicationInput
+  userDevices?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutApplicationInput
+  loginHistory?: Prisma.LoginHistoryUncheckedCreateNestedManyWithoutApplicationInput
+  userSettings?: Prisma.UserSettingsUncheckedCreateNestedManyWithoutApplicationInput
+  files?: Prisma.FileUncheckedCreateNestedManyWithoutApplicationInput
+  fileFolders?: Prisma.FileFolderUncheckedCreateNestedManyWithoutApplicationInput
+  galleryItems?: Prisma.GalleryItemUncheckedCreateNestedManyWithoutApplicationInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedCreateNestedManyWithoutApplicationInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutApplicationInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedCreateNestedManyWithoutApplicationInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedCreateNestedManyWithoutApplicationInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutApplicationInput
+  appSettings?: Prisma.AppSettingUncheckedCreateNestedManyWithoutApplicationInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutApplicationInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutApplicationInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedCreateNestedManyWithoutApplicationInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedCreateNestedManyWithoutApplicationInput
+  userGroups?: Prisma.UserGroupUncheckedCreateNestedManyWithoutApplicationInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedCreateNestedManyWithoutApplicationInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutApplicationInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutApplicationInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutApplicationInput
+  circles?: Prisma.CircleUncheckedCreateNestedManyWithoutApplicationInput
+}
+
+export type ApplicationCreateOrConnectWithoutEntityTypesInput = {
+  where: Prisma.ApplicationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutEntityTypesInput, Prisma.ApplicationUncheckedCreateWithoutEntityTypesInput>
+}
+
+export type ApplicationUpsertWithoutEntityTypesInput = {
+  update: Prisma.XOR<Prisma.ApplicationUpdateWithoutEntityTypesInput, Prisma.ApplicationUncheckedUpdateWithoutEntityTypesInput>
+  create: Prisma.XOR<Prisma.ApplicationCreateWithoutEntityTypesInput, Prisma.ApplicationUncheckedCreateWithoutEntityTypesInput>
+  where?: Prisma.ApplicationWhereInput
+}
+
+export type ApplicationUpdateToOneWithWhereWithoutEntityTypesInput = {
+  where?: Prisma.ApplicationWhereInput
+  data: Prisma.XOR<Prisma.ApplicationUpdateWithoutEntityTypesInput, Prisma.ApplicationUncheckedUpdateWithoutEntityTypesInput>
+}
+
+export type ApplicationUpdateWithoutEntityTypesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUpdateManyWithoutApplicationNestedInput
+}
+
+export type ApplicationUncheckedUpdateWithoutEntityTypesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branding?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userApplications?: Prisma.UserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutApplicationNestedInput
+  userSessions?: Prisma.UserSessionUncheckedUpdateManyWithoutApplicationNestedInput
+  userDevices?: Prisma.UserDeviceUncheckedUpdateManyWithoutApplicationNestedInput
+  loginHistory?: Prisma.LoginHistoryUncheckedUpdateManyWithoutApplicationNestedInput
+  userSettings?: Prisma.UserSettingsUncheckedUpdateManyWithoutApplicationNestedInput
+  files?: Prisma.FileUncheckedUpdateManyWithoutApplicationNestedInput
+  fileFolders?: Prisma.FileFolderUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryItems?: Prisma.GalleryItemUncheckedUpdateManyWithoutApplicationNestedInput
+  galleryAlbums?: Prisma.GalleryAlbumUncheckedUpdateManyWithoutApplicationNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutApplicationNestedInput
+  userPushTokens?: Prisma.UserPushTokenUncheckedUpdateManyWithoutApplicationNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptionPlans?: Prisma.SubscriptionPlanUncheckedUpdateManyWithoutApplicationNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutApplicationNestedInput
+  appSettings?: Prisma.AppSettingUncheckedUpdateManyWithoutApplicationNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutApplicationNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutApplicationNestedInput
+  oauthProviders?: Prisma.OAuthProviderUncheckedUpdateManyWithoutApplicationNestedInput
+  securityPolicies?: Prisma.SecurityPolicyUncheckedUpdateManyWithoutApplicationNestedInput
+  userGroups?: Prisma.UserGroupUncheckedUpdateManyWithoutApplicationNestedInput
+  unifiedEntities?: Prisma.UnifiedEntityUncheckedUpdateManyWithoutApplicationNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutApplicationNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutApplicationNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutApplicationNestedInput
+  circles?: Prisma.CircleUncheckedUpdateManyWithoutApplicationNestedInput
 }
 
 
@@ -4041,6 +5711,12 @@ export type ApplicationCountOutputType = {
   oauthProviders: number
   securityPolicies: number
   userGroups: number
+  unifiedEntities: number
+  entityTypes: number
+  supportTickets: number
+  userComments: number
+  userReminders: number
+  circles: number
 }
 
 export type ApplicationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4065,6 +5741,12 @@ export type ApplicationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   oauthProviders?: boolean | ApplicationCountOutputTypeCountOauthProvidersArgs
   securityPolicies?: boolean | ApplicationCountOutputTypeCountSecurityPoliciesArgs
   userGroups?: boolean | ApplicationCountOutputTypeCountUserGroupsArgs
+  unifiedEntities?: boolean | ApplicationCountOutputTypeCountUnifiedEntitiesArgs
+  entityTypes?: boolean | ApplicationCountOutputTypeCountEntityTypesArgs
+  supportTickets?: boolean | ApplicationCountOutputTypeCountSupportTicketsArgs
+  userComments?: boolean | ApplicationCountOutputTypeCountUserCommentsArgs
+  userReminders?: boolean | ApplicationCountOutputTypeCountUserRemindersArgs
+  circles?: boolean | ApplicationCountOutputTypeCountCirclesArgs
 }
 
 /**
@@ -4224,6 +5906,48 @@ export type ApplicationCountOutputTypeCountUserGroupsArgs<ExtArgs extends runtim
   where?: Prisma.UserGroupWhereInput
 }
 
+/**
+ * ApplicationCountOutputType without action
+ */
+export type ApplicationCountOutputTypeCountUnifiedEntitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UnifiedEntityWhereInput
+}
+
+/**
+ * ApplicationCountOutputType without action
+ */
+export type ApplicationCountOutputTypeCountEntityTypesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EntityTypeWhereInput
+}
+
+/**
+ * ApplicationCountOutputType without action
+ */
+export type ApplicationCountOutputTypeCountSupportTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportTicketWhereInput
+}
+
+/**
+ * ApplicationCountOutputType without action
+ */
+export type ApplicationCountOutputTypeCountUserCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserCommentWhereInput
+}
+
+/**
+ * ApplicationCountOutputType without action
+ */
+export type ApplicationCountOutputTypeCountUserRemindersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserReminderWhereInput
+}
+
+/**
+ * ApplicationCountOutputType without action
+ */
+export type ApplicationCountOutputTypeCountCirclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CircleWhereInput
+}
+
 
 export type ApplicationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4257,6 +5981,12 @@ export type ApplicationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   oauthProviders?: boolean | Prisma.Application$oauthProvidersArgs<ExtArgs>
   securityPolicies?: boolean | Prisma.Application$securityPoliciesArgs<ExtArgs>
   userGroups?: boolean | Prisma.Application$userGroupsArgs<ExtArgs>
+  unifiedEntities?: boolean | Prisma.Application$unifiedEntitiesArgs<ExtArgs>
+  entityTypes?: boolean | Prisma.Application$entityTypesArgs<ExtArgs>
+  supportTickets?: boolean | Prisma.Application$supportTicketsArgs<ExtArgs>
+  userComments?: boolean | Prisma.Application$userCommentsArgs<ExtArgs>
+  userReminders?: boolean | Prisma.Application$userRemindersArgs<ExtArgs>
+  circles?: boolean | Prisma.Application$circlesArgs<ExtArgs>
   _count?: boolean | Prisma.ApplicationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["application"]>
 
@@ -4322,6 +6052,12 @@ export type ApplicationInclude<ExtArgs extends runtime.Types.Extensions.Internal
   oauthProviders?: boolean | Prisma.Application$oauthProvidersArgs<ExtArgs>
   securityPolicies?: boolean | Prisma.Application$securityPoliciesArgs<ExtArgs>
   userGroups?: boolean | Prisma.Application$userGroupsArgs<ExtArgs>
+  unifiedEntities?: boolean | Prisma.Application$unifiedEntitiesArgs<ExtArgs>
+  entityTypes?: boolean | Prisma.Application$entityTypesArgs<ExtArgs>
+  supportTickets?: boolean | Prisma.Application$supportTicketsArgs<ExtArgs>
+  userComments?: boolean | Prisma.Application$userCommentsArgs<ExtArgs>
+  userReminders?: boolean | Prisma.Application$userRemindersArgs<ExtArgs>
+  circles?: boolean | Prisma.Application$circlesArgs<ExtArgs>
   _count?: boolean | Prisma.ApplicationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ApplicationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -4351,6 +6087,12 @@ export type $ApplicationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     oauthProviders: Prisma.$OAuthProviderPayload<ExtArgs>[]
     securityPolicies: Prisma.$SecurityPolicyPayload<ExtArgs>[]
     userGroups: Prisma.$UserGroupPayload<ExtArgs>[]
+    unifiedEntities: Prisma.$UnifiedEntityPayload<ExtArgs>[]
+    entityTypes: Prisma.$EntityTypePayload<ExtArgs>[]
+    supportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
+    userComments: Prisma.$UserCommentPayload<ExtArgs>[]
+    userReminders: Prisma.$UserReminderPayload<ExtArgs>[]
+    circles: Prisma.$CirclePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4778,6 +6520,12 @@ export interface Prisma__ApplicationClient<T, Null = never, ExtArgs extends runt
   oauthProviders<T extends Prisma.Application$oauthProvidersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$oauthProvidersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OAuthProviderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   securityPolicies<T extends Prisma.Application$securityPoliciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$securityPoliciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SecurityPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userGroups<T extends Prisma.Application$userGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$userGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  unifiedEntities<T extends Prisma.Application$unifiedEntitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$unifiedEntitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UnifiedEntityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  entityTypes<T extends Prisma.Application$entityTypesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$entityTypesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EntityTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supportTickets<T extends Prisma.Application$supportTicketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$supportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userComments<T extends Prisma.Application$userCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$userCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userReminders<T extends Prisma.Application$userRemindersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$userRemindersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  circles<T extends Prisma.Application$circlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Application$circlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CirclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5706,6 +7454,150 @@ export type Application$userGroupsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.UserGroupScalarFieldEnum | Prisma.UserGroupScalarFieldEnum[]
+}
+
+/**
+ * Application.unifiedEntities
+ */
+export type Application$unifiedEntitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UnifiedEntity
+   */
+  select?: Prisma.UnifiedEntitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UnifiedEntity
+   */
+  omit?: Prisma.UnifiedEntityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UnifiedEntityInclude<ExtArgs> | null
+  where?: Prisma.UnifiedEntityWhereInput
+  orderBy?: Prisma.UnifiedEntityOrderByWithRelationInput | Prisma.UnifiedEntityOrderByWithRelationInput[]
+  cursor?: Prisma.UnifiedEntityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UnifiedEntityScalarFieldEnum | Prisma.UnifiedEntityScalarFieldEnum[]
+}
+
+/**
+ * Application.entityTypes
+ */
+export type Application$entityTypesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EntityType
+   */
+  select?: Prisma.EntityTypeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EntityType
+   */
+  omit?: Prisma.EntityTypeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EntityTypeInclude<ExtArgs> | null
+  where?: Prisma.EntityTypeWhereInput
+  orderBy?: Prisma.EntityTypeOrderByWithRelationInput | Prisma.EntityTypeOrderByWithRelationInput[]
+  cursor?: Prisma.EntityTypeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EntityTypeScalarFieldEnum | Prisma.EntityTypeScalarFieldEnum[]
+}
+
+/**
+ * Application.supportTickets
+ */
+export type Application$supportTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportTicket
+   */
+  select?: Prisma.SupportTicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportTicket
+   */
+  omit?: Prisma.SupportTicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportTicketInclude<ExtArgs> | null
+  where?: Prisma.SupportTicketWhereInput
+  orderBy?: Prisma.SupportTicketOrderByWithRelationInput | Prisma.SupportTicketOrderByWithRelationInput[]
+  cursor?: Prisma.SupportTicketWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportTicketScalarFieldEnum | Prisma.SupportTicketScalarFieldEnum[]
+}
+
+/**
+ * Application.userComments
+ */
+export type Application$userCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserComment
+   */
+  select?: Prisma.UserCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserComment
+   */
+  omit?: Prisma.UserCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserCommentInclude<ExtArgs> | null
+  where?: Prisma.UserCommentWhereInput
+  orderBy?: Prisma.UserCommentOrderByWithRelationInput | Prisma.UserCommentOrderByWithRelationInput[]
+  cursor?: Prisma.UserCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserCommentScalarFieldEnum | Prisma.UserCommentScalarFieldEnum[]
+}
+
+/**
+ * Application.userReminders
+ */
+export type Application$userRemindersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserReminder
+   */
+  select?: Prisma.UserReminderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserReminder
+   */
+  omit?: Prisma.UserReminderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserReminderInclude<ExtArgs> | null
+  where?: Prisma.UserReminderWhereInput
+  orderBy?: Prisma.UserReminderOrderByWithRelationInput | Prisma.UserReminderOrderByWithRelationInput[]
+  cursor?: Prisma.UserReminderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserReminderScalarFieldEnum | Prisma.UserReminderScalarFieldEnum[]
+}
+
+/**
+ * Application.circles
+ */
+export type Application$circlesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Circle
+   */
+  select?: Prisma.CircleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Circle
+   */
+  omit?: Prisma.CircleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CircleInclude<ExtArgs> | null
+  where?: Prisma.CircleWhereInput
+  orderBy?: Prisma.CircleOrderByWithRelationInput | Prisma.CircleOrderByWithRelationInput[]
+  cursor?: Prisma.CircleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CircleScalarFieldEnum | Prisma.CircleScalarFieldEnum[]
 }
 
 /**

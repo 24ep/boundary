@@ -74,7 +74,6 @@ export const ModelName = {
   EmailTemplate: 'EmailTemplate',
   SubscriptionPlan: 'SubscriptionPlan',
   Subscription: 'Subscription',
-  CoinTransaction: 'CoinTransaction',
   SystemConfig: 'SystemConfig',
   AppSetting: 'AppSetting',
   AdminGroup: 'AdminGroup',
@@ -115,7 +114,16 @@ export const ModelName = {
   FileTag: 'FileTag',
   FileTagAssignment: 'FileTagAssignment',
   FileShare: 'FileShare',
-  FileRecentAccess: 'FileRecentAccess'
+  FileRecentAccess: 'FileRecentAccess',
+  CircleOwner: 'CircleOwner',
+  CircleBillingAssignment: 'CircleBillingAssignment',
+  SupportTicket: 'SupportTicket',
+  TicketComment: 'TicketComment',
+  UserComment: 'UserComment',
+  UserReminder: 'UserReminder',
+  CoinTransaction: 'CoinTransaction',
+  UnifiedEntity: 'UnifiedEntity',
+  EntityType: 'EntityType'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -169,6 +177,7 @@ export const UserScalarFieldEnum = {
   userType: 'userType',
   circleIds: 'circleIds',
   isOnboardingComplete: 'isOnboardingComplete',
+  points: 'points',
   coins: 'coins',
   preferences: 'preferences',
   isActive: 'isActive',
@@ -657,19 +666,6 @@ export const SubscriptionScalarFieldEnum = {
 export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
 
 
-export const CoinTransactionScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  amount: 'amount',
-  type: 'type',
-  description: 'description',
-  referenceId: 'referenceId',
-  createdAt: 'createdAt'
-} as const
-
-export type CoinTransactionScalarFieldEnum = (typeof CoinTransactionScalarFieldEnum)[keyof typeof CoinTransactionScalarFieldEnum]
-
-
 export const SystemConfigScalarFieldEnum = {
   key: 'key',
   value: 'value',
@@ -822,11 +818,14 @@ export const CircleScalarFieldEnum = {
   id: 'id',
   ownerId: 'ownerId',
   circleTypeId: 'circleTypeId',
+  applicationId: 'applicationId',
+  parentId: 'parentId',
   name: 'name',
   description: 'description',
   avatarUrl: 'avatarUrl',
   coverUrl: 'coverUrl',
   inviteCode: 'inviteCode',
+  circleCode: 'circleCode',
   pinCode: 'pinCode',
   settings: 'settings',
   isActive: 'isActive',
@@ -845,6 +844,8 @@ export const CircleMemberScalarFieldEnum = {
   nickname: 'nickname',
   joinedAt: 'joinedAt',
   invitedBy: 'invitedBy',
+  isInherited: 'isInherited',
+  sourceCircleId: 'sourceCircleId',
   settings: 'settings'
 } as const
 
@@ -856,7 +857,9 @@ export const CircleInvitationScalarFieldEnum = {
   circleId: 'circleId',
   email: 'email',
   invitedBy: 'invitedBy',
-  message: 'message',
+  isInherited: 'isInherited',
+  sourceCircleId: 'sourceCircleId',
+  settings: 'settings',
   status: 'status',
   expiresAt: 'expiresAt',
   createdAt: 'createdAt',
@@ -1256,6 +1259,149 @@ export const FileRecentAccessScalarFieldEnum = {
 } as const
 
 export type FileRecentAccessScalarFieldEnum = (typeof FileRecentAccessScalarFieldEnum)[keyof typeof FileRecentAccessScalarFieldEnum]
+
+
+export const CircleOwnerScalarFieldEnum = {
+  id: 'id',
+  circleId: 'circleId',
+  userId: 'userId',
+  role: 'role',
+  createdAt: 'createdAt'
+} as const
+
+export type CircleOwnerScalarFieldEnum = (typeof CircleOwnerScalarFieldEnum)[keyof typeof CircleOwnerScalarFieldEnum]
+
+
+export const CircleBillingAssignmentScalarFieldEnum = {
+  id: 'id',
+  circleId: 'circleId',
+  userId: 'userId',
+  isPrimary: 'isPrimary',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CircleBillingAssignmentScalarFieldEnum = (typeof CircleBillingAssignmentScalarFieldEnum)[keyof typeof CircleBillingAssignmentScalarFieldEnum]
+
+
+export const SupportTicketScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  priority: 'priority',
+  status: 'status',
+  reporterId: 'reporterId',
+  circleId: 'circleId',
+  assignedTo: 'assignedTo',
+  applicationId: 'applicationId',
+  tags: 'tags',
+  attachments: 'attachments',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  resolvedAt: 'resolvedAt'
+} as const
+
+export type SupportTicketScalarFieldEnum = (typeof SupportTicketScalarFieldEnum)[keyof typeof SupportTicketScalarFieldEnum]
+
+
+export const TicketCommentScalarFieldEnum = {
+  id: 'id',
+  ticketId: 'ticketId',
+  authorId: 'authorId',
+  authorType: 'authorType',
+  content: 'content',
+  isInternal: 'isInternal',
+  createdAt: 'createdAt'
+} as const
+
+export type TicketCommentScalarFieldEnum = (typeof TicketCommentScalarFieldEnum)[keyof typeof TicketCommentScalarFieldEnum]
+
+
+export const UserCommentScalarFieldEnum = {
+  id: 'id',
+  applicationId: 'applicationId',
+  userId: 'userId',
+  authorAdminId: 'authorAdminId',
+  content: 'content',
+  tags: 'tags',
+  attachments: 'attachments',
+  remindAt: 'remindAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserCommentScalarFieldEnum = (typeof UserCommentScalarFieldEnum)[keyof typeof UserCommentScalarFieldEnum]
+
+
+export const UserReminderScalarFieldEnum = {
+  id: 'id',
+  applicationId: 'applicationId',
+  userId: 'userId',
+  authorAdminId: 'authorAdminId',
+  title: 'title',
+  note: 'note',
+  remindAt: 'remindAt',
+  status: 'status',
+  attachments: 'attachments',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserReminderScalarFieldEnum = (typeof UserReminderScalarFieldEnum)[keyof typeof UserReminderScalarFieldEnum]
+
+
+export const CoinTransactionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  type: 'type',
+  description: 'description',
+  referenceId: 'referenceId',
+  createdAt: 'createdAt'
+} as const
+
+export type CoinTransactionScalarFieldEnum = (typeof CoinTransactionScalarFieldEnum)[keyof typeof CoinTransactionScalarFieldEnum]
+
+
+export const UnifiedEntityScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  applicationId: 'applicationId',
+  ownerId: 'ownerId',
+  status: 'status',
+  attributes: 'attributes',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UnifiedEntityScalarFieldEnum = (typeof UnifiedEntityScalarFieldEnum)[keyof typeof UnifiedEntityScalarFieldEnum]
+
+
+export const EntityTypeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  displayName: 'displayName',
+  title: 'title',
+  description: 'description',
+  icon: 'icon',
+  category: 'category',
+  apiEndpoint: 'apiEndpoint',
+  responseKey: 'responseKey',
+  columns: 'columns',
+  schema: 'schema',
+  isSystem: 'isSystem',
+  searchPlaceholder: 'searchPlaceholder',
+  canCreate: 'canCreate',
+  canUpdate: 'canUpdate',
+  canDelete: 'canDelete',
+  applicationId: 'applicationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EntityTypeScalarFieldEnum = (typeof EntityTypeScalarFieldEnum)[keyof typeof EntityTypeScalarFieldEnum]
 
 
 export const SortOrder = {

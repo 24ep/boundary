@@ -1,7 +1,7 @@
 export * from './AuthService.types';
 import { User, AuthTokens, AuthResponse, LoginData, SignupData } from './AuthService.types';
 import appkit from '../api/appkit';
-import { AppKitUser } from 'alphayard-appkit';
+import { AppKitUser } from '@alphayard/appkit';
 
 class AuthService {
   private static instance: AuthService;

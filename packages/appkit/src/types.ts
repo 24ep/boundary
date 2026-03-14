@@ -15,6 +15,10 @@ export interface AppKitConfig {
   autoRefresh?: boolean;
   /** Custom fetch implementation for SSR/testing */
   fetch?: typeof globalThis.fetch;
+  /** Optional base URL for API calls */
+  baseURL?: string;
+  /** Optional API key for internal server calls */
+  apiKey?: string;
 }
 
 export interface AppFlowStep {
@@ -240,6 +244,12 @@ export interface LoginOptions {
   prompt?: 'none' | 'login' | 'consent';
   /** Additional query parameters */
   extraParams?: Record<string, string>;
+  /** Optional email for direct login */
+  email?: string;
+  /** Optional phone for direct login */
+  phone?: string;
+  /** Optional password for direct login */
+  password?: string;
 }
 
 export interface LogoutOptions {
@@ -278,6 +288,7 @@ export interface AppKitUser {
   attributes?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
+  isActive?: boolean;
   points?: number;
   appPoints?: number;
 }
@@ -320,6 +331,7 @@ export interface MFAStatus {
 export interface UserSession {
   id: string;
   userId?: string;
+  sessionToken?: string;
   deviceType?: string;
   deviceName?: string;
   browser?: string;

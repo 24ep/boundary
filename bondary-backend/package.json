@@ -20,6 +20,7 @@
     "dependencies": {
         "@aws-sdk/client-s3": "^3.962.0",
         "@aws-sdk/s3-request-presigner": "^3.962.0",
+        "@alphayard/appkit": "file:../packages/appkit",
         "swagger-jsdoc": "^6.2.8",
         "swagger-ui-express": "^5.0.0",
         "prom-client": "^15.1.0",

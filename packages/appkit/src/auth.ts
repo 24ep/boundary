@@ -63,11 +63,19 @@ export class AuthModule {
       }
     }
 
-    return `${this.config.domain}/oauth/authorize?${params.toString()}`;
+    return `${this.config.baseURL || this.config.domain}/oauth/authorize?${params.toString()}`;
   }
 
-  /** Redirect the browser to the login page */
-  async login(options: LoginOptions = {}): Promise<void> {
+  /** Redirect the browser to the login page or perform direct login */
+  async login(options: LoginOptions = {}): Promise<AuthResponse | void> {
+    if (options.email || options.phone) {
+      return this.loginWithCredentials({
+        email: options.email,
+        phone: options.phone,
+        password: options.password
+      } as LoginRequest);
+    }
+
     const url = await this.buildAuthUrl({
       redirect_uri: options.redirectUri || this.config.redirectUri,
       scope: options.scope,
@@ -128,7 +136,7 @@ export class AuthModule {
     }
 
     const tokenResponse = await this.http.postForm<TokenResponse>(
-      '/oauth/token',
+      `${this.config.baseURL || this.config.domain}/oauth/token`,
       body,
     );
 
@@ -148,7 +156,7 @@ export class AuthModule {
     }
 
     const tokenResponse = await this.http.postForm<TokenResponse>(
-      '/oauth/token',
+      `${this.config.baseURL || this.config.domain}/oauth/token`,
       {
         grant_type: 'refresh_token',
         refresh_token: current.refreshToken,
@@ -173,7 +181,7 @@ export class AuthModule {
     // Revoke refresh token on the server
     if (options.revokeToken !== false && tokens?.refreshToken) {
       try {
-        await this.http.postForm('/oauth/revoke', {
+        await this.http.postForm(`${this.config.baseURL || ''}/oauth/revoke`, {
           token: tokens.refreshToken,
           token_type_hint: 'refresh_token',
           client_id: this.config.clientId,
@@ -193,13 +201,13 @@ export class AuthModule {
         client_id: this.config.clientId,
       });
       if (tokens?.idToken) params.set('id_token_hint', tokens.idToken);
-      window.location.href = `${this.config.domain}/oauth/logout?${params.toString()}`;
+      window.location.href = `${this.config.baseURL || this.config.domain}/oauth/logout?${params.toString()}`;
     }
   }
 
   /** Register a new user */
   async register(data: RegisterRequest): Promise<AuthResponse> {
-    const response = await this.http.post<AuthResponse>('/api/v1/auth/register', data);
+    const response = await this.http.post<AuthResponse>(`${this.config.baseURL || ''}/api/v1/auth/register`, data);
     
     // If backend returns tokens, save them
     if (response.accessToken && response.user) {
@@ -217,7 +225,7 @@ export class AuthModule {
 
   /** Direct login with credentials (email/password) */
   async loginWithCredentials(data: LoginRequest): Promise<AuthResponse> {
-    const response = await this.http.post<AuthResponse>('/api/v1/auth/login', data);
+    const response = await this.http.post<AuthResponse>(`${this.config.baseURL || ''}/api/v1/auth/login`, data);
     
     if (response.accessToken) {
       const tokens = {
@@ -234,17 +242,17 @@ export class AuthModule {
 
   /** Check if a user exists by email or phone */
   async checkUserExists(data: CheckUserRequest): Promise<CheckUserResponse> {
-    return this.http.post<CheckUserResponse>('/api/v1/auth/check-user', data);
+    return this.http.post<CheckUserResponse>(`${this.config.baseURL || ''}/api/v1/auth/check-user`, data);
   }
 
   /** Request an OTP code */
   async requestOtp(data: OtpRequest): Promise<{ success: boolean; message?: string }> {
-    return this.http.post<{ success: boolean; message?: string }>('/api/v1/auth/otp/request', data);
+    return this.http.post<{ success: boolean; message?: string }>(`${this.config.baseURL || ''}/api/v1/auth/otp/request`, data);
   }
 
   /** Login with an OTP code */
   async loginWithOtp(data: VerifyOtpRequest): Promise<AuthResponse> {
-    const res = await this.http.post<AuthResponse>('/api/v1/identity/otp/login', data);
+    const res = await this.http.post<AuthResponse>(`${this.config.baseURL || ''}/api/v1/identity/otp/login`, data);
     if (res.success && res.accessToken) {
       this.tokenStorage.setTokens({
         accessToken: res.accessToken,
@@ -258,7 +266,7 @@ export class AuthModule {
 
   /** Verify social login data and return tokens */
   async verifySocialLogin(provider: string, data: any): Promise<AuthResponse> {
-    const res = await this.http.post<AuthResponse>(`/api/v1/identity/social/${provider}/verify`, data);
+    const res = await this.http.post<AuthResponse>(`${this.config.baseURL || ''}/api/v1/identity/social/${provider}/verify`, data);
     if (res.success && res.accessToken) {
       this.tokenStorage.setTokens({
         accessToken: res.accessToken,
@@ -272,7 +280,7 @@ export class AuthModule {
 
   /** Verify email with a code */
   async verifyEmail(data: VerifyEmailRequest): Promise<AuthResponse> {
-    const response = await this.http.post<AuthResponse>('/api/v1/auth/verify-email', data);
+    const response = await this.http.post<AuthResponse>(`${this.config.baseURL || ''}/api/v1/auth/verify-email`, data);
     
     if (response.accessToken) {
       const tokens = {
@@ -289,17 +297,17 @@ export class AuthModule {
 
   /** Request password reset email */
   async forgotPassword(data: ForgotPasswordRequest): Promise<{ success: boolean; message?: string }> {
-    return this.http.post<{ success: boolean; message?: string }>('/api/v1/auth/forgot-password', data);
+    return this.http.post<{ success: boolean; message?: string }>(`${this.config.baseURL || ''}/api/v1/auth/forgot-password`, data);
   }
 
   /** Reset password using a token */
   async resetPassword(data: ResetPasswordRequest): Promise<{ success: boolean; message?: string }> {
-    return this.http.post<{ success: boolean; message?: string }>('/api/v1/auth/reset-password', data);
+    return this.http.post<{ success: boolean; message?: string }>(`${this.config.baseURL || ''}/api/v1/auth/reset-password`, data);
   }
 
   /** Complete user onboarding */
   async completeOnboarding(data: any): Promise<AuthResponse> {
-    const response = await this.http.post<AuthResponse>('/api/v1/auth/onboarding/complete', data);
+    const response = await this.http.post<AuthResponse>(`${this.config.baseURL || ''}/api/v1/auth/onboarding/complete`, data);
     
     if (response.user) {
       // Refresh local user state if needed

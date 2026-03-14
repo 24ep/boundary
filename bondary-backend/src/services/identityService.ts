@@ -3,68 +3,27 @@ import { prisma } from '../lib/prisma';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
+import { HttpClient } from '@alphayard/appkit';
+import { config } from '../config/env';
+
+// Initialize HTTP Client for SDK transport
+const sdkClient = new HttpClient({
+  baseURL: config.APPKIT_URL || 'http://localhost:3002',
+});
 
 // =====================================================
 // INTERFACES
 // =====================================================
 
-export interface UserSession {
-  id: string;
-  userId: string;
-  sessionToken: string;
-  refreshToken?: string;
-  deviceId?: string;
-  deviceType?: string;
-  deviceName?: string;
-  browser?: string;
-  browserVersion?: string;
-  os?: string;
-  osVersion?: string;
-  ipAddress?: string;
-  country?: string;
-  city?: string;
-  isActive: boolean;
-  lastActivityAt: string;
-  expiresAt: string;
-  isRemembered: boolean;
-  mfaVerified: boolean;
-  riskScore: number;
-  createdAt: string;
-  revokedAt?: string;
-  revokedBy?: string;
-  revokeReason?: string;
-}
+export { 
+  UserSession, 
+  UserDevice, 
+  UserMFA, 
+  LoginHistoryEntry, 
+  SecuritySettings as SecurityPolicy 
+} from '@alphayard/appkit';
 
-export interface UserDevice {
-  id: string;
-  userId: string;
-  deviceFingerprint: string;
-  deviceName?: string;
-  deviceType: string;
-  brand?: string;
-  model?: string;
-  os?: string;
-  osVersion?: string;
-  browser?: string;
-  browserVersion?: string;
-  pushToken?: string;
-  pushEnabled: boolean;
-  isTrusted: boolean;
-  isCurrent: boolean;
-  trustLevel: string;
-  firstSeenAt: string;
-  lastSeenAt: string;
-  lastIpAddress?: string;
-  lastLocationCountry?: string;
-  lastLocationCity?: string;
-  loginCount: number;
-  failedLoginCount: number;
-  isBlocked: boolean;
-  blockedAt?: string;
-  blockedReason?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+export interface SecurityPolicy {
 
 export interface UserMFA {
   id: string;
@@ -217,73 +176,24 @@ export interface IdentityAuditEntry {
 
 export async function getSessions(userId: string, options?: {
   includeExpired?: boolean;
-  limit?: number;
-  offset?: number;
-}): Promise<{ sessions: UserSession[]; total: number }> {
-  const { includeExpired = false, limit = 50, offset = 0 } = options || {};
+}): Promise<UserSession[]> {
+  const { includeExpired = false } = options || {};
   
   try {
-    // Use Prisma model for type-safe querying
-    const sessions = await prisma.userSession.findMany({
-      where: {
-        userId,
-        ...(includeExpired ? {} : { expiresAt: { gt: new Date() } }),
-      },
-      orderBy: { lastActivityAt: 'desc' },
-      take: limit,
-      skip: offset,
-    });
-    
-    const total = await prisma.userSession.count({
-      where: {
-        userId,
-        ...(includeExpired ? {} : { expiresAt: { gt: new Date() } }),
-      },
-    });
-    
-    return {
-      sessions: sessions.map(s => {
-        return {
-          id: s.id,
-          userId: s.userId,
-          sessionToken: s.sessionToken || '',
-          refreshToken: undefined,
-          deviceId: s.deviceId ?? undefined,
-          deviceType: s.deviceType ?? undefined,
-          deviceName: s.deviceName ?? undefined,
-          browser: s.browser ?? undefined,
-          browserVersion: s.browserVersion ?? undefined,
-          os: s.os ?? undefined,
-          osVersion: s.osVersion ?? undefined,
-          ipAddress: s.ipAddress || undefined,
-          country: undefined,
-          city: undefined,
-          isActive: s.expiresAt > new Date(),
-          lastActivityAt: s.lastActivityAt.toISOString(),
-          expiresAt: s.expiresAt.toISOString(),
-          isRemembered: false,
-          mfaVerified: false,
-          riskScore: 0,
-          createdAt: s.createdAt.toISOString(),
-          revokedAt: undefined,
-          revokedBy: undefined,
-          revokeReason: undefined,
-        };
-      }),
-      total,
-    };
+    // Forward to SDK
+    return await sdkClient.get<UserSession[]>(`/api/v1/identity/sessions?includeExpired=${includeExpired}`);
   } catch (error: any) {
-    console.warn('[identityService.getSessions] Error:', error.message);
-    // Return empty result if table doesn't exist or other errors
-    return { sessions: [], total: 0 };
+    console.warn('[identityService.getSessions] SDK Error:', error.message);
+    return [];
   }
 }
 
 export async function getSessionById(sessionId: string): Promise<UserSession | null> {
-  const session = await prisma.userSession.findUnique({
-    where: { id: sessionId }
-  });
-  return session ? mapSession(session) : null;
+  try {
+    return await sdkClient.get<UserSession>(`/api/v1/identity/sessions/${sessionId}`);
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function createSession(data: {
@@ -330,15 +240,11 @@ export async function revokeSession(
   revokedBy?: string,
   reason?: string
 ): Promise<void> {
-  await prisma.userSession.update({
-    where: { id: sessionId },
-    data: {
-      isActive: false,
-      revokedAt: new Date(),
-      revokedBy: revokedBy,
-      revokeReason: reason
-    }
-  });
+  try {
+    await sdkClient.post(`/api/v1/identity/sessions/${sessionId}/revoke`, { revokedBy, reason });
+  } catch (error: any) {
+    console.error('[identityService.revokeSession] SDK Error:', error.message);
+  }
 }
 
 export async function revokeAllSessions(
@@ -376,52 +282,19 @@ export async function updateSessionActivity(sessionId: string): Promise<void> {
 
 export async function getDevices(userId: string): Promise<UserDevice[]> {
   try {
-    const devices = await prisma.userDevice.findMany({
-      where: { userId },
-      orderBy: { lastSeenAt: 'desc' },
-    });
-    
-    return devices.map(d => ({
-      id: d.id,
-      userId: d.userId,
-      deviceFingerprint: d.deviceFingerprint ?? '',
-      deviceName: d.deviceName || undefined,
-      deviceType: d.deviceType || 'unknown',
-      brand: undefined,
-      model: undefined,
-      os: d.os || undefined,
-      osVersion: d.osVersion || undefined,
-      browser: undefined,
-      browserVersion: undefined,
-      pushToken: d.pushToken || undefined,
-      pushEnabled: !!d.pushToken,
-      isTrusted: d.isActive,
-      isCurrent: false,
-      trustLevel: d.isActive ? 'trusted' : 'unknown',
-      firstSeenAt: d.createdAt.toISOString(),
-      lastSeenAt: (d.lastSeenAt || d.createdAt).toISOString(),
-      lastIpAddress: undefined,
-      lastLocationCountry: undefined,
-      lastLocationCity: undefined,
-      loginCount: 0,
-      failedLoginCount: 0,
-      isBlocked: !d.isActive,
-      blockedAt: undefined,
-      blockedReason: undefined,
-      createdAt: d.createdAt.toISOString(),
-      updatedAt: d.updatedAt.toISOString(),
-    }));
+    return await sdkClient.get<UserDevice[]>('/api/v1/identity/devices');
   } catch (error: any) {
-    console.warn('[identityService.getDevices] Error:', error.message);
+    console.warn('[identityService.getDevices] SDK Error:', error.message);
     return [];
   }
 }
 
 export async function getDeviceById(deviceId: string): Promise<UserDevice | null> {
-  const device = await prisma.userDevice.findUnique({
-    where: { id: deviceId }
-  });
-  return device ? mapDevice(device) : null;
+  try {
+    return await sdkClient.get<UserDevice>(`/api/v1/identity/devices/${deviceId}`);
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function registerDevice(data: {
@@ -529,14 +402,12 @@ export async function deleteDevice(deviceId: string): Promise<void> {
 // =====================================================
 
 export async function getMFASettings(userId: string): Promise<UserMFA[]> {
-  const result = await prisma.userMFA.findMany({
-    where: { userId: userId },
-    orderBy: [
-      { isPrimary: 'desc' },
-      { mfaType: 'asc' }
-    ]
-  });
-  return result.map(mapMFA);
+  try {
+    return await sdkClient.get<UserMFA[]>('/api/v1/identity/mfa');
+  } catch (error: any) {
+    console.warn('[identityService.getMFASettings] SDK Error:', error.message);
+    return [];
+  }
 }
 
 export async function enableMFA(userId: string, mfaType: string, data: {
@@ -796,8 +667,19 @@ export async function getLoginHistory(options: {
   endDate?: Date;
   success?: boolean;
   suspicious?: boolean;
-}): Promise<{ entries: LoginHistoryEntry[]; total: number }> {
-  const { limit = 50, offset = 0 } = options;
+}): Promise<{ history: LoginHistoryEntry[]; total: number }> {
+  try {
+    const params = new URLSearchParams();
+    if (options.limit) params.append('limit', options.limit.toString());
+    if (options.offset) params.append('page', (Math.floor(options.offset / (options.limit || 20)) + 1).toString());
+    if (options.success !== undefined) params.append('success', options.success.toString());
+    
+    return await sdkClient.get<{ history: LoginHistoryEntry[]; total: number }>(`/api/v1/identity/login-history?${params.toString()}`);
+  } catch (error: any) {
+    console.warn('[identityService.getLoginHistory] SDK Error:', error.message);
+    return { history: [], total: 0 };
+  }
+}
   const conditions: string[] = [];
   const params: any[] = [];
   let paramIndex = 1;

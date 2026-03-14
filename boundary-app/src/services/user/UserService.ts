@@ -1,5 +1,5 @@
 import appkit from '../api/appkit';
-import { AppKitUser } from 'alphayard-appkit';
+import { AppKitUser } from '@alphayard/appkit';
 
 export interface UserProfile {
   id: string;

@@ -28,11 +28,14 @@ export type CircleMinAggregateOutputType = {
   id: string | null
   ownerId: string | null
   circleTypeId: string | null
+  applicationId: string | null
+  parentId: string | null
   name: string | null
   description: string | null
   avatarUrl: string | null
   coverUrl: string | null
   inviteCode: string | null
+  circleCode: string | null
   pinCode: string | null
   isActive: boolean | null
   createdAt: Date | null
@@ -43,11 +46,14 @@ export type CircleMaxAggregateOutputType = {
   id: string | null
   ownerId: string | null
   circleTypeId: string | null
+  applicationId: string | null
+  parentId: string | null
   name: string | null
   description: string | null
   avatarUrl: string | null
   coverUrl: string | null
   inviteCode: string | null
+  circleCode: string | null
   pinCode: string | null
   isActive: boolean | null
   createdAt: Date | null
@@ -58,11 +64,14 @@ export type CircleCountAggregateOutputType = {
   id: number
   ownerId: number
   circleTypeId: number
+  applicationId: number
+  parentId: number
   name: number
   description: number
   avatarUrl: number
   coverUrl: number
   inviteCode: number
+  circleCode: number
   pinCode: number
   settings: number
   isActive: number
@@ -76,11 +85,14 @@ export type CircleMinAggregateInputType = {
   id?: true
   ownerId?: true
   circleTypeId?: true
+  applicationId?: true
+  parentId?: true
   name?: true
   description?: true
   avatarUrl?: true
   coverUrl?: true
   inviteCode?: true
+  circleCode?: true
   pinCode?: true
   isActive?: true
   createdAt?: true
@@ -91,11 +103,14 @@ export type CircleMaxAggregateInputType = {
   id?: true
   ownerId?: true
   circleTypeId?: true
+  applicationId?: true
+  parentId?: true
   name?: true
   description?: true
   avatarUrl?: true
   coverUrl?: true
   inviteCode?: true
+  circleCode?: true
   pinCode?: true
   isActive?: true
   createdAt?: true
@@ -106,11 +121,14 @@ export type CircleCountAggregateInputType = {
   id?: true
   ownerId?: true
   circleTypeId?: true
+  applicationId?: true
+  parentId?: true
   name?: true
   description?: true
   avatarUrl?: true
   coverUrl?: true
   inviteCode?: true
+  circleCode?: true
   pinCode?: true
   settings?: true
   isActive?: true
@@ -195,11 +213,14 @@ export type CircleGroupByOutputType = {
   id: string
   ownerId: string
   circleTypeId: string | null
+  applicationId: string | null
+  parentId: string | null
   name: string
   description: string | null
   avatarUrl: string | null
   coverUrl: string | null
   inviteCode: string | null
+  circleCode: string | null
   pinCode: string | null
   settings: runtime.JsonValue
   isActive: boolean
@@ -232,11 +253,14 @@ export type CircleWhereInput = {
   id?: Prisma.UuidFilter<"Circle"> | string
   ownerId?: Prisma.UuidFilter<"Circle"> | string
   circleTypeId?: Prisma.UuidNullableFilter<"Circle"> | string | null
+  applicationId?: Prisma.UuidNullableFilter<"Circle"> | string | null
+  parentId?: Prisma.UuidNullableFilter<"Circle"> | string | null
   name?: Prisma.StringFilter<"Circle"> | string
   description?: Prisma.StringNullableFilter<"Circle"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
   coverUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
   inviteCode?: Prisma.StringNullableFilter<"Circle"> | string | null
+  circleCode?: Prisma.StringNullableFilter<"Circle"> | string | null
   pinCode?: Prisma.StringNullableFilter<"Circle"> | string | null
   settings?: Prisma.JsonFilter<"Circle">
   isActive?: Prisma.BoolFilter<"Circle"> | boolean
@@ -244,7 +268,14 @@ export type CircleWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Circle"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   circleType?: Prisma.XOR<Prisma.CircleTypeNullableScalarRelationFilter, Prisma.CircleTypeWhereInput> | null
+  application?: Prisma.XOR<Prisma.ApplicationNullableScalarRelationFilter, Prisma.ApplicationWhereInput> | null
+  parent?: Prisma.XOR<Prisma.CircleNullableScalarRelationFilter, Prisma.CircleWhereInput> | null
+  children?: Prisma.CircleListRelationFilter
+  supportTickets?: Prisma.SupportTicketListRelationFilter
   members?: Prisma.CircleMemberListRelationFilter
+  sourcedMemberships?: Prisma.CircleMemberListRelationFilter
+  owners?: Prisma.CircleOwnerListRelationFilter
+  billingAssignees?: Prisma.CircleBillingAssignmentListRelationFilter
   safetyIncidents?: Prisma.SafetyIncidentListRelationFilter
   socialPosts?: Prisma.SocialPostListRelationFilter
   chatRooms?: Prisma.ChatRoomListRelationFilter
@@ -260,11 +291,14 @@ export type CircleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   circleTypeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  applicationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  parentId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   inviteCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  circleCode?: Prisma.SortOrderInput | Prisma.SortOrder
   pinCode?: Prisma.SortOrderInput | Prisma.SortOrder
   settings?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -272,7 +306,14 @@ export type CircleOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   owner?: Prisma.UserOrderByWithRelationInput
   circleType?: Prisma.CircleTypeOrderByWithRelationInput
+  application?: Prisma.ApplicationOrderByWithRelationInput
+  parent?: Prisma.CircleOrderByWithRelationInput
+  children?: Prisma.CircleOrderByRelationAggregateInput
+  supportTickets?: Prisma.SupportTicketOrderByRelationAggregateInput
   members?: Prisma.CircleMemberOrderByRelationAggregateInput
+  sourcedMemberships?: Prisma.CircleMemberOrderByRelationAggregateInput
+  owners?: Prisma.CircleOwnerOrderByRelationAggregateInput
+  billingAssignees?: Prisma.CircleBillingAssignmentOrderByRelationAggregateInput
   safetyIncidents?: Prisma.SafetyIncidentOrderByRelationAggregateInput
   socialPosts?: Prisma.SocialPostOrderByRelationAggregateInput
   chatRooms?: Prisma.ChatRoomOrderByRelationAggregateInput
@@ -287,11 +328,14 @@ export type CircleOrderByWithRelationInput = {
 export type CircleWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   inviteCode?: string
+  circleCode?: string
   AND?: Prisma.CircleWhereInput | Prisma.CircleWhereInput[]
   OR?: Prisma.CircleWhereInput[]
   NOT?: Prisma.CircleWhereInput | Prisma.CircleWhereInput[]
   ownerId?: Prisma.UuidFilter<"Circle"> | string
   circleTypeId?: Prisma.UuidNullableFilter<"Circle"> | string | null
+  applicationId?: Prisma.UuidNullableFilter<"Circle"> | string | null
+  parentId?: Prisma.UuidNullableFilter<"Circle"> | string | null
   name?: Prisma.StringFilter<"Circle"> | string
   description?: Prisma.StringNullableFilter<"Circle"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
@@ -303,7 +347,14 @@ export type CircleWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Circle"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   circleType?: Prisma.XOR<Prisma.CircleTypeNullableScalarRelationFilter, Prisma.CircleTypeWhereInput> | null
+  application?: Prisma.XOR<Prisma.ApplicationNullableScalarRelationFilter, Prisma.ApplicationWhereInput> | null
+  parent?: Prisma.XOR<Prisma.CircleNullableScalarRelationFilter, Prisma.CircleWhereInput> | null
+  children?: Prisma.CircleListRelationFilter
+  supportTickets?: Prisma.SupportTicketListRelationFilter
   members?: Prisma.CircleMemberListRelationFilter
+  sourcedMemberships?: Prisma.CircleMemberListRelationFilter
+  owners?: Prisma.CircleOwnerListRelationFilter
+  billingAssignees?: Prisma.CircleBillingAssignmentListRelationFilter
   safetyIncidents?: Prisma.SafetyIncidentListRelationFilter
   socialPosts?: Prisma.SocialPostListRelationFilter
   chatRooms?: Prisma.ChatRoomListRelationFilter
@@ -313,17 +364,20 @@ export type CircleWhereUniqueInput = Prisma.AtLeast<{
   todos?: Prisma.TodoListRelationFilter
   invitations?: Prisma.CircleInvitationListRelationFilter
   fileTags?: Prisma.FileTagListRelationFilter
-}, "id" | "inviteCode">
+}, "id" | "inviteCode" | "circleCode">
 
 export type CircleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   circleTypeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  applicationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  parentId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   inviteCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  circleCode?: Prisma.SortOrderInput | Prisma.SortOrder
   pinCode?: Prisma.SortOrderInput | Prisma.SortOrder
   settings?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -341,11 +395,14 @@ export type CircleScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"Circle"> | string
   ownerId?: Prisma.UuidWithAggregatesFilter<"Circle"> | string
   circleTypeId?: Prisma.UuidNullableWithAggregatesFilter<"Circle"> | string | null
+  applicationId?: Prisma.UuidNullableWithAggregatesFilter<"Circle"> | string | null
+  parentId?: Prisma.UuidNullableWithAggregatesFilter<"Circle"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"Circle"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Circle"> | string | null
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"Circle"> | string | null
   coverUrl?: Prisma.StringNullableWithAggregatesFilter<"Circle"> | string | null
   inviteCode?: Prisma.StringNullableWithAggregatesFilter<"Circle"> | string | null
+  circleCode?: Prisma.StringNullableWithAggregatesFilter<"Circle"> | string | null
   pinCode?: Prisma.StringNullableWithAggregatesFilter<"Circle"> | string | null
   settings?: Prisma.JsonWithAggregatesFilter<"Circle">
   isActive?: Prisma.BoolWithAggregatesFilter<"Circle"> | boolean
@@ -360,6 +417,7 @@ export type CircleCreateInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -367,7 +425,14 @@ export type CircleCreateInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
@@ -383,17 +448,25 @@ export type CircleUncheckedCreateInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
@@ -412,6 +485,7 @@ export type CircleUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -419,7 +493,14 @@ export type CircleUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
@@ -435,17 +516,25 @@ export type CircleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
@@ -461,11 +550,14 @@ export type CircleCreateManyInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -480,6 +572,7 @@ export type CircleUpdateManyMutationInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -491,11 +584,14 @@ export type CircleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -513,15 +609,23 @@ export type CircleOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type CircleNullableScalarRelationFilter = {
+  is?: Prisma.CircleWhereInput | null
+  isNot?: Prisma.CircleWhereInput | null
+}
+
 export type CircleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   circleTypeId?: Prisma.SortOrder
+  applicationId?: Prisma.SortOrder
+  parentId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
+  circleCode?: Prisma.SortOrder
   pinCode?: Prisma.SortOrder
   settings?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -533,11 +637,14 @@ export type CircleMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   circleTypeId?: Prisma.SortOrder
+  applicationId?: Prisma.SortOrder
+  parentId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
+  circleCode?: Prisma.SortOrder
   pinCode?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -548,11 +655,14 @@ export type CircleMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   circleTypeId?: Prisma.SortOrder
+  applicationId?: Prisma.SortOrder
+  parentId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   coverUrl?: Prisma.SortOrder
   inviteCode?: Prisma.SortOrder
+  circleCode?: Prisma.SortOrder
   pinCode?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -564,9 +674,46 @@ export type CircleScalarRelationFilter = {
   isNot?: Prisma.CircleWhereInput
 }
 
-export type CircleNullableScalarRelationFilter = {
-  is?: Prisma.CircleWhereInput | null
-  isNot?: Prisma.CircleWhereInput | null
+export type CircleCreateNestedManyWithoutApplicationInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutApplicationInput, Prisma.CircleUncheckedCreateWithoutApplicationInput> | Prisma.CircleCreateWithoutApplicationInput[] | Prisma.CircleUncheckedCreateWithoutApplicationInput[]
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutApplicationInput | Prisma.CircleCreateOrConnectWithoutApplicationInput[]
+  createMany?: Prisma.CircleCreateManyApplicationInputEnvelope
+  connect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+}
+
+export type CircleUncheckedCreateNestedManyWithoutApplicationInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutApplicationInput, Prisma.CircleUncheckedCreateWithoutApplicationInput> | Prisma.CircleCreateWithoutApplicationInput[] | Prisma.CircleUncheckedCreateWithoutApplicationInput[]
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutApplicationInput | Prisma.CircleCreateOrConnectWithoutApplicationInput[]
+  createMany?: Prisma.CircleCreateManyApplicationInputEnvelope
+  connect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+}
+
+export type CircleUpdateManyWithoutApplicationNestedInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutApplicationInput, Prisma.CircleUncheckedCreateWithoutApplicationInput> | Prisma.CircleCreateWithoutApplicationInput[] | Prisma.CircleUncheckedCreateWithoutApplicationInput[]
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutApplicationInput | Prisma.CircleCreateOrConnectWithoutApplicationInput[]
+  upsert?: Prisma.CircleUpsertWithWhereUniqueWithoutApplicationInput | Prisma.CircleUpsertWithWhereUniqueWithoutApplicationInput[]
+  createMany?: Prisma.CircleCreateManyApplicationInputEnvelope
+  set?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  disconnect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  delete?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  connect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  update?: Prisma.CircleUpdateWithWhereUniqueWithoutApplicationInput | Prisma.CircleUpdateWithWhereUniqueWithoutApplicationInput[]
+  updateMany?: Prisma.CircleUpdateManyWithWhereWithoutApplicationInput | Prisma.CircleUpdateManyWithWhereWithoutApplicationInput[]
+  deleteMany?: Prisma.CircleScalarWhereInput | Prisma.CircleScalarWhereInput[]
+}
+
+export type CircleUncheckedUpdateManyWithoutApplicationNestedInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutApplicationInput, Prisma.CircleUncheckedCreateWithoutApplicationInput> | Prisma.CircleCreateWithoutApplicationInput[] | Prisma.CircleUncheckedCreateWithoutApplicationInput[]
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutApplicationInput | Prisma.CircleCreateOrConnectWithoutApplicationInput[]
+  upsert?: Prisma.CircleUpsertWithWhereUniqueWithoutApplicationInput | Prisma.CircleUpsertWithWhereUniqueWithoutApplicationInput[]
+  createMany?: Prisma.CircleCreateManyApplicationInputEnvelope
+  set?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  disconnect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  delete?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  connect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  update?: Prisma.CircleUpdateWithWhereUniqueWithoutApplicationInput | Prisma.CircleUpdateWithWhereUniqueWithoutApplicationInput[]
+  updateMany?: Prisma.CircleUpdateManyWithWhereWithoutApplicationInput | Prisma.CircleUpdateManyWithWhereWithoutApplicationInput[]
+  deleteMany?: Prisma.CircleScalarWhereInput | Prisma.CircleScalarWhereInput[]
 }
 
 export type CircleCreateNestedManyWithoutOwnerInput = {
@@ -653,9 +800,73 @@ export type CircleUncheckedUpdateManyWithoutCircleTypeNestedInput = {
   deleteMany?: Prisma.CircleScalarWhereInput | Prisma.CircleScalarWhereInput[]
 }
 
+export type CircleCreateNestedOneWithoutChildrenInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutChildrenInput, Prisma.CircleUncheckedCreateWithoutChildrenInput>
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutChildrenInput
+  connect?: Prisma.CircleWhereUniqueInput
+}
+
+export type CircleCreateNestedManyWithoutParentInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutParentInput, Prisma.CircleUncheckedCreateWithoutParentInput> | Prisma.CircleCreateWithoutParentInput[] | Prisma.CircleUncheckedCreateWithoutParentInput[]
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutParentInput | Prisma.CircleCreateOrConnectWithoutParentInput[]
+  createMany?: Prisma.CircleCreateManyParentInputEnvelope
+  connect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+}
+
+export type CircleUncheckedCreateNestedManyWithoutParentInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutParentInput, Prisma.CircleUncheckedCreateWithoutParentInput> | Prisma.CircleCreateWithoutParentInput[] | Prisma.CircleUncheckedCreateWithoutParentInput[]
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutParentInput | Prisma.CircleCreateOrConnectWithoutParentInput[]
+  createMany?: Prisma.CircleCreateManyParentInputEnvelope
+  connect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+}
+
+export type CircleUpdateOneWithoutChildrenNestedInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutChildrenInput, Prisma.CircleUncheckedCreateWithoutChildrenInput>
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutChildrenInput
+  upsert?: Prisma.CircleUpsertWithoutChildrenInput
+  disconnect?: Prisma.CircleWhereInput | boolean
+  delete?: Prisma.CircleWhereInput | boolean
+  connect?: Prisma.CircleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CircleUpdateToOneWithWhereWithoutChildrenInput, Prisma.CircleUpdateWithoutChildrenInput>, Prisma.CircleUncheckedUpdateWithoutChildrenInput>
+}
+
+export type CircleUpdateManyWithoutParentNestedInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutParentInput, Prisma.CircleUncheckedCreateWithoutParentInput> | Prisma.CircleCreateWithoutParentInput[] | Prisma.CircleUncheckedCreateWithoutParentInput[]
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutParentInput | Prisma.CircleCreateOrConnectWithoutParentInput[]
+  upsert?: Prisma.CircleUpsertWithWhereUniqueWithoutParentInput | Prisma.CircleUpsertWithWhereUniqueWithoutParentInput[]
+  createMany?: Prisma.CircleCreateManyParentInputEnvelope
+  set?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  disconnect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  delete?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  connect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  update?: Prisma.CircleUpdateWithWhereUniqueWithoutParentInput | Prisma.CircleUpdateWithWhereUniqueWithoutParentInput[]
+  updateMany?: Prisma.CircleUpdateManyWithWhereWithoutParentInput | Prisma.CircleUpdateManyWithWhereWithoutParentInput[]
+  deleteMany?: Prisma.CircleScalarWhereInput | Prisma.CircleScalarWhereInput[]
+}
+
+export type CircleUncheckedUpdateManyWithoutParentNestedInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutParentInput, Prisma.CircleUncheckedCreateWithoutParentInput> | Prisma.CircleCreateWithoutParentInput[] | Prisma.CircleUncheckedCreateWithoutParentInput[]
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutParentInput | Prisma.CircleCreateOrConnectWithoutParentInput[]
+  upsert?: Prisma.CircleUpsertWithWhereUniqueWithoutParentInput | Prisma.CircleUpsertWithWhereUniqueWithoutParentInput[]
+  createMany?: Prisma.CircleCreateManyParentInputEnvelope
+  set?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  disconnect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  delete?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  connect?: Prisma.CircleWhereUniqueInput | Prisma.CircleWhereUniqueInput[]
+  update?: Prisma.CircleUpdateWithWhereUniqueWithoutParentInput | Prisma.CircleUpdateWithWhereUniqueWithoutParentInput[]
+  updateMany?: Prisma.CircleUpdateManyWithWhereWithoutParentInput | Prisma.CircleUpdateManyWithWhereWithoutParentInput[]
+  deleteMany?: Prisma.CircleScalarWhereInput | Prisma.CircleScalarWhereInput[]
+}
+
 export type CircleCreateNestedOneWithoutMembersInput = {
   create?: Prisma.XOR<Prisma.CircleCreateWithoutMembersInput, Prisma.CircleUncheckedCreateWithoutMembersInput>
   connectOrCreate?: Prisma.CircleCreateOrConnectWithoutMembersInput
+  connect?: Prisma.CircleWhereUniqueInput
+}
+
+export type CircleCreateNestedOneWithoutSourcedMembershipsInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutSourcedMembershipsInput, Prisma.CircleUncheckedCreateWithoutSourcedMembershipsInput>
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutSourcedMembershipsInput
   connect?: Prisma.CircleWhereUniqueInput
 }
 
@@ -665,6 +876,16 @@ export type CircleUpdateOneRequiredWithoutMembersNestedInput = {
   upsert?: Prisma.CircleUpsertWithoutMembersInput
   connect?: Prisma.CircleWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CircleUpdateToOneWithWhereWithoutMembersInput, Prisma.CircleUpdateWithoutMembersInput>, Prisma.CircleUncheckedUpdateWithoutMembersInput>
+}
+
+export type CircleUpdateOneWithoutSourcedMembershipsNestedInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutSourcedMembershipsInput, Prisma.CircleUncheckedCreateWithoutSourcedMembershipsInput>
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutSourcedMembershipsInput
+  upsert?: Prisma.CircleUpsertWithoutSourcedMembershipsInput
+  disconnect?: Prisma.CircleWhereInput | boolean
+  delete?: Prisma.CircleWhereInput | boolean
+  connect?: Prisma.CircleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CircleUpdateToOneWithWhereWithoutSourcedMembershipsInput, Prisma.CircleUpdateWithoutSourcedMembershipsInput>, Prisma.CircleUncheckedUpdateWithoutSourcedMembershipsInput>
 }
 
 export type CircleCreateNestedOneWithoutInvitationsInput = {
@@ -809,6 +1030,164 @@ export type CircleUpdateOneWithoutFileTagsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CircleUpdateToOneWithWhereWithoutFileTagsInput, Prisma.CircleUpdateWithoutFileTagsInput>, Prisma.CircleUncheckedUpdateWithoutFileTagsInput>
 }
 
+export type CircleCreateNestedOneWithoutOwnersInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutOwnersInput, Prisma.CircleUncheckedCreateWithoutOwnersInput>
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutOwnersInput
+  connect?: Prisma.CircleWhereUniqueInput
+}
+
+export type CircleUpdateOneRequiredWithoutOwnersNestedInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutOwnersInput, Prisma.CircleUncheckedCreateWithoutOwnersInput>
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutOwnersInput
+  upsert?: Prisma.CircleUpsertWithoutOwnersInput
+  connect?: Prisma.CircleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CircleUpdateToOneWithWhereWithoutOwnersInput, Prisma.CircleUpdateWithoutOwnersInput>, Prisma.CircleUncheckedUpdateWithoutOwnersInput>
+}
+
+export type CircleCreateNestedOneWithoutBillingAssigneesInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutBillingAssigneesInput, Prisma.CircleUncheckedCreateWithoutBillingAssigneesInput>
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutBillingAssigneesInput
+  connect?: Prisma.CircleWhereUniqueInput
+}
+
+export type CircleUpdateOneRequiredWithoutBillingAssigneesNestedInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutBillingAssigneesInput, Prisma.CircleUncheckedCreateWithoutBillingAssigneesInput>
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutBillingAssigneesInput
+  upsert?: Prisma.CircleUpsertWithoutBillingAssigneesInput
+  connect?: Prisma.CircleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CircleUpdateToOneWithWhereWithoutBillingAssigneesInput, Prisma.CircleUpdateWithoutBillingAssigneesInput>, Prisma.CircleUncheckedUpdateWithoutBillingAssigneesInput>
+}
+
+export type CircleCreateNestedOneWithoutSupportTicketsInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutSupportTicketsInput, Prisma.CircleUncheckedCreateWithoutSupportTicketsInput>
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutSupportTicketsInput
+  connect?: Prisma.CircleWhereUniqueInput
+}
+
+export type CircleUpdateOneWithoutSupportTicketsNestedInput = {
+  create?: Prisma.XOR<Prisma.CircleCreateWithoutSupportTicketsInput, Prisma.CircleUncheckedCreateWithoutSupportTicketsInput>
+  connectOrCreate?: Prisma.CircleCreateOrConnectWithoutSupportTicketsInput
+  upsert?: Prisma.CircleUpsertWithoutSupportTicketsInput
+  disconnect?: Prisma.CircleWhereInput | boolean
+  delete?: Prisma.CircleWhereInput | boolean
+  connect?: Prisma.CircleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CircleUpdateToOneWithWhereWithoutSupportTicketsInput, Prisma.CircleUpdateWithoutSupportTicketsInput>, Prisma.CircleUncheckedUpdateWithoutSupportTicketsInput>
+}
+
+export type CircleCreateWithoutApplicationInput = {
+  id?: string
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
+  circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutCircleInput
+}
+
+export type CircleUncheckedCreateWithoutApplicationInput = {
+  id?: string
+  ownerId: string
+  circleTypeId?: string | null
+  parentId?: string | null
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutCircleInput
+}
+
+export type CircleCreateOrConnectWithoutApplicationInput = {
+  where: Prisma.CircleWhereUniqueInput
+  create: Prisma.XOR<Prisma.CircleCreateWithoutApplicationInput, Prisma.CircleUncheckedCreateWithoutApplicationInput>
+}
+
+export type CircleCreateManyApplicationInputEnvelope = {
+  data: Prisma.CircleCreateManyApplicationInput | Prisma.CircleCreateManyApplicationInput[]
+  skipDuplicates?: boolean
+}
+
+export type CircleUpsertWithWhereUniqueWithoutApplicationInput = {
+  where: Prisma.CircleWhereUniqueInput
+  update: Prisma.XOR<Prisma.CircleUpdateWithoutApplicationInput, Prisma.CircleUncheckedUpdateWithoutApplicationInput>
+  create: Prisma.XOR<Prisma.CircleCreateWithoutApplicationInput, Prisma.CircleUncheckedCreateWithoutApplicationInput>
+}
+
+export type CircleUpdateWithWhereUniqueWithoutApplicationInput = {
+  where: Prisma.CircleWhereUniqueInput
+  data: Prisma.XOR<Prisma.CircleUpdateWithoutApplicationInput, Prisma.CircleUncheckedUpdateWithoutApplicationInput>
+}
+
+export type CircleUpdateManyWithWhereWithoutApplicationInput = {
+  where: Prisma.CircleScalarWhereInput
+  data: Prisma.XOR<Prisma.CircleUpdateManyMutationInput, Prisma.CircleUncheckedUpdateManyWithoutApplicationInput>
+}
+
+export type CircleScalarWhereInput = {
+  AND?: Prisma.CircleScalarWhereInput | Prisma.CircleScalarWhereInput[]
+  OR?: Prisma.CircleScalarWhereInput[]
+  NOT?: Prisma.CircleScalarWhereInput | Prisma.CircleScalarWhereInput[]
+  id?: Prisma.UuidFilter<"Circle"> | string
+  ownerId?: Prisma.UuidFilter<"Circle"> | string
+  circleTypeId?: Prisma.UuidNullableFilter<"Circle"> | string | null
+  applicationId?: Prisma.UuidNullableFilter<"Circle"> | string | null
+  parentId?: Prisma.UuidNullableFilter<"Circle"> | string | null
+  name?: Prisma.StringFilter<"Circle"> | string
+  description?: Prisma.StringNullableFilter<"Circle"> | string | null
+  avatarUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
+  coverUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
+  inviteCode?: Prisma.StringNullableFilter<"Circle"> | string | null
+  circleCode?: Prisma.StringNullableFilter<"Circle"> | string | null
+  pinCode?: Prisma.StringNullableFilter<"Circle"> | string | null
+  settings?: Prisma.JsonFilter<"Circle">
+  isActive?: Prisma.BoolFilter<"Circle"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Circle"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Circle"> | Date | string
+}
+
 export type CircleCreateWithoutOwnerInput = {
   id?: string
   name: string
@@ -816,13 +1195,21 @@ export type CircleCreateWithoutOwnerInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
@@ -837,17 +1224,25 @@ export type CircleCreateWithoutOwnerInput = {
 export type CircleUncheckedCreateWithoutOwnerInput = {
   id?: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
@@ -885,25 +1280,6 @@ export type CircleUpdateManyWithWhereWithoutOwnerInput = {
   data: Prisma.XOR<Prisma.CircleUpdateManyMutationInput, Prisma.CircleUncheckedUpdateManyWithoutOwnerInput>
 }
 
-export type CircleScalarWhereInput = {
-  AND?: Prisma.CircleScalarWhereInput | Prisma.CircleScalarWhereInput[]
-  OR?: Prisma.CircleScalarWhereInput[]
-  NOT?: Prisma.CircleScalarWhereInput | Prisma.CircleScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Circle"> | string
-  ownerId?: Prisma.UuidFilter<"Circle"> | string
-  circleTypeId?: Prisma.UuidNullableFilter<"Circle"> | string | null
-  name?: Prisma.StringFilter<"Circle"> | string
-  description?: Prisma.StringNullableFilter<"Circle"> | string | null
-  avatarUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
-  coverUrl?: Prisma.StringNullableFilter<"Circle"> | string | null
-  inviteCode?: Prisma.StringNullableFilter<"Circle"> | string | null
-  pinCode?: Prisma.StringNullableFilter<"Circle"> | string | null
-  settings?: Prisma.JsonFilter<"Circle">
-  isActive?: Prisma.BoolFilter<"Circle"> | boolean
-  createdAt?: Prisma.DateTimeFilter<"Circle"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Circle"> | Date | string
-}
-
 export type CircleCreateWithoutCircleTypeInput = {
   id?: string
   name: string
@@ -911,13 +1287,21 @@ export type CircleCreateWithoutCircleTypeInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
@@ -932,17 +1316,25 @@ export type CircleCreateWithoutCircleTypeInput = {
 export type CircleUncheckedCreateWithoutCircleTypeInput = {
   id?: string
   ownerId: string
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
@@ -980,13 +1372,14 @@ export type CircleUpdateManyWithWhereWithoutCircleTypeInput = {
   data: Prisma.XOR<Prisma.CircleUpdateManyMutationInput, Prisma.CircleUncheckedUpdateManyWithoutCircleTypeInput>
 }
 
-export type CircleCreateWithoutMembersInput = {
+export type CircleCreateWithoutChildrenInput = {
   id?: string
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -994,6 +1387,253 @@ export type CircleCreateWithoutMembersInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutCircleInput
+}
+
+export type CircleUncheckedCreateWithoutChildrenInput = {
+  id?: string
+  ownerId: string
+  circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutCircleInput
+}
+
+export type CircleCreateOrConnectWithoutChildrenInput = {
+  where: Prisma.CircleWhereUniqueInput
+  create: Prisma.XOR<Prisma.CircleCreateWithoutChildrenInput, Prisma.CircleUncheckedCreateWithoutChildrenInput>
+}
+
+export type CircleCreateWithoutParentInput = {
+  id?: string
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
+  circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutCircleInput
+}
+
+export type CircleUncheckedCreateWithoutParentInput = {
+  id?: string
+  ownerId: string
+  circleTypeId?: string | null
+  applicationId?: string | null
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutCircleInput
+}
+
+export type CircleCreateOrConnectWithoutParentInput = {
+  where: Prisma.CircleWhereUniqueInput
+  create: Prisma.XOR<Prisma.CircleCreateWithoutParentInput, Prisma.CircleUncheckedCreateWithoutParentInput>
+}
+
+export type CircleCreateManyParentInputEnvelope = {
+  data: Prisma.CircleCreateManyParentInput | Prisma.CircleCreateManyParentInput[]
+  skipDuplicates?: boolean
+}
+
+export type CircleUpsertWithoutChildrenInput = {
+  update: Prisma.XOR<Prisma.CircleUpdateWithoutChildrenInput, Prisma.CircleUncheckedUpdateWithoutChildrenInput>
+  create: Prisma.XOR<Prisma.CircleCreateWithoutChildrenInput, Prisma.CircleUncheckedCreateWithoutChildrenInput>
+  where?: Prisma.CircleWhereInput
+}
+
+export type CircleUpdateToOneWithWhereWithoutChildrenInput = {
+  where?: Prisma.CircleWhereInput
+  data: Prisma.XOR<Prisma.CircleUpdateWithoutChildrenInput, Prisma.CircleUncheckedUpdateWithoutChildrenInput>
+}
+
+export type CircleUpdateWithoutChildrenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
+  circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleUncheckedUpdateWithoutChildrenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleUpsertWithWhereUniqueWithoutParentInput = {
+  where: Prisma.CircleWhereUniqueInput
+  update: Prisma.XOR<Prisma.CircleUpdateWithoutParentInput, Prisma.CircleUncheckedUpdateWithoutParentInput>
+  create: Prisma.XOR<Prisma.CircleCreateWithoutParentInput, Prisma.CircleUncheckedCreateWithoutParentInput>
+}
+
+export type CircleUpdateWithWhereUniqueWithoutParentInput = {
+  where: Prisma.CircleWhereUniqueInput
+  data: Prisma.XOR<Prisma.CircleUpdateWithoutParentInput, Prisma.CircleUncheckedUpdateWithoutParentInput>
+}
+
+export type CircleUpdateManyWithWhereWithoutParentInput = {
+  where: Prisma.CircleScalarWhereInput
+  data: Prisma.XOR<Prisma.CircleUpdateManyMutationInput, Prisma.CircleUncheckedUpdateManyWithoutParentInput>
+}
+
+export type CircleCreateWithoutMembersInput = {
+  id?: string
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
+  circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
@@ -1009,16 +1649,24 @@ export type CircleUncheckedCreateWithoutMembersInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
@@ -1033,6 +1681,77 @@ export type CircleUncheckedCreateWithoutMembersInput = {
 export type CircleCreateOrConnectWithoutMembersInput = {
   where: Prisma.CircleWhereUniqueInput
   create: Prisma.XOR<Prisma.CircleCreateWithoutMembersInput, Prisma.CircleUncheckedCreateWithoutMembersInput>
+}
+
+export type CircleCreateWithoutSourcedMembershipsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
+  circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutCircleInput
+}
+
+export type CircleUncheckedCreateWithoutSourcedMembershipsInput = {
+  id?: string
+  ownerId: string
+  circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutCircleInput
+}
+
+export type CircleCreateOrConnectWithoutSourcedMembershipsInput = {
+  where: Prisma.CircleWhereUniqueInput
+  create: Prisma.XOR<Prisma.CircleCreateWithoutSourcedMembershipsInput, Prisma.CircleUncheckedCreateWithoutSourcedMembershipsInput>
 }
 
 export type CircleUpsertWithoutMembersInput = {
@@ -1053,6 +1772,7 @@ export type CircleUpdateWithoutMembersInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1060,6 +1780,13 @@ export type CircleUpdateWithoutMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
@@ -1075,16 +1802,101 @@ export type CircleUncheckedUpdateWithoutMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleUpsertWithoutSourcedMembershipsInput = {
+  update: Prisma.XOR<Prisma.CircleUpdateWithoutSourcedMembershipsInput, Prisma.CircleUncheckedUpdateWithoutSourcedMembershipsInput>
+  create: Prisma.XOR<Prisma.CircleCreateWithoutSourcedMembershipsInput, Prisma.CircleUncheckedCreateWithoutSourcedMembershipsInput>
+  where?: Prisma.CircleWhereInput
+}
+
+export type CircleUpdateToOneWithWhereWithoutSourcedMembershipsInput = {
+  where?: Prisma.CircleWhereInput
+  data: Prisma.XOR<Prisma.CircleUpdateWithoutSourcedMembershipsInput, Prisma.CircleUncheckedUpdateWithoutSourcedMembershipsInput>
+}
+
+export type CircleUpdateWithoutSourcedMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
+  circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleUncheckedUpdateWithoutSourcedMembershipsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
@@ -1103,6 +1915,7 @@ export type CircleCreateWithoutInvitationsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -1110,7 +1923,14 @@ export type CircleCreateWithoutInvitationsInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
@@ -1125,17 +1945,25 @@ export type CircleUncheckedCreateWithoutInvitationsInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
@@ -1169,6 +1997,7 @@ export type CircleUpdateWithoutInvitationsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1176,7 +2005,14 @@ export type CircleUpdateWithoutInvitationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
@@ -1191,17 +2027,25 @@ export type CircleUncheckedUpdateWithoutInvitationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
@@ -1219,6 +2063,7 @@ export type CircleCreateWithoutSafetyIncidentsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -1226,7 +2071,14 @@ export type CircleCreateWithoutSafetyIncidentsInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
   geofences?: Prisma.GeofenceCreateNestedManyWithoutCircleInput
@@ -1241,17 +2093,25 @@ export type CircleUncheckedCreateWithoutSafetyIncidentsInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
   geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutCircleInput
@@ -1285,6 +2145,7 @@ export type CircleUpdateWithoutSafetyIncidentsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1292,7 +2153,14 @@ export type CircleUpdateWithoutSafetyIncidentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
   geofences?: Prisma.GeofenceUpdateManyWithoutCircleNestedInput
@@ -1307,17 +2175,25 @@ export type CircleUncheckedUpdateWithoutSafetyIncidentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
   geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutCircleNestedInput
@@ -1335,6 +2211,7 @@ export type CircleCreateWithoutSocialPostsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -1342,7 +2219,14 @@ export type CircleCreateWithoutSocialPostsInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
   geofences?: Prisma.GeofenceCreateNestedManyWithoutCircleInput
@@ -1357,17 +2241,25 @@ export type CircleUncheckedCreateWithoutSocialPostsInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
   geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutCircleInput
@@ -1401,6 +2293,7 @@ export type CircleUpdateWithoutSocialPostsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1408,7 +2301,14 @@ export type CircleUpdateWithoutSocialPostsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
   geofences?: Prisma.GeofenceUpdateManyWithoutCircleNestedInput
@@ -1423,17 +2323,25 @@ export type CircleUncheckedUpdateWithoutSocialPostsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
   geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutCircleNestedInput
@@ -1451,6 +2359,7 @@ export type CircleCreateWithoutChatRoomsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -1458,7 +2367,14 @@ export type CircleCreateWithoutChatRoomsInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   geofences?: Prisma.GeofenceCreateNestedManyWithoutCircleInput
@@ -1473,17 +2389,25 @@ export type CircleUncheckedCreateWithoutChatRoomsInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutCircleInput
@@ -1517,6 +2441,7 @@ export type CircleUpdateWithoutChatRoomsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1524,7 +2449,14 @@ export type CircleUpdateWithoutChatRoomsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   geofences?: Prisma.GeofenceUpdateManyWithoutCircleNestedInput
@@ -1539,17 +2471,25 @@ export type CircleUncheckedUpdateWithoutChatRoomsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutCircleNestedInput
@@ -1567,6 +2507,7 @@ export type CircleCreateWithoutGeofencesInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -1574,7 +2515,14 @@ export type CircleCreateWithoutGeofencesInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
@@ -1589,17 +2537,25 @@ export type CircleUncheckedCreateWithoutGeofencesInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
@@ -1633,6 +2589,7 @@ export type CircleUpdateWithoutGeofencesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1640,7 +2597,14 @@ export type CircleUpdateWithoutGeofencesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
@@ -1655,17 +2619,25 @@ export type CircleUncheckedUpdateWithoutGeofencesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
@@ -1683,6 +2655,7 @@ export type CircleCreateWithoutLocationSharesInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -1690,7 +2663,14 @@ export type CircleCreateWithoutLocationSharesInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
@@ -1705,17 +2685,25 @@ export type CircleUncheckedCreateWithoutLocationSharesInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
@@ -1749,6 +2737,7 @@ export type CircleUpdateWithoutLocationSharesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1756,7 +2745,14 @@ export type CircleUpdateWithoutLocationSharesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
@@ -1771,17 +2767,25 @@ export type CircleUncheckedUpdateWithoutLocationSharesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
@@ -1799,6 +2803,7 @@ export type CircleCreateWithoutNotesInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -1806,7 +2811,14 @@ export type CircleCreateWithoutNotesInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
@@ -1821,17 +2833,25 @@ export type CircleUncheckedCreateWithoutNotesInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
@@ -1865,6 +2885,7 @@ export type CircleUpdateWithoutNotesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1872,7 +2893,14 @@ export type CircleUpdateWithoutNotesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
@@ -1887,17 +2915,25 @@ export type CircleUncheckedUpdateWithoutNotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
@@ -1915,6 +2951,7 @@ export type CircleCreateWithoutTodosInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -1922,7 +2959,14 @@ export type CircleCreateWithoutTodosInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
@@ -1937,17 +2981,25 @@ export type CircleUncheckedCreateWithoutTodosInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
@@ -1981,6 +3033,7 @@ export type CircleUpdateWithoutTodosInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1988,7 +3041,14 @@ export type CircleUpdateWithoutTodosInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
@@ -2003,17 +3063,25 @@ export type CircleUncheckedUpdateWithoutTodosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
@@ -2031,6 +3099,7 @@ export type CircleCreateWithoutFileTagsInput = {
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -2038,7 +3107,14 @@ export type CircleCreateWithoutFileTagsInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
   circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
@@ -2053,17 +3129,25 @@ export type CircleUncheckedCreateWithoutFileTagsInput = {
   id?: string
   ownerId: string
   circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
   members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
   socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
   chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
@@ -2097,6 +3181,7 @@ export type CircleUpdateWithoutFileTagsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2104,7 +3189,14 @@ export type CircleUpdateWithoutFileTagsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
@@ -2119,17 +3211,25 @@ export type CircleUncheckedUpdateWithoutFileTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
@@ -2140,14 +3240,563 @@ export type CircleUncheckedUpdateWithoutFileTagsInput = {
   invitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutCircleNestedInput
 }
 
-export type CircleCreateManyOwnerInput = {
+export type CircleCreateWithoutOwnersInput = {
   id?: string
-  circleTypeId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
+  circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutCircleInput
+}
+
+export type CircleUncheckedCreateWithoutOwnersInput = {
+  id?: string
+  ownerId: string
+  circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutCircleInput
+}
+
+export type CircleCreateOrConnectWithoutOwnersInput = {
+  where: Prisma.CircleWhereUniqueInput
+  create: Prisma.XOR<Prisma.CircleCreateWithoutOwnersInput, Prisma.CircleUncheckedCreateWithoutOwnersInput>
+}
+
+export type CircleUpsertWithoutOwnersInput = {
+  update: Prisma.XOR<Prisma.CircleUpdateWithoutOwnersInput, Prisma.CircleUncheckedUpdateWithoutOwnersInput>
+  create: Prisma.XOR<Prisma.CircleCreateWithoutOwnersInput, Prisma.CircleUncheckedCreateWithoutOwnersInput>
+  where?: Prisma.CircleWhereInput
+}
+
+export type CircleUpdateToOneWithWhereWithoutOwnersInput = {
+  where?: Prisma.CircleWhereInput
+  data: Prisma.XOR<Prisma.CircleUpdateWithoutOwnersInput, Prisma.CircleUncheckedUpdateWithoutOwnersInput>
+}
+
+export type CircleUpdateWithoutOwnersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
+  circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleUncheckedUpdateWithoutOwnersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleCreateWithoutBillingAssigneesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
+  circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutCircleInput
+}
+
+export type CircleUncheckedCreateWithoutBillingAssigneesInput = {
+  id?: string
+  ownerId: string
+  circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCircleInput
+  members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutCircleInput
+}
+
+export type CircleCreateOrConnectWithoutBillingAssigneesInput = {
+  where: Prisma.CircleWhereUniqueInput
+  create: Prisma.XOR<Prisma.CircleCreateWithoutBillingAssigneesInput, Prisma.CircleUncheckedCreateWithoutBillingAssigneesInput>
+}
+
+export type CircleUpsertWithoutBillingAssigneesInput = {
+  update: Prisma.XOR<Prisma.CircleUpdateWithoutBillingAssigneesInput, Prisma.CircleUncheckedUpdateWithoutBillingAssigneesInput>
+  create: Prisma.XOR<Prisma.CircleCreateWithoutBillingAssigneesInput, Prisma.CircleUncheckedCreateWithoutBillingAssigneesInput>
+  where?: Prisma.CircleWhereInput
+}
+
+export type CircleUpdateToOneWithWhereWithoutBillingAssigneesInput = {
+  where?: Prisma.CircleWhereInput
+  data: Prisma.XOR<Prisma.CircleUpdateWithoutBillingAssigneesInput, Prisma.CircleUncheckedUpdateWithoutBillingAssigneesInput>
+}
+
+export type CircleUpdateWithoutBillingAssigneesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
+  circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleUncheckedUpdateWithoutBillingAssigneesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleCreateWithoutSupportTicketsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCirclesInput
+  circleType?: Prisma.CircleTypeCreateNestedOneWithoutCirclesInput
+  application?: Prisma.ApplicationCreateNestedOneWithoutCirclesInput
+  parent?: Prisma.CircleCreateNestedOneWithoutChildrenInput
+  children?: Prisma.CircleCreateNestedManyWithoutParentInput
+  members?: Prisma.CircleMemberCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagCreateNestedManyWithoutCircleInput
+}
+
+export type CircleUncheckedCreateWithoutSupportTicketsInput = {
+  id?: string
+  ownerId: string
+  circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  children?: Prisma.CircleUncheckedCreateNestedManyWithoutParentInput
+  members?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutCircleInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedCreateNestedManyWithoutSourceCircleInput
+  owners?: Prisma.CircleOwnerUncheckedCreateNestedManyWithoutCircleInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedCreateNestedManyWithoutCircleInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedCreateNestedManyWithoutCircleInput
+  socialPosts?: Prisma.SocialPostUncheckedCreateNestedManyWithoutCircleInput
+  chatRooms?: Prisma.ChatRoomUncheckedCreateNestedManyWithoutCircleInput
+  geofences?: Prisma.GeofenceUncheckedCreateNestedManyWithoutCircleInput
+  locationShares?: Prisma.LocationShareUncheckedCreateNestedManyWithoutSharedWithCircleInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutCircleInput
+  todos?: Prisma.TodoUncheckedCreateNestedManyWithoutCircleInput
+  invitations?: Prisma.CircleInvitationUncheckedCreateNestedManyWithoutCircleInput
+  fileTags?: Prisma.FileTagUncheckedCreateNestedManyWithoutCircleInput
+}
+
+export type CircleCreateOrConnectWithoutSupportTicketsInput = {
+  where: Prisma.CircleWhereUniqueInput
+  create: Prisma.XOR<Prisma.CircleCreateWithoutSupportTicketsInput, Prisma.CircleUncheckedCreateWithoutSupportTicketsInput>
+}
+
+export type CircleUpsertWithoutSupportTicketsInput = {
+  update: Prisma.XOR<Prisma.CircleUpdateWithoutSupportTicketsInput, Prisma.CircleUncheckedUpdateWithoutSupportTicketsInput>
+  create: Prisma.XOR<Prisma.CircleCreateWithoutSupportTicketsInput, Prisma.CircleUncheckedCreateWithoutSupportTicketsInput>
+  where?: Prisma.CircleWhereInput
+}
+
+export type CircleUpdateToOneWithWhereWithoutSupportTicketsInput = {
+  where?: Prisma.CircleWhereInput
+  data: Prisma.XOR<Prisma.CircleUpdateWithoutSupportTicketsInput, Prisma.CircleUncheckedUpdateWithoutSupportTicketsInput>
+}
+
+export type CircleUpdateWithoutSupportTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
+  circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleUncheckedUpdateWithoutSupportTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleCreateManyApplicationInput = {
+  id?: string
+  ownerId: string
+  circleTypeId?: string | null
+  parentId?: string | null
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CircleUpdateWithoutApplicationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
+  circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleUncheckedUpdateWithoutApplicationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleUncheckedUpdateManyWithoutApplicationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CircleCreateManyOwnerInput = {
+  id?: string
+  circleTypeId?: string | null
+  applicationId?: string | null
+  parentId?: string | null
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -2162,13 +3811,21 @@ export type CircleUpdateWithoutOwnerInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
@@ -2183,17 +3840,25 @@ export type CircleUpdateWithoutOwnerInput = {
 export type CircleUncheckedUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
@@ -2208,11 +3873,14 @@ export type CircleUncheckedUpdateWithoutOwnerInput = {
 export type CircleUncheckedUpdateManyWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2223,11 +3891,14 @@ export type CircleUncheckedUpdateManyWithoutOwnerInput = {
 export type CircleCreateManyCircleTypeInput = {
   id?: string
   ownerId: string
+  applicationId?: string | null
+  parentId?: string | null
   name: string
   description?: string | null
   avatarUrl?: string | null
   coverUrl?: string | null
   inviteCode?: string | null
+  circleCode?: string | null
   pinCode?: string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: boolean
@@ -2242,13 +3913,21 @@ export type CircleUpdateWithoutCircleTypeInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  parent?: Prisma.CircleUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
@@ -2263,17 +3942,25 @@ export type CircleUpdateWithoutCircleTypeInput = {
 export type CircleUncheckedUpdateWithoutCircleTypeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
   members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
   safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
   socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
   chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
@@ -2288,11 +3975,116 @@ export type CircleUncheckedUpdateWithoutCircleTypeInput = {
 export type CircleUncheckedUpdateManyWithoutCircleTypeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CircleCreateManyParentInput = {
+  id?: string
+  ownerId: string
+  circleTypeId?: string | null
+  applicationId?: string | null
+  name: string
+  description?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  inviteCode?: string | null
+  circleCode?: string | null
+  pinCode?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CircleUpdateWithoutParentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCirclesNestedInput
+  circleType?: Prisma.CircleTypeUpdateOneWithoutCirclesNestedInput
+  application?: Prisma.ApplicationUpdateOneWithoutCirclesNestedInput
+  children?: Prisma.CircleUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleUncheckedUpdateWithoutParentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  children?: Prisma.CircleUncheckedUpdateManyWithoutParentNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCircleNestedInput
+  members?: Prisma.CircleMemberUncheckedUpdateManyWithoutCircleNestedInput
+  sourcedMemberships?: Prisma.CircleMemberUncheckedUpdateManyWithoutSourceCircleNestedInput
+  owners?: Prisma.CircleOwnerUncheckedUpdateManyWithoutCircleNestedInput
+  billingAssignees?: Prisma.CircleBillingAssignmentUncheckedUpdateManyWithoutCircleNestedInput
+  safetyIncidents?: Prisma.SafetyIncidentUncheckedUpdateManyWithoutCircleNestedInput
+  socialPosts?: Prisma.SocialPostUncheckedUpdateManyWithoutCircleNestedInput
+  chatRooms?: Prisma.ChatRoomUncheckedUpdateManyWithoutCircleNestedInput
+  geofences?: Prisma.GeofenceUncheckedUpdateManyWithoutCircleNestedInput
+  locationShares?: Prisma.LocationShareUncheckedUpdateManyWithoutSharedWithCircleNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutCircleNestedInput
+  todos?: Prisma.TodoUncheckedUpdateManyWithoutCircleNestedInput
+  invitations?: Prisma.CircleInvitationUncheckedUpdateManyWithoutCircleNestedInput
+  fileTags?: Prisma.FileTagUncheckedUpdateManyWithoutCircleNestedInput
+}
+
+export type CircleUncheckedUpdateManyWithoutParentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  circleTypeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  applicationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inviteCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  circleCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pinCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2306,7 +4098,12 @@ export type CircleUncheckedUpdateManyWithoutCircleTypeInput = {
  */
 
 export type CircleCountOutputType = {
+  children: number
+  supportTickets: number
   members: number
+  sourcedMemberships: number
+  owners: number
+  billingAssignees: number
   safetyIncidents: number
   socialPosts: number
   chatRooms: number
@@ -2319,7 +4116,12 @@ export type CircleCountOutputType = {
 }
 
 export type CircleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  children?: boolean | CircleCountOutputTypeCountChildrenArgs
+  supportTickets?: boolean | CircleCountOutputTypeCountSupportTicketsArgs
   members?: boolean | CircleCountOutputTypeCountMembersArgs
+  sourcedMemberships?: boolean | CircleCountOutputTypeCountSourcedMembershipsArgs
+  owners?: boolean | CircleCountOutputTypeCountOwnersArgs
+  billingAssignees?: boolean | CircleCountOutputTypeCountBillingAssigneesArgs
   safetyIncidents?: boolean | CircleCountOutputTypeCountSafetyIncidentsArgs
   socialPosts?: boolean | CircleCountOutputTypeCountSocialPostsArgs
   chatRooms?: boolean | CircleCountOutputTypeCountChatRoomsArgs
@@ -2344,8 +4146,43 @@ export type CircleCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
 /**
  * CircleCountOutputType without action
  */
+export type CircleCountOutputTypeCountChildrenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CircleWhereInput
+}
+
+/**
+ * CircleCountOutputType without action
+ */
+export type CircleCountOutputTypeCountSupportTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportTicketWhereInput
+}
+
+/**
+ * CircleCountOutputType without action
+ */
 export type CircleCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CircleMemberWhereInput
+}
+
+/**
+ * CircleCountOutputType without action
+ */
+export type CircleCountOutputTypeCountSourcedMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CircleMemberWhereInput
+}
+
+/**
+ * CircleCountOutputType without action
+ */
+export type CircleCountOutputTypeCountOwnersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CircleOwnerWhereInput
+}
+
+/**
+ * CircleCountOutputType without action
+ */
+export type CircleCountOutputTypeCountBillingAssigneesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CircleBillingAssignmentWhereInput
 }
 
 /**
@@ -2416,11 +4253,14 @@ export type CircleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   ownerId?: boolean
   circleTypeId?: boolean
+  applicationId?: boolean
+  parentId?: boolean
   name?: boolean
   description?: boolean
   avatarUrl?: boolean
   coverUrl?: boolean
   inviteCode?: boolean
+  circleCode?: boolean
   pinCode?: boolean
   settings?: boolean
   isActive?: boolean
@@ -2428,7 +4268,14 @@ export type CircleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   circleType?: boolean | Prisma.Circle$circleTypeArgs<ExtArgs>
+  application?: boolean | Prisma.Circle$applicationArgs<ExtArgs>
+  parent?: boolean | Prisma.Circle$parentArgs<ExtArgs>
+  children?: boolean | Prisma.Circle$childrenArgs<ExtArgs>
+  supportTickets?: boolean | Prisma.Circle$supportTicketsArgs<ExtArgs>
   members?: boolean | Prisma.Circle$membersArgs<ExtArgs>
+  sourcedMemberships?: boolean | Prisma.Circle$sourcedMembershipsArgs<ExtArgs>
+  owners?: boolean | Prisma.Circle$ownersArgs<ExtArgs>
+  billingAssignees?: boolean | Prisma.Circle$billingAssigneesArgs<ExtArgs>
   safetyIncidents?: boolean | Prisma.Circle$safetyIncidentsArgs<ExtArgs>
   socialPosts?: boolean | Prisma.Circle$socialPostsArgs<ExtArgs>
   chatRooms?: boolean | Prisma.Circle$chatRoomsArgs<ExtArgs>
@@ -2445,11 +4292,14 @@ export type CircleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   ownerId?: boolean
   circleTypeId?: boolean
+  applicationId?: boolean
+  parentId?: boolean
   name?: boolean
   description?: boolean
   avatarUrl?: boolean
   coverUrl?: boolean
   inviteCode?: boolean
+  circleCode?: boolean
   pinCode?: boolean
   settings?: boolean
   isActive?: boolean
@@ -2457,17 +4307,22 @@ export type CircleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   updatedAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   circleType?: boolean | Prisma.Circle$circleTypeArgs<ExtArgs>
+  application?: boolean | Prisma.Circle$applicationArgs<ExtArgs>
+  parent?: boolean | Prisma.Circle$parentArgs<ExtArgs>
 }, ExtArgs["result"]["circle"]>
 
 export type CircleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   ownerId?: boolean
   circleTypeId?: boolean
+  applicationId?: boolean
+  parentId?: boolean
   name?: boolean
   description?: boolean
   avatarUrl?: boolean
   coverUrl?: boolean
   inviteCode?: boolean
+  circleCode?: boolean
   pinCode?: boolean
   settings?: boolean
   isActive?: boolean
@@ -2475,17 +4330,22 @@ export type CircleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   updatedAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   circleType?: boolean | Prisma.Circle$circleTypeArgs<ExtArgs>
+  application?: boolean | Prisma.Circle$applicationArgs<ExtArgs>
+  parent?: boolean | Prisma.Circle$parentArgs<ExtArgs>
 }, ExtArgs["result"]["circle"]>
 
 export type CircleSelectScalar = {
   id?: boolean
   ownerId?: boolean
   circleTypeId?: boolean
+  applicationId?: boolean
+  parentId?: boolean
   name?: boolean
   description?: boolean
   avatarUrl?: boolean
   coverUrl?: boolean
   inviteCode?: boolean
+  circleCode?: boolean
   pinCode?: boolean
   settings?: boolean
   isActive?: boolean
@@ -2493,11 +4353,18 @@ export type CircleSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CircleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "circleTypeId" | "name" | "description" | "avatarUrl" | "coverUrl" | "inviteCode" | "pinCode" | "settings" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["circle"]>
+export type CircleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "circleTypeId" | "applicationId" | "parentId" | "name" | "description" | "avatarUrl" | "coverUrl" | "inviteCode" | "circleCode" | "pinCode" | "settings" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["circle"]>
 export type CircleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   circleType?: boolean | Prisma.Circle$circleTypeArgs<ExtArgs>
+  application?: boolean | Prisma.Circle$applicationArgs<ExtArgs>
+  parent?: boolean | Prisma.Circle$parentArgs<ExtArgs>
+  children?: boolean | Prisma.Circle$childrenArgs<ExtArgs>
+  supportTickets?: boolean | Prisma.Circle$supportTicketsArgs<ExtArgs>
   members?: boolean | Prisma.Circle$membersArgs<ExtArgs>
+  sourcedMemberships?: boolean | Prisma.Circle$sourcedMembershipsArgs<ExtArgs>
+  owners?: boolean | Prisma.Circle$ownersArgs<ExtArgs>
+  billingAssignees?: boolean | Prisma.Circle$billingAssigneesArgs<ExtArgs>
   safetyIncidents?: boolean | Prisma.Circle$safetyIncidentsArgs<ExtArgs>
   socialPosts?: boolean | Prisma.Circle$socialPostsArgs<ExtArgs>
   chatRooms?: boolean | Prisma.Circle$chatRoomsArgs<ExtArgs>
@@ -2512,10 +4379,14 @@ export type CircleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type CircleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   circleType?: boolean | Prisma.Circle$circleTypeArgs<ExtArgs>
+  application?: boolean | Prisma.Circle$applicationArgs<ExtArgs>
+  parent?: boolean | Prisma.Circle$parentArgs<ExtArgs>
 }
 export type CircleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   circleType?: boolean | Prisma.Circle$circleTypeArgs<ExtArgs>
+  application?: boolean | Prisma.Circle$applicationArgs<ExtArgs>
+  parent?: boolean | Prisma.Circle$parentArgs<ExtArgs>
 }
 
 export type $CirclePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2523,7 +4394,14 @@ export type $CirclePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     owner: Prisma.$UserPayload<ExtArgs>
     circleType: Prisma.$CircleTypePayload<ExtArgs> | null
+    application: Prisma.$ApplicationPayload<ExtArgs> | null
+    parent: Prisma.$CirclePayload<ExtArgs> | null
+    children: Prisma.$CirclePayload<ExtArgs>[]
+    supportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
     members: Prisma.$CircleMemberPayload<ExtArgs>[]
+    sourcedMemberships: Prisma.$CircleMemberPayload<ExtArgs>[]
+    owners: Prisma.$CircleOwnerPayload<ExtArgs>[]
+    billingAssignees: Prisma.$CircleBillingAssignmentPayload<ExtArgs>[]
     safetyIncidents: Prisma.$SafetyIncidentPayload<ExtArgs>[]
     socialPosts: Prisma.$SocialPostPayload<ExtArgs>[]
     chatRooms: Prisma.$ChatRoomPayload<ExtArgs>[]
@@ -2538,11 +4416,14 @@ export type $CirclePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     id: string
     ownerId: string
     circleTypeId: string | null
+    applicationId: string | null
+    parentId: string | null
     name: string
     description: string | null
     avatarUrl: string | null
     coverUrl: string | null
     inviteCode: string | null
+    circleCode: string | null
     pinCode: string | null
     settings: runtime.JsonValue
     isActive: boolean
@@ -2944,7 +4825,14 @@ export interface Prisma__CircleClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   circleType<T extends Prisma.Circle$circleTypeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$circleTypeArgs<ExtArgs>>): Prisma.Prisma__CircleTypeClient<runtime.Types.Result.GetResult<Prisma.$CircleTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  application<T extends Prisma.Circle$applicationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$applicationArgs<ExtArgs>>): Prisma.Prisma__ApplicationClient<runtime.Types.Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  parent<T extends Prisma.Circle$parentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$parentArgs<ExtArgs>>): Prisma.Prisma__CircleClient<runtime.Types.Result.GetResult<Prisma.$CirclePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  children<T extends Prisma.Circle$childrenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CirclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supportTickets<T extends Prisma.Circle$supportTicketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$supportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   members<T extends Prisma.Circle$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CircleMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sourcedMemberships<T extends Prisma.Circle$sourcedMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$sourcedMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CircleMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  owners<T extends Prisma.Circle$ownersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$ownersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CircleOwnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingAssignees<T extends Prisma.Circle$billingAssigneesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$billingAssigneesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CircleBillingAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   safetyIncidents<T extends Prisma.Circle$safetyIncidentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$safetyIncidentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SafetyIncidentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   socialPosts<T extends Prisma.Circle$socialPostsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$socialPostsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SocialPostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   chatRooms<T extends Prisma.Circle$chatRoomsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Circle$chatRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatRoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2986,11 +4874,14 @@ export interface CircleFieldRefs {
   readonly id: Prisma.FieldRef<"Circle", 'String'>
   readonly ownerId: Prisma.FieldRef<"Circle", 'String'>
   readonly circleTypeId: Prisma.FieldRef<"Circle", 'String'>
+  readonly applicationId: Prisma.FieldRef<"Circle", 'String'>
+  readonly parentId: Prisma.FieldRef<"Circle", 'String'>
   readonly name: Prisma.FieldRef<"Circle", 'String'>
   readonly description: Prisma.FieldRef<"Circle", 'String'>
   readonly avatarUrl: Prisma.FieldRef<"Circle", 'String'>
   readonly coverUrl: Prisma.FieldRef<"Circle", 'String'>
   readonly inviteCode: Prisma.FieldRef<"Circle", 'String'>
+  readonly circleCode: Prisma.FieldRef<"Circle", 'String'>
   readonly pinCode: Prisma.FieldRef<"Circle", 'String'>
   readonly settings: Prisma.FieldRef<"Circle", 'Json'>
   readonly isActive: Prisma.FieldRef<"Circle", 'Boolean'>
@@ -3411,6 +5302,92 @@ export type Circle$circleTypeArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * Circle.application
+ */
+export type Circle$applicationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Application
+   */
+  select?: Prisma.ApplicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Application
+   */
+  omit?: Prisma.ApplicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ApplicationInclude<ExtArgs> | null
+  where?: Prisma.ApplicationWhereInput
+}
+
+/**
+ * Circle.parent
+ */
+export type Circle$parentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Circle
+   */
+  select?: Prisma.CircleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Circle
+   */
+  omit?: Prisma.CircleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CircleInclude<ExtArgs> | null
+  where?: Prisma.CircleWhereInput
+}
+
+/**
+ * Circle.children
+ */
+export type Circle$childrenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Circle
+   */
+  select?: Prisma.CircleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Circle
+   */
+  omit?: Prisma.CircleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CircleInclude<ExtArgs> | null
+  where?: Prisma.CircleWhereInput
+  orderBy?: Prisma.CircleOrderByWithRelationInput | Prisma.CircleOrderByWithRelationInput[]
+  cursor?: Prisma.CircleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CircleScalarFieldEnum | Prisma.CircleScalarFieldEnum[]
+}
+
+/**
+ * Circle.supportTickets
+ */
+export type Circle$supportTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportTicket
+   */
+  select?: Prisma.SupportTicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportTicket
+   */
+  omit?: Prisma.SupportTicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportTicketInclude<ExtArgs> | null
+  where?: Prisma.SupportTicketWhereInput
+  orderBy?: Prisma.SupportTicketOrderByWithRelationInput | Prisma.SupportTicketOrderByWithRelationInput[]
+  cursor?: Prisma.SupportTicketWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportTicketScalarFieldEnum | Prisma.SupportTicketScalarFieldEnum[]
+}
+
+/**
  * Circle.members
  */
 export type Circle$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3432,6 +5409,78 @@ export type Circle$membersArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.CircleMemberScalarFieldEnum | Prisma.CircleMemberScalarFieldEnum[]
+}
+
+/**
+ * Circle.sourcedMemberships
+ */
+export type Circle$sourcedMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CircleMember
+   */
+  select?: Prisma.CircleMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CircleMember
+   */
+  omit?: Prisma.CircleMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CircleMemberInclude<ExtArgs> | null
+  where?: Prisma.CircleMemberWhereInput
+  orderBy?: Prisma.CircleMemberOrderByWithRelationInput | Prisma.CircleMemberOrderByWithRelationInput[]
+  cursor?: Prisma.CircleMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CircleMemberScalarFieldEnum | Prisma.CircleMemberScalarFieldEnum[]
+}
+
+/**
+ * Circle.owners
+ */
+export type Circle$ownersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CircleOwner
+   */
+  select?: Prisma.CircleOwnerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CircleOwner
+   */
+  omit?: Prisma.CircleOwnerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CircleOwnerInclude<ExtArgs> | null
+  where?: Prisma.CircleOwnerWhereInput
+  orderBy?: Prisma.CircleOwnerOrderByWithRelationInput | Prisma.CircleOwnerOrderByWithRelationInput[]
+  cursor?: Prisma.CircleOwnerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CircleOwnerScalarFieldEnum | Prisma.CircleOwnerScalarFieldEnum[]
+}
+
+/**
+ * Circle.billingAssignees
+ */
+export type Circle$billingAssigneesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CircleBillingAssignment
+   */
+  select?: Prisma.CircleBillingAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CircleBillingAssignment
+   */
+  omit?: Prisma.CircleBillingAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CircleBillingAssignmentInclude<ExtArgs> | null
+  where?: Prisma.CircleBillingAssignmentWhereInput
+  orderBy?: Prisma.CircleBillingAssignmentOrderByWithRelationInput | Prisma.CircleBillingAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.CircleBillingAssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CircleBillingAssignmentScalarFieldEnum | Prisma.CircleBillingAssignmentScalarFieldEnum[]
 }
 
 /**

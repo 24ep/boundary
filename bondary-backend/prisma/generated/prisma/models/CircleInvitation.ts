@@ -29,7 +29,8 @@ export type CircleInvitationMinAggregateOutputType = {
   circleId: string | null
   email: string | null
   invitedBy: string | null
-  message: string | null
+  isInherited: boolean | null
+  sourceCircleId: string | null
   status: string | null
   expiresAt: Date | null
   createdAt: Date | null
@@ -41,7 +42,8 @@ export type CircleInvitationMaxAggregateOutputType = {
   circleId: string | null
   email: string | null
   invitedBy: string | null
-  message: string | null
+  isInherited: boolean | null
+  sourceCircleId: string | null
   status: string | null
   expiresAt: Date | null
   createdAt: Date | null
@@ -53,7 +55,9 @@ export type CircleInvitationCountAggregateOutputType = {
   circleId: number
   email: number
   invitedBy: number
-  message: number
+  isInherited: number
+  sourceCircleId: number
+  settings: number
   status: number
   expiresAt: number
   createdAt: number
@@ -67,7 +71,8 @@ export type CircleInvitationMinAggregateInputType = {
   circleId?: true
   email?: true
   invitedBy?: true
-  message?: true
+  isInherited?: true
+  sourceCircleId?: true
   status?: true
   expiresAt?: true
   createdAt?: true
@@ -79,7 +84,8 @@ export type CircleInvitationMaxAggregateInputType = {
   circleId?: true
   email?: true
   invitedBy?: true
-  message?: true
+  isInherited?: true
+  sourceCircleId?: true
   status?: true
   expiresAt?: true
   createdAt?: true
@@ -91,7 +97,9 @@ export type CircleInvitationCountAggregateInputType = {
   circleId?: true
   email?: true
   invitedBy?: true
-  message?: true
+  isInherited?: true
+  sourceCircleId?: true
+  settings?: true
   status?: true
   expiresAt?: true
   createdAt?: true
@@ -176,7 +184,9 @@ export type CircleInvitationGroupByOutputType = {
   circleId: string
   email: string
   invitedBy: string | null
-  message: string | null
+  isInherited: boolean
+  sourceCircleId: string | null
+  settings: runtime.JsonValue
   status: string
   expiresAt: Date
   createdAt: Date
@@ -209,7 +219,9 @@ export type CircleInvitationWhereInput = {
   circleId?: Prisma.UuidFilter<"CircleInvitation"> | string
   email?: Prisma.StringFilter<"CircleInvitation"> | string
   invitedBy?: Prisma.UuidNullableFilter<"CircleInvitation"> | string | null
-  message?: Prisma.StringNullableFilter<"CircleInvitation"> | string | null
+  isInherited?: Prisma.BoolFilter<"CircleInvitation"> | boolean
+  sourceCircleId?: Prisma.UuidNullableFilter<"CircleInvitation"> | string | null
+  settings?: Prisma.JsonFilter<"CircleInvitation">
   status?: Prisma.StringFilter<"CircleInvitation"> | string
   expiresAt?: Prisma.DateTimeFilter<"CircleInvitation"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"CircleInvitation"> | Date | string
@@ -223,7 +235,9 @@ export type CircleInvitationOrderByWithRelationInput = {
   circleId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   invitedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  message?: Prisma.SortOrderInput | Prisma.SortOrder
+  isInherited?: Prisma.SortOrder
+  sourceCircleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  settings?: Prisma.SortOrder
   status?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -240,7 +254,9 @@ export type CircleInvitationWhereUniqueInput = Prisma.AtLeast<{
   circleId?: Prisma.UuidFilter<"CircleInvitation"> | string
   email?: Prisma.StringFilter<"CircleInvitation"> | string
   invitedBy?: Prisma.UuidNullableFilter<"CircleInvitation"> | string | null
-  message?: Prisma.StringNullableFilter<"CircleInvitation"> | string | null
+  isInherited?: Prisma.BoolFilter<"CircleInvitation"> | boolean
+  sourceCircleId?: Prisma.UuidNullableFilter<"CircleInvitation"> | string | null
+  settings?: Prisma.JsonFilter<"CircleInvitation">
   status?: Prisma.StringFilter<"CircleInvitation"> | string
   expiresAt?: Prisma.DateTimeFilter<"CircleInvitation"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"CircleInvitation"> | Date | string
@@ -254,7 +270,9 @@ export type CircleInvitationOrderByWithAggregationInput = {
   circleId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   invitedBy?: Prisma.SortOrderInput | Prisma.SortOrder
-  message?: Prisma.SortOrderInput | Prisma.SortOrder
+  isInherited?: Prisma.SortOrder
+  sourceCircleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  settings?: Prisma.SortOrder
   status?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -272,7 +290,9 @@ export type CircleInvitationScalarWhereWithAggregatesInput = {
   circleId?: Prisma.UuidWithAggregatesFilter<"CircleInvitation"> | string
   email?: Prisma.StringWithAggregatesFilter<"CircleInvitation"> | string
   invitedBy?: Prisma.UuidNullableWithAggregatesFilter<"CircleInvitation"> | string | null
-  message?: Prisma.StringNullableWithAggregatesFilter<"CircleInvitation"> | string | null
+  isInherited?: Prisma.BoolWithAggregatesFilter<"CircleInvitation"> | boolean
+  sourceCircleId?: Prisma.UuidNullableWithAggregatesFilter<"CircleInvitation"> | string | null
+  settings?: Prisma.JsonWithAggregatesFilter<"CircleInvitation">
   status?: Prisma.StringWithAggregatesFilter<"CircleInvitation"> | string
   expiresAt?: Prisma.DateTimeWithAggregatesFilter<"CircleInvitation"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CircleInvitation"> | Date | string
@@ -282,7 +302,9 @@ export type CircleInvitationScalarWhereWithAggregatesInput = {
 export type CircleInvitationCreateInput = {
   id?: string
   email: string
-  message?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -296,7 +318,9 @@ export type CircleInvitationUncheckedCreateInput = {
   circleId: string
   email: string
   invitedBy?: string | null
-  message?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -306,7 +330,9 @@ export type CircleInvitationUncheckedCreateInput = {
 export type CircleInvitationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -320,7 +346,9 @@ export type CircleInvitationUncheckedUpdateInput = {
   circleId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -332,7 +360,9 @@ export type CircleInvitationCreateManyInput = {
   circleId: string
   email: string
   invitedBy?: string | null
-  message?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -342,7 +372,9 @@ export type CircleInvitationCreateManyInput = {
 export type CircleInvitationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -354,7 +386,9 @@ export type CircleInvitationUncheckedUpdateManyInput = {
   circleId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -376,7 +410,9 @@ export type CircleInvitationCountOrderByAggregateInput = {
   circleId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   invitedBy?: Prisma.SortOrder
-  message?: Prisma.SortOrder
+  isInherited?: Prisma.SortOrder
+  sourceCircleId?: Prisma.SortOrder
+  settings?: Prisma.SortOrder
   status?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -388,7 +424,8 @@ export type CircleInvitationMaxOrderByAggregateInput = {
   circleId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   invitedBy?: Prisma.SortOrder
-  message?: Prisma.SortOrder
+  isInherited?: Prisma.SortOrder
+  sourceCircleId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -400,7 +437,8 @@ export type CircleInvitationMinOrderByAggregateInput = {
   circleId?: Prisma.SortOrder
   email?: Prisma.SortOrder
   invitedBy?: Prisma.SortOrder
-  message?: Prisma.SortOrder
+  isInherited?: Prisma.SortOrder
+  sourceCircleId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -494,7 +532,9 @@ export type CircleInvitationUncheckedUpdateManyWithoutCircleNestedInput = {
 export type CircleInvitationCreateWithoutInviterInput = {
   id?: string
   email: string
-  message?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -506,7 +546,9 @@ export type CircleInvitationUncheckedCreateWithoutInviterInput = {
   id?: string
   circleId: string
   email: string
-  message?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -547,7 +589,9 @@ export type CircleInvitationScalarWhereInput = {
   circleId?: Prisma.UuidFilter<"CircleInvitation"> | string
   email?: Prisma.StringFilter<"CircleInvitation"> | string
   invitedBy?: Prisma.UuidNullableFilter<"CircleInvitation"> | string | null
-  message?: Prisma.StringNullableFilter<"CircleInvitation"> | string | null
+  isInherited?: Prisma.BoolFilter<"CircleInvitation"> | boolean
+  sourceCircleId?: Prisma.UuidNullableFilter<"CircleInvitation"> | string | null
+  settings?: Prisma.JsonFilter<"CircleInvitation">
   status?: Prisma.StringFilter<"CircleInvitation"> | string
   expiresAt?: Prisma.DateTimeFilter<"CircleInvitation"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"CircleInvitation"> | Date | string
@@ -557,7 +601,9 @@ export type CircleInvitationScalarWhereInput = {
 export type CircleInvitationCreateWithoutCircleInput = {
   id?: string
   email: string
-  message?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -569,7 +615,9 @@ export type CircleInvitationUncheckedCreateWithoutCircleInput = {
   id?: string
   email: string
   invitedBy?: string | null
-  message?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -606,7 +654,9 @@ export type CircleInvitationCreateManyInviterInput = {
   id?: string
   circleId: string
   email: string
-  message?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -616,7 +666,9 @@ export type CircleInvitationCreateManyInviterInput = {
 export type CircleInvitationUpdateWithoutInviterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -628,7 +680,9 @@ export type CircleInvitationUncheckedUpdateWithoutInviterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   circleId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -639,7 +693,9 @@ export type CircleInvitationUncheckedUpdateManyWithoutInviterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   circleId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -650,7 +706,9 @@ export type CircleInvitationCreateManyCircleInput = {
   id?: string
   email: string
   invitedBy?: string | null
-  message?: string | null
+  isInherited?: boolean
+  sourceCircleId?: string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: string
   expiresAt: Date | string
   createdAt?: Date | string
@@ -660,7 +718,9 @@ export type CircleInvitationCreateManyCircleInput = {
 export type CircleInvitationUpdateWithoutCircleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -672,7 +732,9 @@ export type CircleInvitationUncheckedUpdateWithoutCircleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -683,7 +745,9 @@ export type CircleInvitationUncheckedUpdateManyWithoutCircleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   invitedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isInherited?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sourceCircleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   status?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -697,7 +761,9 @@ export type CircleInvitationSelect<ExtArgs extends runtime.Types.Extensions.Inte
   circleId?: boolean
   email?: boolean
   invitedBy?: boolean
-  message?: boolean
+  isInherited?: boolean
+  sourceCircleId?: boolean
+  settings?: boolean
   status?: boolean
   expiresAt?: boolean
   createdAt?: boolean
@@ -711,7 +777,9 @@ export type CircleInvitationSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   circleId?: boolean
   email?: boolean
   invitedBy?: boolean
-  message?: boolean
+  isInherited?: boolean
+  sourceCircleId?: boolean
+  settings?: boolean
   status?: boolean
   expiresAt?: boolean
   createdAt?: boolean
@@ -725,7 +793,9 @@ export type CircleInvitationSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   circleId?: boolean
   email?: boolean
   invitedBy?: boolean
-  message?: boolean
+  isInherited?: boolean
+  sourceCircleId?: boolean
+  settings?: boolean
   status?: boolean
   expiresAt?: boolean
   createdAt?: boolean
@@ -739,14 +809,16 @@ export type CircleInvitationSelectScalar = {
   circleId?: boolean
   email?: boolean
   invitedBy?: boolean
-  message?: boolean
+  isInherited?: boolean
+  sourceCircleId?: boolean
+  settings?: boolean
   status?: boolean
   expiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CircleInvitationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "circleId" | "email" | "invitedBy" | "message" | "status" | "expiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["circleInvitation"]>
+export type CircleInvitationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "circleId" | "email" | "invitedBy" | "isInherited" | "sourceCircleId" | "settings" | "status" | "expiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["circleInvitation"]>
 export type CircleInvitationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   circle?: boolean | Prisma.CircleDefaultArgs<ExtArgs>
   inviter?: boolean | Prisma.CircleInvitation$inviterArgs<ExtArgs>
@@ -771,7 +843,9 @@ export type $CircleInvitationPayload<ExtArgs extends runtime.Types.Extensions.In
     circleId: string
     email: string
     invitedBy: string | null
-    message: string | null
+    isInherited: boolean
+    sourceCircleId: string | null
+    settings: runtime.JsonValue
     status: string
     expiresAt: Date
     createdAt: Date
@@ -1205,7 +1279,9 @@ export interface CircleInvitationFieldRefs {
   readonly circleId: Prisma.FieldRef<"CircleInvitation", 'String'>
   readonly email: Prisma.FieldRef<"CircleInvitation", 'String'>
   readonly invitedBy: Prisma.FieldRef<"CircleInvitation", 'String'>
-  readonly message: Prisma.FieldRef<"CircleInvitation", 'String'>
+  readonly isInherited: Prisma.FieldRef<"CircleInvitation", 'Boolean'>
+  readonly sourceCircleId: Prisma.FieldRef<"CircleInvitation", 'String'>
+  readonly settings: Prisma.FieldRef<"CircleInvitation", 'Json'>
   readonly status: Prisma.FieldRef<"CircleInvitation", 'String'>
   readonly expiresAt: Prisma.FieldRef<"CircleInvitation", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"CircleInvitation", 'DateTime'>

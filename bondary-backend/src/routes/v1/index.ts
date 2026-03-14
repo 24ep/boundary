@@ -5,7 +5,7 @@ import { prisma } from '../../lib/prisma';
 import oauthRoutes from '../oauth';
 
 // Mobile Routes
-import authRoutes from '../mobile/auth';
+// Mobile Routes
 import userRoutes from '../mobile/users';
 import circleRoutes from '../mobile/circles';
 import chatRoutes from '../mobile/chat';
@@ -66,7 +66,7 @@ router.use('/oauth', oauthRoutes);
 router.use('/.well-known', oauthRoutes);
 
 // Mobile / Core routes
-router.use('/auth', authRoutes);
+// Mobile / Core routes
 router.use('/mobile-auth', mobileAuthRoutes); // Mobile app authentication
 router.use('/users', userRoutes);
 router.use('/circles', circleRoutes);

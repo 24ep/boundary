@@ -1,12 +1,18 @@
-﻿import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserModel } from '../models/UserModel';
 import { prisma } from '../lib/prisma';
 import { config } from '../config/env';
 import { tokenBlacklistService } from '../services/tokenBlacklistService';
+import { AppKit, AppKitUser } from '@alphayard/appkit';
+
+// Initialize AppKit SDK
+const appkit = new AppKit({
+  baseURL: config.APPKIT_URL || 'http://localhost:3002',
+  apiKey: process.env.INTERNAL_API_KEY
+});
 
 export interface AuthenticatedRequest extends Request {
-  user: {
+  user: AppKitUser & {
     id: string;
     email: string;
     role?: string;
@@ -111,9 +117,15 @@ export const authenticateToken = async (
       return next();
     }
 
-    // Check if user still exists and is active
-    console.log('[AUTH] Looking up user by ID:', decoded.id);
-    const user = await UserModel.findById(decoded.id);
+    // Check if user still exists and is active using AppKit SDK
+    console.log('[AUTH] Looking up user by ID using AppKit:', decoded.id);
+    let user: AppKitUser | null = null;
+    try {
+      user = await appkit.identity.getUserById(decoded.id);
+    } catch (error) {
+      log(`User lookup error: ${error}`);
+    }
+    
     console.log('[AUTH] User found:', user ? { id: user.id, email: user.email, isActive: user.isActive } : 'NOT FOUND');
 
     if (!user) {
@@ -124,7 +136,7 @@ export const authenticateToken = async (
       });
     }
 
-    if (!user.isActive) {
+    if (user.isActive === false) {
       log(`User inactive: ${user.email}`);
       return res.status(401).json({
         error: 'Access denied',
@@ -132,11 +144,30 @@ export const authenticateToken = async (
       });
     }
 
+    // SESSION VERIFICATION: Check for active session in AppKit
+    // (This ensures revocation works immediately across the platform)
+    try {
+      const sessions = await appkit.identity.getSessions();
+      const currentToken = authHeader?.split(' ')[1];
+      const hasActiveSession = sessions.some(s => s.sessionToken === currentToken && s.isActive);
+      
+      if (!hasActiveSession && process.env.STRICT_SESSION_CHECK === 'true') {
+        log('Session is no longer active in AppKit');
+        return res.status(401).json({
+          error: 'Access denied',
+          message: 'Session has been revoked or expired'
+        });
+      }
+    } catch (e) {
+      console.warn('[AUTH] Session verification failed, allowing by token:', e);
+    }
+
     // Add user info to request
     req.user = {
+      ...user,
       id: user.id,
       email: user.email,
-      role: (user as any).role
+      role: (user as any).role || 'user'
     } as any;
     
     try {

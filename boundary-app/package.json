@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@egjs/hammerjs": "^2.0.17",
-    "alphayard-appkit": "^1.0.3",
+    "@alphayard/appkit": "file:../packages/appkit",
     "@expo-google-fonts/dm-sans": "^0.4.2",
     "@expo-google-fonts/ibm-plex-sans-thai": "^0.4.1",
     "@expo-google-fonts/inter": "^0.4.2",

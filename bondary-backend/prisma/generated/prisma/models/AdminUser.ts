@@ -254,6 +254,9 @@ export type AdminUserWhereInput = {
   group?: Prisma.XOR<Prisma.AdminGroupNullableScalarRelationFilter, Prisma.AdminGroupWhereInput> | null
   adminUserApplications?: Prisma.AdminUserApplicationListRelationFilter
   adminActivityLogs?: Prisma.AdminActivityLogListRelationFilter
+  assignedTickets?: Prisma.SupportTicketListRelationFilter
+  userComments?: Prisma.UserCommentListRelationFilter
+  userReminders?: Prisma.UserReminderListRelationFilter
 }
 
 export type AdminUserOrderByWithRelationInput = {
@@ -275,6 +278,9 @@ export type AdminUserOrderByWithRelationInput = {
   group?: Prisma.AdminGroupOrderByWithRelationInput
   adminUserApplications?: Prisma.AdminUserApplicationOrderByRelationAggregateInput
   adminActivityLogs?: Prisma.AdminActivityLogOrderByRelationAggregateInput
+  assignedTickets?: Prisma.SupportTicketOrderByRelationAggregateInput
+  userComments?: Prisma.UserCommentOrderByRelationAggregateInput
+  userReminders?: Prisma.UserReminderOrderByRelationAggregateInput
 }
 
 export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
@@ -299,6 +305,9 @@ export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
   group?: Prisma.XOR<Prisma.AdminGroupNullableScalarRelationFilter, Prisma.AdminGroupWhereInput> | null
   adminUserApplications?: Prisma.AdminUserApplicationListRelationFilter
   adminActivityLogs?: Prisma.AdminActivityLogListRelationFilter
+  assignedTickets?: Prisma.SupportTicketListRelationFilter
+  userComments?: Prisma.UserCommentListRelationFilter
+  userReminders?: Prisma.UserReminderListRelationFilter
 }, "id" | "email">
 
 export type AdminUserOrderByWithAggregationInput = {
@@ -358,6 +367,9 @@ export type AdminUserCreateInput = {
   group?: Prisma.AdminGroupCreateNestedOneWithoutAdminUsersInput
   adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutAdminUserInput
   adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserUncheckedCreateInput = {
@@ -377,6 +389,9 @@ export type AdminUserUncheckedCreateInput = {
   updatedAt?: Date | string
   adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutAdminUserInput
   adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserUpdateInput = {
@@ -396,6 +411,9 @@ export type AdminUserUpdateInput = {
   group?: Prisma.AdminGroupUpdateOneWithoutAdminUsersNestedInput
   adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutAdminUserNestedInput
   adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserUncheckedUpdateInput = {
@@ -415,6 +433,9 @@ export type AdminUserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutAdminUserNestedInput
   adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserCreateManyInput = {
@@ -658,6 +679,54 @@ export type AdminUserUpdateOneWithoutAdminActivityLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutAdminActivityLogsInput, Prisma.AdminUserUpdateWithoutAdminActivityLogsInput>, Prisma.AdminUserUncheckedUpdateWithoutAdminActivityLogsInput>
 }
 
+export type AdminUserCreateNestedOneWithoutAssignedTicketsInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutAssignedTicketsInput, Prisma.AdminUserUncheckedCreateWithoutAssignedTicketsInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutAssignedTicketsInput
+  connect?: Prisma.AdminUserWhereUniqueInput
+}
+
+export type AdminUserUpdateOneWithoutAssignedTicketsNestedInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutAssignedTicketsInput, Prisma.AdminUserUncheckedCreateWithoutAssignedTicketsInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutAssignedTicketsInput
+  upsert?: Prisma.AdminUserUpsertWithoutAssignedTicketsInput
+  disconnect?: Prisma.AdminUserWhereInput | boolean
+  delete?: Prisma.AdminUserWhereInput | boolean
+  connect?: Prisma.AdminUserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutAssignedTicketsInput, Prisma.AdminUserUpdateWithoutAssignedTicketsInput>, Prisma.AdminUserUncheckedUpdateWithoutAssignedTicketsInput>
+}
+
+export type AdminUserCreateNestedOneWithoutUserCommentsInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutUserCommentsInput, Prisma.AdminUserUncheckedCreateWithoutUserCommentsInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutUserCommentsInput
+  connect?: Prisma.AdminUserWhereUniqueInput
+}
+
+export type AdminUserUpdateOneWithoutUserCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutUserCommentsInput, Prisma.AdminUserUncheckedCreateWithoutUserCommentsInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutUserCommentsInput
+  upsert?: Prisma.AdminUserUpsertWithoutUserCommentsInput
+  disconnect?: Prisma.AdminUserWhereInput | boolean
+  delete?: Prisma.AdminUserWhereInput | boolean
+  connect?: Prisma.AdminUserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutUserCommentsInput, Prisma.AdminUserUpdateWithoutUserCommentsInput>, Prisma.AdminUserUncheckedUpdateWithoutUserCommentsInput>
+}
+
+export type AdminUserCreateNestedOneWithoutUserRemindersInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutUserRemindersInput, Prisma.AdminUserUncheckedCreateWithoutUserRemindersInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutUserRemindersInput
+  connect?: Prisma.AdminUserWhereUniqueInput
+}
+
+export type AdminUserUpdateOneWithoutUserRemindersNestedInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutUserRemindersInput, Prisma.AdminUserUncheckedCreateWithoutUserRemindersInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutUserRemindersInput
+  upsert?: Prisma.AdminUserUpsertWithoutUserRemindersInput
+  disconnect?: Prisma.AdminUserWhereInput | boolean
+  delete?: Prisma.AdminUserWhereInput | boolean
+  connect?: Prisma.AdminUserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutUserRemindersInput, Prisma.AdminUserUpdateWithoutUserRemindersInput>, Prisma.AdminUserUncheckedUpdateWithoutUserRemindersInput>
+}
+
 export type AdminUserCreateWithoutGroupInput = {
   id?: string
   email: string
@@ -674,6 +743,9 @@ export type AdminUserCreateWithoutGroupInput = {
   role?: Prisma.AdminRoleCreateNestedOneWithoutAdminUsersInput
   adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutAdminUserInput
   adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserUncheckedCreateWithoutGroupInput = {
@@ -692,6 +764,9 @@ export type AdminUserUncheckedCreateWithoutGroupInput = {
   updatedAt?: Date | string
   adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutAdminUserInput
   adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserCreateOrConnectWithoutGroupInput = {
@@ -756,6 +831,9 @@ export type AdminUserCreateWithoutRoleInput = {
   group?: Prisma.AdminGroupCreateNestedOneWithoutAdminUsersInput
   adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutAdminUserInput
   adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserUncheckedCreateWithoutRoleInput = {
@@ -774,6 +852,9 @@ export type AdminUserUncheckedCreateWithoutRoleInput = {
   updatedAt?: Date | string
   adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutAdminUserInput
   adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserCreateOrConnectWithoutRoleInput = {
@@ -818,6 +899,9 @@ export type AdminUserCreateWithoutAdminUserApplicationsInput = {
   role?: Prisma.AdminRoleCreateNestedOneWithoutAdminUsersInput
   group?: Prisma.AdminGroupCreateNestedOneWithoutAdminUsersInput
   adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserUncheckedCreateWithoutAdminUserApplicationsInput = {
@@ -836,6 +920,9 @@ export type AdminUserUncheckedCreateWithoutAdminUserApplicationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserCreateOrConnectWithoutAdminUserApplicationsInput = {
@@ -870,6 +957,9 @@ export type AdminUserUpdateWithoutAdminUserApplicationsInput = {
   role?: Prisma.AdminRoleUpdateOneWithoutAdminUsersNestedInput
   group?: Prisma.AdminGroupUpdateOneWithoutAdminUsersNestedInput
   adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutAdminUserApplicationsInput = {
@@ -888,6 +978,9 @@ export type AdminUserUncheckedUpdateWithoutAdminUserApplicationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserCreateWithoutAdminActivityLogsInput = {
@@ -906,6 +999,9 @@ export type AdminUserCreateWithoutAdminActivityLogsInput = {
   role?: Prisma.AdminRoleCreateNestedOneWithoutAdminUsersInput
   group?: Prisma.AdminGroupCreateNestedOneWithoutAdminUsersInput
   adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserUncheckedCreateWithoutAdminActivityLogsInput = {
@@ -924,6 +1020,9 @@ export type AdminUserUncheckedCreateWithoutAdminActivityLogsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type AdminUserCreateOrConnectWithoutAdminActivityLogsInput = {
@@ -958,6 +1057,9 @@ export type AdminUserUpdateWithoutAdminActivityLogsInput = {
   role?: Prisma.AdminRoleUpdateOneWithoutAdminUsersNestedInput
   group?: Prisma.AdminGroupUpdateOneWithoutAdminUsersNestedInput
   adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutAdminActivityLogsInput = {
@@ -976,6 +1078,309 @@ export type AdminUserUncheckedUpdateWithoutAdminActivityLogsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type AdminUserCreateWithoutAssignedTicketsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  avatarUrl?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
+  isSuperAdmin?: boolean
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: Prisma.AdminRoleCreateNestedOneWithoutAdminUsersInput
+  group?: Prisma.AdminGroupCreateNestedOneWithoutAdminUsersInput
+  adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutAdminUserInput
+  adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutAdminUserInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutAuthorInput
+}
+
+export type AdminUserUncheckedCreateWithoutAssignedTicketsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  avatarUrl?: string | null
+  roleId?: string | null
+  groupId?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
+  isSuperAdmin?: boolean
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutAdminUserInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutAdminUserInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutAuthorInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type AdminUserCreateOrConnectWithoutAssignedTicketsInput = {
+  where: Prisma.AdminUserWhereUniqueInput
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutAssignedTicketsInput, Prisma.AdminUserUncheckedCreateWithoutAssignedTicketsInput>
+}
+
+export type AdminUserUpsertWithoutAssignedTicketsInput = {
+  update: Prisma.XOR<Prisma.AdminUserUpdateWithoutAssignedTicketsInput, Prisma.AdminUserUncheckedUpdateWithoutAssignedTicketsInput>
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutAssignedTicketsInput, Prisma.AdminUserUncheckedCreateWithoutAssignedTicketsInput>
+  where?: Prisma.AdminUserWhereInput
+}
+
+export type AdminUserUpdateToOneWithWhereWithoutAssignedTicketsInput = {
+  where?: Prisma.AdminUserWhereInput
+  data: Prisma.XOR<Prisma.AdminUserUpdateWithoutAssignedTicketsInput, Prisma.AdminUserUncheckedUpdateWithoutAssignedTicketsInput>
+}
+
+export type AdminUserUpdateWithoutAssignedTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.AdminRoleUpdateOneWithoutAdminUsersNestedInput
+  group?: Prisma.AdminGroupUpdateOneWithoutAdminUsersNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutAdminUserNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutAdminUserNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutAuthorNestedInput
+}
+
+export type AdminUserUncheckedUpdateWithoutAssignedTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutAdminUserNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutAdminUserNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type AdminUserCreateWithoutUserCommentsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  avatarUrl?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
+  isSuperAdmin?: boolean
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: Prisma.AdminRoleCreateNestedOneWithoutAdminUsersInput
+  group?: Prisma.AdminGroupCreateNestedOneWithoutAdminUsersInput
+  adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutAdminUserInput
+  adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedInput
+  userReminders?: Prisma.UserReminderCreateNestedManyWithoutAuthorInput
+}
+
+export type AdminUserUncheckedCreateWithoutUserCommentsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  avatarUrl?: string | null
+  roleId?: string | null
+  groupId?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
+  isSuperAdmin?: boolean
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutAdminUserInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedInput
+  userReminders?: Prisma.UserReminderUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type AdminUserCreateOrConnectWithoutUserCommentsInput = {
+  where: Prisma.AdminUserWhereUniqueInput
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutUserCommentsInput, Prisma.AdminUserUncheckedCreateWithoutUserCommentsInput>
+}
+
+export type AdminUserUpsertWithoutUserCommentsInput = {
+  update: Prisma.XOR<Prisma.AdminUserUpdateWithoutUserCommentsInput, Prisma.AdminUserUncheckedUpdateWithoutUserCommentsInput>
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutUserCommentsInput, Prisma.AdminUserUncheckedCreateWithoutUserCommentsInput>
+  where?: Prisma.AdminUserWhereInput
+}
+
+export type AdminUserUpdateToOneWithWhereWithoutUserCommentsInput = {
+  where?: Prisma.AdminUserWhereInput
+  data: Prisma.XOR<Prisma.AdminUserUpdateWithoutUserCommentsInput, Prisma.AdminUserUncheckedUpdateWithoutUserCommentsInput>
+}
+
+export type AdminUserUpdateWithoutUserCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.AdminRoleUpdateOneWithoutAdminUsersNestedInput
+  group?: Prisma.AdminGroupUpdateOneWithoutAdminUsersNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutAdminUserNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutAuthorNestedInput
+}
+
+export type AdminUserUncheckedUpdateWithoutUserCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutAdminUserNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type AdminUserCreateWithoutUserRemindersInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  avatarUrl?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
+  isSuperAdmin?: boolean
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: Prisma.AdminRoleCreateNestedOneWithoutAdminUsersInput
+  group?: Prisma.AdminGroupCreateNestedOneWithoutAdminUsersInput
+  adminUserApplications?: Prisma.AdminUserApplicationCreateNestedManyWithoutAdminUserInput
+  adminActivityLogs?: Prisma.AdminActivityLogCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentCreateNestedManyWithoutAuthorInput
+}
+
+export type AdminUserUncheckedCreateWithoutUserRemindersInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  avatarUrl?: string | null
+  roleId?: string | null
+  groupId?: string | null
+  loginMethods?: Prisma.AdminUserCreateloginMethodsInput | string[]
+  mfaEnabled?: boolean
+  isSuperAdmin?: boolean
+  isActive?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedCreateNestedManyWithoutAdminUserInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedCreateNestedManyWithoutAdminUserInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedInput
+  userComments?: Prisma.UserCommentUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type AdminUserCreateOrConnectWithoutUserRemindersInput = {
+  where: Prisma.AdminUserWhereUniqueInput
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutUserRemindersInput, Prisma.AdminUserUncheckedCreateWithoutUserRemindersInput>
+}
+
+export type AdminUserUpsertWithoutUserRemindersInput = {
+  update: Prisma.XOR<Prisma.AdminUserUpdateWithoutUserRemindersInput, Prisma.AdminUserUncheckedUpdateWithoutUserRemindersInput>
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutUserRemindersInput, Prisma.AdminUserUncheckedCreateWithoutUserRemindersInput>
+  where?: Prisma.AdminUserWhereInput
+}
+
+export type AdminUserUpdateToOneWithWhereWithoutUserRemindersInput = {
+  where?: Prisma.AdminUserWhereInput
+  data: Prisma.XOR<Prisma.AdminUserUpdateWithoutUserRemindersInput, Prisma.AdminUserUncheckedUpdateWithoutUserRemindersInput>
+}
+
+export type AdminUserUpdateWithoutUserRemindersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.AdminRoleUpdateOneWithoutAdminUsersNestedInput
+  group?: Prisma.AdminGroupUpdateOneWithoutAdminUsersNestedInput
+  adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutAdminUserNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutAuthorNestedInput
+}
+
+export type AdminUserUncheckedUpdateWithoutUserRemindersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  groupId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  loginMethods?: Prisma.AdminUserUpdateloginMethodsInput | string[]
+  mfaEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutAdminUserNestedInput
+  adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserCreateManyGroupInput = {
@@ -1010,6 +1415,9 @@ export type AdminUserUpdateWithoutGroupInput = {
   role?: Prisma.AdminRoleUpdateOneWithoutAdminUsersNestedInput
   adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutAdminUserNestedInput
   adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutGroupInput = {
@@ -1028,6 +1436,9 @@ export type AdminUserUncheckedUpdateWithoutGroupInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutAdminUserNestedInput
   adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserUncheckedUpdateManyWithoutGroupInput = {
@@ -1078,6 +1489,9 @@ export type AdminUserUpdateWithoutRoleInput = {
   group?: Prisma.AdminGroupUpdateOneWithoutAdminUsersNestedInput
   adminUserApplications?: Prisma.AdminUserApplicationUpdateManyWithoutAdminUserNestedInput
   adminActivityLogs?: Prisma.AdminActivityLogUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutRoleInput = {
@@ -1096,6 +1510,9 @@ export type AdminUserUncheckedUpdateWithoutRoleInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminUserApplications?: Prisma.AdminUserApplicationUncheckedUpdateManyWithoutAdminUserNestedInput
   adminActivityLogs?: Prisma.AdminActivityLogUncheckedUpdateManyWithoutAdminUserNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedNestedInput
+  userComments?: Prisma.UserCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  userReminders?: Prisma.UserReminderUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type AdminUserUncheckedUpdateManyWithoutRoleInput = {
@@ -1122,11 +1539,17 @@ export type AdminUserUncheckedUpdateManyWithoutRoleInput = {
 export type AdminUserCountOutputType = {
   adminUserApplications: number
   adminActivityLogs: number
+  assignedTickets: number
+  userComments: number
+  userReminders: number
 }
 
 export type AdminUserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   adminUserApplications?: boolean | AdminUserCountOutputTypeCountAdminUserApplicationsArgs
   adminActivityLogs?: boolean | AdminUserCountOutputTypeCountAdminActivityLogsArgs
+  assignedTickets?: boolean | AdminUserCountOutputTypeCountAssignedTicketsArgs
+  userComments?: boolean | AdminUserCountOutputTypeCountUserCommentsArgs
+  userReminders?: boolean | AdminUserCountOutputTypeCountUserRemindersArgs
 }
 
 /**
@@ -1153,6 +1576,27 @@ export type AdminUserCountOutputTypeCountAdminActivityLogsArgs<ExtArgs extends r
   where?: Prisma.AdminActivityLogWhereInput
 }
 
+/**
+ * AdminUserCountOutputType without action
+ */
+export type AdminUserCountOutputTypeCountAssignedTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportTicketWhereInput
+}
+
+/**
+ * AdminUserCountOutputType without action
+ */
+export type AdminUserCountOutputTypeCountUserCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserCommentWhereInput
+}
+
+/**
+ * AdminUserCountOutputType without action
+ */
+export type AdminUserCountOutputTypeCountUserRemindersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserReminderWhereInput
+}
+
 
 export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1173,6 +1617,9 @@ export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   group?: boolean | Prisma.AdminUser$groupArgs<ExtArgs>
   adminUserApplications?: boolean | Prisma.AdminUser$adminUserApplicationsArgs<ExtArgs>
   adminActivityLogs?: boolean | Prisma.AdminUser$adminActivityLogsArgs<ExtArgs>
+  assignedTickets?: boolean | Prisma.AdminUser$assignedTicketsArgs<ExtArgs>
+  userComments?: boolean | Prisma.AdminUser$userCommentsArgs<ExtArgs>
+  userReminders?: boolean | Prisma.AdminUser$userRemindersArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["adminUser"]>
 
@@ -1237,6 +1684,9 @@ export type AdminUserInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   group?: boolean | Prisma.AdminUser$groupArgs<ExtArgs>
   adminUserApplications?: boolean | Prisma.AdminUser$adminUserApplicationsArgs<ExtArgs>
   adminActivityLogs?: boolean | Prisma.AdminUser$adminActivityLogsArgs<ExtArgs>
+  assignedTickets?: boolean | Prisma.AdminUser$assignedTicketsArgs<ExtArgs>
+  userComments?: boolean | Prisma.AdminUser$userCommentsArgs<ExtArgs>
+  userReminders?: boolean | Prisma.AdminUser$userRemindersArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AdminUserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1255,6 +1705,9 @@ export type $AdminUserPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     group: Prisma.$AdminGroupPayload<ExtArgs> | null
     adminUserApplications: Prisma.$AdminUserApplicationPayload<ExtArgs>[]
     adminActivityLogs: Prisma.$AdminActivityLogPayload<ExtArgs>[]
+    assignedTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
+    userComments: Prisma.$UserCommentPayload<ExtArgs>[]
+    userReminders: Prisma.$UserReminderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1669,6 +2122,9 @@ export interface Prisma__AdminUserClient<T, Null = never, ExtArgs extends runtim
   group<T extends Prisma.AdminUser$groupArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$groupArgs<ExtArgs>>): Prisma.Prisma__AdminGroupClient<runtime.Types.Result.GetResult<Prisma.$AdminGroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   adminUserApplications<T extends Prisma.AdminUser$adminUserApplicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$adminUserApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdminUserApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   adminActivityLogs<T extends Prisma.AdminUser$adminActivityLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$adminActivityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdminActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedTickets<T extends Prisma.AdminUser$assignedTicketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$assignedTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userComments<T extends Prisma.AdminUser$userCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$userCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userReminders<T extends Prisma.AdminUser$userRemindersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$userRemindersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserReminderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2191,6 +2647,78 @@ export type AdminUser$adminActivityLogsArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.AdminActivityLogScalarFieldEnum | Prisma.AdminActivityLogScalarFieldEnum[]
+}
+
+/**
+ * AdminUser.assignedTickets
+ */
+export type AdminUser$assignedTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportTicket
+   */
+  select?: Prisma.SupportTicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportTicket
+   */
+  omit?: Prisma.SupportTicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportTicketInclude<ExtArgs> | null
+  where?: Prisma.SupportTicketWhereInput
+  orderBy?: Prisma.SupportTicketOrderByWithRelationInput | Prisma.SupportTicketOrderByWithRelationInput[]
+  cursor?: Prisma.SupportTicketWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportTicketScalarFieldEnum | Prisma.SupportTicketScalarFieldEnum[]
+}
+
+/**
+ * AdminUser.userComments
+ */
+export type AdminUser$userCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserComment
+   */
+  select?: Prisma.UserCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserComment
+   */
+  omit?: Prisma.UserCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserCommentInclude<ExtArgs> | null
+  where?: Prisma.UserCommentWhereInput
+  orderBy?: Prisma.UserCommentOrderByWithRelationInput | Prisma.UserCommentOrderByWithRelationInput[]
+  cursor?: Prisma.UserCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserCommentScalarFieldEnum | Prisma.UserCommentScalarFieldEnum[]
+}
+
+/**
+ * AdminUser.userReminders
+ */
+export type AdminUser$userRemindersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserReminder
+   */
+  select?: Prisma.UserReminderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserReminder
+   */
+  omit?: Prisma.UserReminderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserReminderInclude<ExtArgs> | null
+  where?: Prisma.UserReminderWhereInput
+  orderBy?: Prisma.UserReminderOrderByWithRelationInput | Prisma.UserReminderOrderByWithRelationInput[]
+  cursor?: Prisma.UserReminderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserReminderScalarFieldEnum | Prisma.UserReminderScalarFieldEnum[]
 }
 
 /**
