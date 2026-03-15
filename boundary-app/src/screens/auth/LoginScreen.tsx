@@ -30,7 +30,8 @@ const colors = {
 };
 
 // Map SSO provider names to MaterialCommunityIcons names
-const getSSOProviderIcon = (providerName: string): string => {
+const getSSOProviderIcon = (providerName: string | undefined): string => {
+  if (!providerName) return 'login';
   const iconMap: Record<string, string> = {
     google: 'google',
     facebook: 'facebook',
@@ -292,10 +293,10 @@ const LoginScreen: React.FC = () => {
                               <TouchableOpacity
                                 key={provider.id}
                                 style={[styles.socialButton, { borderColor: provider.buttonColor || '#e5e5e5' }]}
-                                onPress={() => handleSSOLogin(provider.name as any)}
+                                onPress={() => handleSSOLogin((provider.providerName || provider.name) as any)}
                               >
-                                <Icon 
-                                  name={getSSOProviderIcon(provider.name)} 
+                                <Icon
+                                  name={getSSOProviderIcon(provider.providerName || provider.name)}
                                   size={24} 
                                   color={provider.buttonColor || '#333'} 
                                 />
