@@ -3,18 +3,14 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { prisma } from '@/server/lib/prisma';
 import { config } from '@/server/config/env';
+import { buildCorsHeaders } from '@/server/lib/cors';
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-App-ID',
-};
-
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+export async function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, { status: 204, headers: buildCorsHeaders(req) });
 }
 
 export async function POST(req: NextRequest) {
+  const cors = buildCorsHeaders(req);
   try {
     const body = await req.json();
     const { email, password, firstName, lastName, phone } = body;
@@ -22,7 +18,7 @@ export async function POST(req: NextRequest) {
     if (!email || !password || !firstName || !lastName) {
       return NextResponse.json(
         { success: false, message: 'Email, password, first name, and last name are required' },
-        { status: 400, headers: CORS_HEADERS }
+        { status: 400, headers: cors }
       );
     }
 
@@ -30,33 +26,30 @@ export async function POST(req: NextRequest) {
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { success: false, message: 'Valid email is required' },
-        { status: 400, headers: CORS_HEADERS }
+        { status: 400, headers: cors }
       );
     }
 
     if (password.length < 8) {
       return NextResponse.json(
         { success: false, message: 'Password must be at least 8 characters' },
-        { status: 400, headers: CORS_HEADERS }
+        { status: 400, headers: cors }
       );
     }
 
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
-      where: { email: email.toLowerCase() }
+      where: { email: email.toLowerCase() },
     });
 
     if (existingUser) {
       return NextResponse.json(
         { success: false, message: 'An account with this email already exists' },
-        { status: 409, headers: CORS_HEADERS }
+        { status: 409, headers: cors }
       );
     }
 
-    // Hash password
     const passwordHash = await bcrypt.hash(password, 12);
 
-    // Create user
     const user = await prisma.user.create({
       data: {
         email: email.toLowerCase(),
@@ -67,10 +60,9 @@ export async function POST(req: NextRequest) {
         isActive: true,
         isVerified: false,
         userType: 'user',
-      }
+      },
     });
 
-    // Generate JWT tokens (same secret as bondary-backend for cross-service auth)
     const payload = {
       id: user.id,
       email: user.email,
@@ -80,37 +72,33 @@ export async function POST(req: NextRequest) {
     };
 
     const accessToken = jwt.sign(payload, config.JWT_SECRET, { expiresIn: '24h' });
-    const refreshToken = jwt.sign(
-      { id: user.id, type: 'refresh' },
-      config.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+    const refreshToken = jwt.sign({ id: user.id, type: 'refresh' }, config.JWT_SECRET, { expiresIn: '7d' });
 
-    const { passwordHash: _, ...userResponse } = user as any;
-
-    return NextResponse.json({
-      success: true,
-      message: 'Registration successful',
-      user: {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        phone: user.phoneNumber,
-        avatar: user.avatarUrl,
-        isActive: user.isActive,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'Registration successful',
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          phone: user.phoneNumber,
+          avatar: user.avatarUrl,
+          isActive: user.isActive,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        },
+        accessToken,
+        refreshToken,
       },
-      accessToken,
-      refreshToken,
-    }, { status: 201, headers: CORS_HEADERS });
-
+      { status: 201, headers: cors }
+    );
   } catch (error: any) {
     console.error('Mobile registration error:', error);
     return NextResponse.json(
       { success: false, message: 'Registration failed. Please try again.' },
-      { status: 500, headers: CORS_HEADERS }
+      { status: 500, headers: cors }
     );
   }
 }
