@@ -3,13 +3,23 @@ import jwt from 'jsonwebtoken';
 import { prisma } from '@/server/lib/prisma';
 import { config } from '@/server/config/env';
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-App-ID',
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { email, phone, otp } = body;
 
     if ((!email && !phone) || !otp) {
-      return NextResponse.json({ success: false, message: 'Identifier and OTP required' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Identifier and OTP required' }, { status: 400, headers: CORS_HEADERS });
     }
 
     // Look up user
@@ -18,7 +28,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user || !user.isActive) {
-      return NextResponse.json({ success: false, message: 'Invalid code' }, { status: 401 });
+      return NextResponse.json({ success: false, message: 'Invalid code' }, { status: 401, headers: CORS_HEADERS });
     }
 
     const prefs = (user.preferences as Record<string, any>) || {};
@@ -26,18 +36,18 @@ export async function POST(req: NextRequest) {
     const storedExpiry = prefs._otpExpiry as number | undefined;
 
     if (!storedOtp || !storedExpiry) {
-      return NextResponse.json({ success: false, message: 'Invalid or expired code' }, { status: 401 });
+      return NextResponse.json({ success: false, message: 'Invalid or expired code' }, { status: 401, headers: CORS_HEADERS });
     }
 
     if (Date.now() > storedExpiry) {
       // Clean up expired OTP
       const { _otp, _otpExpiry, ...rest } = prefs;
       await prisma.user.update({ where: { id: user.id }, data: { preferences: rest } });
-      return NextResponse.json({ success: false, message: 'Code has expired' }, { status: 401 });
+      return NextResponse.json({ success: false, message: 'Code has expired' }, { status: 401, headers: CORS_HEADERS });
     }
 
     if (storedOtp !== String(otp)) {
-      return NextResponse.json({ success: false, message: 'Invalid code' }, { status: 401 });
+      return NextResponse.json({ success: false, message: 'Invalid code' }, { status: 401, headers: CORS_HEADERS });
     }
 
     // OTP valid — consume it
@@ -84,9 +94,9 @@ export async function POST(req: NextRequest) {
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
-    });
+    }, { headers: CORS_HEADERS });
   } catch (error: any) {
     console.error('OTP login error:', error);
-    return NextResponse.json({ success: false, message: 'Login failed' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Login failed' }, { status: 500, headers: CORS_HEADERS });
   }
 }

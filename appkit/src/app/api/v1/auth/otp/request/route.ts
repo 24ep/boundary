@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/server/lib/prisma';
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-App-ID',
+};
+
 function generateOtp(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
 }
 
 export async function POST(req: NextRequest) {
@@ -11,7 +21,7 @@ export async function POST(req: NextRequest) {
     const { email, phone } = body;
 
     if (!email && !phone) {
-      return NextResponse.json({ success: false, message: 'Email or phone required' }, { status: 400 });
+      return NextResponse.json({ success: false, message: 'Email or phone required' }, { status: 400, headers: CORS_HEADERS });
     }
 
     // Look up user
@@ -22,7 +32,7 @@ export async function POST(req: NextRequest) {
 
     if (!user || !user.isActive) {
       // Return success to avoid user enumeration
-      return NextResponse.json({ success: true, message: 'If an account exists, a code has been sent' });
+      return NextResponse.json({ success: true, message: 'If an account exists, a code has been sent' }, { headers: CORS_HEADERS });
     }
 
     const otp = generateOtp();
@@ -48,9 +58,9 @@ export async function POST(req: NextRequest) {
       success: true,
       message: 'Verification code sent',
       debug_otp: otp,
-    });
+    }, { headers: CORS_HEADERS });
   } catch (error: any) {
     console.error('OTP request error:', error);
-    return NextResponse.json({ success: false, message: 'Failed to send code' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Failed to send code' }, { status: 500, headers: CORS_HEADERS });
   }
 }

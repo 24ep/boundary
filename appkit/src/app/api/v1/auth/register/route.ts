@@ -4,6 +4,16 @@ import jwt from 'jsonwebtoken';
 import { prisma } from '@/server/lib/prisma';
 import { config } from '@/server/config/env';
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-App-ID',
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -12,7 +22,7 @@ export async function POST(req: NextRequest) {
     if (!email || !password || !firstName || !lastName) {
       return NextResponse.json(
         { success: false, message: 'Email, password, first name, and last name are required' },
-        { status: 400 }
+        { status: 400, headers: CORS_HEADERS }
       );
     }
 
@@ -20,14 +30,14 @@ export async function POST(req: NextRequest) {
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { success: false, message: 'Valid email is required' },
-        { status: 400 }
+        { status: 400, headers: CORS_HEADERS }
       );
     }
 
     if (password.length < 8) {
       return NextResponse.json(
         { success: false, message: 'Password must be at least 8 characters' },
-        { status: 400 }
+        { status: 400, headers: CORS_HEADERS }
       );
     }
 
@@ -39,7 +49,7 @@ export async function POST(req: NextRequest) {
     if (existingUser) {
       return NextResponse.json(
         { success: false, message: 'An account with this email already exists' },
-        { status: 409 }
+        { status: 409, headers: CORS_HEADERS }
       );
     }
 
@@ -94,13 +104,13 @@ export async function POST(req: NextRequest) {
       },
       accessToken,
       refreshToken,
-    }, { status: 201 });
+    }, { status: 201, headers: CORS_HEADERS });
 
   } catch (error: any) {
     console.error('Mobile registration error:', error);
     return NextResponse.json(
       { success: false, message: 'Registration failed. Please try again.' },
-      { status: 500 }
+      { status: 500, headers: CORS_HEADERS }
     );
   }
 }
