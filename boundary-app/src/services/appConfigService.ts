@@ -166,15 +166,19 @@ class AppConfigService {
   }
 
   /**
-   * Get asset by key
+   * Get asset by key — returns null if not found (404) instead of throwing
    */
-  async getAsset(assetKey: string): Promise<AssetInfo> {
+  async getAsset(assetKey: string): Promise<AssetInfo | null> {
     try {
       const res = await this.call('GET', `/assets/${assetKey}`);
-      return res.asset;
+      return res.asset ?? null;
     } catch (error: any) {
+      // 404 means the asset isn't configured yet — return null so callers use their fallback
+      if (error.message?.includes('404')) {
+        return null;
+      }
       console.error(`Error fetching asset ${assetKey}:`, error);
-      throw new Error(`Failed to fetch asset: ${error.message}`);
+      return null;
     }
   }
 
