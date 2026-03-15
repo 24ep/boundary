@@ -190,38 +190,27 @@ export function UserManagement() {
 
   const loadData = async () => {
     setLoading(true)
+    const rolesData: Role[] = [
+      { id: 'admin', name: 'Administrator', description: 'Full system access', permissions: ['read', 'write', 'delete', 'admin'], color: '#DC2626' },
+      { id: 'moderator', name: 'Moderator', description: 'Content moderation access', permissions: ['read', 'write', 'moderate'], color: '#D97706' },
+      { id: 'Circle_admin', name: 'Circle Admin', description: 'Circle management access', permissions: ['read', 'write', 'Circle_manage'], color: '#059669' },
+      { id: 'user', name: 'User', description: 'Basic user access', permissions: ['read'], color: '#2563EB' }
+    ]
+    setRoles(rolesData)
     try {
-      // Load data from API
-      const [usersData, circlesData] = await Promise.all([
-        userService.getUsers(),
-        userService.getCircles()
-      ])
-
-      // Define roles locally since they're typically static
-      const rolesData: Role[] = [
-        { id: 'admin', name: 'Administrator', description: 'Full system access', permissions: ['read', 'write', 'delete', 'admin'], color: '#DC2626' },
-        { id: 'moderator', name: 'Moderator', description: 'Content moderation access', permissions: ['read', 'write', 'moderate'], color: '#D97706' },
-        { id: 'Circle_admin', name: 'Circle Admin', description: 'Circle management access', permissions: ['read', 'write', 'Circle_manage'], color: '#059669' },
-        { id: 'user', name: 'User', description: 'Basic user access', permissions: ['read'], color: '#2563EB' }
-      ]
-
+      const usersData = await userService.getUsers()
       setUsers(usersData.users)
-      setRoles(rolesData)
-      setCircles(circlesData)
     } catch (error) {
-      console.error('Error loading user data:', error)
-      // Set empty arrays when API fails
+      console.error('Error loading users:', error)
       setUsers([])
-      setCircles([])
-      setRoles([
-        { id: 'admin', name: 'Administrator', description: 'Full system access', permissions: ['read', 'write', 'delete', 'admin'], color: '#DC2626' },
-        { id: 'moderator', name: 'Moderator', description: 'Content moderation access', permissions: ['read', 'write', 'moderate'], color: '#D97706' },
-        { id: 'Circle_admin', name: 'Circle Admin', description: 'Circle management access', permissions: ['read', 'write', 'Circle_manage'], color: '#059669' },
-        { id: 'user', name: 'User', description: 'Basic user access', permissions: ['read'], color: '#2563EB' }
-      ])
-    } finally {
-      setLoading(false)
     }
+    try {
+      const circlesData = await userService.getCircles()
+      setCircles(circlesData)
+    } catch {
+      setCircles([])
+    }
+    setLoading(false)
   }
 
   const openBilling = (user: User) => {
@@ -946,6 +935,9 @@ export function UserManagement() {
                     className="px-6 py-4"
                   />
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Applications
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Circle
                   </th>
                   <SortableHeader
@@ -1060,6 +1052,19 @@ export function UserManagement() {
                           <option value="suspended">Suspended</option>
                         </select>
                       </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      {user.apps && user.apps.length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                          {user.apps.map((app: any) => (
+                            <span key={app.appId} className="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-indigo-100 text-indigo-700">
+                              {app.appName}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-sm text-gray-400">—</span>
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       {user.circles && user.circles.length > 0 ? (

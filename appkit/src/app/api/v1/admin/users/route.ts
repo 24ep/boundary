@@ -57,7 +57,15 @@ export async function GET(request: NextRequest) {
           createdAt: true,
           lastLoginAt: true,
           avatarUrl: true,
-          points: true
+          points: true,
+          applications: {
+            select: {
+              applicationId: true,
+              role: true,
+              status: true,
+              application: { select: { id: true, name: true, slug: true } }
+            }
+          }
         }
       }),
       prisma.user.count({ where })

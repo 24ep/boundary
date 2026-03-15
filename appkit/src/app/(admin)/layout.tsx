@@ -98,7 +98,7 @@ function AdminLayoutInner({ children }: AdminLayoutProps) {
             return pathname.startsWith('/dashboard')
         }
         if (hub.id === 'applications') {
-            return pathname.startsWith('/applications')
+            return pathname.startsWith('/applications') || pathname === '/users' || pathname.startsWith('/users/')
         }
         if (hub.id === 'system') {
             return pathname.startsWith('/system') || pathname.startsWith('/settings')
