@@ -1,7 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticate } from '@/lib/auth';
+import jwt from 'jsonwebtoken';
 import { prisma } from '@/server/lib/prisma';
+import { config } from '@/server/config/env';
 import { buildCorsHeaders } from '@/server/lib/cors';
+
+function getMobileUserId(req: NextRequest): string | null {
+  const authHeader = req.headers.get('authorization');
+  const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
+  if (!token) return null;
+  try {
+    const decoded = jwt.verify(token, config.JWT_SECRET) as any;
+    return decoded.id || decoded.adminId || null;
+  } catch {
+    return null;
+  }
+}
 
 export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, { status: 204, headers: buildCorsHeaders(request) });
@@ -9,20 +22,11 @@ export async function OPTIONS(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const corsHeaders = buildCorsHeaders(request);
-  const auth = await authenticate(request);
-  
-  if (auth.error) {
-    return NextResponse.json(
-      { error: auth.error, error_description: 'Unauthorized' },
-      { status: auth.status || 401, headers: corsHeaders }
-    );
-  }
+  const userId = getMobileUserId(request);
 
-  // @ts-ignore
-  const userId = auth.admin?.id || auth.admin?.adminId;
   if (!userId) {
     return NextResponse.json(
-      { error: 'unauthorized', error_description: 'User ID not found' },
+      { error: 'unauthorized', error_description: 'Unauthorized' },
       { status: 401, headers: corsHeaders }
     );
   }
@@ -37,15 +41,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find the circle by invite code or PIN code
-    // Note: In a real system, we'd check if inviteCode is actually a PIN or an alphanumeric code
     const circle = await prisma.circle.findFirst({
       where: {
         OR: [
           { circleCode: inviteCode },
-          { pinCode: inviteCode } // Supporting both as "inviteCode" in the request for flexibility
-        ]
-      }
+          { pinCode: inviteCode },
+        ],
+      },
     });
 
     if (!circle) {
@@ -55,14 +57,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if membership already exists
     const existingMember = await prisma.circleMember.findUnique({
-      where: {
-        circleId_userId: {
-          circleId: circle.id,
-          userId
-        }
-      }
+      where: { circleId_userId: { circleId: circle.id, userId } },
     });
 
     if (existingMember) {
@@ -72,23 +68,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Add member to circle
     const newMember = await prisma.circleMember.create({
-      data: {
-        userId,
-        circleId: circle.id,
-        role: 'member'
-      },
-      include: {
-        circle: true
-      }
+      data: { userId, circleId: circle.id, role: 'member' },
+      include: { circle: true },
     });
 
     return NextResponse.json(
       { success: true, message: 'Joined circle successfully', circle: newMember.circle },
       { status: 201, headers: corsHeaders }
     );
-
   } catch (error) {
     console.error('[POST /api/v1/circles/join] Error:', error);
     return NextResponse.json(
