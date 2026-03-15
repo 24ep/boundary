@@ -25,12 +25,23 @@ import { FileActionsSheet } from './FileActionsSheet';
 import { FileDetailsModal } from './FileDetailsModal';
 import { MoveFileModal } from './MoveFileModal';
 import { CreateFolderModal } from './CreateFolderModal';
+import { 
+    ViewMode, 
+    FilterChip, 
+    FolderItem, 
+    FileItemComponent, 
+    QuotaBar, 
+    BreadcrumbNav,
+    formatFileSize,
+    formatDate,
+} from './FileSharedUI';
 
 // =====================================
 // TYPES
 // =====================================
 
-type ViewMode = 'grid' | 'list';
+
+
 type SortBy = 'name' | 'date' | 'size' | 'type';
 type FilterType = 'all' | 'image' | 'video' | 'document' | 'audio' | 'other';
 
@@ -39,247 +50,6 @@ interface CircleFilesTabProps {
     circleName?: string;
     onFilePress?: (file: FileItem) => void;
 }
-
-// =====================================
-// HELPER FUNCTIONS
-// =====================================
-
-const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-};
-
-const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-};
-
-const getFileIcon = (mimeType: string, fileType: string): string => {
-    if (fileType === 'image' || mimeType?.startsWith('image/')) return 'file-image-outline';
-    if (fileType === 'video' || mimeType?.startsWith('video/')) return 'file-video-outline';
-    if (fileType === 'audio' || mimeType?.startsWith('audio/')) return 'file-music-outline';
-    if (fileType === 'document' || mimeType?.includes('pdf')) return 'file-pdf-box';
-    if (mimeType?.includes('word') || mimeType?.includes('document')) return 'file-word-outline';
-    if (mimeType?.includes('spreadsheet') || mimeType?.includes('excel')) return 'file-excel-outline';
-    if (mimeType?.includes('presentation') || mimeType?.includes('powerpoint')) return 'file-powerpoint-outline';
-    if (mimeType?.includes('zip') || mimeType?.includes('rar') || mimeType?.includes('compressed')) return 'folder-zip-outline';
-    return 'file-outline';
-};
-
-const getFileIconColor = (fileType: string): string => {
-    switch (fileType) {
-        case 'image': return '#10B981';
-        case 'video': return '#F59E0B';
-        case 'audio': return '#8B5CF6';
-        case 'document': return '#EF4444';
-        default: return '#6B7280';
-    }
-};
-
-// =====================================
-// SUB-COMPONENTS
-// =====================================
-
-const FilterChip: React.FC<{
-    label: string;
-    icon: string;
-    active: boolean;
-    onPress: () => void;
-}> = ({ label, icon, active, onPress }) => (
-    <TouchableOpacity
-        style={[styles.filterChip, active && styles.filterChipActive]}
-        onPress={onPress}
-    >
-        <MaterialCommunityIcons 
-            name={icon as any} 
-            size={16} 
-            color={active ? '#FFF' : '#6B7280'} 
-        />
-        <Text style={[styles.filterChipText, active && styles.filterChipTextActive]}>
-            {label}
-        </Text>
-    </TouchableOpacity>
-);
-
-const FolderItem: React.FC<{
-    folder: FileFolder;
-    viewMode: ViewMode;
-    onPress: () => void;
-    onLongPress?: () => void;
-}> = ({ folder, viewMode, onPress, onLongPress }) => {
-    if (viewMode === 'grid') {
-        return (
-            <TouchableOpacity 
-                style={styles.gridFolderItem} 
-                onPress={onPress}
-                onLongPress={onLongPress}
-            >
-                <View style={[styles.folderIconContainer, { backgroundColor: folder.color || '#DBEAFE' }]}>
-                    <MaterialCommunityIcons name="folder" size={32} color={folder.color ? '#FFF' : '#3B82F6'} />
-                </View>
-                <Text style={styles.gridItemName} numberOfLines={1}>{folder.name}</Text>
-                <Text style={styles.gridItemMeta}>{folder.itemCount} items</Text>
-                {folder.isPinned && (
-                    <MaterialCommunityIcons name="pin" size={14} color="#3B82F6" style={styles.pinnedIcon} />
-                )}
-            </TouchableOpacity>
-        );
-    }
-
-    return (
-        <TouchableOpacity 
-            style={styles.listFolderItem} 
-            onPress={onPress}
-            onLongPress={onLongPress}
-        >
-            <View style={[styles.listFolderIcon, { backgroundColor: folder.color || '#DBEAFE' }]}>
-                <MaterialCommunityIcons name="folder" size={24} color={folder.color ? '#FFF' : '#3B82F6'} />
-            </View>
-            <View style={styles.listItemInfo}>
-                <View style={styles.listItemNameRow}>
-                    <Text style={styles.listItemName}>{folder.name}</Text>
-                    {folder.isPinned && (
-                        <MaterialCommunityIcons name="pin" size={14} color="#3B82F6" style={{ marginLeft: 4 }} />
-                    )}
-                </View>
-                <Text style={styles.listItemMeta}>
-                    {folder.itemCount} items · {formatFileSize(folder.totalSize)}
-                </Text>
-            </View>
-            <MaterialCommunityIcons name="chevron-right" size={20} color="#9CA3AF" />
-        </TouchableOpacity>
-    );
-};
-
-const FileItemComponent: React.FC<{
-    file: FileItem;
-    viewMode: ViewMode;
-    onPress: () => void;
-    onLongPress?: () => void;
-    showUploader?: boolean;
-}> = ({ file, viewMode, onPress, onLongPress, showUploader = true }) => {
-    const iconName = getFileIcon(file.mimeType, file.fileType);
-    const iconColor = getFileIconColor(file.fileType);
-    const isImage = file.fileType === 'image';
-
-    if (viewMode === 'grid') {
-        return (
-            <TouchableOpacity 
-                style={styles.gridFileItem} 
-                onPress={onPress}
-                onLongPress={onLongPress}
-            >
-                {isImage && file.url ? (
-                    <Image source={{ uri: file.url }} style={styles.gridImagePreview} resizeMode="cover" />
-                ) : (
-                    <View style={[styles.gridFileIcon, { backgroundColor: `${iconColor}15` }]}>
-                        <MaterialCommunityIcons name={iconName as any} size={32} color={iconColor} />
-                    </View>
-                )}
-                <Text style={styles.gridItemName} numberOfLines={1}>{file.originalName}</Text>
-                <Text style={styles.gridItemMeta}>{formatFileSize(file.size)}</Text>
-                {file.isPinned && (
-                    <MaterialCommunityIcons name="pin" size={14} color="#3B82F6" style={styles.pinnedIcon} />
-                )}
-            </TouchableOpacity>
-        );
-    }
-
-    return (
-        <TouchableOpacity 
-            style={styles.listFileItem} 
-            onPress={onPress}
-            onLongPress={onLongPress}
-        >
-            {isImage && file.url ? (
-                <Image source={{ uri: file.url }} style={styles.listImagePreview} resizeMode="cover" />
-            ) : (
-                <View style={[styles.listFileIcon, { backgroundColor: `${iconColor}15` }]}>
-                    <MaterialCommunityIcons name={iconName as any} size={24} color={iconColor} />
-                </View>
-            )}
-            <View style={styles.listItemInfo}>
-                <View style={styles.listItemNameRow}>
-                    <Text style={styles.listItemName} numberOfLines={1}>{file.originalName}</Text>
-                    {file.isPinned && (
-                        <MaterialCommunityIcons name="pin" size={14} color="#3B82F6" style={{ marginLeft: 4 }} />
-                    )}
-                </View>
-                <Text style={styles.listItemMeta}>
-                    {formatFileSize(file.size)} · {formatDate(file.createdAt)}
-                    {showUploader && (file as any).uploaderName && ` · by ${(file as any).uploaderName}`}
-                </Text>
-            </View>
-            <TouchableOpacity style={styles.moreButton}>
-                <MaterialCommunityIcons name="dots-vertical" size={20} color="#9CA3AF" />
-            </TouchableOpacity>
-        </TouchableOpacity>
-    );
-};
-
-const QuotaBar: React.FC<{ quota: StorageQuota; circleName?: string }> = ({ quota, circleName }) => {
-    const percentage = quota.percentUsed;
-    const barColor = percentage > 90 ? '#EF4444' : percentage > 70 ? '#F59E0B' : '#3B82F6';
-
-    return (
-        <View style={styles.quotaContainer}>
-            <View style={styles.quotaHeader}>
-                <Text style={styles.quotaLabel}>{circleName || 'Circle'} Storage</Text>
-                <Text style={styles.quotaText}>
-                    {formatFileSize(quota.usedBytes)} / {formatFileSize(quota.quotaBytes)}
-                </Text>
-            </View>
-            <View style={styles.quotaBarBackground}>
-                <View style={[styles.quotaBarFill, { width: `${Math.min(percentage, 100)}%`, backgroundColor: barColor }]} />
-            </View>
-        </View>
-    );
-};
-
-const BreadcrumbNav: React.FC<{
-    path: FileFolder[];
-    circleName?: string;
-    onNavigate: (folderId: string | null) => void;
-}> = ({ path, circleName, onNavigate }) => {
-    return (
-        <View style={styles.breadcrumbContainer}>
-            <TouchableOpacity onPress={() => onNavigate(null)} style={styles.breadcrumbItem}>
-                <MaterialCommunityIcons name="home-group" size={18} color="#3B82F6" />
-                {circleName && <Text style={styles.breadcrumbRootText}>{circleName}</Text>}
-            </TouchableOpacity>
-            {path.map((folder, index) => (
-                <React.Fragment key={folder.id}>
-                    <MaterialCommunityIcons name="chevron-right" size={16} color="#D1D5DB" />
-                    <TouchableOpacity 
-                        onPress={() => onNavigate(folder.id)} 
-                        style={styles.breadcrumbItem}
-                    >
-                        <Text style={[
-                            styles.breadcrumbText,
-                            index === path.length - 1 && styles.breadcrumbTextActive
-                        ]}>
-                            {folder.name}
-                        </Text>
-                    </TouchableOpacity>
-                </React.Fragment>
-            ))}
-        </View>
-    );
-};
-
-// =====================================
-// MAIN COMPONENT
-// =====================================
 
 export const CircleFilesTab: React.FC<CircleFilesTabProps> = ({ 
     circleId, 
@@ -751,12 +521,12 @@ export const CircleFilesTab: React.FC<CircleFilesTabProps> = ({
             {/* Breadcrumb Navigation */}
             <BreadcrumbNav 
                 path={folderPath} 
-                circleName={circleName} 
+                rootName={circleName} 
                 onNavigate={handleNavigateBreadcrumb} 
             />
 
             {/* Storage Quota */}
-            {quota && <QuotaBar quota={quota} circleName={circleName} />}
+            {quota && <QuotaBar quota={quota} label={`${circleName || 'Circle'} Storage`} />}
         </View>
     );
 

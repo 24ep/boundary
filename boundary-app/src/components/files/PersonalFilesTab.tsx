@@ -6,11 +6,9 @@ import {
     TouchableOpacity,
     FlatList,
     ActivityIndicator,
-    Image,
     TextInput,
     Alert,
     RefreshControl,
-    Animated,
     Platform,
     Share,
     Modal,
@@ -25,229 +23,25 @@ import { FileActionsSheet } from './FileActionsSheet';
 import { FileDetailsModal } from './FileDetailsModal';
 import { MoveFileModal } from './MoveFileModal';
 import { CreateFolderModal } from './CreateFolderModal';
+import { 
+    ViewMode, 
+    FilterChip, 
+    FolderItem, 
+    FileItemComponent, 
+    QuotaBar, 
+    BreadcrumbNav,
+} from './FileSharedUI';
 
 // =====================================
 // TYPES
 // =====================================
 
-type ViewMode = 'grid' | 'list';
 type SortBy = 'name' | 'date' | 'size' | 'type';
+type FilterMode = 'all' | 'recent' | 'favorites' | 'images' | 'videos' | 'documents' | 'audio';
 
 interface PersonalFilesTabProps {
     onFilePress?: (file: FileItem) => void;
 }
-
-// =====================================
-// HELPER FUNCTIONS
-// =====================================
-
-const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-};
-
-const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-};
-
-const getFileIcon = (mimeType: string, fileType: string): string => {
-    if (fileType === 'image' || mimeType?.startsWith('image/')) return 'file-image-outline';
-    if (fileType === 'video' || mimeType?.startsWith('video/')) return 'file-video-outline';
-    if (fileType === 'audio' || mimeType?.startsWith('audio/')) return 'file-music-outline';
-    if (fileType === 'document' || mimeType?.includes('pdf')) return 'file-pdf-box';
-    if (mimeType?.includes('word') || mimeType?.includes('document')) return 'file-word-outline';
-    if (mimeType?.includes('spreadsheet') || mimeType?.includes('excel')) return 'file-excel-outline';
-    if (mimeType?.includes('presentation') || mimeType?.includes('powerpoint')) return 'file-powerpoint-outline';
-    if (mimeType?.includes('zip') || mimeType?.includes('rar') || mimeType?.includes('compressed')) return 'folder-zip-outline';
-    return 'file-outline';
-};
-
-const getFileIconColor = (fileType: string): string => {
-    switch (fileType) {
-        case 'image': return '#10B981';
-        case 'video': return '#F59E0B';
-        case 'audio': return '#8B5CF6';
-        case 'document': return '#EF4444';
-        default: return '#6B7280';
-    }
-};
-
-// =====================================
-// SUB-COMPONENTS
-// =====================================
-
-const FolderItem: React.FC<{
-    folder: FileFolder;
-    viewMode: ViewMode;
-    onPress: () => void;
-    onLongPress?: () => void;
-}> = ({ folder, viewMode, onPress, onLongPress }) => {
-    if (viewMode === 'grid') {
-        return (
-            <TouchableOpacity 
-                style={styles.gridFolderItem} 
-                onPress={onPress}
-                onLongPress={onLongPress}
-            >
-                <View style={[styles.folderIconContainer, { backgroundColor: folder.color || '#FEF3C7' }]}>
-                    <MaterialCommunityIcons name="folder" size={32} color={folder.color ? '#FFF' : '#F59E0B'} />
-                </View>
-                <Text style={styles.gridItemName} numberOfLines={1}>{folder.name}</Text>
-                <Text style={styles.gridItemMeta}>{folder.itemCount} items</Text>
-                {folder.isFavorite && (
-                    <MaterialCommunityIcons name="star" size={14} color="#F59E0B" style={styles.favoriteIcon} />
-                )}
-            </TouchableOpacity>
-        );
-    }
-
-    return (
-        <TouchableOpacity 
-            style={styles.listFolderItem} 
-            onPress={onPress}
-            onLongPress={onLongPress}
-        >
-            <View style={[styles.listFolderIcon, { backgroundColor: folder.color || '#FEF3C7' }]}>
-                <MaterialCommunityIcons name="folder" size={24} color={folder.color ? '#FFF' : '#F59E0B'} />
-            </View>
-            <View style={styles.listItemInfo}>
-                <Text style={styles.listItemName}>{folder.name}</Text>
-                <Text style={styles.listItemMeta}>{folder.itemCount} items</Text>
-            </View>
-            {folder.isFavorite && (
-                <MaterialCommunityIcons name="star" size={18} color="#F59E0B" />
-            )}
-            <MaterialCommunityIcons name="chevron-right" size={20} color="#9CA3AF" />
-        </TouchableOpacity>
-    );
-};
-
-const FileItemComponent: React.FC<{
-    file: FileItem;
-    viewMode: ViewMode;
-    onPress: () => void;
-    onLongPress?: () => void;
-}> = ({ file, viewMode, onPress, onLongPress }) => {
-    const iconName = getFileIcon(file.mimeType, file.fileType);
-    const iconColor = getFileIconColor(file.fileType);
-    const isImage = file.fileType === 'image';
-
-    if (viewMode === 'grid') {
-        return (
-            <TouchableOpacity 
-                style={styles.gridFileItem} 
-                onPress={onPress}
-                onLongPress={onLongPress}
-            >
-                {isImage && file.url ? (
-                    <Image source={{ uri: file.url }} style={styles.gridImagePreview} resizeMode="cover" />
-                ) : (
-                    <View style={[styles.gridFileIcon, { backgroundColor: `${iconColor}15` }]}>
-                        <MaterialCommunityIcons name={iconName as any} size={32} color={iconColor} />
-                    </View>
-                )}
-                <Text style={styles.gridItemName} numberOfLines={1}>{file.originalName}</Text>
-                <Text style={styles.gridItemMeta}>{formatFileSize(file.size)}</Text>
-                {file.isFavorite && (
-                    <MaterialCommunityIcons name="star" size={14} color="#F59E0B" style={styles.favoriteIcon} />
-                )}
-            </TouchableOpacity>
-        );
-    }
-
-    return (
-        <TouchableOpacity 
-            style={styles.listFileItem} 
-            onPress={onPress}
-            onLongPress={onLongPress}
-        >
-            {isImage && file.url ? (
-                <Image source={{ uri: file.url }} style={styles.listImagePreview} resizeMode="cover" />
-            ) : (
-                <View style={[styles.listFileIcon, { backgroundColor: `${iconColor}15` }]}>
-                    <MaterialCommunityIcons name={iconName as any} size={24} color={iconColor} />
-                </View>
-            )}
-            <View style={styles.listItemInfo}>
-                <Text style={styles.listItemName} numberOfLines={1}>{file.originalName}</Text>
-                <Text style={styles.listItemMeta}>
-                    {formatFileSize(file.size)} · {formatDate(file.createdAt)}
-                </Text>
-            </View>
-            {file.isFavorite && (
-                <MaterialCommunityIcons name="star" size={18} color="#F59E0B" style={{ marginRight: 8 }} />
-            )}
-            <TouchableOpacity style={styles.moreButton}>
-                <MaterialCommunityIcons name="dots-vertical" size={20} color="#9CA3AF" />
-            </TouchableOpacity>
-        </TouchableOpacity>
-    );
-};
-
-const QuotaBar: React.FC<{ quota: StorageQuota }> = ({ quota }) => {
-    const percentage = quota.percentUsed;
-    const barColor = percentage > 90 ? '#EF4444' : percentage > 70 ? '#F59E0B' : '#10B981';
-
-    return (
-        <View style={styles.quotaContainer}>
-            <View style={styles.quotaHeader}>
-                <Text style={styles.quotaLabel}>Storage Used</Text>
-                <Text style={styles.quotaText}>
-                    {formatFileSize(quota.usedBytes)} / {formatFileSize(quota.quotaBytes)}
-                </Text>
-            </View>
-            <View style={styles.quotaBarBackground}>
-                <View style={[styles.quotaBarFill, { width: `${Math.min(percentage, 100)}%`, backgroundColor: barColor }]} />
-            </View>
-        </View>
-    );
-};
-
-const BreadcrumbNav: React.FC<{
-    path: FileFolder[];
-    onNavigate: (folderId: string | null) => void;
-}> = ({ path, onNavigate }) => {
-    return (
-        <View style={styles.breadcrumbContainer}>
-            <TouchableOpacity onPress={() => onNavigate(null)} style={styles.breadcrumbItem}>
-                <MaterialCommunityIcons name="home" size={18} color="#6B7280" />
-            </TouchableOpacity>
-            {path.map((folder, index) => (
-                <React.Fragment key={folder.id}>
-                    <MaterialCommunityIcons name="chevron-right" size={16} color="#D1D5DB" />
-                    <TouchableOpacity 
-                        onPress={() => onNavigate(folder.id)} 
-                        style={styles.breadcrumbItem}
-                    >
-                        <Text style={[
-                            styles.breadcrumbText,
-                            index === path.length - 1 && styles.breadcrumbTextActive
-                        ]}>
-                            {folder.name}
-                        </Text>
-                    </TouchableOpacity>
-                </React.Fragment>
-            ))}
-        </View>
-    );
-};
-
-// =====================================
-// MAIN COMPONENT
-// =====================================
-
-type FilterMode = 'all' | 'recent' | 'favorites' | 'images' | 'videos' | 'documents' | 'audio';
 
 export const PersonalFilesTab: React.FC<PersonalFilesTabProps> = ({ onFilePress }) => {
     // Basic state
@@ -429,9 +223,9 @@ export const PersonalFilesTab: React.FC<PersonalFilesTabProps> = ({ onFilePress 
                             const deletePromises: Promise<any>[] = [];
                             selectedItems.forEach(itemId => {
                                 if (itemId.startsWith('file-')) {
-                                    deletePromises.push(fileManagementApi.deleteFile(itemId.replace('file-', '')));
+                                    deletePromises.push(fileManagementApi.deleteFile(itemId.replace('file-', '') as string));
                                 } else if (itemId.startsWith('folder-')) {
-                                    deletePromises.push(fileManagementApi.deleteFolder(itemId.replace('folder-', '')));
+                                    deletePromises.push(fileManagementApi.deleteFolder(itemId.replace('folder-', '') as string));
                                 }
                             });
                             await Promise.all(deletePromises);
@@ -560,7 +354,7 @@ export const PersonalFilesTab: React.FC<PersonalFilesTabProps> = ({ onFilePress 
 
     const handleCopyFile = async (file: FileItem) => {
         try {
-            await fileManagementApi.copyFile(file.id, currentFolderId || undefined);
+            await fileManagementApi.copyFile(file.id, currentFolderId || null);
             setShowActionsSheet(false);
             loadData();
             Alert.alert('Success', 'File copied successfully');
@@ -616,9 +410,9 @@ export const PersonalFilesTab: React.FC<PersonalFilesTabProps> = ({ onFilePress 
     const handleMoveConfirm = async (targetFolderId: string | null) => {
         try {
             if (selectedFile) {
-                await fileManagementApi.moveFile(selectedFile.id, targetFolderId || undefined);
+                await fileManagementApi.moveFile(selectedFile.id, targetFolderId);
             } else if (selectedFolder) {
-                await fileManagementApi.moveFolder(selectedFolder.id, targetFolderId || undefined);
+                await fileManagementApi.moveFolder(selectedFolder.id, targetFolderId);
             }
             setShowMoveModal(false);
             loadData();
@@ -788,27 +582,20 @@ export const PersonalFilesTab: React.FC<PersonalFilesTabProps> = ({ onFilePress 
                         )}
                     </View>
 
-                    {/* Filter Tabs */}
-                    <View style={styles.filterTabs}>
+                    {/* Filter Tabs as Chips */}
+                    <View style={styles.filterRow}>
                         {[
-                            { mode: 'all' as FilterMode, label: 'All', icon: 'folder-outline' },
+                            { mode: 'all' as FilterMode, label: 'All', icon: 'file-multiple-outline' },
                             { mode: 'recent' as FilterMode, label: 'Recent', icon: 'clock-outline' },
                             { mode: 'favorites' as FilterMode, label: 'Favorites', icon: 'star-outline' },
                         ].map(({ mode, label, icon }) => (
-                            <TouchableOpacity
+                            <FilterChip
                                 key={mode}
-                                style={[styles.filterTab, filterMode === mode && styles.filterTabActive]}
+                                label={label}
+                                icon={icon}
+                                active={filterMode === mode}
                                 onPress={() => setFilterMode(mode)}
-                            >
-                                <MaterialCommunityIcons 
-                                    name={icon as any} 
-                                    size={16} 
-                                    color={filterMode === mode ? '#3B82F6' : '#6B7280'} 
-                                />
-                                <Text style={[styles.filterTabText, filterMode === mode && styles.filterTabTextActive]}>
-                                    {label}
-                                </Text>
-                            </TouchableOpacity>
+                            />
                         ))}
                     </View>
 
@@ -879,11 +666,11 @@ export const PersonalFilesTab: React.FC<PersonalFilesTabProps> = ({ onFilePress 
 
             {/* Breadcrumb Navigation */}
             {!multiSelectMode && filterMode === 'all' && (currentFolderId || folderPath.length > 0) && (
-                <BreadcrumbNav path={folderPath} onNavigate={handleNavigateBreadcrumb} />
+                <BreadcrumbNav path={folderPath} rootName="Files" rootIcon="home" onNavigate={handleNavigateBreadcrumb} />
             )}
 
             {/* Storage Quota */}
-            {!multiSelectMode && quota && <QuotaBar quota={quota} />}
+            {!multiSelectMode && quota && <QuotaBar quota={quota} label="Personal Storage" />}
 
             {/* Upload progress indicator */}
             {uploading && (
@@ -1175,8 +962,7 @@ const styles = StyleSheet.create({
     },
     header: {
         padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#F3F4F6',
+        backgroundColor: '#FFFFFF',
     },
     multiSelectHeader: {
         flexDirection: 'row',
@@ -1215,35 +1001,16 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#1F2937',
     },
-    filterTabs: {
+    filterRow: {
         flexDirection: 'row',
-        marginBottom: 12,
         gap: 8,
-    },
-    filterTab: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-        borderRadius: 20,
-        backgroundColor: '#F3F4F6',
-        gap: 6,
-    },
-    filterTabActive: {
-        backgroundColor: '#EFF6FF',
-    },
-    filterTabText: {
-        fontSize: 13,
-        color: '#6B7280',
-    },
-    filterTabTextActive: {
-        color: '#3B82F6',
-        fontWeight: '500',
+        marginBottom: 12,
     },
     actionsRow: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 8,
+        marginBottom: 8,
     },
     viewModeToggle: {
         flexDirection: 'row',
@@ -1257,6 +1024,11 @@ const styles = StyleSheet.create({
     },
     viewModeButtonActive: {
         backgroundColor: '#FFFFFF',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 1.2,
+        elevation: 2,
     },
     sortButton: {
         flexDirection: 'row',
@@ -1298,22 +1070,20 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: '#3B82F6',
     },
-    // Dropdown styles
     dropdownOverlay: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        justifyContent: 'flex-end',
     },
     dropdownContainer: {
         backgroundColor: '#FFFFFF',
-        borderRadius: 16,
-        padding: 16,
-        width: '80%',
-        maxWidth: 320,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        padding: 20,
+        paddingBottom: Platform.OS === 'ios' ? 34 : 20,
     },
     dropdownTitle: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: '600',
         color: '#1F2937',
         marginBottom: 16,
@@ -1324,8 +1094,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 14,
         paddingHorizontal: 12,
-        borderRadius: 10,
-        gap: 12,
+        borderRadius: 12,
+        marginBottom: 4,
     },
     dropdownItemActive: {
         backgroundColor: '#EFF6FF',
@@ -1337,220 +1107,53 @@ const styles = StyleSheet.create({
     },
     dropdownItemTextActive: {
         color: '#3B82F6',
-        fontWeight: '500',
+        fontWeight: '600',
     },
-    // Upload options styles
     uploadOptionsContainer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
         backgroundColor: '#FFFFFF',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        padding: 20,
-        paddingBottom: Platform.OS === 'ios' ? 34 : 20,
+        padding: 24,
+        paddingBottom: Platform.OS === 'ios' ? 40 : 24,
     },
     uploadOptionsHandle: {
-        width: 40,
+        width: 36,
         height: 4,
         backgroundColor: '#E5E7EB',
         borderRadius: 2,
         alignSelf: 'center',
-        marginBottom: 16,
+        marginBottom: 20,
     },
     uploadOptionsTitle: {
-        fontSize: 18,
-        fontWeight: '600',
+        fontSize: 20,
+        fontWeight: '700',
         color: '#1F2937',
-        marginBottom: 20,
+        marginBottom: 24,
         textAlign: 'center',
     },
     uploadOptionsGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
     },
     uploadOption: {
-        width: '25%',
+        width: '23%',
         alignItems: 'center',
         marginBottom: 16,
     },
     uploadOptionIcon: {
-        width: 56,
-        height: 56,
-        borderRadius: 16,
+        width: 50,
+        height: 50,
+        borderRadius: 14,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 8,
     },
     uploadOptionText: {
-        fontSize: 12,
-        color: '#6B7280',
-        textAlign: 'center',
-    },
-    // Multi-select styles
-    itemSelected: {
-        backgroundColor: '#EFF6FF',
-        borderRadius: 8,
-    },
-    checkboxOverlay: {
-        position: 'absolute',
-        top: 8,
-        left: 8,
-        zIndex: 10,
-    },
-    breadcrumbContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 12,
-        gap: 4,
-    },
-    breadcrumbItem: {
-        padding: 4,
-    },
-    breadcrumbText: {
-        fontSize: 13,
-        color: '#6B7280',
-    },
-    breadcrumbTextActive: {
-        color: '#1F2937',
-        fontWeight: '600',
-    },
-    quotaContainer: {
-        marginTop: 12,
-    },
-    quotaHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 6,
-    },
-    quotaLabel: {
-        fontSize: 12,
-        color: '#6B7280',
-    },
-    quotaText: {
-        fontSize: 12,
-        color: '#1F2937',
-        fontWeight: '500',
-    },
-    quotaBarBackground: {
-        height: 6,
-        backgroundColor: '#F3F4F6',
-        borderRadius: 3,
-        overflow: 'hidden',
-    },
-    quotaBarFill: {
-        height: '100%',
-        borderRadius: 3,
-    },
-    gridContent: {
-        padding: 12,
-    },
-    listContent: {
-        padding: 12,
-    },
-    gridFolderItem: {
-        flex: 1,
-        maxWidth: '33.33%',
-        padding: 8,
-        alignItems: 'center',
-    },
-    gridFileItem: {
-        flex: 1,
-        maxWidth: '33.33%',
-        padding: 8,
-        alignItems: 'center',
-    },
-    folderIconContainer: {
-        width: 64,
-        height: 64,
-        borderRadius: 16,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 8,
-    },
-    gridFileIcon: {
-        width: 64,
-        height: 64,
-        borderRadius: 12,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 8,
-    },
-    gridImagePreview: {
-        width: 64,
-        height: 64,
-        borderRadius: 12,
-        marginBottom: 8,
-    },
-    gridItemName: {
-        fontSize: 12,
-        color: '#1F2937',
+        fontSize: 11,
+        color: '#4B5563',
         textAlign: 'center',
         fontWeight: '500',
-    },
-    gridItemMeta: {
-        fontSize: 10,
-        color: '#9CA3AF',
-        marginTop: 2,
-    },
-    favoriteIcon: {
-        position: 'absolute',
-        top: 8,
-        right: 8,
-    },
-    listFolderItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 8,
-        borderBottomWidth: 1,
-        borderBottomColor: '#F3F4F6',
-    },
-    listFileItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 8,
-        borderBottomWidth: 1,
-        borderBottomColor: '#F3F4F6',
-    },
-    listFolderIcon: {
-        width: 44,
-        height: 44,
-        borderRadius: 12,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    listFileIcon: {
-        width: 44,
-        height: 44,
-        borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    listImagePreview: {
-        width: 44,
-        height: 44,
-        borderRadius: 10,
-    },
-    listItemInfo: {
-        flex: 1,
-        marginLeft: 12,
-    },
-    listItemName: {
-        fontSize: 14,
-        color: '#1F2937',
-        fontWeight: '500',
-    },
-    listItemMeta: {
-        fontSize: 12,
-        color: '#9CA3AF',
-        marginTop: 2,
-    },
-    moreButton: {
-        padding: 8,
     },
     emptyState: {
         flex: 1,
@@ -1584,6 +1187,22 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 14,
         fontWeight: '600',
+    },
+    gridContent: {
+        padding: 8,
+    },
+    listContent: {
+        paddingHorizontal: 16,
+    },
+    itemSelected: {
+        backgroundColor: '#EFF6FF',
+        borderRadius: 12,
+    },
+    checkboxOverlay: {
+        position: 'absolute',
+        top: 8,
+        right: 8,
+        zIndex: 10,
     },
 });
 

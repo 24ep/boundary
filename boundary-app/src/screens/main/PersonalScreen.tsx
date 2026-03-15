@@ -256,12 +256,7 @@ const PersonalScreen: React.FC = () => {
                         )}
                     </View>
                 );
-            case 'finance':
-                return (
-                        <FinancialTab 
-                            useScrollView={false} 
-                        />
-                );
+
             case 'health':
                 return (
                     <View style={{ paddingTop: 0 }}>
@@ -324,6 +319,16 @@ const PersonalScreen: React.FC = () => {
                                     isCircleLoading={loading}
                                     onOpenApps={() => navigation.navigate('Apps', { screen: 'AppsMain' })}
                                     onGoToFinance={() => onTabPress('finance')}
+                                />
+                            </Animated.View>
+                        ) : activeTab === 'finance' ? (
+                            <Animated.View style={{
+                                flex: 1,
+                                opacity: tabContentOpacityAnim,
+                                transform: [{ translateX: tabContentTranslateXAnim }],
+                            }}>
+                                <FinancialTab 
+                                    useScrollView={true} 
                                 />
                             </Animated.View>
                         ) : (
@@ -502,7 +507,7 @@ const psStyles = StyleSheet.create({
         left: 12,
         right: 12,
         height: 44,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'transparent',
         borderRadius: 22,
         flexDirection: 'row',
         alignItems: 'center',

@@ -161,9 +161,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: 'relative',
+    backgroundColor: '#F8FAFC',
   },
   list: {
     flex: 1,
+    backgroundColor: '#F8FAFC',
   },
   messagesList: {
     paddingHorizontal: 16,
@@ -208,8 +210,13 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 4,
   },
   aiBubble: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#FFFFFF',
     borderBottomLeftRadius: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   typingBubble: {
     paddingVertical: 12,
@@ -233,15 +240,20 @@ const styles = StyleSheet.create({
   inputBar: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     paddingHorizontal: 4,
     paddingVertical: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   input: {
     flex: 1,

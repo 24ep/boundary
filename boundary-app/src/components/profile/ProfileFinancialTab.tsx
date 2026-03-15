@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import IconMC from 'react-native-vector-icons/MaterialCommunityIcons';
-import { CircleSelectionTabs } from '../common/CircleSelectionTabs';
 
 interface ProfileFinancialTabProps {
     userId?: string;
@@ -11,22 +10,29 @@ interface ProfileFinancialTabProps {
 export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
     useScrollView = true,
 }) => {
-    const [activeTab, setActiveTab] = useState('summary');
+    const [expandedTabs, setExpandedTabs] = useState<string[]>(['summary', 'assets', 'debts', 'cashflow']);
     const [selectedCategory, setSelectedCategory] = useState<any>(null);
+    const [detailSourceTab, setDetailSourceTab] = useState<string | null>(null);
     const [showFabMenu, setShowFabMenu] = useState(false);
 
-    const handleTabChange = (tabId: string) => {
-        console.log('Switching to financial tab:', tabId);
-        setActiveTab(tabId);
-        setSelectedCategory(null); // Clear selection when switching tabs
+    const toggleSection = (tabId: string) => {
+        if (selectedCategory) {
+            setSelectedCategory(null);
+            setDetailSourceTab(null);
+        }
+        setExpandedTabs(prev =>
+            prev.includes(tabId) ? prev.filter(t => t !== tabId) : [...prev, tabId]
+        );
     };
 
-    const handleCategorySelect = (category: any) => {
+    const handleCategorySelect = (category: any, tabId: string) => {
+        setDetailSourceTab(tabId);
         setSelectedCategory(category);
     };
 
     const handleBackFromDetail = () => {
         setSelectedCategory(null);
+        setDetailSourceTab(null);
     };
 
     // Sub-navigation config
@@ -80,17 +86,58 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
     (financialData.assetCategories[1] as any).items = [{ name: 'Blue Chip Stocks', amount: 300000 }, { name: 'Growth Stocks', amount: 150000 }];
     (financialData.debtCategories[0] as any).items = [{ name: 'Mortgage', amount: 450000 }];
 
+    // Totals
+    const totalAssets = financialData.assetCategories.reduce((sum, cat) => sum + cat.amount, 0);
+    const totalDebts = financialData.debtCategories.reduce((sum, cat) => sum + cat.amount, 0);
+    const totalIncome = financialData.cashFlow.income.reduce((sum, cat) => sum + cat.amount, 0);
+    const totalExpense = financialData.cashFlow.expense.reduce((sum, cat) => sum + cat.amount, 0);
+    const netCashFlow = totalIncome - totalExpense;
+
     const formatCurrency = (amount: number) => {
         return `฿${amount.toLocaleString('th-TH', { minimumFractionDigits: 0 })}`;
     };
 
-    const CategoryBar = (cat: { id: string, name: string, amount: number, total: number, color: string, icon?: string, items?: any[] }) => {
-        const { name, amount, total, color, icon } = cat;
+    const tabTotals: Record<string, string> = {
+        summary: formatCurrency(financialData.netWorth),
+        assets: formatCurrency(totalAssets),
+        debts: formatCurrency(totalDebts),
+        cashflow: (netCashFlow >= 0 ? '+' : '') + formatCurrency(netCashFlow),
+    };
+
+    const AccordionHeader = ({ id, label, icon, isExpanded }: { id: string, label: string, icon: string, isExpanded: boolean }) => (
+        <TouchableOpacity
+            style={[styles.accordionHeader, isExpanded && styles.accordionHeaderActive]}
+            onPress={() => toggleSection(id)}
+            activeOpacity={0.7}
+        >
+            <View style={styles.accordionHeaderLeft}>
+                <View style={[styles.accordionIconContainer, isExpanded && styles.accordionIconActive]}>
+                    <IconMC name={icon} size={20} color={isExpanded ? '#FA7272' : '#64748B'} />
+                </View>
+                <Text style={[styles.accordionLabel, isExpanded && styles.accordionLabelActive]}>{label}</Text>
+            </View>
+            <View style={styles.accordionHeaderRight}>
+                {tabTotals[id] && (
+                    <Text style={[styles.accordionTotal, isExpanded && styles.accordionTotalActive]}>
+                        {tabTotals[id]}
+                    </Text>
+                )}
+                <IconMC
+                    name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                    size={20}
+                    color={isExpanded ? '#FA7272' : '#94A3B8'}
+                />
+            </View>
+        </TouchableOpacity>
+    );
+
+    const CategoryBar = (cat: { id: string, name: string, amount: number, total: number, color: string, icon?: string, items?: any[], tabId: string }) => {
+        const { name, amount, total, color, icon, tabId } = cat;
         const percentage = total > 0 ? (amount / total) * 100 : 0;
         return (
-            <TouchableOpacity 
-                style={styles.categoryBarRow} 
-                onPress={() => handleCategorySelect(cat)}
+            <TouchableOpacity
+                style={styles.categoryBarRow}
+                onPress={() => handleCategorySelect(cat, tabId)}
                 activeOpacity={0.7}
             >
                 <View style={styles.categoryMainInfo}>
@@ -98,7 +145,7 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
                         {icon && <IconMC name={icon} size={18} color={color} style={{ marginRight: 8 }} />}
                         <Text style={styles.catBarLabel} numberOfLines={1}>{name}</Text>
                     </View>
-                    
+
                     <View style={styles.categoryBarDetails}>
                         <Text style={[styles.catBarPercentText, { color: color }]}>
                             {percentage.toFixed(0)}%
@@ -108,7 +155,7 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
                         </View>
                     </View>
                 </View>
-                
+
                 <View style={styles.categoryAmountGroup}>
                     <Text style={styles.catBarAmount}>{formatCurrency(amount)}</Text>
                     <IconMC name="chevron-right" size={16} color="#94A3B8" style={{ marginLeft: 4 }} />
@@ -132,7 +179,6 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
                         </View>
                     </View>
                     <View style={styles.chartContainer}>
-                        {/* Simulated Area Chart */}
                         <View style={styles.chartMock}>
                             {[40, 60, 45, 80, 75, 95, 100].map((h, i) => (
                                 <View key={i} style={[styles.chartBar, { height: `${h}%`, opacity: 0.3 + (i * 0.1) }]} />
@@ -167,10 +213,9 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
     };
 
     const renderAssets = () => {
-        const totalAssets = financialData.assetCategories.reduce((sum, cat) => sum + cat.amount, 0);
         return (
             <View style={styles.section}>
-                <View style={styles.topSummaryCard}>
+                <View style={styles.topSummaryHeader}>
                     <Text style={styles.topSummaryLabel}>Total Assets</Text>
                     <Text style={[styles.topSummaryValue, { color: '#10B981' }]}>{formatCurrency(totalAssets)}</Text>
                 </View>
@@ -178,7 +223,7 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
                 <Text style={styles.sectionTitle}>Asset Portfolio</Text>
                 <View style={styles.categoriesList}>
                     {financialData.assetCategories.map(cat => (
-                        <CategoryBar key={cat.id} {...cat} color="#10B981" total={totalAssets} />
+                        <CategoryBar key={cat.id} {...cat} color="#10B981" total={totalAssets} tabId="assets" />
                     ))}
                 </View>
             </View>
@@ -186,10 +231,9 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
     };
 
     const renderDebts = () => {
-        const totalDebts = financialData.debtCategories.reduce((sum, cat) => sum + cat.amount, 0);
         return (
             <View style={styles.section}>
-                <View style={[styles.topSummaryCard, { backgroundColor: '#FFF1F2', borderColor: '#FECDD3' }]}>
+                <View style={styles.topSummaryHeader}>
                     <Text style={[styles.topSummaryLabel, { color: '#BE123C' }]}>Total Liabilities</Text>
                     <Text style={[styles.topSummaryValue, { color: '#E11D48' }]}>{formatCurrency(totalDebts)}</Text>
                 </View>
@@ -197,7 +241,7 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
                 <Text style={styles.sectionTitle}>Total Obligations</Text>
                 <View style={styles.categoriesList}>
                     {financialData.debtCategories.map(cat => (
-                        <CategoryBar key={cat.id} {...cat} color="#EF4444" total={totalDebts} />
+                        <CategoryBar key={cat.id} {...cat} color="#EF4444" total={totalDebts} tabId="debts" />
                     ))}
                 </View>
             </View>
@@ -205,12 +249,9 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
     };
 
     const renderCashFlow = () => {
-        const totalIncome = financialData.cashFlow.income.reduce((sum, cat) => sum + cat.amount, 0);
-        const totalExpense = financialData.cashFlow.expense.reduce((sum, cat) => sum + cat.amount, 0);
-        const netCashFlow = totalIncome - totalExpense;
         return (
             <View style={styles.section}>
-                <View style={[styles.topSummaryCard, { backgroundColor: '#F0FDFA', borderColor: '#CCFBF1' }]}>
+                <View style={styles.topSummaryHeader}>
                     <Text style={[styles.topSummaryLabel, { color: '#134E4A' }]}>Net Cash Flow</Text>
                     <Text style={[styles.topSummaryValue, { color: '#10B981' }]}>
                         {netCashFlow >= 0 ? '+' : ''}{formatCurrency(netCashFlow)}
@@ -220,21 +261,19 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
                 <Text style={styles.sectionTitle}>Monthly Income</Text>
                 <View style={styles.categoriesList}>
                     {financialData.cashFlow.income.map(cat => (
-                        <CategoryBar key={cat.id} {...cat} color="#10B981" total={totalIncome} />
+                        <CategoryBar key={cat.id} {...cat} color="#10B981" total={totalIncome} tabId="cashflow" />
                     ))}
                 </View>
-                
+
                 <Text style={[styles.sectionTitle, { marginTop: 24 }]}>Monthly Expenses</Text>
                 <View style={styles.categoriesList}>
                     {financialData.cashFlow.expense.map(cat => (
-                        <CategoryBar key={cat.id} {...cat} color="#EF4444" total={totalExpense} />
+                        <CategoryBar key={cat.id} {...cat} color="#EF4444" total={totalExpense} tabId="cashflow" />
                     ))}
                 </View>
             </View>
         );
     };
-
-
 
     const renderCategoryDetail = () => {
         if (!selectedCategory) return null;
@@ -245,7 +284,9 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
                 <View style={styles.detailHeader}>
                     <TouchableOpacity onPress={handleBackFromDetail} style={styles.backLink}>
                         <IconMC name="arrow-left" size={20} color="#64748B" />
-                        <Text style={styles.backLinkText}>Back to {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</Text>
+                        <Text style={styles.backLinkText}>
+                            Back to {detailSourceTab ? (detailSourceTab.charAt(0).toUpperCase() + detailSourceTab.slice(1)) : 'Finance'}
+                        </Text>
                     </TouchableOpacity>
                     <View style={styles.detailTitleRow}>
                         <View style={[styles.detailIcon, { backgroundColor: `${color}15` }]}>
@@ -281,10 +322,9 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
         );
     };
 
-    const renderActiveView = () => {
-        if (selectedCategory) return renderCategoryDetail();
-        
-        switch (activeTab) {
+    const renderTabContent = (tabId: string) => {
+        if (selectedCategory && detailSourceTab === tabId) return renderCategoryDetail();
+        switch (tabId) {
             case 'assets': return renderAssets();
             case 'debts': return renderDebts();
             case 'cashflow': return renderCashFlow();
@@ -296,34 +336,34 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
 
     return (
         <View style={styles.container}>
-            <ContentWrapper 
-                style={styles.container} 
-                {...(useScrollView ? { 
+            <ContentWrapper
+                style={styles.container}
+                {...(useScrollView ? {
                     showsVerticalScrollIndicator: false,
-                    contentContainerStyle: { paddingBottom: 100 } 
+                    contentContainerStyle: { paddingBottom: 180 }
                 } : {})}
             >
-
-
-                {/* Sub-Navigation */}
-                <View style={styles.subTabsContainer}>
-                    <CircleSelectionTabs
-                        activeTab={activeTab}
-                        onTabPress={handleTabChange}
-                        tabs={subTabs}
-                        variant="segmented"
-                        fit={true}
-                        activeColor="#FFFFFF"
-                        inactiveColor="#F1F5F9"
-                        activeTextColor="#0F172A"
-                        inactiveTextColor="#64748B"
-                        showIcons={true}
-                        iconPosition="left"
-                        activeShowShadow={true}
-                    />
+                {/* Accordion List */}
+                <View style={styles.accordionContainer}>
+                    {subTabs.map(tab => {
+                        const isExpanded = expandedTabs.includes(tab.id);
+                        return (
+                            <View key={tab.id} style={styles.accordionSection}>
+                                <AccordionHeader
+                                    id={tab.id}
+                                    label={tab.label}
+                                    icon={tab.icon}
+                                    isExpanded={isExpanded}
+                                />
+                                {isExpanded && (
+                                    <View style={styles.accordionContent}>
+                                        {renderTabContent(tab.id)}
+                                    </View>
+                                )}
+                            </View>
+                        );
+                    })}
                 </View>
-
-                {renderActiveView()}
             </ContentWrapper>
 
             {/* FAB Component */}
@@ -341,8 +381,8 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
                         </TouchableOpacity>
                     </View>
                 )}
-                <TouchableOpacity 
-                    style={styles.fab} 
+                <TouchableOpacity
+                    style={styles.fab}
                     onPress={() => setShowFabMenu(!showFabMenu)}
                     activeOpacity={0.9}
                 >
@@ -356,17 +396,6 @@ export const ProfileFinancialTab: React.FC<ProfileFinancialTabProps> = ({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    headerRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 16,
-        paddingTop: 16,
-        paddingBottom: 8,
-    },
-    subTabsContainer: {
-        paddingHorizontal: 16,
-        paddingTop: 16,
     },
     balanceCard: {
         backgroundColor: '#FFFFFF',
@@ -399,89 +428,25 @@ const styles = StyleSheet.create({
     categoriesList: {
         marginTop: 8,
     },
-    transactionsList: {
-        marginTop: 8,
-    },
-    transactionItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 12,
-        borderBottomWidth: 1,
-        borderBottomColor: '#F1F5F9',
-    },
-    transactionIcon: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 12,
-    },
-    transactionContent: {
-        flex: 1,
-    },
-    transactionDesc: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#1E293B',
-    },
-    transactionDate: {
-        fontSize: 13,
-        color: '#64748B',
-        marginTop: 2,
-    },
-    summaryInfoCard: {
-        marginTop: 16,
-        padding: 16,
-        backgroundColor: '#F8FAFC',
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: '#E2E8F0',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    topSummaryCard: {
-        marginBottom: 24,
-        padding: 24,
-        backgroundColor: '#F8FAFC',
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#E2E8F0',
-        alignItems: 'center',
+    topSummaryHeader: {
+        marginBottom: 32,
+        paddingHorizontal: 0,
+        alignItems: 'flex-start',
         justifyContent: 'center',
     },
     topSummaryLabel: {
         fontSize: 14,
-        fontWeight: '600',
-        color: '#64748B',
+        fontWeight: '700',
+        color: '#94A3B8',
         textTransform: 'uppercase',
-        letterSpacing: 0.5,
+        letterSpacing: 1.2,
     },
     topSummaryValue: {
-        fontSize: 32,
-        fontWeight: '800',
+        fontSize: 36,
+        fontWeight: '900',
         color: '#0F172A',
-        marginTop: 8,
-    },
-    summaryInfoLabel: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#475569',
-    },
-    summaryInfoValue: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: '#0F172A',
-    },
-    statusBadge: {
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        borderRadius: 8,
-    },
-    statusBadgeText: {
-        fontSize: 11,
-        fontWeight: '600',
+        marginTop: 4,
+        letterSpacing: -0.5,
     },
     categoryBarRow: {
         flexDirection: 'row',
@@ -631,7 +596,7 @@ const styles = StyleSheet.create({
     // FAB Styles
     fabWrapper: {
         position: 'absolute',
-        bottom: 90, // Positioned above main navigation
+        bottom: 90,
         left: 0,
         right: 0,
         alignItems: 'center',
@@ -659,7 +624,7 @@ const styles = StyleSheet.create({
     },
     popoverMenu: {
         position: 'absolute',
-        bottom: 60, // Relative to fabWrapper bottom
+        bottom: 60,
         backgroundColor: '#FFFFFF',
         borderRadius: 20,
         padding: 8,
@@ -780,29 +745,67 @@ const styles = StyleSheet.create({
         fontWeight: '800',
         color: '#3B82F6',
     },
-    cashFlowSummary: {
-        marginTop: 24,
-        padding: 20,
-        backgroundColor: '#F0FDFA',
-        borderRadius: 16,
-        borderWidth: 1,
-        borderColor: '#CCFBF1',
+    // Accordion Styles
+    accordionContainer: {
+        paddingTop: 0,
     },
-    cfItem: {
+    accordionSection: {
+        backgroundColor: '#FFFFFF',
+        borderBottomWidth: 1,
+        borderBottomColor: '#F1F5F9',
+    },
+    accordionHeader: {
         flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-between',
+        paddingVertical: 16,
+        paddingHorizontal: 16,
+    },
+    accordionHeaderActive: {
+        backgroundColor: '#FFF8F8',
+        borderBottomWidth: 1,
+        borderBottomColor: '#FFE4E6',
+    },
+    accordionHeaderLeft: {
+        flexDirection: 'row',
         alignItems: 'center',
     },
-    cfLabel: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#134E4A',
+    accordionHeaderRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
     },
-    cfValue: {
-        fontSize: 18,
-        fontWeight: '800',
+    accordionIconContainer: {
+        width: 36,
+        height: 36,
+        borderRadius: 10,
+        backgroundColor: '#F8FAFC',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+    },
+    accordionIconActive: {
+        backgroundColor: '#FFFFFF',
+    },
+    accordionLabel: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#475569',
+    },
+    accordionLabelActive: {
+        color: '#FA7272',
+    },
+    accordionTotal: {
+        fontSize: 13,
+        fontWeight: '700',
+        color: '#94A3B8',
+    },
+    accordionTotalActive: {
+        color: '#FA7272',
+    },
+    accordionContent: {
+        paddingTop: 8,
     },
 });
 
 export default ProfileFinancialTab;
-
