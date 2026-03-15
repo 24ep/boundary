@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { prisma } from '@/server/lib/prisma';
 import { config } from '@/server/config/env';
-import { otpStore } from '@/app/api/v1/auth/otp/request/route';
+import { otpStore } from '@/server/lib/otpStore';
 
 export async function POST(req: NextRequest) {
   try {

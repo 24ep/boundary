@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/server/lib/prisma';
-
-// In-memory OTP store: key = email|phone, value = { otp, expiresAt }
-const otpStore = new Map<string, { otp: string; expiresAt: number }>();
+import { otpStore } from '@/server/lib/otpStore';
 
 function generateOtp(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -51,6 +49,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, message: 'Failed to send code' }, { status: 500 });
   }
 }
-
-// Export the store so the login route can access it
-export { otpStore };
